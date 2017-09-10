@@ -1,14 +1,11 @@
 <template>
-    <div id="app">
+    <div id="advancedIterativeMethods">
         <router-view></router-view>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'app'
+    name: 'advancedIterativeMethods'
 }
 </script>
-
-<style>
-</style>

@@ -236,9 +236,9 @@ class TabuSolver {
         this.formula = cnf;
         this.counter = 0;
 
-        var limit = Math.round(this.formula.params.numberOfClausules * this.params.multiplierLimit);
-        var maxTabuSize = Math.round(this.formula.params.numberOfVariables * this.params.multiplierTabuSize);
-        var maxTabuSize2 = Math.round(this.formula.params.numberOfVariables / this.params.dividerTabuSize2);
+        var limit = Math.round(this.formula.params.numberOfClausules * this.params.tabu_multiplierLimit);
+        var maxTabuSize = Math.round(this.formula.params.numberOfVariables * this.params.tabu_multiplierTabuSize);
+        var maxTabuSize2 = Math.round(this.formula.params.numberOfVariables / this.params.tabu_dividerTabuSize2);
 
         console.log("params: ", limit, maxTabuSize, maxTabuSize2);
 
