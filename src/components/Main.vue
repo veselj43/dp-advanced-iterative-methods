@@ -1,7 +1,7 @@
 <template>
     <div class="advancedIterativeMethods">
 
-        <div class="right-panel">
+        <div class="right-panel"><div class="inner-relative-block">
 
             <div class="controls">
                 <span class="status">Status: <b>{{status}}</b></span>
@@ -51,7 +51,7 @@
                 </ul>
                 <p v-if="files.length === 0" class="help-block">Žádné nahrané soubory.</p>
             </div>
-        </div>
+        </div></div>
 
         <div class="main-panel">
             <div class="top-panel">
@@ -80,7 +80,7 @@ export default {
     data() {
         return {
             worker: null,
-            status: "None",
+            status: "Ready",
             files: [],
             params: {
                 multiplierLimit: 4,
@@ -134,7 +134,7 @@ export default {
 
             var context = this;
             this.progressData.fitness = [];
-            this.worker = new Worker("./static/worker.js");
+            this.worker = new Worker("./static/js/worker.js");
 
             this.worker.onmessage = function(e) {
                 if (!_.isArray(e.data)) {
@@ -173,104 +173,4 @@ export default {
 </script>
 
 <style scoped>
-    .advancedIterativeMethods {
-        height: 100vh;
-        background: #f9f9f9;
-    }
-
-    .main-panel {
-        margin-right: 350px;
-    }
-
-    .top-panel {
-        height: 4em;
-        border-bottom: 1px #ccc solid;
-    }
-
-    .top-panel ul {
-        float: left;
-        display: inline-block;
-    }
-
-    .top-panel ul li {
-        display: inline-block;
-    }
-
-    .top-panel ul li a {
-        display: block;
-        padding: 0 1em;
-        line-height: 4em;
-    }
-
-    .top-panel ul li a:hover,
-    .top-panel ul li a:focus {
-        text-decoration: none;
-    }
-
-    .right-panel .controls {
-        display: inline-block;
-        width: 350px;
-        height: 4em;
-        padding: 0 2em;
-        line-height: 4em;
-        border-bottom: #ccc 1px solid;
-    }
-
-    .right-panel .controls .status {
-        float: left;
-    }
-
-    .right-panel .controls .control-buttons {
-        float: right;
-    }
-
-    .right-panel {
-        position: absolute;
-        width: 350px;
-        height: 100%;
-        top: 0;
-        right: 0;
-        border-left: #ccc 1px solid;
-    }
-
-    .right-panel .header {
-        padding-left: 1em;
-        padding-top: .5em;
-        font-size: 120%;
-        font-weight: bold;
-    }
-
-    .right-panel .problemSelection {
-        padding: 1em 2em;
-    }
-
-    .right-panel .fileManager {
-    }
-
-    .right-panel .fileManager input#filesToLoad,
-    .right-panel .fileManager p {
-        width: 100%;
-        padding: .5em 1em;
-    }
-
-    .right-panel .fileManager ul {
-        margin: 0;
-        padding: 0;
-    }
-
-    .right-panel .fileManager ul li {
-        display: block;
-        padding: .2em .5em;
-    }
-
-    .right-panel .fileManager ul li .remove {
-        float: right;
-        color: #f30;
-        cursor: pointer;
-    }
-
-    .middle-panel {
-        margin: 2em;
-        padding: .2em;
-    }
 </style>
