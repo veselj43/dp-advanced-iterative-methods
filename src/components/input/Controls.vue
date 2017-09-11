@@ -11,8 +11,6 @@
 
 <script>
 export default {
-    props: ['inputFiles', 'params'],
-
     data() {
         return {
             worker: null,
@@ -22,38 +20,61 @@ export default {
 
     methods: {
         start: function() {
-            if (typeof(Worker) === "undefined") {
-                console.log("Workers not supported.");
-                return;
-            }
-            if (!this.inputFiles[0]) {
-                console.log("No input file.");
-                return;
-            }
-
             var context = this;
-            this.worker = new Worker("./static/js/worker.js");
 
-            this.worker.onmessage = function(e) {
-                if (!_.isArray(e.data)) {
-                    console.warn("[Main] Cannot understand worker message.");
-                }
-                else if (e.data[0] === "progress") {
-                    context.$emit('handleProgress', e.data[1]);
-                }
-                else if (e.data[0] === "result") {
-                    console.log('[Main] worker msg: ', e.data[1]);
-
-                    context.worker.terminate();
-                    context.worker = null;
-
-                    context.status = "Done";
-                }
+            if (typeof(Worker) === "undefined") {
+                console.warn("Workers not supported.");
+                return;
             }
 
-            this.worker.postMessage([this.inputFiles[0], this.params]);
+            function processInput(params, filesObj) {
+                context.params = params;
 
-            this.status = "In progress";
+                if (filesObj.files.length === 0) {
+                    console.log("No input file.");
+                    return;
+                }
+
+                for (var i = 0, file; file = filesObj.files[i]; i++) {
+                    var reader = new FileReader();
+                    reader.onLoadCallback = compute(file);
+
+                    reader.onload = function(event) {
+                        this.onLoadCallback(event.target.result);
+                    };
+
+                    reader.readAsBinaryString(file);
+                    break;
+                }
+
+            }
+
+            var compute = fileObj => data => {
+                context.worker = new Worker("./static/js/worker.js");
+
+                context.worker.onmessage = function(e) {
+                    if (!_.isArray(e.data)) {
+                        console.warn("[Main] Cannot understand worker message.");
+                    }
+                    else if (e.data[0] === "progress") {
+                        context.$emit('handleProgress', e.data[1]);
+                    }
+                    else if (e.data[0] === "result") {
+                        console.log('[Main] worker msg: ', e.data[1]);
+
+                        context.worker.terminate();
+                        context.worker = null;
+
+                        context.status = "Done";
+                    }
+                }
+
+                context.worker.postMessage([data, context.params]);
+
+                context.status = "In progress";
+            };
+
+            $eventBus.$emit("getInput", processInput);
         },
 
         stop: function() {

@@ -6,7 +6,9 @@ import router from './router'
 
 window._ = require('lodash');
 
-Vue.config.productionTip = false
+window.$eventBus = new Vue();
+
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({

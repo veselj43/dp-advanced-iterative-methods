@@ -48,10 +48,6 @@ import GeneticParams from "./methodParams/Genetic"
 import TabuParams from "./methodParams/Tabu"
 
 export default {
-    props: {
-        'files': Array,
-        'params': Object
-    },
     components: {
         'Annealing': AnnealingParams,
         'Genetic': GeneticParams,
@@ -76,20 +72,34 @@ export default {
                 problems: [
                     {value: 1, text: "3 SAT"}
                 ]
-            }
+            },
+            params: {
+                problemKey: 1,
+                methodKey: 'Tabu',
+                tabu_multiplierLimit: 2,
+                tabu_multiplierTabuSize: 1,
+                tabu_dividerTabuSize2: 4
+            },
+            files: []
         }
     },
 
     mounted() {
+        var context = this;
+        $eventBus.$on("getInput", function(callback) {
+            console.log(context.files);
+            callback(context.params, {files: context.files});
+        });
     },
 
     methods: {
         handleFileSelect: function(event) {
-            this.$emit('handleFiles', event);
+            this.files = event.target.files;
+            // this.$emit('handleFiles', event);
         },
 
         removeFile: function(index) {
-            this.$emit('removeFile', index);
+            // this.$emit('removeFile', index);
         }
     }
 }

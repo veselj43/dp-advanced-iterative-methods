@@ -251,8 +251,8 @@ class TabuSolver {
 }
 
 class Job {
-    constructor(inputFile, params) {
-        this.problem = new Input3SAT(inputFile.content, "cnf");
+    constructor(inputData, params) {
+        this.problem = new Input3SAT(inputData, "cnf");
         this.solver = new TabuSolver(params);
     }
 
