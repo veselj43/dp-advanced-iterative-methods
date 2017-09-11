@@ -87,11 +87,16 @@ html, body {
     padding: 1em 2em;
 }
 
-.right-panel .fileManager {
+.right-panel .fileManager .fileLoadLabel {
+    margin-top: .2em;
+    display: block;
+    color: #09c;
+    cursor: pointer;
 }
 
 .right-panel .fileManager input#filesToLoad,
-.right-panel .fileManager p {
+.right-panel .fileManager p,
+.right-panel .fileManager .fileLoadLabel {
     width: 100%;
     padding: .5em 1em;
 }

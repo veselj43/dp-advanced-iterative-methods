@@ -28,16 +28,18 @@
 
         <div class="fileManager">
             <div class="header">Nahrané soubory</div>
-            <div class="form-group">
-                <input id="filesToLoad" type="file" multiple v-on:change="handleFileSelect">
-            </div>
+            <div class="dropZone" v-on:drop="handleDrop" v-on:dragenter="dragEnter" v-on:dragover="dragEnter">
 
-            <ul v-if="files.length > 0">
-                <li v-for="(file, index) in files">
-                    {{file.name}} <span class="remove glyphicon glyphicon-remove" v-on:click="removeFile(index)"></span>
-                </li>
-            </ul>
-            <p v-if="files.length === 0" class="help-block">Žádné nahrané soubory.</p>
+                <label class="fileLoadLabel" for="filesToLoad">Select files</label>
+                <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
+
+                <ul v-if="files.length > 0">
+                    <li v-for="(file, index) in files">
+                        {{file.name}} <span class="remove glyphicon glyphicon-remove" v-on:click="removeFile(index)"></span>
+                    </li>
+                </ul>
+                <p v-if="files.length === 0" class="help-block">Žádné nahrané soubory.</p>
+            </div>
         </div>
     </div>
 </template>
@@ -70,7 +72,7 @@ export default {
                     }
                 ],
                 problems: [
-                    {value: 1, text: "3 SAT"}
+                    {value: 1, text: "SAT"}
                 ]
             },
             params: {
@@ -87,19 +89,31 @@ export default {
     mounted() {
         var context = this;
         $eventBus.$on("getInput", function(callback) {
-            console.log(context.files);
             callback(context.params, {files: context.files});
         });
     },
 
     methods: {
         handleFileSelect: function(event) {
-            this.files = event.target.files;
-            // this.$emit('handleFiles', event);
+            for (var i = 0, file; file = event.target.files[i]; i++) {
+                this.files.push(file);
+            }
+        },
+
+        dragEnter: function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        },
+
+        handleDrop: function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            console.log(event);
+            this.files = event.dataTransfer.files;
         },
 
         removeFile: function(index) {
-            // this.$emit('removeFile', index);
+            this.files.splice(index, 1);
         }
     }
 }

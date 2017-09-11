@@ -60,6 +60,7 @@ export default {
                         context.$emit('handleProgress', e.data[1]);
                     }
                     else if (e.data[0] === "result") {
+                        context.$emit('handleResult', e.data[1]);
                         console.log('[Main] worker msg: ', e.data[1]);
 
                         context.worker.terminate();
@@ -86,6 +87,8 @@ export default {
             this.worker = null;
 
             this.status = "Stopped";
+
+            this.$emit('interrupt', []);
         }
     }
 }

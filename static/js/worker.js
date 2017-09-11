@@ -1,3 +1,5 @@
+
+// common SAT input
 class Literal {
     constructor(name, i) {
         this.id = name; // int
@@ -27,9 +29,9 @@ class Clausule {
         }
         return false;
     }
-
 }
 
+// SAT input type
 class CNF {
     constructor(data) {
         this.clausules = [];
@@ -75,6 +77,14 @@ class CNF {
     }
 }
 
+class Input3SAT {
+    constructor(data, type) {
+        this.input = null;
+        if (type === "cnf") this.input = new CNF(data);
+    }
+}
+
+// tabu configuration model
 class Configuration {
     constructor(size, fromSelection) {
         if (fromSelection) {
@@ -116,24 +126,18 @@ class Configuration {
     }
 }
 
-class Input3SAT {
-    constructor(data, type) {
-        this.input = null;
-        if (type === "cnf") this.input = new CNF(data);
-    }
-}
-
+// Tabu method
 class TabuSolver {
     constructor(params) {
         this.params = params;
     }
 
-    //     getWeight(Configuration c) {
-    //         return c.getWeight(formula.getWeights());
+    //     getWeight(configuration) {
+    //         return configuration.getWeight(this.formula.getWeights());
     //     }
     //
-    //     getResultWeight(Configuration c) {
-    //         return (formula.check(c) < formula.getClausuleCount()) ? 0 : getWeight(c);
+    //     getResultWeight(configuration) {
+    //         return (this.formula.check(configuration) < this.formula.params.numberOfClausules) ? 0 : this.getWeight(configuration);
     //     }
 
     _compareIndexesOf(queue, c1, c2) {
@@ -174,7 +178,7 @@ class TabuSolver {
                 this.counter++;
 
                 var sCandidate = state.getNeighbor(i);
-                // console.log("sCandidate", sCandidate, this._fitness(sCandidate));
+                
                 if (tabuChanges.indexOf(i) !== -1 && this._fitness(sCandidate) < this._fitness(sBest)) continue;
 
                 if (this._fitness(sCandidate) >= this._fitness(bestCandidate)) {
@@ -202,10 +206,10 @@ class TabuSolver {
             }
             if (this._fitness(state) > this._fitness(sBest)) {
                 sBest = state;
-//                if (formula.check(sBest) == formula.getClausuleCount()) {
-//                    System.out.println(
-//                        (counter - tabuChanges.get(tabuChanges.size()-1)) + "\t" +
-//                        getWeight(sBest)
+//                if (this.formula.check(sBest) === this.formula.params.numberOfClausules) {
+//                    console.log(
+//                        (this.counter - tabuChanges[tabuChanges.length-1]) + "\t" +
+//                        this._getWeight(sBest)
 //                    );
 //                }
             }

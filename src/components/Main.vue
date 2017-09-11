@@ -4,23 +4,22 @@
         <div class="right-panel">
             <div class="inner-relative-block">
 
-                <controls></controls>
+                <controls
+                    v-on:handleProgress="handleProgress"
+                    v-on:handleResult="handleResult"
+                    v-on:interrupt="interrupt"
+                ></controls>
                 <inputs></inputs>
 
             </div>
         </div>
 
         <div class="main-panel">
-            <!-- <div class="top-panel">
-                <ul>
-                    <li><a href="#">Simulované ochlazování</a></li>
-                    <li><a href="#">Genetický algoritmus</a></li>
-                    <li><a href="#" class="active">Tabu search</a></li>
-                </ul>
-            </div> -->
-
             <div class="middle-panel">
+                <p>progress</p>
                 <code>{{progressData}}</code>
+                <p>result</p>
+                <code>{{result}}</code>
             </div>
         </div>
 
@@ -39,7 +38,8 @@ export default {
 
     data() {
         return {
-            progressData: []
+            progressData: [],
+            result: null
         }
     },
 
@@ -48,7 +48,19 @@ export default {
 
     methods: {
         handleProgress: function(data) {
+            if (this.result !== null) {
+                this.result = null;
+                this.progressData = [];
+            }
             this.progressData.push(data.fitness);
+        },
+
+        handleResult: function(data) {
+            this.result = data;
+        },
+
+        interrupt: function(data) {
+            this.result = data;
         }
     }
 }
