@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Controls from './input/Controls'
+import Controls from './Controls'
 import Inputs from './input/Inputs'
 
 export default {

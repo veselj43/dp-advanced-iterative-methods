@@ -50,7 +50,8 @@ export default {
             }
 
             var compute = fileObj => data => {
-                context.worker = new Worker("./static/js/worker.js");
+                var myWorker = require("worker-loader!./computing/worker.js");
+                context.worker = new myWorker();
 
                 context.worker.onmessage = function(e) {
                     if (!_.isArray(e.data)) {
@@ -75,7 +76,11 @@ export default {
                 context.status = "In progress";
             };
 
-            $eventBus.$emit("getInput", processInput);
+            var params;
+            var files;
+            $eventBus.$emit("getParams", data => {params = data});
+            $eventBus.$emit("getFiles", data => {files = data});
+            processInput(params, files);
         },
 
         stop: function() {

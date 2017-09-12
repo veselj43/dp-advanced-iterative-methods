@@ -72,7 +72,8 @@ export default {
                     }
                 ],
                 problems: [
-                    {value: 1, text: "SAT"}
+                    {value: 1, text: "SAT"},
+                    {value: 2, text: 'Travelling Salesman'}
                 ]
             },
             params: {
@@ -88,8 +89,12 @@ export default {
 
     mounted() {
         var context = this;
-        $eventBus.$on("getInput", function(callback) {
-            callback(context.params, {files: context.files});
+        $eventBus.$on("getParams", function(callback) {
+            callback(context.params);
+        });
+
+        $eventBus.$on("getFiles", function(callback) {
+            callback({files: context.files});
         });
     },
 
