@@ -9,7 +9,7 @@ class Job {
 
         if (params.problemKey === 1) this.problem = new SAT.Input(inputData);
 
-        if (params.methodKey === 'Tabu') this.method = new Tabu.TabuSolver(params);
+        if (params.methodKey === 'Tabu') this.method = new Tabu.TabuSolver(params.tabu);
     }
 
     run() {

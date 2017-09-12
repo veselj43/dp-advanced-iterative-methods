@@ -9,3 +9,5 @@ export default {
     name: 'advancedIterativeMethods'
 }
 </script>
+
+<style src="./styles/layout.css"></style>

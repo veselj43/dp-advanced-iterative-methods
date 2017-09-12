@@ -27,26 +27,22 @@ export default {
                 return;
             }
 
-            function processInput(params, filesObj) {
-                context.params = params;
-
-                if (filesObj.files.length === 0) {
+            function processInput(params, fileObj) {
+                if (fileObj.file === undefined) {
                     console.log("No input file.");
                     return;
                 }
 
-                for (var i = 0, file; file = filesObj.files[i]; i++) {
-                    var reader = new FileReader();
-                    reader.onLoadCallback = compute(file);
+                context.params = params;
 
-                    reader.onload = function(event) {
-                        this.onLoadCallback(event.target.result);
-                    };
+                var reader = new FileReader();
+                reader.onLoadCallback = compute(fileObj.file);
 
-                    reader.readAsBinaryString(file);
-                    break;
-                }
+                reader.onload = function(event) {
+                    this.onLoadCallback(event.target.result);
+                };
 
+                reader.readAsBinaryString(fileObj.file);
             }
 
             var compute = fileObj => data => {

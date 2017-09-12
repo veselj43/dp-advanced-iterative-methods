@@ -1,15 +1,15 @@
 <template>
     <div class="params">
         <div class="form-group">
-            <label class="col-sm-6 control-label" for="param1">param1</label>
-            <div class="col-sm-4">
-                <input class="form-control" type="number" id="param1" v-model="params.annealing_param1" placeholder="">
+            <label class="col-md-8 control-label" for="param1">param1</label>
+            <div class="col-md-4">
+                <input class="form-control" type="number" id="param1" v-model="params.annealing.param1" placeholder="">
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-6 control-label" for="param2">param2</label>
-            <div class="col-sm-4">
-                <input class="form-control" type="number" id="param2" v-model="params.annealing_param2" placeholder="">
+            <label class="col-md-8 control-label" for="param2">param2</label>
+            <div class="col-md-4">
+                <input class="form-control" type="number" id="param2" v-model="params.annealing.param2" placeholder="">
             </div>
         </div>
     </div>

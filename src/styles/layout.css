@@ -5,14 +5,16 @@ html, body {
 
 #advancedIterativeMethods {
     width: 100%;
+    height: 100vh;
     margin: 0;
     padding: 0;
     background: #fff;
+    overflow: hidden;
 }
 
 .main-panel {
-    margin-right: 350px;
-    height: 100vh;
+    margin-left: 300px;
+    margin-right: 300px;
 }
 
 .middle-panel {
@@ -44,14 +46,21 @@ html, body {
     text-decoration: none;
 }
 
-.inner-relative-block {
-    position: relative;
+.left-panel {
+    position: absolute;
+    overflow: hidden;
+    width: 300px;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #f9f9f9;
+    border-right: #ccc 1px solid;
 }
 
 .right-panel {
     position: absolute;
     overflow: hidden;
-    width: 350px;
+    width: 300px;
     height: 100vh;
     top: 0;
     right: 0;
@@ -59,20 +68,12 @@ html, body {
     border-left: #ccc 1px solid;
 }
 
+.left-panel .header,
 .right-panel .header {
     padding-left: 1em;
     padding-top: .5em;
     font-size: 120%;
     font-weight: bold;
-}
-
-.right-panel .controls {
-    display: inline-block;
-    width: 350px;
-    height: 4em;
-    padding: 0 2em;
-    line-height: 4em;
-    border-bottom: #ccc 1px solid;
 }
 
 .right-panel .controls .status {
@@ -87,23 +88,39 @@ html, body {
     padding: 1em 2em;
 }
 
-.right-panel .fileManager .fileLoadLabel {
-    margin-top: .2em;
-    display: block;
-    color: #09c;
-    cursor: pointer;
+.controls {
+    display: inline-block;
+    width: 100%;
+    height: 4em;
+    padding: 0 1em;
+    line-height: 4em;
+    border-bottom: #ccc 1px solid;
 }
 
-.right-panel .fileManager input#filesToLoad,
-.right-panel .fileManager p,
-.right-panel .fileManager .fileLoadLabel {
-    width: 100%;
+.paramsSelection {
+    padding: 1em;
+}
+
+.fileManager {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.fileManager input#filesToLoad,
+.fileManager p,
+.fileManager .fileLoadLabel {
     padding: .5em 1em;
 }
 
-.right-panel .fileManager ul {
-    overflow-y: auto;
-    height: 100%;
+.fileManager .fileLoadLabel {
+    width: auto;
+    display: block;
+    margin: .2em 1em;
+    /*color: #09c;*/
+    cursor: pointer;
+}
+
+.fileManager ul {
     margin: 0;
     padding: 0;
     background-color: #f5faff;
@@ -111,15 +128,31 @@ html, body {
     border-width: 1px 0;
 }
 
-.right-panel .fileManager ul li {
+.fileManager ul li {
     display: block;
-    padding: .2em .5em;
+    border-bottom: 1px #fff solid;
 }
 
-.right-panel .fileManager ul li .remove {
+.fileManager ul li.active {
+    background-color: #fc0;
+}
+
+.fileManager ul li span {
+    display: block;
+    line-height: 2em;
+    padding: 0 .5em;
+    cursor: pointer;
+}
+
+.fileManager ul li .select {
+    width: auto;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.fileManager ul li .remove {
     float: right;
     color: #f30;
-    cursor: pointer;
 }
 
 .middle-panel {

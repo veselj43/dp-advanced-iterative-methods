@@ -1,17 +1,18 @@
 <template>
     <div class="advancedIterativeMethods">
 
+        <div class="left-panel">
+            <files-input></files-input>
+        </div>
+
         <div class="right-panel">
-            <div class="inner-relative-block">
+            <controls
+                v-on:handleProgress="handleProgress"
+                v-on:handleResult="handleResult"
+                v-on:interrupt="interrupt"
+            ></controls>
 
-                <controls
-                    v-on:handleProgress="handleProgress"
-                    v-on:handleResult="handleResult"
-                    v-on:interrupt="interrupt"
-                ></controls>
-                <inputs></inputs>
-
-            </div>
+            <params-input></params-input>
         </div>
 
         <div class="main-panel">
@@ -28,12 +29,14 @@
 
 <script>
 import Controls from './Controls'
-import Inputs from './input/Inputs'
+import FilesInput from './input/FilesInput'
+import ParamsInput from './input/ParamsInput'
 
 export default {
     components: {
-        'controls': Controls,
-        'inputs': Inputs
+        Controls,
+        FilesInput,
+        ParamsInput
     },
 
     data() {
