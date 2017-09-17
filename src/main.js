@@ -4,9 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-window._ = require('lodash');
-
 window.$eventBus = new Vue();
+window._ = require('lodash');
 
 Vue.config.productionTip = false;
 

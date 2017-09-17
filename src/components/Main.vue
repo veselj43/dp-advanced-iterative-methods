@@ -17,10 +17,44 @@
 
         <div class="main-panel">
             <div class="middle-panel">
-                <p>progress</p>
-                <code>{{progressData}}</code>
+                <!-- <p>progress</p>
+                <code>{{progressData}}</code> -->
                 <p>result</p>
                 <code>{{result}}</code>
+
+                <br>
+                <br>
+
+                <line-chart
+                    :data="progressData"
+                    :labels="labels"
+                    :options="{
+                        responsive: false,
+                        maintainAspectRatio: false,
+                        scales: {
+    						xAxes: [{
+    							ticks: {
+                                    /*min: 0,
+                                    max: 100,
+                                    stepSize: 20,*/
+    								autoSkip: true,
+                                    autoSkipPadding: 20
+    			                }
+    						}],
+    			            yAxes: [{
+    			                ticks: {
+                                    min: 0,
+                                    max: 100,
+                                    stepSize: 10,
+    			                    beginAtZero:true
+    			                }
+    			            }]
+    			        }
+                    }"
+                    :width="800"
+                    :height="200"
+                ></line-chart>
+
             </div>
         </div>
 
@@ -32,17 +66,23 @@ import Controls from './Controls'
 import FilesInput from './input/FilesInput'
 import ParamsInput from './input/ParamsInput'
 
+// import ChartTest from './ChartTest'
+
+import LineChart from './LineChart.js'
+
 export default {
     components: {
         Controls,
         FilesInput,
-        ParamsInput
+        ParamsInput,
+        LineChart
     },
 
     data() {
         return {
             progressData: [],
-            result: null
+            result: null,
+            labels: _.range(3640/20)
         }
     },
 
@@ -50,6 +90,10 @@ export default {
     },
 
     methods: {
+        clicked: function(event) {
+            this.chartData.push(Math.floor(Math.random()*100));
+        },
+
         handleProgress: function(data) {
             if (this.result !== null) {
                 this.result = null;

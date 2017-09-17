@@ -13,8 +13,10 @@ html, body {
 }
 
 .main-panel {
+    height: 100vh;
     margin-left: 300px;
     margin-right: 300px;
+    overflow-y: auto;
 }
 
 .middle-panel {
