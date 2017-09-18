@@ -11,6 +11,7 @@
 
 <script>
 export default {
+    props: ['handlers'],
     data() {
         return {
             worker: null,
@@ -53,11 +54,14 @@ export default {
                     if (!_.isArray(e.data)) {
                         console.warn("[Main] Cannot understand worker message.");
                     }
+                    else if (e.data[0] === "init") {
+                        context.handlers.init(e.data[1]);
+                    }
                     else if (e.data[0] === "progress") {
-                        context.$emit('handleProgress', e.data[1]);
+                        context.handlers.progress(e.data[1]);
                     }
                     else if (e.data[0] === "result") {
-                        context.$emit('handleResult', e.data[1]);
+                        context.handlers.result(e.data[1]);
                         console.log('[Main] worker msg: ', e.data[1]);
 
                         context.worker.terminate();

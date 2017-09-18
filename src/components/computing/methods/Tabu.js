@@ -160,6 +160,7 @@ export class TabuSolver {
         var maxTabuSize2 = Math.round(this.formula.params.numberOfVariables / this.params.dividerTabuSize2);
 
         console.log("params: ", limit, maxTabuSize, maxTabuSize2);
+        postMessage(["init", { numberOfIterations: limit, maxFitness: this.formula.params.numberOfClausules }]);
 
         this.state0 = new Configuration(this.formula.params.numberOfVariables);
 

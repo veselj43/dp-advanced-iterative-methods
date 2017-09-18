@@ -7,9 +7,7 @@
 
         <div class="right-panel">
             <controls
-                v-on:handleProgress="handleProgress"
-                v-on:handleResult="handleResult"
-                v-on:interrupt="interrupt"
+                :handlers="handlers"
             ></controls>
 
             <params-input></params-input>
@@ -28,29 +26,6 @@
                 <line-chart
                     :data="progressData"
                     :labels="labels"
-                    :options="{
-                        responsive: false,
-                        maintainAspectRatio: false,
-                        scales: {
-    						xAxes: [{
-    							ticks: {
-                                    /*min: 0,
-                                    max: 100,
-                                    stepSize: 20,*/
-    								autoSkip: true,
-                                    autoSkipPadding: 20
-    			                }
-    						}],
-    			            yAxes: [{
-    			                ticks: {
-                                    min: 0,
-                                    max: 100,
-                                    stepSize: 10,
-    			                    beginAtZero:true
-    			                }
-    			            }]
-    			        }
-                    }"
                     :width="800"
                     :height="200"
                 ></line-chart>
@@ -82,33 +57,31 @@ export default {
         return {
             progressData: [],
             result: null,
-            labels: _.range(3640/20)
+            labels: [],
+            handlers: {
+                init: data => {
+                    this.labels = _.range(data.numberOfIterations);
+                    // data.maxFitness;
+                },
+                progress: data => {
+                    if (this.result !== null) {
+                        this.result = null;
+                        this.progressData = [];
+                    }
+                    this.progressData.push(data.fitness);
+                },
+                result: data => {
+                    this.result = data;
+                },
+                interrupt: data => {
+                    this.result = data;
+                }
+            }
         }
     },
-
     mounted() {
     },
-
     methods: {
-        clicked: function(event) {
-            this.chartData.push(Math.floor(Math.random()*100));
-        },
-
-        handleProgress: function(data) {
-            if (this.result !== null) {
-                this.result = null;
-                this.progressData = [];
-            }
-            this.progressData.push(data.fitness);
-        },
-
-        handleResult: function(data) {
-            this.result = data;
-        },
-
-        interrupt: function(data) {
-            this.result = data;
-        }
     }
 }
 </script>

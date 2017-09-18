@@ -19,9 +19,6 @@ html, body {
     overflow-y: auto;
 }
 
-.middle-panel {
-}
-
 .top-panel {
     height: 4em;
     background: #f9f9f9;
@@ -160,4 +157,5 @@ html, body {
 .middle-panel {
     margin: 2em;
     padding: .2em;
+    padding-bottom: 10em;
 }
