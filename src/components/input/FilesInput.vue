@@ -1,9 +1,12 @@
 <template>
     <div class="fileManager" v-on:drop="handleDrop" v-on:dragenter="dragEnter" v-on:dragover="dragEnter">
-        <div class="header">Nahrané soubory</div>
+        <div class="header">Input files</div>
 
-            <label class="fileLoadLabel btn btn-primary" for="filesToLoad">Add files</label>
-            <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
+            <div class="fileControlButtons">
+                <label class="fileLoad btn btn-primary" for="filesToLoad">Add</label>
+                <button class="fileRemove btn btn-danger" v-on:click="removeAllFiles">Remove</button>
+                <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
+            </div>
 
             <ul v-if="files.length > 0">
                 <li v-for="(file, index) in files" v-bind:class="{ active: index === activeFile }">
@@ -58,9 +61,35 @@ export default {
             if (this.activeFile < 0) this.activeFile = 0;
         },
 
+        removeAllFiles: function(index) {
+            this.files = [];
+            this.activeFile = 0;
+        },
+
         selectFile: function(index) {
             this.activeFile = index;
         }
     }
 }
 </script>
+
+<style scoped>
+    .fileControlButtons {
+        margin: .3em 1em .5em 1em;
+    }
+
+    .fileLoad,
+    .fileRemove {
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .fileLoad {
+        width: 60%;
+    }
+
+    .fileRemove {
+        width: 35%;
+        float: right;
+    }
+</style>

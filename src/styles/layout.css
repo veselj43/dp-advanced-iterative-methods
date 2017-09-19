@@ -111,14 +111,6 @@ html, body {
     padding: .5em 1em;
 }
 
-.fileManager .fileLoadLabel {
-    width: auto;
-    display: block;
-    margin: .2em 1em;
-    /*color: #09c;*/
-    cursor: pointer;
-}
-
 .fileManager ul {
     margin: 0;
     padding: 0;

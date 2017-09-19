@@ -21,7 +21,14 @@ class Job {
             console.warn("Unknown method selected");
             return null;
         }
-        return this.method.solve(this.problem.input);
+
+        var t0 = performance.now();
+        var result = this.method.solve(this.problem.input);
+        var t1 = performance.now();
+        
+        result.setProcessTime(t1 - t0);
+
+        return result;
     }
 }
 

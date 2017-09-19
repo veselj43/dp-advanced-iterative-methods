@@ -1,3 +1,4 @@
+import Result from '../_common/Result.js';
 
 // tabu configuration model
 class Configuration {
@@ -142,10 +143,10 @@ export class TabuSolver {
         }
 
         if (this.formula.check(sBest) === this.formula.params.numberOfClausules) {
-            console.log(this.counter + "\t" + this._fitness(sBest)); // getWeight()
+            console.log(this.counter,  this._fitness(sBest)); // getWeight()
         }
         else {
-            console.log(this.counter + "\t" + this._fitness(sBest));
+            console.log(this.counter, this._fitness(sBest));
         }
 
         return sBest;
@@ -166,6 +167,6 @@ export class TabuSolver {
 
         var best = this._process(limit, maxTabuSize, maxTabuSize2);
 
-        return best;
+        return new Result(best.selection, this._fitness(best));
     }
 }
