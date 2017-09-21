@@ -55,12 +55,14 @@ export default Line.extend({
     props: ['data', 'labels', 'customOptions'],
     data() {
         return {
-            options: this.customOptions || defaultOptions
+            options: this.customOptions || defaultOptions,
+            renderedData: [],
+            lastUpdate: performance.now()
         }
     },
     computed: {
         chartDataFn: function() {
-            return this.data;
+            return this.renderedData;
         },
         chartLabelsFn: function() {
             return this.labels;
@@ -68,11 +70,19 @@ export default Line.extend({
     },
     watch: {
         data: function() {
-            if (this.data.length === 1) {
+            if (this.data.length === 0) {
+                this.renderedData = [];
                 this._chart.destroy();
                 this.renderLineChart();
             }
-            this._chart.update();
+            else if (
+                ((performance.now() - this.lastUpdate) > 50) ||
+                this.data.length === this.labels.length
+            ) {
+                this.renderedData.push.apply(this.renderedData, this.data.slice(this.renderedData.length));
+                this.lastUpdate = performance.now();
+                this._chart.update();
+            }
         }
     },
     mounted () {
