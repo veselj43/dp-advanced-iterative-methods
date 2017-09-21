@@ -26,16 +26,24 @@
                     ></line-chart>
 
                     <div class="best" v-if="result">
-                        <h4>Best found</h4>
-                        <h5>Fitness</h5>
-                        <p>{{result.fitness}}</p>
-                        <h5>Configuration</h5>
-                        <conf-visual :resultObj="result"></conf-visual>
-                    </div>
 
-                    <div class="time" v-if="result">
-                        <h4>Processing time</h4>
-                        <p>{{result.processTime}}&nbsp;ms</p>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Fitness</th>
+                                    <th>Processing time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{result.fitness}}</td>
+                                    <td>{{result.processTime}}&nbsp;ms</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <conf-visual :resultObj="result"></conf-visual>
+
                     </div>
                 </div>
             </div>

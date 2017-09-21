@@ -28,6 +28,11 @@ export default {
                 return;
             }
 
+            if (this.worker !== null) {
+                context.$notifier.put("worker-info", "Work is in progress.", "info");
+                return;
+            }
+
             function processInput(params, fileObj) {
                 if (fileObj.file === undefined) {
                     context.$notifier.put("inFile", "No input file.");
