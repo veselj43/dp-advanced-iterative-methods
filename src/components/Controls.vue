@@ -24,13 +24,13 @@ export default {
             var context = this;
 
             if (typeof(Worker) === "undefined") {
-                console.warn("Workers not supported.");
+                context.$notifier.put("worker-err", "Workers not supported.", "error");
                 return;
             }
 
             function processInput(params, fileObj) {
                 if (fileObj.file === undefined) {
-                    console.log("No input file.");
+                    context.$notifier.put("inFile", "No input file.");
                     return;
                 }
 
@@ -61,8 +61,6 @@ export default {
                         context.handlers.progress(e.data[1]);
                     }
                     else if (e.data[0] === "result") {
-                        console.log('[Main] worker msg: ', e.data[1]);
-
                         context.worker.terminate();
                         context.worker = null;
 
@@ -71,7 +69,7 @@ export default {
 
                         context.handlers.result(e.data[1]);
                     }
-                }
+                };
 
                 context.worker.postMessage([data, context.params]);
 
@@ -87,7 +85,7 @@ export default {
 
         stop: function() {
             if (this.worker === null) {
-                console.log("Nothing to stop.");
+                this.$notifier.put("stop", "Nothing to stop.", "info");
                 return;
             }
             this.worker.terminate();
