@@ -53,6 +53,15 @@ export default {
         };
 
         Vue.prototype.$notifier = {
+            push: function(message, type = 'show') {
+                if (typeof toastedMethods[type] === "function") {
+                    var msgOptions = (options.bindedMsgOptions[type]) ? options.bindedMsgOptions[type] : options.bindedMsgOptions.default;
+                    toastedMethods[type](message, msgOptions);
+                }
+                else {
+                    console.warn("Invalid message type: \"" + type + "\"");
+                }
+            },
             put: function(id, message, type = 'show') {
                 if (messagesId[id] && !messagesId[id].disposed()) {
                     messagesId[id].goAway(0);

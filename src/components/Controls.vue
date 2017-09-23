@@ -59,6 +59,9 @@ export default {
                     if (!_.isArray(e.data)) {
                         console.warn("[Main] Cannot understand worker message.");
                     }
+                    else if (e.data[0] === "message") {
+                        context.$notifier.push(e.data[1], e.data[2]);
+                    }
                     else if (e.data[0] === "init") {
                         context.handlers.init(e.data[1]);
                     }
@@ -69,10 +72,15 @@ export default {
                         context.worker.terminate();
                         context.worker = null;
 
-                        context.status = "Done";
-                        e.data[1].status = context.status;
+                        if (e.data[1] === null) {
+                            context.status = "Error";
+                        }
+                        else {
+                            context.status = "Done";
+                            e.data[1].status = context.status;
+                            context.handlers.result(e.data[1]);
+                        }
 
-                        context.handlers.result(e.data[1]);
                     }
                 };
 
@@ -98,7 +106,7 @@ export default {
 
             this.status = "Stopped";
 
-            this.$emit('interrupt', {status: this.status});
+            this.handlers.interrupt(this.status);
         }
     }
 }

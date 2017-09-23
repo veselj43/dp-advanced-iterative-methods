@@ -14,18 +14,18 @@ class Job {
 
     run() {
         if (this.problem === null) {
-            console.warn("Unknown problem selected");
+            postMessage(["message", "Unknown problem selected", "error"]);
             return null;
         }
         if (this.method === null) {
-            console.warn("Unknown method selected");
+            postMessage(["message", "Unknown method selected", "error"]);
             return null;
         }
 
         var t0 = performance.now();
         var result = this.method.solve(this.problem.input);
         var t1 = performance.now();
-        
+
         result.setProcessTime(t1 - t0);
 
         return result;
@@ -34,12 +34,9 @@ class Job {
 
 // msg recieved event
 onmessage = function(e) {
-    console.log('[Worker] start');
 
     var job = new Job(e.data[0], e.data[1]);
     var result = job.run();
-
-    console.log('[Worker] done');
 
     postMessage(["result", result]);
 }

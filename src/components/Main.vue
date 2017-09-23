@@ -91,8 +91,8 @@ export default {
                 result: data => {
                     this.result = data;
                 },
-                interrupt: data => {
-                    this.result = data;
+                interrupt: status => {
+                    this.result = null;
                 }
             }
         }

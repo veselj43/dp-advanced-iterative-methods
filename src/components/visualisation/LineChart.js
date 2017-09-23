@@ -32,6 +32,7 @@ var defaultOptions = {
             ticks: {
                 min: 0,
                 stepSize: 10,
+                beginAtZero: true,
                 maxRotation: 0,
                 autoSkip: true
             }
@@ -44,8 +45,8 @@ var defaultOptions = {
             },
             ticks: {
                 min: 0,
-                stepSize: 10,
-                beginAtZero:true
+                beginAtZero: true,
+                autoSkip: true,
             }
         }]
     }
