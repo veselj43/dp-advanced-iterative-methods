@@ -31,9 +31,9 @@ var defaultOptions = {
             },
             ticks: {
                 min: 0,
-                stepSize: 10,
+                stepSize: 100,
                 beginAtZero: true,
-                maxRotation: 0,
+                // maxRotation: 0,
                 autoSkip: true
             }
         }],

@@ -17,13 +17,13 @@ class Configuration {
         return new Configuration(this.selection.length, this.selection);
     }
 
-    changeOn(position) {
+    _changeOn(position) {
         this.selection[position] = !this.selection[position];
         return this;
     }
 
     getNeighbor(position) {
-        return this.copy().changeOn(position);
+        return this.copy()._changeOn(position);
     }
 
     toString() {
@@ -111,7 +111,7 @@ export class TabuSolver {
 
             if (bestCandidate === null) {
                 if (tabuBestCandidate === null) {
-                    console.log("------------");
+                    console.warn("-- no candidates --");
                     break;
                 }
                 state = tabuBestCandidate;
