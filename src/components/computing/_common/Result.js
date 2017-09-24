@@ -1,7 +1,8 @@
 export default class Result {
-    constructor(result, fitness) {
+    constructor(result, fitness, counter) {
         this.result = result;
         this.fitness = fitness;
+        this.counter = counter;
     }
 
     setProcessTime(time) {

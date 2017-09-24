@@ -71,7 +71,7 @@ export default {
                 tabu: {
                     multiplierLimit: 2,
                     multiplierTabuSize: 1,
-                    dividerTabuSize2: 4
+                    tabuSize2: 4
                 }
             }
         }

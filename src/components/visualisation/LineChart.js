@@ -8,8 +8,8 @@ var defaultOptions = {
     },
     elements: {
         point:{
-            radius: 0,
-            hoverRadius: 4
+            radius: 1,
+            hoverRadius: 5
         },
         line: {
             tension: 0
@@ -18,8 +18,14 @@ var defaultOptions = {
     legend: {
         display: false
     },
-    tooltips: {
+    hover: {
+        mode: 'index',
+        intersect: false
         // enabled: false
+    },
+    tooltips: {
+        mode: 'index',
+        intersect: false
     },
     scales: {
         xAxes: [{
@@ -53,10 +59,18 @@ var defaultOptions = {
 };
 
 export default Line.extend({
-    props: ['data', 'labels', 'customOptions'],
+    props: {
+        values: Array,
+        labels: Array,
+        options: {
+            type: Object,
+            default: function () {
+                return defaultOptions;
+            }
+        }
+    },
     data() {
         return {
-            options: this.customOptions || defaultOptions,
             renderedData: [],
             lastUpdate: performance.now()
         }
@@ -70,17 +84,17 @@ export default Line.extend({
         }
     },
     watch: {
-        data: function() {
-            if (this.data.length === 0) {
+        values: function() {
+            if (this.values.length === 0) {
                 this.renderedData = [];
                 this._chart.destroy();
                 this.renderLineChart();
             }
             else if (
                 ((performance.now() - this.lastUpdate) > 50) ||
-                this.data.length === this.labels.length
+                this.values.length === this.labels.length
             ) {
-                this.renderedData.push.apply(this.renderedData, this.data.slice(this.renderedData.length));
+                this.renderedData.push.apply(this.renderedData, this.values.slice(this.renderedData.length));
                 this.lastUpdate = performance.now();
                 this._chart.update();
             }

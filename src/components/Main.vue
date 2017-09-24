@@ -19,9 +19,8 @@
                 <div class="results">
                     <h3>Results</h3>
 
-                    <line-chart
-                        :data="progressData"
-                        :labels="labels"
+                    <line-chart class="chart"
+                        v-bind="chartData"
                         :height="300"
                     ></line-chart>
 
@@ -44,12 +43,14 @@
                             <thead>
                                 <tr>
                                     <th>Fitness</th>
+                                    <th>States checked</th>
                                     <th>Processing time</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>{{result.fitness}}</td>
+                                    <td>{{result.counter}}</td>
                                     <td>{{parsedProcessTime}}</td>
                                 </tr>
                             </tbody>
@@ -85,22 +86,24 @@ export default {
 
     data() {
         return {
-            labels: [],
-            progressData: [],
+            chartData: {
+                labels: [],
+                values: []
+            },
             bestFoundFitness: 0,
             actualFitness: 0,
             result: null,
             handlers: {
                 init: data => {
                     this.result = null;
-                    this.labels = _.range(data.numberOfIterations);
-                    this.progressData = [];
+                    this.chartData.labels = _.range(data.numberOfIterations);
+                    this.chartData.values = [];
                     this.bestFoundFitness = 0;
                     this.actualFitness = 0;
                     // data.maxFitness;
                 },
                 progress: data => {
-                    this.progressData.push(data.fitness);
+                    this.chartData.values.push(data.fitness);
                     this.bestFoundFitness = Math.max(this.bestFoundFitness, data.fitness);
                     this.actualFitness = data.fitness;
                 },
@@ -135,3 +138,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .chart {
+        padding: 1em 0;
+    }
+</style>

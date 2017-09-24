@@ -142,13 +142,6 @@ export class TabuSolver {
             }
         }
 
-        if (this.formula.check(sBest) === this.formula.params.numberOfClausules) {
-            console.log(this.counter,  this._fitness(sBest)); // getWeight()
-        }
-        else {
-            console.log(this.counter, this._fitness(sBest));
-        }
-
         return sBest;
     }
 
@@ -158,7 +151,7 @@ export class TabuSolver {
 
         var limit = Math.round(this.formula.params.numberOfClausules * this.params.multiplierLimit);
         var maxTabuSize = Math.round(this.formula.params.numberOfVariables * this.params.multiplierTabuSize);
-        var maxTabuSize2 = Math.round(this.formula.params.numberOfVariables / this.params.dividerTabuSize2);
+        var maxTabuSize2 = this.params.tabuSize2;
 
         console.log("params: ", limit, maxTabuSize, maxTabuSize2);
         postMessage(["init", { numberOfIterations: limit, maxFitness: this.formula.params.numberOfClausules }]);
@@ -167,6 +160,6 @@ export class TabuSolver {
 
         var best = this._process(limit, maxTabuSize, maxTabuSize2);
 
-        return new Result(best.selection, this._fitness(best));
+        return new Result(best.selection, this._fitness(best), this.counter);
     }
 }

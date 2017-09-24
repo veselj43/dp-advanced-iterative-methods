@@ -13,9 +13,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-8 control-label" for="dividerTabuSize2">dividerTabuSize2</label>
+            <label class="col-md-8 control-label" for="tabuSize2">tabuSize2</label>
             <div class="col-md-4">
-                <input class="form-control" type="number" id="dividerTabuSize2" v-model="params.tabu.dividerTabuSize2" placeholder="">
+                <input class="form-control" type="number" id="tabuSize2" v-model="params.tabu.tabuSize2" placeholder="">
             </div>
         </div>
     </div>
