@@ -13,7 +13,7 @@
             <params-input></params-input>
         </div>
 
-        <div class="main-panel">
+        <div class="main-panel center-panel">
             <div class="middle-panel">
 
                 <div class="results">

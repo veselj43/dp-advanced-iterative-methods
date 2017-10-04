@@ -12,10 +12,13 @@ html, body {
     overflow: hidden;
 }
 
-.main-panel {
-    height: 100vh;
+.center-panel {
     margin-left: 300px;
     margin-right: 300px;
+}
+
+.main-panel {
+    height: 100vh;
     overflow-y: auto;
 }
 

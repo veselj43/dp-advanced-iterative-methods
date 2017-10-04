@@ -52,7 +52,7 @@ export default {
             }
 
             var compute = fileObj => data => {
-                var myWorker = require("worker-loader!./computing/worker.js");
+                var myWorker = require("worker-loader!./computing/IterativeMethodWorker.js");
                 context.worker = new myWorker();
 
                 context.worker.onmessage = function(e) {

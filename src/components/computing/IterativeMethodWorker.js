@@ -34,7 +34,6 @@ class Job {
 
 // msg recieved event
 onmessage = function(e) {
-
     var job = new Job(e.data[0], e.data[1]);
     var result = job.run();
 
