@@ -1,15 +1,21 @@
 <template>
     <div class="generator center-panel">
-        <form class="form-horizontal">
+        <div class="form-horizontal">
             <div class="form-group">
-                <label for="genParam1">generator p1:</label>
-                <input type="number" class="form-control" id="genParam1" placeholder="gp1">
+                <label class="col-md-2 control-label" for="genParam1">generator p1:</label>
+                <div class="col-md-10">
+                    <input type="number" class="form-control" id="genParam1" placeholder="gp1">
+                </div>
             </div>
-            <button class="btn btn-success" v-on:click="start">Generate</button>
-            <button class="btn btn-danger" v-on:click="stop">Cancel</button>
 
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-success" v-on:click="generate">Generate</button>
+                <button class="btn btn-danger" v-on:click="stop">Cancel</button>
+            </div>
+
+            <h2>Result</h2>
             <a v-if="fileData" :href="fileData" download="test.txt">download file</a>
-        </form>
+        </div>
     </div>
 </template>
 
@@ -24,7 +30,7 @@ export default {
     },
 
     methods: {
-        start: function() {
+        generate: function() {
             var context = this;
 
             if (typeof(Worker) === "undefined") {
@@ -37,7 +43,7 @@ export default {
                 return;
             }
 
-            var myWorker = require("worker-loader!../computing/GeneratorWorker.js");
+            var myWorker = require("worker-loader!../../computing/GeneratorWorker.js");
             context.worker = new myWorker();
 
             context.worker.onmessage = function(e) {
@@ -87,3 +93,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .generator {
+        margin-top: 2em;
+    }
+</style>

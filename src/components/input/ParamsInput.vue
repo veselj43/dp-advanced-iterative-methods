@@ -56,7 +56,8 @@ export default {
                 ],
                 problems: [
                     {value: 1, text: "SAT"},
-                    {value: 2, text: 'Travelling Salesman'}
+                    {value: 2, text: "Travelling Salesman"},
+                    {value: 3, text: "Knapsack"}
                 ]
             },
             params: {
