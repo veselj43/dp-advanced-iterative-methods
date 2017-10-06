@@ -1,3 +1,14 @@
+import { WorkerInterface } from './WorkerInterface.js';
+
+var methods = {
+    work: function(data) {
+        var job = new Job(data);
+        var result = job.run();
+        workerInterface.reply('result', result);
+    }
+}
+
+var workerInterface = new WorkerInterface(this, methods);
 
 class Job {
     constructor(params) {
@@ -5,14 +16,13 @@ class Job {
     }
 
     run() {
-        return "0,1,2,3,4,5,6";
+        return this.params;
     }
 }
 
-// msg recieved event
-onmessage = function(e) {
-    var job = new Job(e.data[0]);
-    var result = job.run();
+this.postMessage = postMessage;
 
-    postMessage(["result", result]);
+// msg recieved event
+onmessage = function(event) {
+    workerInterface.onMessage(event);
 }

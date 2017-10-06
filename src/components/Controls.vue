@@ -23,7 +23,7 @@ export default {
         start: function() {
             var context = this;
 
-            if (typeof(Worker) === "undefined") {
+            if (Worker === undefined) {
                 context.$notifier.put("worker-err", "Workers not supported.", "error");
                 return;
             }

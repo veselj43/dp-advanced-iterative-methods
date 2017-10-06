@@ -20,70 +20,56 @@
 </template>
 
 <script>
+import { WorkerManager } from '../../computing/WorkerManager.js';
+
 export default {
     data() {
         return {
-            worker: null,
             status: "Ready",
             fileData: null
         }
     },
-
+    mounted () {
+        var WorkerThread = require("worker-loader!../../computing/GeneratorWorker.js");
+        this.workerManager = new WorkerManager(this, WorkerThread);
+    },
     methods: {
         generate: function() {
             var context = this;
 
-            if (typeof(Worker) === "undefined") {
-                context.$notifier.put("worker-err", "Workers not supported.", "error");
+            if (this.workerManager.inProgress) {
+                this.$notifier.put("worker-info", "Work is in progress.", "info");
                 return;
             }
 
-            if (this.worker !== null) {
-                context.$notifier.put("worker-info", "Work is in progress.", "info");
-                return;
-            }
-
-            var myWorker = require("worker-loader!../../computing/GeneratorWorker.js");
-            context.worker = new myWorker();
-
-            context.worker.onmessage = function(e) {
-                if (!_.isArray(e.data)) {
-                    console.warn("[Main] Cannot understand worker message.");
-                }
-                else if (e.data[0] === "message") {
-                    context.$notifier.push(e.data[1], e.data[2]);
-                }
-                else if (e.data[0] === "result") {
-                    context.worker.terminate();
-                    context.worker = null;
-
-                    if (e.data[1] === null) {
+            this.workerManager
+                .setHandler('message', function(id, content) {
+                    this.$notifier.push(id, content);
+                })
+                .setHandler('result', function(result) {
+                    this.workerManager.terminate();
+                    if (result === null) {
                         context.status = "Error";
                     }
                     else {
                         context.status = "Done";
-                        context.result(e.data[1]);
+                        context.result(result);
                     }
+                });
 
-                }
-            };
-
-            context.worker.postMessage([context.params]);
+            this.workerManager.sendWork('work', "Hello file!");
 
             context.status = "In progress";
         },
 
         stop: function() {
-            if (this.worker === null) {
+            if (this.workerManager.terminated) {
                 this.$notifier.put("stop", "Nothing to stop.", "info");
                 return;
             }
-            this.worker.terminate();
-            this.worker = null;
+            this.workerManager.terminate();
 
             this.status = "Stopped";
-
-            this.handlers.interrupt(this.status);
         },
 
         result: function(data) {
