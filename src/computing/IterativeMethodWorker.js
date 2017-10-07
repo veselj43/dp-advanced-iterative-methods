@@ -1,5 +1,15 @@
+import { WorkerInterface } from './WorkerInterface.js';
 import * as SAT from './problems/SAT';
 import * as Tabu from './methods/Tabu';
+
+var methods = {
+    work: function(data, params) {
+        var job = new Job(data, params);
+        job.run();
+    }
+}
+
+var workerInterface = new WorkerInterface(this, methods);
 
 // Job organization
 class Job {
@@ -9,16 +19,16 @@ class Job {
 
         if (params.problemKey === 1) this.problem = new SAT.Input(inputData);
 
-        if (params.methodKey === 'Tabu') this.method = new Tabu.TabuSolver(params.tabu);
+        if (params.methodKey === 'Tabu') this.method = new Tabu.TabuSolver(workerInterface, params.tabu);
     }
 
     run() {
         if (this.problem === null) {
-            postMessage(["message", "Unknown problem selected", "error"]);
+            workerInterface.reply('message', "Unknown problem selected", "error");
             return null;
         }
         if (this.method === null) {
-            postMessage(["message", "Unknown method selected", "error"]);
+            workerInterface.reply('message', "Unknown method selected", "error");
             return null;
         }
 
@@ -28,14 +38,15 @@ class Job {
 
         result.setProcessTime(t1 - t0);
 
+        workerInterface.reply('result', result);
+
         return result;
     }
 }
 
-// msg recieved event
-onmessage = function(e) {
-    var job = new Job(e.data[0], e.data[1]);
-    var result = job.run();
+this.postMessage = postMessage;
 
-    postMessage(["result", result]);
+// msg recieved event
+onmessage = function(event) {
+    workerInterface.onMessage(event);
 }

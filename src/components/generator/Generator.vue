@@ -30,36 +30,34 @@ export default {
         }
     },
     mounted () {
-        var WorkerThread = require("worker-loader!../../computing/GeneratorWorker.js");
-        this.workerManager = new WorkerManager(this, WorkerThread);
+        var myWorker = require("worker-loader!../../computing/GeneratorWorker.js");
+        this.workerManager = new WorkerManager(this, myWorker);
+
+        this.workerManager
+            .setHandler('message', function(id, content) {
+                this.$notifier.push(id, content);
+            })
+            .setHandler('result', function(result) {
+                this.workerManager.terminate();
+                if (result === null) {
+                    this.status = "Error";
+                }
+                else {
+                    this.status = "Done";
+                    this.result(result);
+                }
+            });
     },
     methods: {
         generate: function() {
-            var context = this;
-
             if (this.workerManager.inProgress) {
                 this.$notifier.put("worker-info", "Work is in progress.", "info");
                 return;
             }
 
-            this.workerManager
-                .setHandler('message', function(id, content) {
-                    this.$notifier.push(id, content);
-                })
-                .setHandler('result', function(result) {
-                    this.workerManager.terminate();
-                    if (result === null) {
-                        context.status = "Error";
-                    }
-                    else {
-                        context.status = "Done";
-                        context.result(result);
-                    }
-                });
-
             this.workerManager.sendWork('work', "Hello file!");
 
-            context.status = "In progress";
+            this.status = "In progress";
         },
 
         stop: function() {

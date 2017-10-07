@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { WorkerManager } from '../computing/WorkerManager.js';
+
 export default {
     props: ['handlers'],
     data() {
@@ -18,18 +20,43 @@ export default {
             status: "Ready"
         }
     },
+    mounted () {
+        var myWorker = require("worker-loader!../computing/IterativeMethodWorker.js");
+        this.workerManager = new WorkerManager(this, myWorker);
 
+        this.workerManager
+            .setHandler('message', function(id, content, type) {
+                this.$notifier.push(id, content, type);
+            })
+            .setHandler('init', function(data) {
+                this.handlers.init(data);
+            })
+            .setHandler('progress', function(data) {
+                this.handlers.progress(data);
+            })
+            .setHandler('result', function(result) {
+                this.workerManager.terminate();
+                if (result === null) {
+                    this.status = "Error";
+                }
+                else {
+                    this.status = "Done";
+                    result.status = this.status;
+                    this.handlers.result(result);
+                }
+            });
+    },
     methods: {
         start: function() {
             var context = this;
 
             if (Worker === undefined) {
-                context.$notifier.put("worker-err", "Workers not supported.", "error");
+                this.$notifier.put("worker-err", "Workers not supported.", "error");
                 return;
             }
 
-            if (this.worker !== null) {
-                context.$notifier.put("worker-info", "Work is in progress.", "info");
+            if (this.workerManager.inProgress) {
+                this.$notifier.put("worker-info", "Work is in progress.", "info");
                 return;
             }
 
@@ -52,39 +79,7 @@ export default {
             }
 
             var compute = fileObj => data => {
-                var myWorker = require("worker-loader!../computing/IterativeMethodWorker.js");
-                context.worker = new myWorker();
-
-                context.worker.onmessage = function(e) {
-                    if (!_.isArray(e.data)) {
-                        console.warn("[Main] Cannot understand worker message.");
-                    }
-                    else if (e.data[0] === "message") {
-                        context.$notifier.push(e.data[1], e.data[2]);
-                    }
-                    else if (e.data[0] === "init") {
-                        context.handlers.init(e.data[1]);
-                    }
-                    else if (e.data[0] === "progress") {
-                        context.handlers.progress(e.data[1]);
-                    }
-                    else if (e.data[0] === "result") {
-                        context.worker.terminate();
-                        context.worker = null;
-
-                        if (e.data[1] === null) {
-                            context.status = "Error";
-                        }
-                        else {
-                            context.status = "Done";
-                            e.data[1].status = context.status;
-                            context.handlers.result(e.data[1]);
-                        }
-
-                    }
-                };
-
-                context.worker.postMessage([data, context.params]);
+                context.workerManager.sendWork('work', data, context.params);
 
                 context.status = "In progress";
             };
@@ -97,12 +92,11 @@ export default {
         },
 
         stop: function() {
-            if (this.worker === null) {
+            if (!this.workerManager.inProgress) {
                 this.$notifier.put("stop", "Nothing to stop.", "info");
                 return;
             }
-            this.worker.terminate();
-            this.worker = null;
+            this.workerManager.terminate();
 
             this.status = "Stopped";
 

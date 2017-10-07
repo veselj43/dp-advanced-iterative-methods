@@ -44,7 +44,8 @@ class Configuration {
 
 // Tabu method
 export class TabuSolver {
-    constructor(params) {
+    constructor(workerInterface, params) {
+        this._workerInterface = workerInterface;
         this.params = params;
     }
 
@@ -83,7 +84,7 @@ export class TabuSolver {
         var tabuChanges = [];           // List
 
         for (var n = 0; n < limit; n++) {
-            postMessage(["progress", { counter: this.counter, fitness: this._fitness(state) }]);
+            this._workerInterface.reply('progress', { counter: this.counter, fitness: this._fitness(state) });
 
             var bestCandidate = null;
             var tabuBestCandidate = null;
@@ -154,7 +155,7 @@ export class TabuSolver {
         var maxTabuSize2 = this.params.tabuSize2;
 
         console.log("params: ", limit, maxTabuSize, maxTabuSize2);
-        postMessage(["init", { numberOfIterations: limit, maxFitness: this.formula.params.numberOfClausules }]);
+        this._workerInterface.reply('init', { numberOfIterations: limit, maxFitness: this.formula.params.numberOfClausules });
 
         this.state0 = new Configuration(this.formula.params.numberOfVariables);
 
