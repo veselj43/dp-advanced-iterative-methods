@@ -1,7 +1,8 @@
 export class WorkerManager {
-    constructor(context, workerThread, onError) {
+    constructor(context, workerThread, defaultHandler, onError) {
         this._workerThread = workerThread;
         this._context = context;
+        this._defaultHandler = defaultHandler;
         this._onError = onError;
         this._handlers = {};
         this.inProgress = false;
@@ -24,9 +25,17 @@ export class WorkerManager {
                 event.data.hasOwnProperty('handlerName') &&
                 event.data.hasOwnProperty('handlerArguments')
             ) {
-                instance._handlers[event.data.handlerName].apply(instance._context, event.data.handlerArguments);
+                if (instance._handlers[event.data.handlerName]) {
+                    instance._handlers[event.data.handlerName].apply(instance._context, event.data.handlerArguments);
+                }
+                else if (instance._defaultHandler) {
+                    instance._defaultHandler.apply(instance._context, event.data.handlerArguments);
+                }
+                else {
+                    throw new TypeError('no handler for this reply');
+                }
             } else {
-                throw new TypeError('no handler for this action');
+                throw new TypeError('unsupported reply structure');
             }
         }
     }
@@ -57,7 +66,9 @@ export class WorkerManager {
     }
 
     terminate() {
-        this._worker.terminate();
+        if (!this.terminated) {
+            this._worker.terminate();
+        }
         this.terminated = true;
         this.inProgress = false;
     }
