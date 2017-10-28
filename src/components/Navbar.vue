@@ -12,12 +12,33 @@
 
         <div class="collapse navbar-collapse center">
             <ul class="nav navbar-nav center-panel">
-                <li class="active"><a>Home</a></li>
-                <li><a>Link 2</a></li>
+                <li v-for="(method, index) in methodEnum" v-on:click="selectMethod(index)" v-bind:class="{ active: selectedMethod.id === method.id }">
+                    <a>{{method.text}}</a>
+                </li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </nav>
 </template>
+
+<script>
+import { mapState, mapGetters, mapMutations } from 'vuex';
+
+export default {
+    computed: {
+        ...mapState({
+            selectedMethod: state => state.methods.selected
+        }),
+        ...mapGetters([
+            'methodEnum'
+        ])
+    },
+    methods: {
+        ...mapMutations({
+            selectMethod: 'selectMethod'
+        })
+    }
+}
+</script>
 
 <style scoped>
     .navbar {
