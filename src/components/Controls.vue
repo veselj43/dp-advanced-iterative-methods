@@ -1,10 +1,9 @@
 <template>
     <div class="controls">
-        <span class="status">Status: <b>{{status}}</b></span>
+        <span class="status">Status: <b>{{status.text}}</b></span>
         <span class="control-buttons">
-            <button class="btn btn-success" v-on:click="start">Start</button>
-            &nbsp;
-            <button class="btn btn-danger" v-on:click="stop">Stop</button>
+            <button v-if="!status.isRunning" class="btn btn-success" v-on:click="start">Start</button>
+            <button v-else class="btn btn-danger" v-on:click="stop">Stop</button>
         </span>
     </div>
 </template>
@@ -17,7 +16,10 @@ export default {
     data() {
         return {
             worker: null,
-            status: "Ready"
+            status: {
+                isRunning: false,
+                text: "Ready"
+            }
         }
     },
     mounted () {
@@ -25,26 +27,10 @@ export default {
         this.workerManager = new WorkerManager(this, myWorker);
 
         this.workerManager
-            .setHandler('message', function(id, content, type) {
-                this.$notifier.push(id, content, type);
-            })
-            .setHandler('init', function(data) {
-                this.handlers.init(data);
-            })
-            .setHandler('progress', function(data) {
-                this.handlers.progress(data);
-            })
-            .setHandler('result', function(result) {
-                this.workerManager.terminate();
-                if (result === null) {
-                    this.status = "Error";
-                }
-                else {
-                    this.status = "Done";
-                    result.status = this.status;
-                    this.handlers.result(result);
-                }
-            });
+            .setHandler('message', this.$notifier.push)
+            .setHandler('init', this.handlers.init)
+            .setHandler('progress', this.handlers.progress)
+            .setHandler('result', this.done);
     },
     methods: {
         start: function() {
@@ -81,7 +67,8 @@ export default {
             var compute = fileObj => data => {
                 context.workerManager.sendWork('work', data, context.params);
 
-                context.status = "In progress";
+                context.status.isRunning = true;
+                context.status.text = "In progress";
             };
 
             var params;
@@ -97,11 +84,45 @@ export default {
                 return;
             }
             this.workerManager.terminate();
-
-            this.status = "Stopped";
+            this.status.isRunning = false;
+            this.status.text = "Stopped";
 
             this.handlers.interrupt(this.status);
+        },
+
+        done: function(result) {
+            this.workerManager.terminate();
+            this.status.isRunning = false;
+
+            if (result === null) {
+                // TODO handle errors (are errors even possible here?)
+                this.status.text = "Error";
+            }
+            else {
+                this.status.text = "Done";
+                result.status = this.status;
+                this.handlers.result(result);
+            }
         }
     }
 }
 </script>
+
+<style scoped>
+    .controls {
+        display: inline-block;
+        width: 100%;
+        height: 4em;
+        padding: 0 1em;
+        line-height: 4em;
+        border-bottom: #ccc 1px solid;
+    }
+
+    .controls .status {
+        float: left;
+    }
+
+    .controls .control-buttons {
+        float: right;
+    }
+</style>

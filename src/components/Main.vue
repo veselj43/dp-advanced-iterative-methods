@@ -1,16 +1,18 @@
 <template>
-    <div class="advancedIterativeMethods">
+    <div class="main-page">
 
         <div class="left-panel">
-            <files-input></files-input>
-        </div>
+            <params-input></params-input>
 
-        <div class="right-panel">
             <controls
                 :handlers="handlers"
             ></controls>
 
-            <params-input></params-input>
+            <files-input></files-input>
+        </div>
+
+        <div class="right-panel">
+            <div class="header">Řešené instance</div>
         </div>
 
         <div class="main-panel center-panel">

@@ -8,13 +8,15 @@
                 <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
             </div>
 
-            <ul v-if="files.length > 0">
-                <li v-for="(file, index) in files" v-bind:class="{ active: index === activeFile }">
-                    <span class="remove glyphicon glyphicon-remove" v-on:click="removeFile(index)"></span>
-                    <span class="select" v-on:click="selectFile(index)" v-bind:title="file.name">{{file.name}}</span>
-                </li>
-            </ul>
-            <p v-if="files.length === 0" class="help-block">Žádné nahrané soubory.</p>
+            <div class="fileList-wrapper">
+                <ul v-if="files.length > 0">
+                    <li v-for="(file, index) in files" v-bind:class="{ active: index === activeFile }">
+                        <span class="remove glyphicon glyphicon-remove" v-on:click="removeFile(index)"></span>
+                        <span class="select" v-on:click="selectFile(index)" v-bind:title="file.name">{{file.name}}</span>
+                    </li>
+                </ul>
+                <p v-if="files.length === 0" class="help-block">Žádné nahrané soubory.</p>
+            </div>
         </div>
     </div>
 </template>
@@ -74,6 +76,57 @@ export default {
 </script>
 
 <style scoped>
+    .fileManager {
+    }
+
+    .fileManager input#filesToLoad,
+    .fileManager p,
+    .fileManager .fileLoadLabel {
+        padding: .5em 1em;
+    }
+
+    /* TODO file list scrolling */
+    .fileList-wrapper {
+        position: relative;
+    }
+
+    .fileManager ul {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #f5faff;
+        border: #ddd 1px solid;
+        border-width: 1px 0;
+        overflow-y: auto;
+    }
+
+    .fileManager ul li {
+        display: block;
+        border-bottom: 1px #fff solid;
+    }
+
+    .fileManager ul li.active {
+        background-color: #fc0;
+    }
+
+    .fileManager ul li span {
+        display: block;
+        line-height: 2em;
+        padding: 0 .5em;
+        cursor: pointer;
+    }
+
+    .fileManager ul li .select {
+        width: auto;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .fileManager ul li .remove {
+        float: right;
+        color: #f30;
+    }
+
     .fileControlButtons {
         margin: .3em 1em .5em 1em;
     }

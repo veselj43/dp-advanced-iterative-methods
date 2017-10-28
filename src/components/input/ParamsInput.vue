@@ -90,3 +90,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .paramsSelection {
+        padding: 1em;
+    }
+</style>

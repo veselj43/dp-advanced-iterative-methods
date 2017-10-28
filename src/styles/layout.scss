@@ -1,0 +1,105 @@
+$top-panel-height: 4em;
+$content-panels-height: calc(100vh - #{$top-panel-height});
+
+$left-panel-width: 300px;
+$right-panel-width: 250px;
+
+$bg-secondary: #f9f9f9;
+$bg-primary: #fff;
+$border-color-primary: #ccc;
+
+@mixin reset-offsets() {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+}
+
+html, body {
+    @include reset-offsets();
+}
+
+#advancedIterativeMethods {
+    @include reset-offsets();
+    width: 100%;
+    height: 100vh;
+    background: $bg-primary;
+    overflow: hidden;
+}
+
+.__router-view {
+    @include reset-offsets();
+    position: relative;
+    height: $content-panels-height;
+}
+
+.center-panel {
+    margin-left: $left-panel-width;
+    margin-right: $right-panel-width;
+}
+
+.main-panel {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+// .top-panel {
+//     height: $top-panel-height;
+//     background: $bg-secondary;
+//     border-bottom: 1px $border-color-primary solid;
+// }
+//
+// .top-panel ul {
+//     float: left;
+//     display: inline-block;
+// }
+//
+// .top-panel ul li {
+//     display: inline-block;
+// }
+//
+// .top-panel ul li a {
+//     display: block;
+//     padding: 0 1em;
+//     line-height: $top-panel-height;
+// }
+//
+// .top-panel ul li a:hover,
+// .top-panel ul li a:focus {
+//     text-decoration: none;
+// }
+
+.left-panel {
+    position: absolute;
+    overflow: hidden;
+    width: $left-panel-width;
+    height: 100%;
+    bottom: 0;
+    left: 0;
+    background: $bg-secondary;
+    border-right: $border-color-primary 1px solid;
+}
+
+.right-panel {
+    position: absolute;
+    overflow: hidden;
+    width: $right-panel-width;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    background: $bg-secondary;
+    border-left: $border-color-primary 1px solid;
+}
+
+.left-panel .header,
+.right-panel .header {
+    padding-left: 1em;
+    padding-top: .5em;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.middle-panel {
+    margin: 2em;
+    padding: .2em;
+    padding-bottom: 10em;
+}
