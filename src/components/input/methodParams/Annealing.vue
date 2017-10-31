@@ -17,14 +17,17 @@
 
 <script>
 export default {
-    computed: {
+    data () {
+        return {
+            params: _.cloneDeep(this.$store.state.inputParams.params.methodParams.annealing)
+        };
+    },
+    watch: {
         params: {
-            get () {
-                return this.$store.state.inputParams.params.methodParams.annealing
+            handler: function (params) {
+                this.$store.commit('updateParams', {id: 'annealing', data: params});
             },
-            set (value) {
-                this.$store.commit('updateParams', 'annealing', value)
-            }
+            deep: true
         }
     }
 }

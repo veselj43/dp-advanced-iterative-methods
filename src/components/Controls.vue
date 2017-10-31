@@ -126,7 +126,8 @@ export default {
         height: 4em;
         padding: 0 1em;
         line-height: 4em;
-        border-bottom: #ccc 1px solid;
+        border: #ccc 1px solid;
+        border-width: 1px 0;
     }
 
     .controls .status {

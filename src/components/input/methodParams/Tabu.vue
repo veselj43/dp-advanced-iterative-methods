@@ -23,14 +23,17 @@
 
 <script>
 export default {
-    computed: {
+    data () {
+        return {
+            params: _.cloneDeep(this.$store.state.inputParams.params.methodParams.tabu)
+        };
+    },
+    watch: {
         params: {
-            get () {
-                return this.$store.state.inputParams.params.methodParams.tabu
+            handler: function (params) {
+                this.$store.commit('updateParams', {id: 'tabu', data: params});
             },
-            set (value) {
-                this.$store.commit('updateParams', 'tabu', value)
-            }
+            deep: true
         }
     }
 }

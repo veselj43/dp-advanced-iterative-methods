@@ -2,12 +2,9 @@
     <div class="main-page">
 
         <div class="left-panel">
-            <params-input></params-input>
-
-            <controls
-                :handlers="handlers"
-            ></controls>
-
+            <params-input class="component"></params-input>
+            <controls class="component" :handlers="handlers"></controls>
+            <problem-select class="component"></problem-select>
             <files-input></files-input>
         </div>
 
@@ -71,8 +68,9 @@
 <script>
 import Controls from './Controls'
 
-import FilesInput from './input/FilesInput'
 import ParamsInput from './input/ParamsInput'
+import ProblemSelect from './input/ProblemSelect'
+import FilesInput from './input/FilesInput'
 
 import LineChart from './visualisation/LineChart.js'
 import ConfVisual from './visualisation/Configuration'
@@ -80,8 +78,9 @@ import ConfVisual from './visualisation/Configuration'
 export default {
     components: {
         Controls,
-        FilesInput,
         ParamsInput,
+        ProblemSelect,
+        FilesInput,
         LineChart,
         ConfVisual
     },

@@ -2,21 +2,20 @@
     <div class="fileManager" v-on:drop="handleDrop" v-on:dragenter="dragEnter" v-on:dragover="dragEnter">
         <div class="header">Input files</div>
 
-            <div class="fileControlButtons">
-                <label class="fileLoad btn btn-primary" for="filesToLoad">Add</label>
-                <button class="fileRemove btn btn-danger" v-on:click="removeAllFiles">Remove</button>
-                <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
-            </div>
+        <div class="fileControlButtons">
+            <label class="fileLoad btn btn-primary" for="filesToLoad">Add</label>
+            <button class="fileRemove btn btn-danger" v-on:click="removeAllFiles">Remove</button>
+            <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
+        </div>
 
-            <div class="fileList-wrapper">
-                <ul v-if="files.length > 0">
-                    <li v-for="(file, index) in files" v-bind:class="{ active: index === activeFile }">
-                        <span class="remove glyphicon glyphicon-remove" v-on:click="removeFile(index)"></span>
-                        <span class="select" v-on:click="selectFile(index)" v-bind:title="file.name">{{file.name}}</span>
-                    </li>
-                </ul>
-                <p v-if="files.length === 0" class="help-block">Žádné nahrané soubory.</p>
-            </div>
+        <div class="fileList-wrapper">
+            <ul v-if="files.length > 0">
+                <li v-for="(file, index) in files" v-bind:class="{ active: index === activeFile }">
+                    <span class="remove glyphicon glyphicon-remove" v-on:click="removeFile(index)"></span>
+                    <span class="select" v-on:click="selectFile(index)" v-bind:title="file.name">{{file.name}}</span>
+                </li>
+            </ul>
+            <p v-if="files.length === 0" class="help-block">Žádné nahrané soubory.</p>
         </div>
     </div>
 </template>
@@ -77,6 +76,12 @@ export default {
 
 <style scoped>
     .fileManager {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .fileManager > * {
+        flex-shrink: 0;
     }
 
     .fileManager input#filesToLoad,
@@ -85,9 +90,9 @@ export default {
         padding: .5em 1em;
     }
 
-    /* TODO file list scrolling */
     .fileList-wrapper {
-        position: relative;
+        flex-shrink: 1;
+        overflow-y: auto;
     }
 
     .fileManager ul {

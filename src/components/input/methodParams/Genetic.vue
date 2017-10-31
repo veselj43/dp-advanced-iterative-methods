@@ -17,14 +17,17 @@
 
 <script>
 export default {
-    computed: {
+    data () {
+        return {
+            params: _.cloneDeep(this.$store.state.inputParams.params.methodParams.genetic)
+        };
+    },
+    watch: {
         params: {
-            get () {
-                return this.$store.state.inputParams.params.methodParams.genetic
+            handler: function (params) {
+                this.$store.commit('updateParams', {id: 'genetic', data: params});
             },
-            set (value) {
-                this.$store.commit('updateParams', 'genetic', value)
-            }
+            deep: true
         }
     }
 }

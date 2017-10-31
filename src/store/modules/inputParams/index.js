@@ -45,8 +45,8 @@ const mutations = {
             state.params.problem = enums.problems[index];
         }
     },
-    updateParams (state, methodKey, methodParams) {
-        state.params.methodParams[methodKey] = methodParams;
+    updateParams (state, payload) {
+        state.params.methodParams[payload.id] = payload.data;
     }
 }
 

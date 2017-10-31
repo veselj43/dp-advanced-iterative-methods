@@ -14,13 +14,13 @@ export const methods = [
 
 export const problems = [
     {
-        id: 1,
+        id: 0,
         text: "SAT"
     }, {
-        id: 2,
+        id: 1,
         text: "Travelling Salesman"
     }, {
-        id: 3,
+        id: 2,
         text: "Knapsack"
     }
 ];

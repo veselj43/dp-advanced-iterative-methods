@@ -71,6 +71,8 @@ html, body {
 .left-panel {
     position: absolute;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     width: $left-panel-width;
     height: 100%;
     bottom: 0;
@@ -88,6 +90,10 @@ html, body {
     right: 0;
     background: $bg-secondary;
     border-left: $border-color-primary 1px solid;
+}
+
+.left-panel .component {
+    padding: 1em 1em 0 1em;
 }
 
 .left-panel .header,

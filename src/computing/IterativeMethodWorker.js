@@ -17,7 +17,7 @@ class Job {
         this.problem = null;
         this.method = null;
 
-        if (params.problem.id === 1) this.problem = new SAT.Input(inputData);
+        if (params.problem.id === 0) this.problem = new SAT.Input(inputData);
 
         if (params.method.id === 'tabu') this.method = new Tabu.TabuSolver(workerInterface, params.methodParams.tabu);
     }
