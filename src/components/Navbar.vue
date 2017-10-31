@@ -26,7 +26,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex';
 export default {
     computed: {
         ...mapState({
-            selectedMethod: state => state.methods.selected
+            selectedMethod: state => state.inputParams.params.method
         }),
         ...mapGetters([
             'methodEnum'

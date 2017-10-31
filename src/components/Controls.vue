@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { WorkerManager } from '../computing/WorkerManager.js';
 
 export default {
@@ -22,6 +23,14 @@ export default {
             }
         }
     },
+    computed: {
+        params: {
+            get () {
+                return this.$store.state.inputParams.params;
+            },
+            set (value) {}
+        }
+    },
     mounted () {
         var myWorker = require("worker-loader!../computing/IterativeMethodWorker.js");
         this.workerManager = new WorkerManager(this, myWorker);
@@ -30,7 +39,11 @@ export default {
             .setHandler('message', this.$notifier.push)
             .setHandler('init', this.handlers.init)
             .setHandler('progress', this.handlers.progress)
-            .setHandler('result', this.done);
+            .setHandler('result', this.done)
+            .setHandler('error', (message, type) => {
+                this.done(null);
+                this.$notifier.push(message, "error");
+            });
     },
     methods: {
         start: function() {
@@ -71,11 +84,9 @@ export default {
                 context.status.text = "In progress";
             };
 
-            var params;
             var files;
-            $eventBus.$emit("getParams", data => {params = data});
             $eventBus.$emit("getFiles", data => {files = data});
-            processInput(params, files);
+            processInput(this.params, files);
         },
 
         stop: function() {
@@ -95,7 +106,7 @@ export default {
             this.status.isRunning = false;
 
             if (result === null) {
-                // TODO handle errors (are errors even possible here?)
+                // TODO handle errors ?
                 this.status.text = "Error";
             }
             else {

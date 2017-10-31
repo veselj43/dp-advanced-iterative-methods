@@ -3,13 +3,13 @@
         <div class="form-group">
             <label class="col-md-8 control-label" for="param1">Param1</label>
             <div class="col-md-4">
-                <input class="form-control" type="number" id="param1" v-model="params.genetic.param1" placeholder="">
+                <input class="form-control" type="number" id="param1" v-model="params.param1" placeholder="">
             </div>
         </div>
         <div class="form-group">
             <label class="col-md-8 control-label" for="param2">Param2</label>
             <div class="col-md-4">
-                <input class="form-control" type="number" id="param2" v-model="params.genetic.param2" placeholder="">
+                <input class="form-control" type="number" id="param2" v-model="params.param2" placeholder="">
             </div>
         </div>
     </div>
@@ -17,6 +17,15 @@
 
 <script>
 export default {
-    props: ['params']
+    computed: {
+        params: {
+            get () {
+                return this.$store.state.inputParams.params.methodParams.genetic
+            },
+            set (value) {
+                this.$store.commit('updateParams', 'genetic', value)
+            }
+        }
+    }
 }
 </script>

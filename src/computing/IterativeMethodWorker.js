@@ -17,18 +17,18 @@ class Job {
         this.problem = null;
         this.method = null;
 
-        if (params.problemKey === 1) this.problem = new SAT.Input(inputData);
+        if (params.problem.id === 1) this.problem = new SAT.Input(inputData);
 
-        if (params.methodKey === 'Tabu') this.method = new Tabu.TabuSolver(workerInterface, params.tabu);
+        if (params.method.id === 'tabu') this.method = new Tabu.TabuSolver(workerInterface, params.methodParams.tabu);
     }
 
     run() {
         if (this.problem === null) {
-            workerInterface.reply('message', "Unknown problem selected", "error");
+            workerInterface.reply('error', "Unknown problem selected");
             return null;
         }
         if (this.method === null) {
-            workerInterface.reply('message', "Unknown method selected", "error");
+            workerInterface.reply('error', "Unknown method selected");
             return null;
         }
 

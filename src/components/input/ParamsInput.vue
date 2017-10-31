@@ -5,22 +5,14 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="problemKey">Problem</label>
                 <div class="col-md-8">
-                    <select class="form-control" id="problemKey" v-model="params.problemKey">
-                        <option v-for="problem in options.problems" v-bind:value="problem.value">{{problem.text}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="methodKey">Method</label>
-                <div class="col-md-8">
-                    <select class="form-control" id="methodKey" v-model="params.methodKey">
-                        <option v-for="method in options.methods" v-bind:value="method.value">{{method.text}}</option>
+                    <select class="form-control" id="problemKey" v-model="problemKey">
+                        <option v-for="problem in problemEnum" :value="problem.id">{{problem.text}}</option>
                     </select>
                 </div>
             </div>
 
             <keep-alive>
-                <component :is="params.methodKey" :params.sync="params"></component>
+                <component :is="methodKey"></component>
             </keep-alive>
 
         </form>
@@ -28,6 +20,8 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
+
 import AnnealingParams from "./methodParams/Annealing"
 import GeneticParams from "./methodParams/Genetic"
 import TabuParams from "./methodParams/Tabu"
@@ -39,54 +33,21 @@ export default {
         'Tabu': TabuParams
     },
 
-    data() {
-        return {
-            options: {
-                methods: [
-                    {
-                        value: 'Annealing',
-                        text: "Simulované ochlazování"
-                    }, {
-                        value: 'Genetic',
-                        text: "Genetický algoritmus"
-                    }, {
-                        value: 'Tabu',
-                        text: "Tabu prohledávání"
-                    }
-                ],
-                problems: [
-                    {value: 1, text: "SAT"},
-                    {value: 2, text: "Travelling Salesman"},
-                    {value: 3, text: "Knapsack"}
-                ]
+    computed: {
+        problemKey: {
+            get () {
+                return this.$store.state.inputParams.params.problem.id
             },
-            params: {
-                problemKey: 1,
-                methodKey: 'Tabu',
-                annealing: {
-                    param1: 1
-                },
-                genetic: {
-                    param1: 1
-                },
-                tabu: {
-                    multiplierLimit: 2,
-                    multiplierTabuSize: 1,
-                    tabuSize2: 4
-                }
+            set (value) {
+                this.$store.commit('selectProblem', value)
             }
-        }
-    },
-
-    mounted() {
-        var context = this;
-        $eventBus.$on("getParams", function(callback) {
-            callback(context.params);
-        });
-    },
-
-    methods: {
-
+        },
+        ...mapState({
+            methodKey: (state) => state.inputParams.params.method.id
+        }),
+        ...mapGetters([
+            'problemEnum'
+        ])
     }
 }
 </script>
