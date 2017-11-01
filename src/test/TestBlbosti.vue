@@ -1,6 +1,8 @@
 <template>
     <div class="testComponent">
-        <span v-on:click="click">Hello world!</span>
+        <p>printing variable: "{{someVariable}}"</p>
+
+        <button class="btn btn-default" v-on:click="click">Hello world!</button>
     </div>
 </template>
 
@@ -10,6 +12,11 @@ function clickHandler() {
 }
 
 export default {
+    data: function() {
+        return {
+            someVariable: "variable content"
+        };
+    },
     mounted: function() {
         var i = [5, "ahoj", 5.854];
         var obj = {
@@ -22,7 +29,17 @@ export default {
     methods: {
         click: function() {
             clickHandler();
+
+            // accessing data variables with this
+            console.log(this.someVariable);
         }
     }
 }
 </script>
+
+<style scoped>
+    .testComponent {
+        width: 80%;
+        margin: 1em auto;
+    }
+</style>
