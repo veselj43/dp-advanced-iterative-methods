@@ -18,10 +18,10 @@
                 <div class="results">
                     <h3>Results</h3>
 
-                    <line-chart class="chart"
+                    <live-line-chart class="chart"
                         v-bind="chartData"
                         :height="300"
-                    ></line-chart>
+                    ></live-line-chart>
 
                     <div class="best">
 
@@ -38,7 +38,7 @@
                             </tbody>
                         </table>
 
-                        <table v-if="result" class="table table-bordered table-hover">
+                        <table v-else class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Fitness</th>
@@ -72,7 +72,7 @@ import ParamsInput from './input/ParamsInput'
 import ProblemSelect from './input/ProblemSelect'
 import FilesInput from './input/FilesInput'
 
-import LineChart from './visualisation/LineChart.js'
+import LiveLineChart from './visualisation/LiveLineChart'
 import ConfVisual from './visualisation/Configuration'
 
 export default {
@@ -81,7 +81,7 @@ export default {
         ParamsInput,
         ProblemSelect,
         FilesInput,
-        LineChart,
+        LiveLineChart,
         ConfVisual
     },
 
@@ -119,6 +119,7 @@ export default {
     },
     computed: {
         parsedProcessTime() {
+            // TODO try to move to filter
             var parsed = "";
             if (this.result && this.result.processTime) {
                 var time = [

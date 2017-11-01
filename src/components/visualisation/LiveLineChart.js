@@ -1,6 +1,7 @@
 import { Line } from 'vue-chartjs'
 
-var defaultOptions = {
+// chartjs options
+const defaultOptions = {
     responsive: true,
     maintainAspectRatio: false,
     animation: {
@@ -58,6 +59,12 @@ var defaultOptions = {
     }
 };
 
+const defaultComponentOptions = {
+    debounce: {
+        duration: 50
+    }
+};
+
 export default Line.extend({
     props: {
         values: Array,
@@ -66,6 +73,12 @@ export default Line.extend({
             type: Object,
             default: function () {
                 return defaultOptions;
+            }
+        },
+        componentOptions: {
+            type: Object,
+            default: function () {
+                return defaultComponentOptions;
             }
         }
     },
@@ -91,7 +104,7 @@ export default Line.extend({
                 this.renderLineChart();
             }
             else if (
-                ((performance.now() - this.lastUpdate) > 50) ||
+                ((performance.now() - this.lastUpdate) > this.componentOptions.debounce.duration) ||
                 this.values.length === this.labels.length
             ) {
                 this.renderedData.push.apply(this.renderedData, this.values.slice(this.renderedData.length));
@@ -105,18 +118,17 @@ export default Line.extend({
     },
     methods: {
         renderLineChart: function() {
-            this.renderChart(
-                {
-                    labels: this.chartLabelsFn,
-                    datasets: [{
-                        label: "Fitness",
-                        borderColor: "#f87979",
-						backgroundColor: "transparent", // rgba(90,90,90,0.1)
-                        data: this.chartDataFn
-                    }]
-                },
-                this.options
-            );
+            var chartData = {
+                labels: this.chartLabelsFn,
+                datasets: [{
+                    label: "Fitness",
+                    borderColor: "#f87979",
+                    backgroundColor: "transparent", // rgba(90,90,90,0.1)
+                    data: this.chartDataFn
+                }]
+            };
+
+            this.renderChart(chartData, this.options);
         }
     }
 });
