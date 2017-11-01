@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
-import Generator from '@/components/generator/Generator'
+import TestBlbosti from '@/test/TestBlbosti'
 
 Vue.use(Router)
 
@@ -13,9 +13,9 @@ export default new Router({
             component: Main
         },
         {
-            path: '/generator',
-            name: 'Generator',
-            component: Generator
+            path: '/test-blbosti',
+            name: 'TestBlbosti',
+            component: TestBlbosti
         }
     ]
 })
