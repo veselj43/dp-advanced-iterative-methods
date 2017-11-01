@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import database from './modules/database/index';
 import inputParams from './modules/inputParams/index';
 
 Vue.use(Vuex);
@@ -12,6 +13,7 @@ export default new Vuex.Store({
         debugMode: debug
     },
     modules: {
+        database,
         inputParams
     }
 });
