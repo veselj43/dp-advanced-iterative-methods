@@ -9,7 +9,8 @@
         </div>
 
         <div class="right-panel">
-            <div class="header">Řešené instance</div>
+            <div class="header">Solved instances</div>
+            <computing-history></computing-history>
         </div>
 
         <div class="main-panel center-panel">
@@ -72,6 +73,8 @@ import ParamsInput from './input/ParamsInput'
 import ProblemSelect from './input/ProblemSelect'
 import FilesInput from './input/FilesInput'
 
+import ComputingHistory from './input/ComputingHistory'
+
 import LiveLineChart from './visualisation/LiveLineChart'
 import ConfVisual from './visualisation/Configuration'
 
@@ -81,6 +84,7 @@ export default {
         ParamsInput,
         ProblemSelect,
         FilesInput,
+        ComputingHistory,
         LiveLineChart,
         ConfVisual
     },
