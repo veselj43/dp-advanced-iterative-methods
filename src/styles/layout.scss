@@ -29,7 +29,7 @@ html, body {
 .__router-view {
     @include reset-offsets();
     position: relative;
-    height: $content-panels-height;
+    height: 100%;
 }
 
 .center-panel {

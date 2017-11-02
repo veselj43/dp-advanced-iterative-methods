@@ -1,11 +1,12 @@
 <template>
     <div class="fileManager" v-on:drop="handleDrop" v-on:dragenter="dragEnter" v-on:dragover="dragEnter">
-        <div class="header">Input files</div>
-
-        <div class="fileControlButtons">
-            <label class="fileLoad btn btn-primary" for="filesToLoad">Add</label>
-            <button class="fileRemove btn btn-danger" v-on:click="removeAllFiles">Remove</button>
-            <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
+        <div class="header">
+            <div class="fileControlButtons">
+                <label class="fileLoad btn btn-primary" for="filesToLoad"><span class="glyphicon glyphicon-plus"></span></label>
+                <button class="fileRemove btn btn-danger" v-on:click="removeAllFiles"><span class="glyphicon glyphicon-trash"></span></button>
+                <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
+            </div>
+            <div class="header-text">Input files</div>
         </div>
 
         <div class="fileList-wrapper">
@@ -91,6 +92,7 @@ export default {
     }
 
     .fileList-wrapper {
+        margin-top: .5em;
         flex-shrink: 1;
         overflow-y: auto;
     }
@@ -132,22 +134,20 @@ export default {
         color: #f30;
     }
 
+    .header-text, .fileControlButtons {
+        display: inline-block;
+        height: 34px;
+        line-height: 34px;
+    }
+
     .fileControlButtons {
-        margin: .3em 1em .5em 1em;
+        margin-right:  1em;
+        float: right;
     }
 
     .fileLoad,
     .fileRemove {
         display: inline-block;
         cursor: pointer;
-    }
-
-    .fileLoad {
-        width: 60%;
-    }
-
-    .fileRemove {
-        width: 35%;
-        float: right;
     }
 </style>

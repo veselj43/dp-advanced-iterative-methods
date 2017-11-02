@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar-default">
+    <nav class="navbar-default top-panel">
         <ul class="nav nav-pills nav-justified">
             <li v-for="(method, index) in methodEnum" v-on:click="selectMethod(index)" v-bind:class="{ active: selectedMethod.id === method.id }">
                 <a>{{method.text}}</a>
