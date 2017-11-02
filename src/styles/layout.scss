@@ -42,31 +42,10 @@ html, body {
     overflow-y: auto;
 }
 
-// .top-panel {
-//     height: $top-panel-height;
-//     background: $bg-secondary;
-//     border-bottom: 1px $border-color-primary solid;
-// }
-//
-// .top-panel ul {
-//     float: left;
-//     display: inline-block;
-// }
-//
-// .top-panel ul li {
-//     display: inline-block;
-// }
-//
-// .top-panel ul li a {
-//     display: block;
-//     padding: 0 1em;
-//     line-height: $top-panel-height;
-// }
-//
-// .top-panel ul li a:hover,
-// .top-panel ul li a:focus {
-//     text-decoration: none;
-// }
+.top-panel {
+    background: $bg-secondary;
+    border-bottom: 1px $border-color-primary solid;
+}
 
 .left-panel {
     position: absolute;

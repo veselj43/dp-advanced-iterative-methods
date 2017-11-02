@@ -49,11 +49,6 @@ export default {
         start: function() {
             var context = this;
 
-            if (Worker === undefined) {
-                this.$notifier.put("worker-err", "Workers not supported.", "error");
-                return;
-            }
-
             if (this.workerManager.inProgress) {
                 this.$notifier.put("worker-info", "Work is in progress.", "info");
                 return;
