@@ -32,8 +32,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    $duration-primary: 500ms;
-    $duration-secondary: 250ms;
+    $duration-primary: 400ms;
+    $duration-secondary: 300ms;
 
     .historyList {
         margin-top: 1em;

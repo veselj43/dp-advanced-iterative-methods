@@ -1,9 +1,5 @@
 <template>
     <div class="computingHistory">
-        <button class="btn btn-default" v-on:click="mockDB">Mock db</button>
-        <button class="btn btn-default" v-on:click="deleteDB">Delete db</button>
-        <button class="btn btn-default" v-on:click="removeHistory">Clear history</button>
-
         <div class="historyList">
             <div class="list-group">
                 <computing-history-item
@@ -40,11 +36,6 @@ export default {
             this.collapsed[index] = !this.collapsed[index];
         },
         ...mapMutations([
-        ]),
-        ...mapActions([
-            'mockDB',
-            'removeHistory',
-            'deleteDB'
         ])
     },
     mounted() {
