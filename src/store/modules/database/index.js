@@ -1,4 +1,5 @@
-import _mapValues from 'lodash/mapValues';
+import __mapValues from 'lodash/mapValues';
+import __extend from 'lodash/extend';
 import DBManager from './DBManager';
 
 const dbName = "MyTestDatabase";
@@ -30,7 +31,7 @@ const dbStructure = {
         }
     }
 };
-const dbTables = _mapValues(dbStructure, (tableMetaData) => tableMetaData.name);
+const dbTables = __mapValues(dbStructure, (tableMetaData) => tableMetaData.name);
 const mode = {
     RO: 'readonly',
     RW: 'readwrite'
@@ -40,7 +41,7 @@ const mockData = {
     computingHistory: [
         {method: 'tabu', problem: 0, instance: 'SAT instance 01', params: { a: 1, b: 2 } },
         {method: 'tabu', problem: 1, instance: 'KNAP instance 01', params: { a: 1, b: 2 } },
-        {method: 'annealing', problem: 0, instance: 'SAT instance 01',params: { c: 4, d: 3 } }
+        {method: 'annealing', problem: 0, instance: 'SAT instance 01', params: { c: 4, d: 3 } }
     ],
     instances: [
         {content: "instance content as string"}
@@ -70,23 +71,13 @@ var dbm = new DBManager(dbName, dbVersion, upgradeDB);
 // });
 
 // initial state
-const state = {
-    instances: null,
-    computingHistory: null
-}
+const state = {}
 
 // getters
 const getters = {}
 
 // mutations
-const mutations = {
-    updateComputingHistory(store, data) {
-        store.computingHistory = data;
-    },
-    updateInstances(store, data) {
-        store.instances = data;
-    }
-}
+const mutations = {}
 
 var loadFactory = (dbTableName, mutationName) => ({ commit }) => {
     dbm.getAll(dbTableName).then(function(data) {
@@ -101,6 +92,29 @@ const actions = {
     loadAll ({ dispatch }) {
         dispatch('loadComputingHistory');
         dispatch('loadInstances');
+    },
+    pushComputingHistory({ getters, dispatch }, data) {
+        var objForDB = getters.getInputData;
+        __extend(objForDB, {
+            instance: 'TODO get name',
+            data: {
+                bestFound: data.bestFoundFitness,
+                dataSet: data.chartData.values
+            }
+        });
+        dbm.getStore(dbTables.computingHistory, mode.RW).then(function(store) {
+            store.add(objForDB).then(function(data) {
+                dispatch('loadComputingHistory');
+            })
+        });
+    },
+    removeHistory ({ dispatch }) {
+        dbm.getStore(dbTables.computingHistory, mode.RW).then(function(store) {
+            return store.clear();
+        }).then(function(data) {
+            console.log("[DB] cleared");
+            dispatch('loadAll');
+        });
     },
     mockDB ({ dispatch }) {
         function fillStore(dbTable) {
@@ -121,14 +135,6 @@ const actions = {
         }
 
         Promise.all(fillPromises).then(function(values) {
-            dispatch('loadAll');
-        });
-    },
-    removeHistory ({ dispatch }) {
-        dbm.getStore(dbTables.computingHistory, mode.RW).then(function(store) {
-            return store.clear();
-        }).then(function(data) {
-            console.log("[DB] cleared");
             dispatch('loadAll');
         });
     },

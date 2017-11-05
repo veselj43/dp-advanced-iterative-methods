@@ -30,6 +30,14 @@ const getters = {
     },
     problemEnum () {
         return enums.problems;
+    },
+    getInputData (state) {
+        return {
+            method: state.params.method.id,
+            problem: state.params.problem.id,
+            // instance: 'TODO get name',
+            params: state.params.methodParams[state.params.method.id]
+        }
     }
 }
 

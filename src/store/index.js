@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { missingFeatures, metFeatures } from './featureSupportCheck';
 import database from './modules/database/index';
 import inputParams from './modules/inputParams/index';
+import outputData from './modules/outputData/index';
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     },
     modules: {
         database,
-        inputParams
+        inputParams,
+        outputData
     }
 });

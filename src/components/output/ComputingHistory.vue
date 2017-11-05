@@ -4,7 +4,7 @@
             <div class="list-group">
                 <computing-history-item
                     v-for="(result, index) in computingHistory"
-                    :key="index"
+                    :key="result.id"
                     :item="result"
                 ></computing-history-item>
             </div>
@@ -22,7 +22,7 @@ export default {
     },
     computed: {
         ...mapState({
-            computingHistory: (state) => state.database.computingHistory
+            computingHistory: (state) => state.outputData.computingHistory.reverse()
         }),
         ...mapGetters([
             'methodEnum',

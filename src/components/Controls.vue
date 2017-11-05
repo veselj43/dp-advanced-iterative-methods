@@ -28,7 +28,7 @@ export default {
             get () {
                 return this.$store.state.inputParams.params;
             },
-            set (value) {}
+            set (value) {} // dont change value from here
         }
     },
     mounted () {
@@ -50,7 +50,7 @@ export default {
             var context = this;
 
             if (this.workerManager.inProgress) {
-                this.$notifier.put("worker-info", "Work is in progress.", "info");
+                this.$notifier.put("workerInfo", "Work is in progress.", "info");
                 return;
             }
 

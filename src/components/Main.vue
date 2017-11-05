@@ -67,13 +67,15 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import Controls from './Controls'
 
 import ParamsInput from './input/ParamsInput'
 import ProblemSelect from './input/ProblemSelect'
 import FilesInput from './input/FilesInput'
 
-import ComputingHistory from './input/ComputingHistory'
+import ComputingHistory from './output/ComputingHistory'
 
 import LiveLineChart from './visualisation/LiveLineChart'
 import ConfVisual from './visualisation/Configuration'
@@ -114,6 +116,11 @@ export default {
                 },
                 result: data => {
                     this.result = data;
+                    console.log(this.bestFoundFitness);
+                    this.pushResult({
+                        chartData: this.chartData,
+                        bestFoundFitness: this.bestFoundFitness
+                    });
                 },
                 interrupt: status => {
                     this.result = null;
@@ -141,6 +148,9 @@ export default {
     mounted() {
     },
     methods: {
+        ...mapActions([
+            'pushResult'
+        ])
     }
 }
 </script>
