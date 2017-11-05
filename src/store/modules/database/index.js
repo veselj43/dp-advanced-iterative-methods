@@ -96,7 +96,6 @@ const actions = {
     pushComputingHistory({ getters, dispatch }, data) {
         var objForDB = getters.getInputData;
         __extend(objForDB, {
-            instance: 'TODO get name',
             data: {
                 bestFound: data.bestFoundFitness,
                 dataSet: data.chartData.values

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { WorkerManager } from '../computing/WorkerManager.js';
 
 export default {
@@ -29,7 +29,10 @@ export default {
                 return this.$store.state.inputParams.params;
             },
             set (value) {} // dont change value from here
-        }
+        },
+        ...mapGetters([
+            'getSelectedFile'
+        ])
     },
     mounted () {
         var myWorker = require("worker-loader!../computing/IterativeMethodWorker.js");
@@ -55,7 +58,7 @@ export default {
             }
 
             function processInput(params, fileObj) {
-                if (fileObj.file === undefined) {
+                if (fileObj === undefined) {
                     context.$notifier.put("inFile", "No input file.");
                     return;
                 }
@@ -63,13 +66,13 @@ export default {
                 context.params = params;
 
                 var reader = new FileReader();
-                reader.onLoadCallback = compute(fileObj.file);
+                reader.onLoadCallback = compute(fileObj);
 
                 reader.onload = function(event) {
                     this.onLoadCallback(event.target.result);
                 };
 
-                reader.readAsBinaryString(fileObj.file);
+                reader.readAsBinaryString(fileObj);
             }
 
             var compute = fileObj => data => {
@@ -79,9 +82,7 @@ export default {
                 context.status.text = "In progress";
             };
 
-            var files;
-            $eventBus.$emit("getFiles", data => {files = data});
-            processInput(this.params, files);
+            processInput(this.params, this.getSelectedFile);
         },
 
         stop: function() {

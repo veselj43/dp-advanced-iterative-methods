@@ -27,7 +27,6 @@ const mutations = {
 // actions
 const actions = {
     pushResult({ dispatch }, data) {
-        console.log(data.chartData, data.bestFoundFitness);
         dispatch('pushComputingHistory', data);
     }
 }

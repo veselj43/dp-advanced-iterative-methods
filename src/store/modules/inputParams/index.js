@@ -20,6 +20,10 @@ const state = {
                 tabuSize2: 4
             }
         }
+    },
+    files: {
+        selected: 0,
+        files: []
     }
 }
 
@@ -31,13 +35,19 @@ const getters = {
     problemEnum () {
         return enums.problems;
     },
-    getInputData (state) {
+    getInputData (state, getters) {
         return {
             method: state.params.method.id,
             problem: state.params.problem.id,
-            // instance: 'TODO get name',
+            instance: getters.getSelectedFile.name,
             params: state.params.methodParams[state.params.method.id]
         }
+    },
+    getSelectedFile (state) {
+        if (state.files.files.length === 0) {
+            return {};
+        }
+        return state.files.files[state.files.selected];
     }
 }
 
@@ -55,6 +65,23 @@ const mutations = {
     },
     updateParams (state, payload) {
         state.params.methodParams[payload.id] = payload.data;
+    },
+    addFiles (state, filesArray) {
+        for (var i = 0, file; file = filesArray[i]; i++) {
+            state.files.files.push(file);
+        }
+    },
+    selectFile (state, index) {
+        state.files.selected = index;
+    },
+    removeFile (state, index) {
+        state.files.files.splice(index, 1);
+        if (state.files.selected > index || index === state.files.files.length) state.files.selected--;
+        if (state.files.selected < 0) state.files.selected = 0;
+    },
+    removeAllFiles (state) {
+        state.files.files = [];
+        state.files.selected = 0;
     }
 }
 

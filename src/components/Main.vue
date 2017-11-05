@@ -116,7 +116,6 @@ export default {
                 },
                 result: data => {
                     this.result = data;
-                    console.log(this.bestFoundFitness);
                     this.pushResult({
                         chartData: this.chartData,
                         bestFoundFitness: this.bestFoundFitness
