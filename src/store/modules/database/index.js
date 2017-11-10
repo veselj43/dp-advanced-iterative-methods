@@ -93,7 +93,7 @@ const actions = {
         dispatch('loadComputingHistory');
         dispatch('loadInstances');
     },
-    pushComputingHistory({ getters, dispatch }, data) {
+    pushComputingHistory ({ getters, dispatch }, data) {
         var objForDB = getters.getInputData;
         __extend(objForDB, {
             data: {

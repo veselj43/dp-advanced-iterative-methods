@@ -1,13 +1,11 @@
 <template>
     <div class="computingHistory">
-        <div class="historyList">
-            <div class="list-group">
-                <computing-history-item
-                    v-for="(result, index) in computingHistory"
-                    :key="result.id"
-                    :item="result"
-                ></computing-history-item>
-            </div>
+        <div class="list-group">
+            <computing-history-item
+                v-for="(result, index) in computingHistory"
+                :key="result.id"
+                :item="result"
+            ></computing-history-item>
         </div>
     </div>
 </template>
@@ -45,7 +43,8 @@ export default {
 </script>
 
 <style scoped>
-    .historyList {
+    .computingHistory {
         margin-top: 1em;
+        overflow-y: auto;
     }
 </style>

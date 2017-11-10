@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import { WorkerManager } from '../computing/WorkerManager.js';
 
 export default {
@@ -17,19 +17,11 @@ export default {
     data() {
         return {
             worker: null,
-            status: {
-                isRunning: false,
-                text: "Ready"
-            }
+            status: this.$store.getters.getComputingStatus,
+            params: this.$store.state.inputParams.params
         }
     },
     computed: {
-        params: {
-            get () {
-                return this.$store.state.inputParams.params;
-            },
-            set (value) {} // dont change value from here
-        },
         ...mapGetters([
             'getSelectedFile'
         ])
@@ -58,12 +50,10 @@ export default {
             }
 
             function processInput(params, fileObj) {
-                if (fileObj === undefined) {
+                if (fileObj && fileObj.name === undefined) {
                     context.$notifier.put("inFile", "No input file.");
                     return;
                 }
-
-                context.params = params;
 
                 var reader = new FileReader();
                 reader.onLoadCallback = compute(fileObj);
@@ -77,9 +67,7 @@ export default {
 
             var compute = fileObj => data => {
                 context.workerManager.sendWork('work', data, context.params);
-
-                context.status.isRunning = true;
-                context.status.text = "In progress";
+                context.setStatusRunning(fileObj);
             };
 
             processInput(this.params, this.getSelectedFile);
@@ -91,26 +79,30 @@ export default {
                 return;
             }
             this.workerManager.terminate();
-            this.status.isRunning = false;
-            this.status.text = "Stopped";
-
-            this.handlers.interrupt(this.status);
+            this.handlers.interrupt();
+            this.setStatusStopped();
         },
 
         done: function(result) {
             this.workerManager.terminate();
-            this.status.isRunning = false;
 
             if (result === null) {
                 // TODO handle errors ?
-                this.status.text = "Error";
+                this.handlers.interrupt();
+                this.setStatusError();
             }
             else {
-                this.status.text = "Done";
-                result.status = this.status;
                 this.handlers.result(result);
+                this.setStatusDone();
             }
-        }
+        },
+
+        ...mapMutations([
+            'setStatusRunning',
+            'setStatusStopped',
+            'setStatusDone',
+            'setStatusError'
+        ])
     }
 }
 </script>

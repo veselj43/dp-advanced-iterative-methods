@@ -63,6 +63,8 @@ html, body {
 .right-panel {
     position: absolute;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     width: $right-panel-width;
     height: 100%;
     bottom: 0;

@@ -121,7 +121,7 @@ export default {
                         bestFoundFitness: this.bestFoundFitness
                     });
                 },
-                interrupt: status => {
+                interrupt: () => {
                     this.result = null;
                 }
             }

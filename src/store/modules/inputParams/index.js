@@ -39,9 +39,9 @@ const getters = {
         return {
             method: state.params.method.id,
             problem: state.params.problem.id,
-            instance: getters.getSelectedFile.name,
+            instance: getters.getComputingFile.name,
             params: state.params.methodParams[state.params.method.id]
-        }
+        };
     },
     getSelectedFile (state) {
         if (state.files.files.length === 0) {
