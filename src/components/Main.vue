@@ -3,7 +3,7 @@
 
         <div class="left-panel">
             <params-input class="component"></params-input>
-            <controls class="component" :handlers="handlers"></controls>
+            <controls class="component"></controls>
             <problem-select class="component"></problem-select>
             <files-input></files-input>
         </div>
@@ -20,21 +20,21 @@
                     <h3>Results</h3>
 
                     <live-line-chart class="chart"
-                        v-bind="chartData"
+                        v-bind="liveData.chart"
                         :height="300"
                     ></live-line-chart>
 
                     <div class="best">
 
-                        <table v-if="!result" class="table table-bordered table-hover">
+                        <table v-if="!computingStatus.bestResult" class="table table-bordered table-hover">
                             <tbody>
                                 <tr>
                                     <th>Best found fitness</th>
-                                    <td>{{bestFoundFitness}}</td>
+                                    <td>{{liveData.best}}</td>
                                 </tr>
                                 <tr>
                                     <th>Actual finess</th>
-                                    <td>{{actualFitness}}</td>
+                                    <td>{{liveData.actual}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -49,14 +49,14 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{{result.fitness}}</td>
-                                    <td>{{result.counter}}</td>
+                                    <td>{{computingStatus.bestResult.cost}}</td>
+                                    <td>{{computingStatus.bestResult.counter}}</td>
                                     <td>{{parsedProcessTime}}</td>
                                 </tr>
                             </tbody>
                         </table>
 
-                        <conf-visual :resultObj="result"></conf-visual>
+                        <conf-visual :resultObj="computingStatus.bestResult"></conf-visual>
 
                     </div>
                 </div>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import Controls from './Controls'
 
@@ -93,49 +93,19 @@ export default {
 
     data() {
         return {
-            chartData: {
-                labels: [],
-                values: []
-            },
-            bestFoundFitness: 0,
-            actualFitness: 0,
-            result: null,
-            handlers: {
-                init: data => {
-                    this.result = null;
-                    this.chartData.labels = _.range(data.numberOfIterations);
-                    this.chartData.values = [];
-                    this.bestFoundFitness = 0;
-                    this.actualFitness = 0;
-                    // data.maxFitness;
-                },
-                progress: data => {
-                    this.chartData.values.push(data.fitness);
-                    this.bestFoundFitness = Math.max(this.bestFoundFitness, data.fitness);
-                    this.actualFitness = data.fitness;
-                },
-                result: data => {
-                    this.result = data;
-                    this.pushResult({
-                        chartData: this.chartData,
-                        bestFoundFitness: this.bestFoundFitness
-                    });
-                },
-                interrupt: () => {
-                    this.result = null;
-                }
-            }
+            computingStatus: this.$store.state.liveData.computingStatus,
+            liveData: this.$store.state.liveData.data
         }
     },
     computed: {
         parsedProcessTime() {
             // TODO try to move to filter
             var parsed = "";
-            if (this.result && this.result.processTime) {
+            if (this.computingStatus.bestResult && this.computingStatus.bestResult.processTime) {
                 var time = [
-                    {name: "m", value: Math.floor(this.result.processTime / (1000 * 60))},
-                    {name: "s", value: Math.floor(this.result.processTime / 1000)},
-                    {name: "ms", value: Math.floor(this.result.processTime % 1000)}
+                    {name: "m", value: Math.floor(this.computingStatus.bestResult.processTime / (1000 * 60))},
+                    {name: "s", value: Math.floor(this.computingStatus.bestResult.processTime / 1000)},
+                    {name: "ms", value: Math.floor(this.computingStatus.bestResult.processTime % 1000)}
                 ];
                 time.filter(unit => unit.value > 0).forEach(unit => {
                     parsed += " " + unit.value + unit.name;

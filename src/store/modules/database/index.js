@@ -93,12 +93,14 @@ const actions = {
         dispatch('loadComputingHistory');
         dispatch('loadInstances');
     },
-    pushComputingHistory ({ getters, dispatch }, data) {
+
+    pushComputingHistory ({ getters, dispatch }, result) {
         var objForDB = getters.getInputData;
         __extend(objForDB, {
+            instance: getters.getComputingFile.name,
             data: {
-                bestFound: data.bestFoundFitness,
-                dataSet: data.chartData.values
+                result: result,
+                dataSet: getters.getChartValues
             }
         });
         dbm.getStore(dbTables.computingHistory, mode.RW).then(function(store) {
@@ -107,6 +109,7 @@ const actions = {
             })
         });
     },
+
     removeHistory ({ dispatch }) {
         dbm.getStore(dbTables.computingHistory, mode.RW).then(function(store) {
             return store.clear();
@@ -115,6 +118,8 @@ const actions = {
             dispatch('loadAll');
         });
     },
+
+    // dev tools
     mockDB ({ dispatch }) {
         function fillStore(dbTable) {
             dbm.getStore(dbTables[dbTable], mode.RW).then(function(store) {

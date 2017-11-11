@@ -8,23 +8,19 @@ const stateName = {
 
 // initial state
 const state = {
-    // testing concept
-    instances: [],
-    computingHistory: [],
-
     computingStatus: {
         isRunning: false,
-        file: null,
         text: "Ready",
-        // liveChartData: {
-        //     labels: [],
-        //     values: []
-        // }
+        file: {},
+        bestResult: null
     },
-
-    // potential structure
-    computationHistory: {
-        tabu: []
+    data: {
+        actual: 0,
+        best: 0,
+        chart: {
+            labels: [],
+            values: []
+        }
     }
 }
 
@@ -35,12 +31,16 @@ const getters = {
     },
     getComputingFile(store) {
         return store.computingStatus.file;
+    },
+    getChartValues(store) {
+        return store.data.chart.values;
     }
 }
 
 // mutations
 const mutations = {
     setStatusRunning(store, fileObj) {
+        store.data = state.data;
         store.computingStatus.file = fileObj;
         store.computingStatus.isRunning = true;
         store.computingStatus.text = stateName.running;
@@ -52,11 +52,12 @@ const mutations = {
         store.computingStatus.text = stateName.stopped;
         return file;
     },
-    setStatusDone(store) {
+    setStatusDone(store, result) {
         var file = store.computingStatus.file;
         store.computingStatus.file = null;
         store.computingStatus.isRunning = false;
         store.computingStatus.text = stateName.done;
+        store.computingStatus.bestResult = result;
         return file;
     },
     setStatusError(store) {
@@ -66,20 +67,23 @@ const mutations = {
         store.computingStatus.text = stateName.error;
         return file;
     },
-    updateComputingHistory(store, data) {
-        store.computingHistory = data;
+
+    dataInit(store, data) {
+        store.computingStatus.bestResult = null;
+        store.data.chart.labels = _.range(data.numberOfIterations);
+        store.data.chart.values = [];
+        store.data.best = 0;
+        store.data.actual = 0;
     },
-    updateInstances(store, data) {
-        store.instances = data;
+    dataProgress(store, data) {
+        store.data.actual = data.fitness;
+        store.data.chart.values.push(store.data.actual);
+        store.data.best = Math.max(store.data.best, store.data.actual);
     }
 }
 
 // actions
-const actions = {
-    pushResult({ dispatch }, data) {
-        dispatch('pushComputingHistory', data);
-    }
-}
+const actions = {}
 
 // modules
 const modules = {}

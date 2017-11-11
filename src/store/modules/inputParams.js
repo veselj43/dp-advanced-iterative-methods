@@ -1,4 +1,4 @@
-import * as enums from './enums'
+import * as enums from './_enums'
 
 // initial state
 const state = {
@@ -35,11 +35,10 @@ const getters = {
     problemEnum () {
         return enums.problems;
     },
-    getInputData (state, getters) {
+    getInputData (state) {
         return {
             method: state.params.method.id,
             problem: state.params.problem.id,
-            instance: getters.getComputingFile.name,
             params: state.params.methodParams[state.params.method.id]
         };
     },

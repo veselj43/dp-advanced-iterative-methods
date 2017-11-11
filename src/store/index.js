@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { missingFeatures, metFeatures } from './featureSupportCheck';
 import database from './modules/database/index';
-import inputParams from './modules/inputParams/index';
-import outputData from './modules/outputData/index';
+import inputParams from './modules/inputParams';
+import liveData from './modules/liveData';
+import outputData from './modules/outputData';
 
 Vue.use(Vuex);
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     modules: {
         database,
         inputParams,
+        liveData,
         outputData
     }
 });

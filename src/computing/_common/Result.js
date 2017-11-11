@@ -1,7 +1,7 @@
 export default class Result {
-    constructor(result, fitness, counter) {
+    constructor(result, cost, counter) {
         this.result = result;
-        this.fitness = fitness;
+        this.cost = cost;
         this.counter = counter;
     }
 

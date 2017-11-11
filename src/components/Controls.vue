@@ -9,14 +9,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import { WorkerManager } from '../computing/WorkerManager.js';
 
 export default {
-    props: ['handlers'],
     data() {
         return {
-            worker: null,
             status: this.$store.getters.getComputingStatus,
             params: this.$store.state.inputParams.params
         }
@@ -32,8 +30,8 @@ export default {
 
         this.workerManager
             .setHandler('message', this.$notifier.push)
-            .setHandler('init', this.handlers.init)
-            .setHandler('progress', this.handlers.progress)
+            .setHandler('init', this.dataInit)
+            .setHandler('progress', this.dataProgress)
             .setHandler('result', this.done)
             .setHandler('error', (message, type) => {
                 this.done(null);
@@ -43,34 +41,31 @@ export default {
     methods: {
         start: function() {
             var context = this;
+            var fileObj = this.getSelectedFile;
+            var reader = new FileReader();
 
             if (this.workerManager.inProgress) {
                 this.$notifier.put("workerInfo", "Work is in progress.", "info");
                 return;
             }
 
-            function processInput(params, fileObj) {
-                if (fileObj && fileObj.name === undefined) {
-                    context.$notifier.put("inFile", "No input file.");
-                    return;
-                }
-
-                var reader = new FileReader();
-                reader.onLoadCallback = compute(fileObj);
-
-                reader.onload = function(event) {
-                    this.onLoadCallback(event.target.result);
-                };
-
-                reader.readAsBinaryString(fileObj);
+            if (fileObj && fileObj.name === undefined) {
+                context.$notifier.put("inFile", "No input file.");
+                return;
             }
 
-            var compute = fileObj => data => {
+            var compute = (fileObj) => (data) => {
                 context.workerManager.sendWork('work', data, context.params);
                 context.setStatusRunning(fileObj);
             };
 
-            processInput(this.params, this.getSelectedFile);
+            reader.onLoadCallback = compute(fileObj);
+
+            reader.onload = function(event) {
+                this.onLoadCallback(event.target.result);
+            };
+
+            reader.readAsBinaryString(fileObj);
         },
 
         stop: function() {
@@ -79,7 +74,6 @@ export default {
                 return;
             }
             this.workerManager.terminate();
-            this.handlers.interrupt();
             this.setStatusStopped();
         },
 
@@ -88,12 +82,11 @@ export default {
 
             if (result === null) {
                 // TODO handle errors ?
-                this.handlers.interrupt();
                 this.setStatusError();
             }
             else {
-                this.handlers.result(result);
-                this.setStatusDone();
+                this.pushResult(result);
+                this.setStatusDone(result);
             }
         },
 
@@ -101,7 +94,12 @@ export default {
             'setStatusRunning',
             'setStatusStopped',
             'setStatusDone',
-            'setStatusError'
+            'setStatusError',
+            'dataInit',
+            'dataProgress'
+        ]),
+        ...mapActions([
+            'pushResult'
         ])
     }
 }
