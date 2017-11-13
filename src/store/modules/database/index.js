@@ -5,6 +5,34 @@ import DBManager from './DBManager';
 const dbName = "MyTestDatabase";
 const dbVersion = 1;
 const dbStructure = {
+    annealingComputingHistory: {
+        name: "annealingComputingHistory",
+        pk: {
+            keyPath: "id",
+            autoIncrement: true
+        },
+        indexes: [
+            {
+                name: "by_problem",
+                column: "problem",
+                options: {unique: false}
+            }
+        ]
+    },
+    geneticComputingHistory: {
+        name: "geneticComputingHistory",
+        pk: {
+            keyPath: "id",
+            autoIncrement: true
+        },
+        indexes: [
+            {
+                name: "by_problem",
+                column: "problem",
+                options: {unique: false}
+            }
+        ]
+    },
     tabuComputingHistory: {
         name: "tabuComputingHistory",
         pk: {
@@ -99,7 +127,7 @@ const actions = {
     },
     loadInstances: loadFactory(dbTables.instances, 'updateInstances'),
     loadAll ({ dispatch }) {
-        dispatch('loadTabuComputingHistory');
+        dispatch('loadComputingHistory');
         dispatch('loadInstances');
     },
 

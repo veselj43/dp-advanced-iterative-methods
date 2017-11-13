@@ -1,8 +1,11 @@
 <template>
     <div class="list-group-item">
-        <div class="list-group-item-heading" v-on:click="toggle">
-            <div class="collapse-header">{{item.instance}}</div>
-            <span class="collapse-switch">
+        <div class="list-group-item-heading checkbox">
+            <label>
+                <input type="checkbox" v-model="checked">
+                <div class="collapse-header">{{item.instance}}</div>
+            </label>
+            <span class="collapse-switch" v-on:click="toggle">
                 <span v-if="isActive" class="glyphicon glyphicon-triangle-bottom"></span>
                 <span v-else class="glyphicon glyphicon-triangle-left"></span>
             </span>
@@ -25,7 +28,8 @@ export default {
     props: ['item'],
     data() {
         return {
-            isActive: false
+            isActive: false,
+            checked: false
         }
     },
     methods: {
@@ -49,6 +53,7 @@ export default {
     }
 
     .list-group-item-heading {
+        position: relative;
         display: block;
         margin: 0;
         padding: 10px 15px;
@@ -60,8 +65,12 @@ export default {
         }
 
         .collapse-switch {
-            display: inline-block;
-            float: right;
+            position: absolute;
+            display: block;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            padding: 10px 1em;
             font-size: 90%;
         }
     }
