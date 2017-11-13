@@ -12,7 +12,7 @@
         <div class="fileList-wrapper">
             <ul v-if="files.length > 0">
                 <li v-for="(file, index) in files" v-bind:class="{ active: index === selectedFile }">
-                    <span class="remove glyphicon glyphicon-remove" v-on:click="removeFile(index)"></span>
+                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeFile(index)"></span>
                     <span class="select" v-on:click="selectFile(index)" v-bind:title="file.name">{{file.name}}</span>
                 </li>
             </ul>

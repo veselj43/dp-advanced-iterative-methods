@@ -3,15 +3,20 @@
         <div class="list-group-item-heading" v-on:click="toggle">
             <div class="collapse-header">{{item.instance}}</div>
             <span class="collapse-switch">
-                <span v-if="isActive" class="glyphicon glyphicon-triangle-left"></span>
-                <span v-else class="glyphicon glyphicon-triangle-bottom"></span>
+                <span v-if="isActive" class="glyphicon glyphicon-triangle-bottom"></span>
+                <span v-else class="glyphicon glyphicon-triangle-left"></span>
             </span>
         </div>
-        <ul class="list-group-item-text collapsable" v-bind:class="{'collapsed': !isActive}">
-            <li v-for="(param, key) in item.params">
-                {{key}}: {{param}}
-            </li>
-        </ul>
+        <div class="list-group-item-text collapsable" v-bind:class="{'collapsed': !isActive}">
+            <table class="table">
+                <tbody>
+                    <tr v-for="(param, key) in item.params">
+                        <td>{{key}}</td>
+                        <td><strong>{{param}}</strong></td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -62,13 +67,16 @@ export default {
     }
 
     .list-group-item-text {
+        .table {
+            margin: 0;
+        }
+
         &.collapsable {
             max-height: 500px;
             padding: 10px;
             padding-left: 25px;
-            list-style-type: none;
             overflow: hidden;
-            background-color: #ccc;
+            background-color: #ddd;
             -webkit-transition: max-height $duration-secondary, padding-top $duration-primary, padding-bottom $duration-primary;
             transition: max-height $duration-secondary, padding-top $duration-primary, padding-bottom $duration-primary;
 

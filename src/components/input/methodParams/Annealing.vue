@@ -1,14 +1,14 @@
 <template>
     <div class="params">
         <div class="form-group">
-            <label class="col-md-8 control-label" for="param1">param1</label>
-            <div class="col-md-4">
+            <label class="" for="param1">param1</label>
+            <div class="">
                 <input class="form-control" type="number" id="param1" v-model="params.param1" placeholder="">
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-8 control-label" for="param2">param2</label>
-            <div class="col-md-4">
+            <label class="" for="param2">param2</label>
+            <div class="">
                 <input class="form-control" type="number" id="param2" v-model="params.param2" placeholder="">
             </div>
         </div>

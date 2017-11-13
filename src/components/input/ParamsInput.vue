@@ -1,6 +1,6 @@
 <template>
     <div class="paramsSelection">
-        <form class="form-horizontal">
+        <form class="">
 
             <keep-alive>
                 <component :is="methodKey"></component>
