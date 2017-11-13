@@ -25,7 +25,7 @@ export default {
                 return this.$store.state.inputParams.params.problem.id
             },
             set (value) {
-                this.$store.commit('selectProblem', value);
+                this.$store.dispatch('selectProblem', value);
             }
         },
         ...mapGetters([

@@ -27,15 +27,7 @@ export default {
             'problemEnum'
         ])
     },
-    methods: {
-        toggle(index) {
-            console.log(this.collapsed[index]);
-            this.isActive = ! this.isActive;
-            this.collapsed[index] = !this.collapsed[index];
-        },
-        ...mapMutations([
-        ])
-    },
+    methods: {},
     mounted() {
         this.$store.dispatch('loadComputingHistory');
     }

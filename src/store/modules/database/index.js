@@ -5,18 +5,14 @@ import DBManager from './DBManager';
 const dbName = "MyTestDatabase";
 const dbVersion = 1;
 const dbStructure = {
-    computingHistory: {
-        name: "computingHistory",
+    tabuComputingHistory: {
+        name: "tabuComputingHistory",
         pk: {
             keyPath: "id",
             autoIncrement: true
         },
         indexes: [
             {
-                name: "by_method",
-                column: "method",
-                options: {unique: false}
-            }, {
                 name: "by_problem",
                 column: "problem",
                 options: {unique: false}
@@ -28,7 +24,14 @@ const dbStructure = {
         pk: {
             keyPath: "id",
             autoIncrement: true
-        }
+        },
+        indexes: [
+            {
+                name: "by_problem",
+                column: "problem",
+                options: {unique: false}
+            }
+        ]
     }
 };
 const dbTables = __mapValues(dbStructure, (tableMetaData) => tableMetaData.name);
@@ -38,13 +41,13 @@ const mode = {
 };
 
 const mockData = {
-    computingHistory: [
-        {method: 'tabu', problem: 0, instance: 'SAT instance 01', params: { a: 1, b: 2 } },
-        {method: 'tabu', problem: 1, instance: 'KNAP instance 01', params: { a: 1, b: 2 } },
-        {method: 'annealing', problem: 0, instance: 'SAT instance 01', params: { c: 4, d: 3 } }
+    tabuComputingHistory: [
+        { problem: 0, instance: 'SAT instance 01', params: { a: 1, b: 2 } },
+        { problem: 1, instance: 'KNAP instance 01', params: { a: 1, b: 2 } },
+        { problem: 0, instance: 'SAT instance 01', params: { c: 4, d: 3 } }
     ],
     instances: [
-        {content: "instance content as string"}
+        { content: "instance content as string ???" }
     ]
 };
 
@@ -66,7 +69,7 @@ function upgradeDB(db) {
 
 var dbm = new DBManager(dbName, dbVersion, upgradeDB);
 
-// dbm.getAll(dbTables.computingHistory, "by_method", 'tabu').then(function(data) {
+// dbm.getAll(dbTables.tabuComputingHistory, "by_method", 'tabu').then(function(data) {
 //     console.log(data);
 // });
 
@@ -87,10 +90,16 @@ var loadFactory = (dbTableName, mutationName) => ({ commit }) => {
 
 // actions
 const actions = {
-    loadComputingHistory: loadFactory(dbTables.computingHistory, 'updateComputingHistory'),
+    loadComputingHistory ({ getters, commit }) {
+        var params = getters.getInputData;
+        var table = params.method + 'ComputingHistory';
+        dbm.getAll(dbTables[table], "by_problem", params.problem).then(function(data) {
+            commit('updateComputingHistory', data);
+        });
+    },
     loadInstances: loadFactory(dbTables.instances, 'updateInstances'),
     loadAll ({ dispatch }) {
-        dispatch('loadComputingHistory');
+        dispatch('loadTabuComputingHistory');
         dispatch('loadInstances');
     },
 
@@ -103,7 +112,7 @@ const actions = {
                 dataSet: getters.getChartValues
             }
         });
-        dbm.getStore(dbTables.computingHistory, mode.RW).then(function(store) {
+        dbm.getStore(dbTables.tabuComputingHistory, mode.RW).then(function(store) {
             store.add(objForDB).then(function(data) {
                 dispatch('loadComputingHistory');
             })
@@ -111,7 +120,7 @@ const actions = {
     },
 
     removeHistory ({ dispatch }) {
-        dbm.getStore(dbTables.computingHistory, mode.RW).then(function(store) {
+        dbm.getStore(dbTables.tabuComputingHistory, mode.RW).then(function(store) {
             return store.clear();
         }).then(function(data) {
             console.log("[DB] cleared");

@@ -85,7 +85,16 @@ const mutations = {
 }
 
 // actions
-const actions = {}
+const actions = {
+    selectMethod ({ state, commit, dispatch }, index) {
+        commit('selectMethod', index);
+        dispatch('loadComputingHistory');
+    },
+    selectProblem ({ state, commit, dispatch }, index) {
+        commit('selectProblem', index);
+        dispatch('loadComputingHistory');
+    }
+}
 
 // modules
 const modules = {}
