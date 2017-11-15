@@ -4,62 +4,37 @@ import DBManager from './DBManager';
 
 const dbName = "MyTestDatabase";
 const dbVersion = 1;
+
+const defaultPK = {
+    keyPath: "id",
+    autoIncrement: true
+};
+const problemIndex = {
+    name: "by_problem",
+    column: "problem",
+    options: {unique: false}
+};
+
 const dbStructure = {
     annealingComputingHistory: {
         name: "annealingComputingHistory",
-        pk: {
-            keyPath: "id",
-            autoIncrement: true
-        },
-        indexes: [
-            {
-                name: "by_problem",
-                column: "problem",
-                options: {unique: false}
-            }
-        ]
+        pk: defaultPK,
+        indexes: [problemIndex]
     },
     geneticComputingHistory: {
         name: "geneticComputingHistory",
-        pk: {
-            keyPath: "id",
-            autoIncrement: true
-        },
-        indexes: [
-            {
-                name: "by_problem",
-                column: "problem",
-                options: {unique: false}
-            }
-        ]
+        pk: defaultPK,
+        indexes: [problemIndex]
     },
     tabuComputingHistory: {
         name: "tabuComputingHistory",
-        pk: {
-            keyPath: "id",
-            autoIncrement: true
-        },
-        indexes: [
-            {
-                name: "by_problem",
-                column: "problem",
-                options: {unique: false}
-            }
-        ]
+        pk: defaultPK,
+        indexes: [problemIndex]
     },
     instances: {
         name: "instances",
-        pk: {
-            keyPath: "id",
-            autoIncrement: true
-        },
-        indexes: [
-            {
-                name: "by_problem",
-                column: "problem",
-                options: {unique: false}
-            }
-        ]
+        pk: defaultPK,
+        indexes: [problemIndex]
     }
 };
 const dbTables = __mapValues(dbStructure, (tableMetaData) => tableMetaData.name);
@@ -125,7 +100,12 @@ const actions = {
             commit('updateComputingHistory', data);
         });
     },
-    loadInstances: loadFactory(dbTables.instances, 'updateInstances'),
+    loadInstances ({ getters, commit }) {
+        var params = getters.getInputData;
+        dbm.getAll(dbTables.instances, "by_problem", params.problem).then(function(data) {
+            commit('updateInstances', data);
+        });
+    },
     loadAll ({ dispatch }) {
         dispatch('loadComputingHistory');
         dispatch('loadInstances');
@@ -143,16 +123,46 @@ const actions = {
         dbm.getStore(dbTables.tabuComputingHistory, mode.RW).then(function(store) {
             store.add(objForDB).then(function(data) {
                 dispatch('loadComputingHistory');
-            })
+            });
         });
     },
 
-    removeHistory ({ dispatch }) {
+    clearHistory ({ dispatch }) {
         dbm.getStore(dbTables.tabuComputingHistory, mode.RW).then(function(store) {
             return store.clear();
         }).then(function(data) {
-            console.log("[DB] cleared");
-            dispatch('loadAll');
+            console.log("[DB] history cleared");
+            dispatch('loadComputingHistory');
+        });
+    },
+
+    addInstances ({ getters, dispatch }, filesArray) {
+        var inputParams = getters.getInputData;
+        dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+            var addPromises = [];
+
+            for (var i = 0, fileDbObj; fileDbObj = filesArray[i]; i++) {
+                addPromises.push(store.add({ problem: inputParams.problem, file: fileDbObj}));
+            }
+
+            Promise.all(addPromises).then(function(values) {
+                dispatch('loadInstances');
+            });
+        });
+    },
+
+    removeInstance ({ dispatch }, id) {
+        dbm.remove(dbTables.instances, id).then(function() {
+            dispatch('loadInstances');
+        });
+    },
+
+    clearInstances ({ dispatch }) {
+        dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+            return store.clear();
+        }).then(function(data) {
+            console.log("[DB] instances cleared");
+            dispatch('loadInstances');
         });
     },
 

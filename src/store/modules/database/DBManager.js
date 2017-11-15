@@ -46,6 +46,20 @@ export default class DBManager {
         });
     }
 
+    remove(dbTable, value) {
+        return this.getStore(dbTable, 'readwrite').then(function(store) {
+            store.openCursor(value).then(function(cursor) {
+                if (!cursor) return false;
+                return cursor.delete().then(function() {
+                    return true;
+                }, function(err) {
+                    console.log("[DB] record remove error", err);
+                    return false;
+                });
+            });
+        });
+    }
+
     deleteDB() {
         idb.delete(this._dbName).then(function() {
             console.log("[DB] deleted");

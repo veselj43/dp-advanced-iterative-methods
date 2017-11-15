@@ -13,6 +13,7 @@
             <ul v-if="files.length > 0">
                 <li v-for="(file, index) in files" v-bind:class="{ active: index === selectedFile }">
                     <span class="remove glyphicon glyphicon-trash" v-on:click="removeFile(index)"></span>
+                    <span class="download glyphicon glyphicon-download-alt"></span>
                     <span class="select" v-on:click="selectFile(index)" v-bind:title="file.name">{{file.name}}</span>
                 </li>
             </ul>
@@ -22,7 +23,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
     computed: {
@@ -33,15 +34,13 @@ export default {
     },
 
     mounted() {
-        var context = this;
-        $eventBus.$on("getFiles", function(callback) {
-            callback({file: context.files[context.selectedFile]});
-        });
+        this.loadInstances();
     },
 
     methods: {
         handleFileSelect: function(event) {
             this.addFiles(event.target.files);
+            // this.addInstances(event.target.files);
         },
 
         dragEnter: function(e) {
@@ -60,6 +59,12 @@ export default {
             'selectFile',
             'removeFile',
             'removeAllFiles'
+        ]),
+
+        ...mapActions([
+            'loadInstances',
+            'addInstances',
+            'removeInstance'
         ])
     }
 }
@@ -117,6 +122,11 @@ export default {
         width: auto;
         overflow: hidden;
         cursor: pointer;
+    }
+
+    .fileManager ul li .download {
+        float: right;
+        color: #03f;
     }
 
     .fileManager ul li .remove {
