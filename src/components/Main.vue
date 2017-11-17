@@ -13,7 +13,7 @@
             <computing-history></computing-history>
         </div>
 
-        <div class="main-panel center-panel">
+        <div class="main-panel center-panel __above-disable-layer">
             <div class="middle-panel">
 
                 <div class="results">

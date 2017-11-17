@@ -1,5 +1,5 @@
 <template>
-    <div class="controls">
+    <div class="controls __above-disable-layer">
         <span class="status">Status: <b>{{status.text}}</b></span>
         <span class="control-buttons">
             <button v-if="!status.isRunning" class="btn btn-success" v-on:click="start">Start</button>
@@ -60,7 +60,7 @@ export default {
 
             if (fileDbObj.type === 'file') {
                 var reader = new FileReader();
-                
+
                 reader.onLoadCallback = compute(fileDbObj.file);
                 reader.onload = function(event) {
                     this.onLoadCallback(event.target.result);
@@ -118,6 +118,7 @@ export default {
         line-height: 4em;
         border: #ccc 1px solid;
         border-width: 1px 0;
+        background-color: inherit;
     }
 
     .controls .status {

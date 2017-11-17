@@ -40,7 +40,7 @@ export default {
         max-width: 20%;
         right: 15%;
         bottom: 5%;
-        z-index: 100;
+        z-index: 1000;
         background-color: $dev-bg-color;
         border: $dev-border-color 1px solid;
 
