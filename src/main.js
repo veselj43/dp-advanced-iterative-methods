@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
+import Tooltip from 'vue-directive-tooltip';
 import App from './App';
 import store from './store';
 import router from './router';
@@ -11,6 +12,7 @@ window.$eventBus = new Vue();
 
 Vue.config.productionTip = false;
 
+Vue.use(Tooltip);
 Vue.use(ToastedWrapper);
 
 new Vue({

@@ -1,4 +1,4 @@
-import Resource from '../../../resources';
+import Resource from '../../../services/resource';
 import __mapValues from 'lodash/mapValues';
 import __extend from 'lodash/extend';
 import DBManager from './DBManager';

@@ -2,8 +2,15 @@
     <div class="fileManager" v-on:drop="handleDrop" v-on:dragenter="dragEnter" v-on:dragover="dragEnter">
         <div class="header">
             <div class="fileControlButtons">
-                <label class="fileLoad btn btn-primary" for="filesToLoad"><span class="glyphicon glyphicon-plus"></span></label>
-                <button class="fileRemove btn btn-danger" v-on:click="clearInstances"><span class="glyphicon glyphicon-trash"></span></button>
+                <label v-tooltip.top="'Upload instance file'" class="fileLoad btn btn-primary" for="filesToLoad">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </label>
+                <span v-tooltip.top="'Generate instance'" class="fileLoad btn btn-info" for="filesToLoad" v-on:click="$refs.generatorModal.open()">
+                    <span class="glyphicon glyphicon-duplicate"></span>
+                </span>
+                <button v-tooltip.top="'Remove uploaded instances'" class="fileRemove btn btn-danger" v-on:click="clearInstances">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
                 <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
             </div>
             <div class="header-text">Input files</div>
@@ -19,13 +26,26 @@
             </ul>
             <p v-if="files.length === 0" class="help-block">No files uploaded.</p>
         </div>
+
+        <sweet-modal ref="generatorModal" overlay-theme="dark">
+            <template slot="title"><strong>Instance generator</strong></template>
+            <generator></generator>
+        </sweet-modal>
     </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
+import { SweetModal } from 'sweet-modal-vue';
+import { downloadFile } from '../../services/download';
+import Generator from './Generator';
 
 export default {
+    components: {
+		SweetModal,
+        Generator
+    },
+
     computed: {
         ...mapState({
             selectedFile: state => state.inputParams.files.selected.index,
@@ -39,26 +59,18 @@ export default {
 
     methods: {
         downloadInstance: function(index) {
-            function download(fileContent) {
-                var a = document.createElement('A');
-                a.href = "data:application/octet-stream;charset=utf-8;base64," + fileContent;
-                a.download = fileDbObj.file.name;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            }
-
             var fileDbObj = this.files[index];
             if (fileDbObj.type === 'string') {
-                download(btoa(fileDbObj.file.content));
+                downloadFile(fileDbObj.file.name, btoa(fileDbObj.file.content));
                 return;
             }
             if (fileDbObj.type === 'file') {
                 var reader = new FileReader();
 
-                reader.onLoadCallback = download;
+                reader.fileName = fileDbObj.file.name;
+                reader.onLoadCallback = downloadFile;
                 reader.onload = function(event) {
-                    this.onLoadCallback(btoa(event.target.result));
+                    this.onLoadCallback(this.fileName, btoa(event.target.result));
                 };
                 reader.readAsBinaryString(fileDbObj.file);
                 return;
