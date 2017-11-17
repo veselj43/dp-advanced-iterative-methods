@@ -1,7 +1,7 @@
 import * as enums from './_enums'
 
 // initial state
-const state = {
+const initState = {
     params: {
         method: enums.methods[2],
         problem: enums.problems[0],
@@ -22,8 +22,11 @@ const state = {
         }
     },
     files: {
-        selected: 0,
-        files: []
+        selected: {
+            id: -1,
+            index: -1
+        },
+        instances: []
     }
 }
 
@@ -43,10 +46,10 @@ const getters = {
         };
     },
     getSelectedFile (state) {
-        if (state.files.files.length === 0) {
+        if (state.files.instances.length === 0) {
             return {};
         }
-        return state.files.files[state.files.selected];
+        return state.files.instances[state.files.selected.index];
     }
 }
 
@@ -65,22 +68,28 @@ const mutations = {
     updateParams (state, payload) {
         state.params.methodParams[payload.id] = payload.data;
     },
-    addFiles (state, filesArray) {
-        for (var i = 0, file; file = filesArray[i]; i++) {
-            state.files.files.push(file);
+    selectInstance (state, selected) {
+        state.files.selected.id = selected.id;
+        state.files.selected.index = selected.index;
+    },
+    updateInstances (state, data) {
+        state.files.instances = data;
+
+        if (state.files.instances.length === 0) {
+            state.files.selected = initState.files.selected;
+            return;
         }
-    },
-    selectFile (state, index) {
-        state.files.selected = index;
-    },
-    removeFile (state, index) {
-        state.files.files.splice(index, 1);
-        if (state.files.selected > index || index === state.files.files.length) state.files.selected--;
-        if (state.files.selected < 0) state.files.selected = 0;
-    },
-    removeAllFiles (state) {
-        state.files.files = [];
-        state.files.selected = 0;
+        if (state.files.selected.id === -1) {
+            state.files.selected.id = state.files.instances[0].id;
+            state.files.selected.index = 0;
+            return;
+        }
+        if (state.files.selected.index >= state.files.instances.length || state.files.selected.id < state.files.instances[state.files.selected.index].id) {
+            state.files.selected.index--;
+            if (state.files.selected.index < 0) state.files.selected.index = 0;
+        }
+
+        state.files.selected.id = state.files.instances[state.files.selected.index].id;
     }
 }
 
@@ -92,6 +101,7 @@ const actions = {
     },
     selectProblem ({ state, commit, dispatch }, index) {
         commit('selectProblem', index);
+        dispatch('loadInstances');
         dispatch('loadComputingHistory');
     }
 }
@@ -100,7 +110,7 @@ const actions = {
 const modules = {}
 
 export default {
-    state,
+    state: initState,
     getters,
     mutations,
     actions,

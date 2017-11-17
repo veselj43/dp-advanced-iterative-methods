@@ -3,7 +3,7 @@
         <div class="header">
             <div class="fileControlButtons">
                 <label class="fileLoad btn btn-primary" for="filesToLoad"><span class="glyphicon glyphicon-plus"></span></label>
-                <button class="fileRemove btn btn-danger" v-on:click="removeAllFiles"><span class="glyphicon glyphicon-trash"></span></button>
+                <button class="fileRemove btn btn-danger" v-on:click="clearInstances"><span class="glyphicon glyphicon-trash"></span></button>
                 <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
             </div>
             <div class="header-text">Input files</div>
@@ -11,13 +11,13 @@
 
         <div class="fileList-wrapper">
             <ul v-if="files.length > 0">
-                <li v-for="(file, index) in files" v-bind:class="{ active: index === selectedFile }">
-                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeFile(index)"></span>
-                    <span class="download glyphicon glyphicon-download-alt"></span>
-                    <span class="select" v-on:click="selectFile(index)" v-bind:title="file.name">{{file.name}}</span>
+                <li v-for="(instance, index) in files" :key="instance.id" v-bind:class="{ active: index === selectedFile }">
+                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeInstance(instance.id)"></span>
+                    <span class="download glyphicon glyphicon-download-alt" v-on:click="downloadInstance(index)"></span>
+                    <span class="select" v-on:click="selectInstance({index, id: instance.id})" v-bind:title="instance.file.name">{{instance.file.name}}</span>
                 </li>
             </ul>
-            <p v-if="files.length === 0" class="help-block">Žádné nahrané soubory.</p>
+            <p v-if="files.length === 0" class="help-block">No files uploaded.</p>
         </div>
     </div>
 </template>
@@ -28,8 +28,8 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 export default {
     computed: {
         ...mapState({
-            selectedFile: state => state.inputParams.files.selected,
-            files: state => state.inputParams.files.files
+            selectedFile: state => state.inputParams.files.selected.index,
+            files: state => state.inputParams.files.instances
         })
     },
 
@@ -38,9 +38,35 @@ export default {
     },
 
     methods: {
+        downloadInstance: function(index) {
+            function download(fileContent) {
+                var a = document.createElement('A');
+                a.href = "data:application/octet-stream;charset=utf-8;base64," + fileContent;
+                a.download = fileDbObj.file.name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+
+            var fileDbObj = this.files[index];
+            if (fileDbObj.type === 'string') {
+                download(btoa(fileDbObj.file.content));
+                return;
+            }
+            if (fileDbObj.type === 'file') {
+                var reader = new FileReader();
+
+                reader.onLoadCallback = download;
+                reader.onload = function(event) {
+                    this.onLoadCallback(btoa(event.target.result));
+                };
+                reader.readAsBinaryString(fileDbObj.file);
+                return;
+            }
+        },
+
         handleFileSelect: function(event) {
-            this.addFiles(event.target.files);
-            // this.addInstances(event.target.files);
+            this.addInstances(event.target.files);
         },
 
         dragEnter: function(e) {
@@ -51,20 +77,18 @@ export default {
         handleDrop: function(event) {
             event.stopPropagation();
             event.preventDefault();
-            this.addFiles(event.dataTransfer.files);
+            this.addInstances(event.dataTransfer.files);
         },
 
         ...mapMutations([
-            'addFiles',
-            'selectFile',
-            'removeFile',
-            'removeAllFiles'
+            'selectInstance'
         ]),
 
         ...mapActions([
             'loadInstances',
             'addInstances',
-            'removeInstance'
+            'removeInstance',
+            'clearInstances'
         ])
     }
 }

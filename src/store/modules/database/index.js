@@ -1,3 +1,4 @@
+import Resource from '../../../resources';
 import __mapValues from 'lodash/mapValues';
 import __extend from 'lodash/extend';
 import DBManager from './DBManager';
@@ -71,10 +72,7 @@ function upgradeDB(db) {
 }
 
 var dbm = new DBManager(dbName, dbVersion, upgradeDB);
-
-// dbm.getAll(dbTables.tabuComputingHistory, "by_method", 'tabu').then(function(data) {
-//     console.log(data);
-// });
+var exampleInstanceAdded = false;
 
 // initial state
 const state = {}
@@ -85,14 +83,13 @@ const getters = {}
 // mutations
 const mutations = {}
 
-var loadFactory = (dbTableName, mutationName) => ({ commit }) => {
-    dbm.getAll(dbTableName).then(function(data) {
-        commit(mutationName, data);
-    });
-}
-
 // actions
 const actions = {
+    loadAll ({ dispatch }) {
+        dispatch('loadComputingHistory');
+        dispatch('loadInstances');
+    },
+
     loadComputingHistory ({ getters, commit }) {
         var params = getters.getInputData;
         var table = params.method + 'ComputingHistory';
@@ -100,15 +97,33 @@ const actions = {
             commit('updateComputingHistory', data);
         });
     },
+
     loadInstances ({ getters, commit }) {
         var params = getters.getInputData;
-        dbm.getAll(dbTables.instances, "by_problem", params.problem).then(function(data) {
-            commit('updateInstances', data);
+        dbm.getAll(dbTables.instances, "by_problem", params.problem).then(function(instances) {
+            if (instances.length > 0 || exampleInstanceAdded) {
+                commit('updateInstances', instances);
+            }
+            else {
+                Resource.getExampleInstance().then(function(data) {
+                    var instanceDbObj = {
+                        problem: 0,
+                        type: 'string',
+                        file: {
+                            name: 'Example SAT instance.cnf',
+                            content: data.bodyText
+                        }
+                    };
+                    dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+                        store.add(instanceDbObj).then(function() {
+                            // console.log([instanceDbObj, ...instances]);
+                            commit('updateInstances', [instanceDbObj, ...instances]);
+                        });
+                    });
+                });
+            }
+            exampleInstanceAdded = true;
         });
-    },
-    loadAll ({ dispatch }) {
-        dispatch('loadComputingHistory');
-        dispatch('loadInstances');
     },
 
     pushComputingHistory ({ getters, dispatch }, result) {
@@ -142,7 +157,11 @@ const actions = {
             var addPromises = [];
 
             for (var i = 0, fileDbObj; fileDbObj = filesArray[i]; i++) {
-                addPromises.push(store.add({ problem: inputParams.problem, file: fileDbObj}));
+                addPromises.push(store.add({
+                    problem: inputParams.problem,
+                    type: 'file',
+                    file: fileDbObj
+                }));
             }
 
             Promise.all(addPromises).then(function(values) {
@@ -152,7 +171,7 @@ const actions = {
     },
 
     removeInstance ({ dispatch }, id) {
-        dbm.remove(dbTables.instances, id).then(function() {
+        dbm.remove(dbTables.instances, id).then(function(ok) {
             dispatch('loadInstances');
         });
     },

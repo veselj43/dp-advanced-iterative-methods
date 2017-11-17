@@ -1,14 +1,7 @@
 
 // initial state
 const state = {
-    // testing concept
-    instances: [],
-    computingHistory: [],
-
-    // potential structure
-    computationHistory: {
-        tabu: []
-    }
+    computingHistory: []
 }
 
 // getters
@@ -17,11 +10,8 @@ const getters = {
 
 // mutations
 const mutations = {
-    updateComputingHistory(store, data) {
-        store.computingHistory = data;
-    },
-    updateInstances(store, data) {
-        store.instances = data;
+    updateComputingHistory(state, data) {
+        state.computingHistory = data;
     }
 }
 

@@ -41,16 +41,15 @@ export default {
     methods: {
         start: function() {
             var context = this;
-            var fileObj = this.getSelectedFile;
-            var reader = new FileReader();
+            var fileDbObj = this.getSelectedFile;
 
-            if (this.workerManager.inProgress) {
-                this.$notifier.put("workerInfo", "Work is in progress.", "info");
+            if (!fileDbObj.type) {
+                this.$notifier.put("inFile", "No input file.");
                 return;
             }
 
-            if (fileObj && fileObj.name === undefined) {
-                context.$notifier.put("inFile", "No input file.");
+            if (this.workerManager.inProgress) {
+                this.$notifier.put("workerInfo", "Work is in progress.", "info");
                 return;
             }
 
@@ -59,13 +58,18 @@ export default {
                 context.setStatusRunning(fileObj);
             };
 
-            reader.onLoadCallback = compute(fileObj);
-
-            reader.onload = function(event) {
-                this.onLoadCallback(event.target.result);
-            };
-
-            reader.readAsBinaryString(fileObj);
+            if (fileDbObj.type === 'file') {
+                var reader = new FileReader();
+                
+                reader.onLoadCallback = compute(fileDbObj.file);
+                reader.onload = function(event) {
+                    this.onLoadCallback(event.target.result);
+                };
+                reader.readAsBinaryString(fileDbObj.file);
+            }
+            else if (fileDbObj.type === 'string') {
+                compute(fileDbObj.file)(fileDbObj.file.content);
+            }
         },
 
         stop: function() {
