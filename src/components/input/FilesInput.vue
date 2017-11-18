@@ -1,7 +1,7 @@
 <template>
     <div class="fileManager" v-on:drop="handleDrop" v-on:dragenter="dragEnter" v-on:dragover="dragEnter">
         <div class="header">
-            <div class="fileControlButtons">
+            <div class="controlButtons">
                 <label v-tooltip.top="'Upload instance file'" class="fileLoad btn btn-primary" for="filesToLoad">
                     <span class="glyphicon glyphicon-plus"></span>
                 </label>
@@ -169,17 +169,6 @@ export default {
     .fileManager ul li .remove {
         float: right;
         color: #f30;
-    }
-
-    .header-text, .fileControlButtons {
-        display: inline-block;
-        height: 34px;
-        line-height: 34px;
-    }
-
-    .fileControlButtons {
-        margin-right:  1em;
-        float: right;
     }
 
     .fileLoad,

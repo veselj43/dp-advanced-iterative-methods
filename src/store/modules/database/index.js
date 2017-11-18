@@ -114,7 +114,7 @@ const actions = {
         });
     },
 
-    clearHistory ({ dispatch }) {
+    clearComputingHistory ({ dispatch }) {
         dbm.getStore(dbTables.tabuComputingHistory, mode.RW).then(function(store) {
             return store.clear();
         }).then(function(data) {

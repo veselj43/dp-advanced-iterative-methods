@@ -1,7 +1,8 @@
 
 // initial state
 const state = {
-    computingHistory: []
+    computingHistory: [],
+    comparingResults: []
 }
 
 // getters
@@ -12,6 +13,10 @@ const getters = {
 const mutations = {
     updateComputingHistory(state, data) {
         state.computingHistory = data;
+    },
+
+    updateComparingResults(state, data) {
+        // TODO
     }
 }
 

@@ -9,7 +9,6 @@
         </div>
 
         <div class="right-panel">
-            <div class="header">Solved instances</div>
             <computing-history></computing-history>
         </div>
 
