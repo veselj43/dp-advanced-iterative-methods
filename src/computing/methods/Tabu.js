@@ -112,7 +112,7 @@ export class TabuSolver {
 
             if (bestCandidate === null) {
                 if (tabuBestCandidate === null) {
-                    console.warn("-- no candidates --");
+                    console.log("-- no candidates --");
                     break;
                 }
                 state = tabuBestCandidate;
@@ -142,6 +142,7 @@ export class TabuSolver {
                 tabuChanges.shift();
             }
         }
+        this._workerInterface.reply('progress', { counter: this.counter, fitness: this._fitness(state) });
 
         return sBest;
     }

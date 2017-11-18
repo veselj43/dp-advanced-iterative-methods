@@ -98,34 +98,6 @@ const actions = {
         });
     },
 
-    loadInstances ({ getters, commit }) {
-        var params = getters.getInputData;
-        dbm.getAll(dbTables.instances, "by_problem", params.problem).then(function(instances) {
-            if (instances.length > 0 || exampleInstanceAdded) {
-                commit('updateInstances', instances);
-            }
-            else {
-                Resource.getExampleInstance().then(function(data) {
-                    var instanceDbObj = {
-                        problem: 0,
-                        type: 'string',
-                        file: {
-                            name: 'Example SAT instance.cnf',
-                            content: data.bodyText
-                        }
-                    };
-                    dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
-                        store.add(instanceDbObj).then(function() {
-                            // console.log([instanceDbObj, ...instances]);
-                            commit('updateInstances', [instanceDbObj, ...instances]);
-                        });
-                    });
-                });
-            }
-            exampleInstanceAdded = true;
-        });
-    },
-
     pushComputingHistory ({ getters, dispatch }, result) {
         var objForDB = getters.getInputData;
         __extend(objForDB, {
@@ -151,6 +123,33 @@ const actions = {
         });
     },
 
+    loadInstances ({ getters, commit }) {
+        var params = getters.getInputData;
+        dbm.getAll(dbTables.instances, "by_problem", params.problem).then(function(instances) {
+            if (instances.length > 0 || exampleInstanceAdded) {
+                commit('updateInstances', instances);
+            }
+            else {
+                Resource.getExampleInstance().then(function(data) {
+                    var instanceDbObj = {
+                        problem: 0,
+                        type: 'string',
+                        file: {
+                            name: 'Example SAT instance.cnf',
+                            content: data.bodyText
+                        }
+                    };
+                    dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+                        store.add(instanceDbObj).then(function() {
+                            commit('updateInstances', [instanceDbObj, ...instances]);
+                        });
+                    });
+                });
+            }
+            exampleInstanceAdded = true;
+        });
+    },
+
     addInstances ({ getters, dispatch }, filesArray) {
         var inputParams = getters.getInputData;
         dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
@@ -160,6 +159,25 @@ const actions = {
                 addPromises.push(store.add({
                     problem: inputParams.problem,
                     type: 'file',
+                    file: fileDbObj
+                }));
+            }
+
+            Promise.all(addPromises).then(function(values) {
+                dispatch('loadInstances');
+            });
+        });
+    },
+
+    addGeneratedInstances ({ getters, dispatch }, stringFilesArray) {
+        var inputParams = getters.getInputData;
+        dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+            var addPromises = [];
+
+            for (var i = 0, fileDbObj; fileDbObj = stringFilesArray[i]; i++) {
+                addPromises.push(store.add({
+                    problem: inputParams.problem,
+                    type: 'string',
                     file: fileDbObj
                 }));
             }
@@ -186,28 +204,6 @@ const actions = {
     },
 
     // dev tools
-    mockDB ({ dispatch }) {
-        function fillStore(dbTable) {
-            dbm.getStore(dbTables[dbTable], mode.RW).then(function(store) {
-                store.clear().then(function() {
-                    mockData[dbTable].forEach(function(item) {
-                        store.add(item).then(function (data) {
-                            console.log("[DB]["+dbTable+"]["+data+"] added");
-                        });
-                    });
-                });
-            });
-        }
-
-        var fillPromises = [];
-        for (var dbTable in mockData) {
-            fillPromises.push(fillStore(dbTable));
-        }
-
-        Promise.all(fillPromises).then(function(values) {
-            dispatch('loadAll');
-        });
-    },
     deleteDB (context) {
         console.log("[DB] deleting...");
         dbm.deleteDB();

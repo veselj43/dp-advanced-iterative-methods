@@ -20,26 +20,21 @@
             </div>
 
             <div class="form-group">
-                <button v-if="!isGenerating" type="submit" class="btn btn-success" v-on:click="generate">Generate</button>
+                <button v-if="!isGenerating" class="btn btn-success" v-on:click="generate">Generate</button>
                 <button v-else class="btn btn-danger" v-on:click="stop">Cancel</button>
             </div>
-
-            <!-- TODO push to instances instead of download -->
-            <h2>Result</h2>
-            <button class="btn btn-primary" v-if="fileData" v-on:click="downloadInstance">download file</button>
         </form>
     </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import { WorkerManager } from '../../computing/WorkerManager.js';
-import { downloadFile } from '../../services/download';
 
 export default {
     data() {
         return {
             isGenerating: false,
-            fileData: null,
             generatorParams: {
                 instanceName: "instance"
             }
@@ -48,7 +43,6 @@ export default {
     mounted () {
         var myWorker = require("worker-loader!../../computing/GeneratorWorker.js");
         this.workerManager = new WorkerManager(this, myWorker);
-
         this.workerManager
             .setHandler('message', this.$notifier.push)
             .setHandler('result', this.result);
@@ -59,8 +53,7 @@ export default {
                 this.$notifier.put("worker-info", "Work is in progress.", "info");
                 return;
             }
-            this.workerManager.sendWork('work', "Hello file!");
-
+            this.workerManager.sendWork('work', this.generatorParams);
             this.isGenerating = true;
         },
 
@@ -70,7 +63,6 @@ export default {
                 return;
             }
             this.workerManager.terminate();
-
             this.isGenerating = false;
         },
 
@@ -81,14 +73,14 @@ export default {
                 this.$notifier.push("Error while generating instance.", "error");
             }
             else {
-                this.fileData = btoa(result);
+                this.addGeneratedInstances([{name: this.generatorParams.instanceName, content: result}]);
                 this.$notifier.push("Instance added to list.", "success");
             }
         },
 
-        downloadInstance: function() {
-            downloadFile(this.generatorParams.instanceName, this.fileData);
-        }
+        ...mapActions([
+            'addGeneratedInstances'
+        ])
     }
 }
 </script>

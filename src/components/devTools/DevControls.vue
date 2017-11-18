@@ -5,7 +5,6 @@
                 <li class="btn btn-default">
                     <span>DB</span>
                     <ul class="btn-group-vertical">
-                        <li class="btn btn-default" v-on:click="mockDB">Mock db</li>
                         <li class="btn btn-default" v-on:click="clearHistory">Clear history</li>
                         <li class="btn btn-default" v-on:click="clearInstances">Clear instances</li>
                         <li class="btn btn-default" v-on:click="deleteDB">Delete db</li>
@@ -22,7 +21,6 @@ import { mapActions } from 'vuex';
 export default {
     methods: {
         ...mapActions([
-            'mockDB',
             'clearHistory',
             'clearInstances',
             'deleteDB'

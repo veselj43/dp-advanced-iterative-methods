@@ -70,7 +70,7 @@ const mutations = {
 
     dataInit(store, data) {
         store.computingStatus.bestResult = null;
-        store.data.chart.labels = _.range(data.numberOfIterations);
+        store.data.chart.labels = _.range(data.numberOfIterations + 1);
         store.data.chart.values = [];
         store.data.best = 0;
         store.data.actual = 0;

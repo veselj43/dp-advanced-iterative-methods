@@ -91,6 +91,7 @@ export default {
             else {
                 this.pushResult(result);
                 this.setStatusDone(result);
+                $eventBus.$emit('LiveLaneChart_update');
             }
         },
 

@@ -45,6 +45,9 @@ const defaultOptions = {
             }
         }],
         yAxes: [{
+            id: 'yAxe0',
+            type: 'linear',
+            position: 'left',
             scaleLabel: {
                 display: true,
                 labelString: 'Fitness',
@@ -53,7 +56,7 @@ const defaultOptions = {
             ticks: {
                 min: 0,
                 beginAtZero: true,
-                autoSkip: true,
+                autoSkip: true
             }
         }]
     }
@@ -98,23 +101,16 @@ export default Line.extend({
     },
     watch: {
         values: function() {
-            if (this.values.length === 0) {
-                this.renderedData = [];
-                this._chart.destroy();
-                this.renderLineChart();
-            }
-            else if (
-                ((performance.now() - this.lastUpdate) > this.componentOptions.debounce.duration) ||
-                this.values.length === this.labels.length
-            ) {
-                this.renderedData.push.apply(this.renderedData, this.values.slice(this.renderedData.length));
-                this.lastUpdate = performance.now();
-                this._chart.update();
-            }
+            this.smartUpdate();
         }
     },
     mounted () {
         this.renderLineChart();
+
+        var context = this;
+        $eventBus.$on('LiveLaneChart_update', function() {
+            context.smartUpdate(true);
+        });
     },
     methods: {
         renderLineChart: function() {
@@ -129,6 +125,34 @@ export default Line.extend({
             };
 
             this.renderChart(chartData, this.options);
+        },
+
+        smartUpdate: function(force) {
+            if (this.values.length === 0) {
+                this.renderedData = [];
+                this._chart.destroy();
+                this.renderLineChart();
+            }
+            else if (
+                ((performance.now() - this.lastUpdate) > this.componentOptions.debounce.duration) ||
+                this.values.length === this.labels.length ||
+                force
+            ) {
+                var freshData = this.values.slice(this.renderedData.length);
+                this.fixMaxValueY(this._chart, Math.max(...freshData));
+                this.renderedData.push.apply(this.renderedData, freshData);
+                this.lastUpdate = performance.now();
+                this._chart.update();
+            }
+        },
+
+        fixMaxValueY(chart, maxToFix) {
+            var chartMax = chart.scales.yAxe0.max;
+            if (chartMax <= maxToFix) {
+                var fixedMax = maxToFix + 1;
+                chart.scales.yAxe0.options.ticks.suggestedMax = fixedMax;
+                chart.scales.yAxe0.options.ticks.major.suggestedMax = fixedMax;
+            }
         }
     }
 });
