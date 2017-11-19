@@ -2,7 +2,7 @@
     <div class="generator">
         <problem-select></problem-select>
 
-        <form class="form">
+        <div class="form">
             <div v-if="problemKey === 0">
 
                 <div class="form-group">
@@ -73,7 +73,8 @@
                 <button v-if="!isGenerating" class="btn btn-success" v-on:click="generate">Generate</button>
                 <button v-else class="btn btn-danger" v-on:click="stop">Cancel</button>
             </div>
-        </form>
+        </div>
+
     </div>
 </template>
 

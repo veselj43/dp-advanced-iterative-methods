@@ -6,14 +6,19 @@ import App from './App';
 import store from './store';
 import router from './router';
 import ToastedWrapper from './plugins/Notifier';
+import Filters from './services/filters';
 
 window._ = require('lodash');
 window.$eventBus = new Vue();
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = process.env.NODE_ENV === 'demo';
 
 Vue.use(Tooltip);
 Vue.use(ToastedWrapper);
+
+for (var filterKey in Filters) {
+    Vue.filter(filterKey, Filters[filterKey]);
+}
 
 new Vue({
     el: '#app',
