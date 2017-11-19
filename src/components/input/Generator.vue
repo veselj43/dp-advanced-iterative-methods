@@ -1,21 +1,71 @@
 <template>
     <div class="generator">
+        <problem-select></problem-select>
+
         <form class="form">
-            <div class="form-group">
-                <label for="genParam1">generator parameter 1</label>
-                <span class="form-tooltip" v-tooltip="'Tooltip text p1'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                <input type="number" class="form-control" id="genParam1" v-model="generatorParams.genParam1" placeholder="">
+            <div v-if="problemKey === 0">
+
+                <div class="form-group">
+                    <label for="genParam1">Number of clausules</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p1'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[0].noClausules" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label for="genParam2">Number of variables</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[0].noVariables" placeholder="">
+                </div>
+
             </div>
 
-            <div class="form-group">
-                <label for="genParam2">generator parameter 2</label>
-                <span class="form-tooltip" v-tooltip="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                <input type="number" class="form-control" id="genParam2" v-model="generatorParams.genParam2" placeholder="">
+            <div v-if="problemKey === 1">
+
+                <div class="form-group">
+                    <label for="genParam1">Number of nodes</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p1'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[1].noNodes" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label for="genParam2">Number of edges</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].noEdges" placeholder="">
+                </div>
+
+            </div>
+
+            <div v-if="problemKey === 2">
+
+                <div class="form-group">
+                    <label for="genParam1">Capacity</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p1'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[2].capacity" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label for="genParam2">Number of items</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[2].noItems" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label for="genParam2">Sum of items weights</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[2].sumOfWeights" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label for="genParam2">Granularity</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[2].granularity" placeholder="">
+                </div>
+
             </div>
 
             <div class="form-group">
                 <label for="instanceName">Instance name</label>
-                <span class="form-tooltip" v-tooltip="'Name that will be shown in instance list'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="'Name that will be shown in instance list'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <input type="text" class="form-control" id="instanceName" v-model="generatorParams.instanceName" placeholder="">
             </div>
 
@@ -28,18 +78,35 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { WorkerManager } from '../../computing/WorkerManager.js';
 
+import ProblemSelect from './ProblemSelect';
+
 export default {
+    components: {
+        ProblemSelect
+    },
+
     data() {
         return {
             isGenerating: false,
             generatorParams: {
-                instanceName: "instance"
+                instanceName: "instance",
+                0: {
+                },
+                1: {},
+                2: {}
             }
         }
     },
+
+    computed: {
+        ...mapState({
+            problemKey: (state) => state.inputParams.params.problem.id
+        })
+    },
+
     mounted () {
         var myWorker = require("worker-loader!../../computing/GeneratorWorker.js");
         this.workerManager = new WorkerManager(this, myWorker);
@@ -47,6 +114,7 @@ export default {
             .setHandler('message', this.$notifier.push)
             .setHandler('result', this.result);
     },
+
     methods: {
         generate: function() {
             if (this.workerManager.inProgress) {

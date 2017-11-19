@@ -1,14 +1,12 @@
 <template>
     <div class="problemSelect">
-        <form class="form-horizontal">
+        <form class="form">
 
             <div class="form-group">
-                <label class="col-md-4 control-label" for="problemKey">Problem</label>
-                <div class="col-md-8">
-                    <select class="form-control" id="problemKey" v-model="problemKey">
-                        <option v-for="(problem, index) in problemEnum" :value="index">{{problem.text}}</option>
-                    </select>
-                </div>
+                <label for="problemKey">Problem</label>
+                <select class="form-control" id="problemKey" v-model="problemKey">
+                    <option v-for="(problem, index) in problemEnum" :value="index">{{problem.text}}</option>
+                </select>
             </div>
 
         </form>
