@@ -45,6 +45,9 @@ const defaultOptions = {
             }
         }],
         yAxes: [{
+            id: 'yAxe0',
+            type: 'linear',
+            position: 'left',
             scaleLabel: {
                 display: true,
                 labelString: 'Fitness',
@@ -53,35 +56,25 @@ const defaultOptions = {
             ticks: {
                 min: 0,
                 beginAtZero: true,
-                autoSkip: true,
+                autoSkip: true
             }
         }]
     }
 };
 
 const defaultComponentOptions = {
-    debounce: {
-        duration: -1
-    }
 };
 
-const defaultDatasetOptions = {
-    borderColor: "#f87979",
-    backgroundColor: "transparent", // rgba(90,90,90,0.1)
-    data: this.chartDataFn
-};
-
-function addDataSet(chartData, dataset) {
-    if (!dataset.label) {
-        dataset.label = "Dataset " + chartData.data.length;
-    }
-    _.defaults(dataset, defaultDatasetOptions);
-    chartData.datasets.push();
-}
+const dataSetColors = [
+    'red',
+    'blue',
+    'green',
+    'black'
+];
 
 export default Line.extend({
     props: {
-        values: Array,
+        dataSets: Array,
         labels: Array,
         options: {
             type: Object,
@@ -98,16 +91,23 @@ export default Line.extend({
     },
     data() {
         return {
-            renderedData: [],
             lastUpdate: performance.now()
         }
     },
     computed: {
-        chartDataFn: function() {
-            return this.renderedData;
+        chartDataSetsFn: function() {
+            for (var i in this.dataSets) {
+                this.dataSets[i].borderColor = dataSetColors[i];
+            }
+            return this.dataSets;
         },
         chartLabelsFn: function() {
             return this.labels;
+        }
+    },
+    watch: {
+        dataSets: function() {
+            this.smartUpdate();
         }
     },
     mounted () {
@@ -117,15 +117,30 @@ export default Line.extend({
         renderLineChart: function() {
             var chartData = {
                 labels: this.chartLabelsFn,
-                datasets: [{
-                    label: "Fitness",
-                    borderColor: "#f87979",
-                    backgroundColor: "transparent", // rgba(90,90,90,0.1)
-                    data: this.chartDataFn
-                }]
+                datasets: this.chartDataSetsFn
             };
 
             this.renderChart(chartData, this.options);
+            this.fixMaxValueY(this._chart);
+            this._chart.update();
+        },
+
+        smartUpdate: function() {
+            this._chart.destroy();
+            this.renderLineChart();
+        },
+
+        fixMaxValueY(chart) {
+            var maxToFix = 0;
+            for (var key in this.chartDataSetsFn) {
+                maxToFix = Math.max(maxToFix, Math.max(...this.chartDataSetsFn[key].data));
+            }
+            var chartMax = chart.scales.yAxe0.max;
+            if (chartMax <= maxToFix) {
+                var fixedMax = maxToFix + 1;
+                chart.scales.yAxe0.options.ticks.suggestedMax = fixedMax;
+                chart.scales.yAxe0.options.ticks.major.suggestedMax = fixedMax;
+            }
         }
     }
 });

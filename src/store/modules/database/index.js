@@ -95,6 +95,7 @@ const actions = {
         var table = params.method + 'ComputingHistory';
         dbm.getAll(dbTables[table], "by_problem", params.problem).then(function(data) {
             commit('updateComputingHistory', data);
+            commit('initComparingResults');
         });
     },
 

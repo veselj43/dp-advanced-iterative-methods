@@ -108,9 +108,9 @@ export default Line.extend({
         this.renderLineChart();
 
         var context = this;
-        $eventBus.$on('LiveLaneChart_update', function() {
-            context.smartUpdate(true);
-        });
+        // $eventBus.$on('LiveLaneChart_update', function() {
+        //     context.smartUpdate(true);
+        // });
     },
     methods: {
         renderLineChart: function() {
@@ -119,7 +119,7 @@ export default Line.extend({
                 datasets: [{
                     label: "Fitness",
                     borderColor: "#f87979",
-                    backgroundColor: "transparent", // rgba(90,90,90,0.1)
+                    backgroundColor: "transparent",
                     data: this.chartDataFn
                 }]
             };

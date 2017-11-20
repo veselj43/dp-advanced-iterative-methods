@@ -1,13 +1,15 @@
 <template>
     <div class="visualizeConfiguration">
-        <table class="config" v-if="resultObj">
+        <table class="config" v-if="itemsArray">
             <tr>
-                <td v-for="(value, index) in resultObj.result">
+                <td>Instance</td>
+                <td v-for="(value, index) in varCount">
                     {{index}}
                 </td>
             </tr>
-            <tr>
-                <td v-for="(value, index) in resultObj.result" :class="{true: value, false: !value}">
+            <tr v-for="item in itemsArray">
+                <td>{{item.instance}}</td>
+                <td v-for="(value, index) in item.result.result" :class="{true: value, false: !value}">
                     {{value ? 'T' : 'F'}}
                 </td>
             </tr>
@@ -17,7 +19,19 @@
 
 <script>
 export default {
-    props: ['resultObj']
+    computed: {
+        itemsArray() {
+            return this.$store.state.outputData.comparingResults.info.items;
+        },
+
+        varCount() {
+            var count = 0;
+            for (var i in this.itemsArray) {
+                count = Math.max(count, this.itemsArray[i].result.result.length);
+            }
+            return _.range(count);
+        }
+    }
 }
 </script>
 

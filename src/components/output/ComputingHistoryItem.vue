@@ -1,16 +1,18 @@
 <template>
     <div class="list-group-item">
-        <div class="list-group-item-heading checkbox">
-            <label>
-                <input type="checkbox" v-model="checked">
-                <div class="collapse-header">{{item.instance}}</div>
-            </label>
+        <div class="list-group-item-heading">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" v-model="checked">
+                    <div class="collapse-header">{{item.instance}}</div>
+                </label>
+            </div>
             <span class="collapse-switch" v-on:click="toggle">
-                <span v-if="isActive" class="glyphicon glyphicon-triangle-bottom"></span>
+                <span v-if="isOpen" class="glyphicon glyphicon-triangle-bottom"></span>
                 <span v-else class="glyphicon glyphicon-triangle-left"></span>
             </span>
         </div>
-        <div class="list-group-item-text collapsable" v-bind:class="{'collapsed': !isActive}">
+        <div class="list-group-item-text collapsable" v-bind:class="{'collapsed': !isOpen}">
             <table class="table">
                 <tbody>
                     <tr v-for="(param, key) in item.params">
@@ -24,18 +26,35 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
-    props: ['item'],
+    props: ['item', 'index'],
     data() {
         return {
-            isActive: false,
-            checked: false
+            isOpen: false
         }
     },
+
+    computed: {
+        checked: {
+            get() {
+                return !!this.$store.state.outputData.comparingResults.info.items[this.item.id];
+            },
+            set() {
+                this.toggleIndexInComparingResults(this.index);
+            }
+        }
+    },
+
     methods: {
         toggle() {
-            this.isActive =! this.isActive;
-        }
+            this.isOpen = !this.isOpen;
+        },
+
+        ...mapMutations([
+            'toggleIndexInComparingResults'
+        ])
     }
 }
 </script>
@@ -58,6 +77,10 @@ export default {
         margin: 0;
         padding: 10px 15px;
         cursor: pointer;
+
+        .checkbox {
+            margin: 0;
+        }
 
         .collapse-header {
             display: inline-block;
