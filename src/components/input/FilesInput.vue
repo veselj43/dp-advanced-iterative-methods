@@ -3,10 +3,10 @@
         <div class="header">
             <div class="controlButtons">
                 <label v-tooltip.top="'Upload instance file'" class="fileLoad btn btn-primary" for="filesToLoad">
-                    <span class="glyphicon glyphicon-plus"></span>
+                    <i class="material-icons">file_upload</i>
                 </label>
                 <span v-tooltip.top="'Generate instance'" class="fileLoad btn btn-info" for="filesToLoad" v-on:click="$refs.generatorModal.open()">
-                    <span class="glyphicon glyphicon-duplicate"></span>
+                    <span class="glyphicon glyphicon-plus"></span>
                 </span>
                 <button v-tooltip.top="'Remove uploaded instances'" class="fileRemove btn btn-danger" v-on:click="clearInstances">
                     <span class="glyphicon glyphicon-trash"></span>
@@ -175,5 +175,10 @@ export default {
     .fileRemove {
         display: inline-block;
         cursor: pointer;
+    }
+
+    /* TODO style */
+    .material-icons {
+        font-size: 100%;
     }
 </style>

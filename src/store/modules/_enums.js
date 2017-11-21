@@ -2,13 +2,13 @@
 export const methods = [
     {
         id: 'annealing',
-        text: "Simulované ochlazování"
+        text: "Simulated Annealing"
     }, {
         id: 'genetic',
-        text: "Genetický algoritmus"
+        text: "Genetic Algorithm"
     }, {
         id: 'tabu',
-        text: "Tabu prohledávání"
+        text: "Tabu Search"
     }
 ];
 

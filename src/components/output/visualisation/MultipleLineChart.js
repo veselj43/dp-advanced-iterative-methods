@@ -17,7 +17,7 @@ const defaultOptions = {
         }
     },
     legend: {
-        display: false
+        display: true
     },
     hover: {
         mode: 'index',
