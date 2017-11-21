@@ -5,7 +5,7 @@
             <button class="btn btn-primary" v-on:click="deselectAll">
                 Deselect all
             </button>
-            <button class="btn btn-danger pull-right" v-on:click="clearComputingHistory">
+            <button class="btn btn-danger pull-right" v-on:click="$refs.clearComputingHistoryConfirm.open()">
                 Clear history
             </button>
         </div>
@@ -17,15 +17,26 @@
                 :index="index"
             ></computing-history-item>
         </div>
+
+        <sweet-modal ref="clearComputingHistoryConfirm" overlay-theme="dark">
+            <template slot="title"><strong>Are you sure?</strong></template>
+            Do you want to clear computing history?
+            <template slot="button">
+                <button class="btn btn-info" v-on:click="$refs.clearComputingHistoryConfirm.close()">No</button>
+                <button class="btn btn-danger" v-on:click="confirm">Yes</button>
+            </template>
+        </sweet-modal>
     </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
+import { SweetModal } from 'sweet-modal-vue';
 import ComputingHistoryItem from './ComputingHistoryItem';
 
 export default {
     components: {
+        SweetModal,
         ComputingHistoryItem
     },
     computed: {
@@ -43,6 +54,11 @@ export default {
     methods: {
         deselectAll() {
             // TODO
+        },
+
+        confirm() {
+            this.clearComputingHistory();
+            this.$refs.clearComputingHistoryConfirm.close();
         },
 
         ...mapActions([

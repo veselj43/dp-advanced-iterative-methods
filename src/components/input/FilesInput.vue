@@ -8,7 +8,7 @@
                 <span v-tooltip.top="'Generate instance'" class="fileLoad btn btn-info" for="filesToLoad" v-on:click="$refs.generatorModal.open()">
                     <span class="glyphicon glyphicon-plus"></span>
                 </span>
-                <button v-tooltip.top="'Remove uploaded instances'" class="fileRemove btn btn-danger" v-on:click="$refs.removeConfirm.open()">
+                <button v-tooltip.top="'Remove uploaded instances'" class="fileRemove btn btn-danger" v-on:click="removeAllFiles" v-bind:class="{'disabled': (files.length === 0)}">
                     <span class="glyphicon glyphicon-trash"></span>
                 </button>
                 <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
@@ -19,7 +19,7 @@
         <div class="fileList-wrapper">
             <ul v-if="files.length > 0">
                 <li v-for="(instance, index) in files" :key="instance.id" v-bind:class="{ active: index === selectedFile }">
-                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeInstance(instance.id)"></span>
+                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeFile(instance.id, instance.file.name)"></span>
                     <span class="download glyphicon glyphicon-download-alt" v-on:click="downloadInstance(index)"></span>
                     <span class="select" v-on:click="selectInstance({index, id: instance.id})" v-bind:title="instance.file.name">{{instance.file.name}}</span>
                 </li>
@@ -34,9 +34,10 @@
 
         <sweet-modal ref="removeConfirm" overlay-theme="dark">
             <template slot="title"><strong>Are you sure?</strong></template>
-            Do you want to clear all instances?
+            {{confirmAction.bodyText}}
             <template slot="button">
-                <button class="btn btn-danger" v-on:click="removeAllFiles">Yes</button>
+                <button class="btn btn-info" v-on:click="$refs.removeConfirm.close()">No</button>
+                <button class="btn btn-danger" v-on:click="confirm">Yes</button>
             </template>
         </sweet-modal>
     </div>
@@ -48,10 +49,22 @@ import { SweetModal } from 'sweet-modal-vue';
 import { downloadFile } from '../../services/download';
 import Generator from './Generator';
 
+function ConfirmAction(bodyText, name, payload) {
+    this.bodyText = bodyText;
+    this.actionName = name;
+    this.payload = payload;
+}
+
 export default {
     components: {
 		SweetModal,
         Generator
+    },
+
+    data() {
+        return {
+            confirmAction: new ConfirmAction()
+        }
     },
 
     computed: {
@@ -100,8 +113,21 @@ export default {
             this.addInstances(event.dataTransfer.files);
         },
 
+        removeFile(id, name) {
+            this.$refs.removeConfirm.open();
+            this.confirmAction = new ConfirmAction('Do you want to remove instance \"' + name + '\"?', 'removeInstance', id);
+        },
+
         removeAllFiles() {
-            this.clearInstances();
+            this.$refs.removeConfirm.open();
+            this.confirmAction = new ConfirmAction('Do you want to remove all instances?', 'clearInstances');
+        },
+
+        confirm() {
+            if (this.confirmAction !== null) {
+                this.$store.dispatch(this.confirmAction.actionName, this.confirmAction.payload);
+                this.confirmAction = new ConfirmAction();
+            }
             this.$refs.removeConfirm.close();
         },
 
@@ -111,9 +137,7 @@ export default {
 
         ...mapActions([
             'loadInstances',
-            'addInstances',
-            'removeInstance',
-            'clearInstances'
+            'addInstances'
         ])
     }
 }
