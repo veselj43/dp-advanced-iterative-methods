@@ -8,7 +8,7 @@
                 <span v-tooltip.top="'Generate instance'" class="fileLoad btn btn-info" for="filesToLoad" v-on:click="$refs.generatorModal.open()">
                     <span class="glyphicon glyphicon-plus"></span>
                 </span>
-                <button v-tooltip.top="'Remove uploaded instances'" class="fileRemove btn btn-danger" v-on:click="clearInstances">
+                <button v-tooltip.top="'Remove uploaded instances'" class="fileRemove btn btn-danger" v-on:click="$refs.removeConfirm.open()">
                     <span class="glyphicon glyphicon-trash"></span>
                 </button>
                 <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
@@ -30,6 +30,14 @@
         <sweet-modal ref="generatorModal" overlay-theme="dark">
             <template slot="title"><strong>Instance generator</strong></template>
             <generator></generator>
+        </sweet-modal>
+
+        <sweet-modal ref="removeConfirm" overlay-theme="dark">
+            <template slot="title"><strong>Are you sure?</strong></template>
+            Do you want to clear all instances?
+            <template slot="button">
+                <button class="btn btn-danger" v-on:click="removeAllFiles">Yes</button>
+            </template>
         </sweet-modal>
     </div>
 </template>
@@ -90,6 +98,11 @@ export default {
             event.stopPropagation();
             event.preventDefault();
             this.addInstances(event.dataTransfer.files);
+        },
+
+        removeAllFiles() {
+            this.clearInstances();
+            this.$refs.removeConfirm.close();
         },
 
         ...mapMutations([
