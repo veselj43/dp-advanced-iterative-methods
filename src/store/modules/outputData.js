@@ -46,8 +46,8 @@ const mutations = {
     },
 
     // TODO refactoring !!!
-    initComparingResults(state) {
-        var index = state.computingHistory.length - 1;
+    initComparingResults(state, fromDB) {
+        var index = (fromDB) ? state.computingHistory.length - 1 : 0;
         var toAdd = state.computingHistory[index];
         if (!toAdd) {
             return;

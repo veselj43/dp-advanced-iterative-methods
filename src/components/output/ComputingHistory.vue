@@ -53,7 +53,7 @@ export default {
     },
     methods: {
         deselectAll() {
-            // TODO
+            this.$store.commit('initComparingResults');
         },
 
         confirm() {

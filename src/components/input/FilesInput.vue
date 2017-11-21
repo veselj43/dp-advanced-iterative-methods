@@ -124,7 +124,7 @@ export default {
         },
 
         confirm() {
-            if (this.confirmAction !== null) {
+            if (this.confirmAction.actionName) {
                 this.$store.dispatch(this.confirmAction.actionName, this.confirmAction.payload);
                 this.confirmAction = new ConfirmAction();
             }
