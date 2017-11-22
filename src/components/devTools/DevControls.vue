@@ -1,5 +1,5 @@
 <template>
-    <div class="dev-controls panel panel-default">
+    <div class="dev-controls panel panel-default" v-if="show">
         <div class="panel-body">
             <ul class="dev-control-menu">
                 <li class="btn btn-default">
@@ -10,6 +10,9 @@
                         <li class="btn btn-default" v-on:click="deleteDB">Delete db</li>
                     </ul>
                 </li>
+                <li class="btn btn-default">
+                    <span v-on:click="show = false">close</span>
+                </li>
             </ul>
         </div>
     </div>
@@ -19,6 +22,12 @@
 import { mapActions } from 'vuex';
 
 export default {
+    data() {
+        return {
+            show: true
+        }
+    },
+
     methods: {
         ...mapActions([
             'clearComputingHistory',
