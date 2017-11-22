@@ -95,9 +95,19 @@ export default {
             generatorParams: {
                 instanceName: "instance",
                 0: {
+                    noVariables: 20,
+                    noClausules: 91
                 },
-                1: {},
-                2: {}
+                1: {
+                    noNodes: 5,
+                    noEdges: 6
+                },
+                2: {
+                    capacity: 100,
+                    noItems: 5,
+                    sumOfWeights: 200,
+                    granularity: 1
+                }
             }
         }
     },

@@ -3,7 +3,7 @@
         <div class="header">Computed instances</div>
         <div class="header historyControls">
             <button class="btn btn-primary" v-on:click="deselectAll">
-                Deselect all
+                Select first
             </button>
             <button class="btn btn-danger pull-right" v-on:click="$refs.clearComputingHistoryConfirm.open()">
                 Clear history

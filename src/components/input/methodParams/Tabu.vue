@@ -1,6 +1,6 @@
 <template>
     <div class="params">
-        <div class="form-group">
+        <div class="form-group" v-bind:class="{'has-error': !params.multiplierLimit}">
             <label class="" for="multiplierLimit">Iteration limit</label>
             <span class="form-tooltip" v-tooltip.right="'Tooltip text'"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="">

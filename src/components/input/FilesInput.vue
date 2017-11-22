@@ -5,7 +5,7 @@
                 <label v-tooltip.top="'Upload instance file'" class="fileLoad btn btn-primary" for="filesToLoad">
                     <i class="material-icons">file_upload</i>
                 </label>
-                <span v-tooltip.top="'Generate instance'" class="fileLoad btn btn-info" for="filesToLoad" v-on:click="$refs.generatorModal.open()">
+                <span v-tooltip.top="'Generate instance'" class="fileLoad btn btn-primary" for="filesToLoad" v-on:click="$refs.generatorModal.open()">
                     <span class="glyphicon glyphicon-plus"></span>
                 </span>
                 <button v-tooltip.top="'Remove uploaded instances'" class="fileRemove btn btn-danger" v-on:click="removeAllFiles" v-bind:class="{'disabled': (files.length === 0)}">
