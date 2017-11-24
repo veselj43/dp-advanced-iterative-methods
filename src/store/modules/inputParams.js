@@ -7,8 +7,10 @@ const initState = {
         problem: enums.problems[0],
         methodParams: {
             annealing: {
-                param1: 1,
-                param2: 1
+                start_temp: 100,
+                cool_coef: 0.995,
+                min_temp: 10,
+                equil: 50
             },
             genetic: {
                 param1: 1,
