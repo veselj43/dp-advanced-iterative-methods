@@ -14,6 +14,16 @@ function GeneratedDataSet(historyRecord) {
     this.backgroundColor = "transparent";
 }
 
+function updateComparingResultsComputedValues(comparingResults) {
+    var maxLength = 0;
+    comparingResults.chart.dataSets.forEach(function(set) {
+        maxLength = Math.max(maxLength, set.data.length);
+    });
+
+    comparingResults.chart.labels = __range(maxLength);
+    comparingResults.info.activeCount = comparingResults.chart.dataSets.length;
+}
+
 // initial state
 const state = {
     computingHistory: [],
@@ -45,33 +55,29 @@ const mutations = {
         state.computingHistory = data;
     },
 
-    // TODO refactoring !!!
     initComparingResults(state, fromDB) {
         var index = (fromDB) ? state.computingHistory.length - 1 : 0;
         var toAdd = state.computingHistory[index];
+
+        state.comparingResults.info.items = {};
+        state.comparingResults.chart.dataSets = [];
+        state.comparingResults.info.activeCount = 0;
+
         if (!toAdd) {
             return;
         }
 
-        state.comparingResults.info.items = {};
         Vue.set(state.comparingResults.info.items, toAdd.id, {
             instance: toAdd.instance,
             params: toAdd.params,
             result: toAdd.data.result
         });
 
-        state.comparingResults.chart.dataSets = [new GeneratedDataSet(toAdd)];
+        state.comparingResults.chart.dataSets.push(new GeneratedDataSet(toAdd));
 
-        var maxLength = 0;
-        state.comparingResults.chart.dataSets.forEach(function(set) {
-            maxLength = Math.max(maxLength, set.data.length);
-        });
-
-        state.comparingResults.chart.labels = __range(maxLength);
-        state.comparingResults.info.activeCount = state.comparingResults.chart.dataSets.length;
+        updateComparingResultsComputedValues(state.comparingResults);
     },
 
-    // TODO refactoring !!!
     toggleIndexInComparingResults(state, index) {
         var toAdd = state.computingHistory[index];
         if (!toAdd) {
@@ -98,13 +104,7 @@ const mutations = {
             state.comparingResults.chart.dataSets.push(new GeneratedDataSet(toAdd));
         }
 
-        var maxLength = 0;
-        state.comparingResults.chart.dataSets.forEach(function(set) {
-            maxLength = Math.max(maxLength, set.data.length);
-        });
-
-        state.comparingResults.chart.labels = __range(maxLength);
-        state.comparingResults.info.activeCount = state.comparingResults.chart.dataSets.length;
+        updateComparingResultsComputedValues(state.comparingResults);
     }
 }
 
