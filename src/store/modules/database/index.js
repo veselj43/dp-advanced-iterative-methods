@@ -108,7 +108,8 @@ const actions = {
                 dataSet: getters.getChartValues
             }
         });
-        dbm.getStore(dbTables.tabuComputingHistory, mode.RW).then(function(store) {
+        var table = objForDB.method + 'ComputingHistory';
+        dbm.getStore(dbTables[table], mode.RW).then(function(store) {
             store.add(objForDB).then(function(data) {
                 dispatch('loadComputingHistory');
             });
