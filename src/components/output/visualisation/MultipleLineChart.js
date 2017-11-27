@@ -30,6 +30,7 @@ const defaultOptions = {
     },
     scales: {
         xAxes: [{
+            type: 'linear',
             display: true,
             scaleLabel: {
                 display: true,
@@ -38,7 +39,7 @@ const defaultOptions = {
             },
             ticks: {
                 min: 0,
-                stepSize: 100,
+                stepSize: 10,
                 beginAtZero: true,
                 // maxRotation: 0,
                 autoSkip: true
@@ -98,12 +99,15 @@ export default Line.extend({
         chartDataSetsFn: function() {
             for (var i in this.dataSets) {
                 this.dataSets[i].borderColor = dataSetColors[i];
+                for (var k = 0; k < this.dataSets[i].data.length; k++) {
+                    this.dataSets[i].data[k] = { x: this.labels[k], y: this.dataSets[i].data[k] };
+                }
             }
             return this.dataSets;
         },
-        chartLabelsFn: function() {
-            return this.labels;
-        }
+        // chartLabelsFn: function() {
+        //     return this.labels;
+        // }
     },
     watch: {
         dataSets: function() {
@@ -116,7 +120,7 @@ export default Line.extend({
     methods: {
         renderLineChart: function() {
             var chartData = {
-                labels: this.chartLabelsFn,
+                // labels: this.chartLabelsFn,
                 datasets: this.chartDataSetsFn
             };
 
