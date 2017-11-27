@@ -8,7 +8,7 @@
                 </td>
             </tr>
             <tr v-for="item in itemsArray">
-                <td>{{item.instance}}</td>
+                <td class="instanceName">{{item.instance}}</td>
                 <td v-for="(value, index) in item.result.result" :class="{true: value, false: !value}">
                     {{value ? 'T' : 'F'}}
                 </td>
@@ -62,5 +62,9 @@ export default {
     table.config td.false {
         background: #c33;
         color: #fff;
+    }
+
+    table td.instanceName {
+        white-space: nowrap;
     }
 </style>

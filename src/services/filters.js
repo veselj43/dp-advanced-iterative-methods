@@ -2,6 +2,10 @@ export default {
     parseTime: function(processTime) {
         var parsed = "";
         if (processTime) {
+            if (processTime < 1) {
+                return "< 1ms";
+            }
+
             var time = [
                 {name: "m", value: Math.floor(processTime / (1000 * 60))},
                 {name: "s", value: Math.floor(processTime / 1000)},

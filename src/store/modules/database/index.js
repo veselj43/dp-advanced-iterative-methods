@@ -74,6 +74,11 @@ function upgradeDB(db) {
 var dbm = new DBManager(dbName, dbVersion, upgradeDB);
 var exampleInstanceAdded = false;
 
+function getTableNameByMethod(inputData) {
+    var table = inputData.method + 'ComputingHistory';
+    return dbTables[table];
+}
+
 // initial state
 const state = {}
 
@@ -92,8 +97,8 @@ const actions = {
 
     loadComputingHistory ({ getters, commit }) {
         var params = getters.getInputData;
-        var table = params.method + 'ComputingHistory';
-        dbm.getAll(dbTables[table], "by_problem", params.problem).then(function(data) {
+        var table = getTableNameByMethod(params);
+        dbm.getAll(table, "by_problem", params.problem).then(function(data) {
             commit('updateComputingHistory', data);
             commit('initComparingResults', true);
         });
@@ -108,16 +113,18 @@ const actions = {
                 dataSet: getters.getChartValues
             }
         });
-        var table = objForDB.method + 'ComputingHistory';
-        dbm.getStore(dbTables[table], mode.RW).then(function(store) {
+        var table = getTableNameByMethod(objForDB);
+        dbm.getStore(table, mode.RW).then(function(store) {
             store.add(objForDB).then(function(data) {
                 dispatch('loadComputingHistory');
             });
         });
     },
 
-    clearComputingHistory ({ dispatch }) {
-        dbm.getStore(dbTables.tabuComputingHistory, mode.RW).then(function(store) {
+    clearComputingHistory ({ getters, dispatch }) {
+        var params = getters.getInputData;
+        var table = getTableNameByMethod(params);
+        dbm.getStore(table, mode.RW).then(function(store) {
             return store.clear();
         }).then(function(data) {
             console.log("[DB] history cleared");

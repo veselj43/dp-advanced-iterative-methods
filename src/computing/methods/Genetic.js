@@ -12,18 +12,22 @@ export class GeneticSolver {
         this.result = [];
         this.cost = 0;
         this.count = 50;
+        this.counter = 0;
 
         console.log("params: ", this.params);
+
         this._workerInterface.reply('init', { numberOfIterations: this.count, maxFitness: this.problemInput.params.numberOfClausules });
 
-        this._workerInterface.reply('progress', { counter: this.count, fitness: 0 });
+        for (var i = 0; i < this.problemInput.params.numberOfVariables; i++) {
+            this.result.push(!!Math.round(Math.random()));
+        }
 
         for (var i = 0; i < this.count; i++) {
             var actualCost = Math.round(Math.random() * this.problemInput.params.numberOfClausules);
-            this.result.push(actualCost);
             this.cost = Math.max(this.cost, actualCost);
+            this.counter++;
 
-            this._workerInterface.reply('progress', { counter: i, fitness: this.result[i] });
+            this._workerInterface.reply('progress', { counter: i, fitness: actualCost });
         }
 
         return new Result(this.result, this.cost, this.counter);
