@@ -43,6 +43,7 @@ export default {
     table.config {
         margin: 0;
         padding: 0;
+        margin-right: 1em;
     }
 
     table.config td {

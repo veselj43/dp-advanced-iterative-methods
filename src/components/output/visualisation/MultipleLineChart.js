@@ -100,7 +100,7 @@ export default Line.extend({
             for (var i in this.dataSets) {
                 this.dataSets[i].borderColor = dataSetColors[i];
                 for (var k = 0; k < this.dataSets[i].data.length; k++) {
-                    this.dataSets[i].data[k] = { x: this.labels[k], y: this.dataSets[i].data[k] };
+                    if (!this.dataSets[i].data[k].y) this.dataSets[i].data[k] = { x: this.labels[k], y: this.dataSets[i].data[k] };
                 }
             }
             return this.dataSets;
@@ -132,12 +132,14 @@ export default Line.extend({
         smartUpdate: function() {
             this._chart.destroy();
             this.renderLineChart();
+            this.fixMaxValueY(this._chart);
+            this._chart.update();
         },
 
         fixMaxValueY(chart) {
             var maxToFix = 0;
             for (var key in this.chartDataSetsFn) {
-                maxToFix = Math.max(maxToFix, Math.max(...this.chartDataSetsFn[key].data));
+                maxToFix = Math.max(maxToFix, Math.max(...this.chartDataSetsFn[key].data.map(v=>v.y)));
             }
             var chartMax = chart.scales.yAxe0.max;
             if (chartMax <= maxToFix) {

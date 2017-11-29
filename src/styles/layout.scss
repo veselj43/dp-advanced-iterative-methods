@@ -75,6 +75,7 @@ html, body {
     left: 0;
     background: $bg-secondary;
     border-right: $border-color-primary 1px solid;
+    overflow-y: auto;
 }
 
 .right-panel {
@@ -116,5 +117,5 @@ html, body {
 .middle-panel {
     margin: 2em;
     padding: .2em;
-    padding-bottom: 10em;
+    padding-bottom: 5em;
 }

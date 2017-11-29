@@ -163,7 +163,7 @@ export default {
     .fileList-wrapper {
         margin-top: .5em;
         flex-shrink: 1;
-        overflow-y: auto;
+        /*overflow-y: auto;*/
     }
 
     .fileManager ul {
@@ -173,7 +173,6 @@ export default {
         background-color: #f5faff;
         border: #ddd 1px solid;
         border-width: 1px 0;
-        overflow-y: auto;
     }
 
     .fileManager ul li {
