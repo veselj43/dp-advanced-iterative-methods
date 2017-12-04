@@ -8,10 +8,10 @@ export class GeneticSolver {
 
     solve (problemInput) {
         this.problemInput = problemInput;
-
+        
         this.result = [];
         this.cost = 0;
-        this.count = 50;
+        this.count = this.params.noGenerations;
         this.counter = 0;
 
         console.log("params: ", this.params);

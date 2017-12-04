@@ -16,7 +16,7 @@ const initState = {
                 crossoverType: 1,
                 elitism: 0.65,
                 mutationRate: 0.08,
-                noGenerations: 200,
+                noGenerations: 100,
                 noIndividuals: 10,
                 selectionType: 1
             },

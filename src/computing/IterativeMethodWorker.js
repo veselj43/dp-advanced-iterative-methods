@@ -24,7 +24,7 @@ class Job {
         else if (params.problem.id === 2) this.problem = new SAT.Input(inputData);
 
         if (params.method.id === 'tabu') this.method = new Tabu.TabuSolver(workerInterface, params.methodParams.tabu);
-        if (params.method.id === 'genetic') this.method = new Genetic.GeneticSolver(workerInterface, params.methodParams.tabu);
+        if (params.method.id === 'genetic') this.method = new Genetic.GeneticSolver(workerInterface, params.methodParams.genetic);
         else if(params.method.id === 'annealing') this.method = new Annealing.AnnealingSolver(workerInterface, params.methodParams.annealing);
     }
 
