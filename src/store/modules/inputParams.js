@@ -13,8 +13,12 @@ const initState = {
                 equil: 50
             },
             genetic: {
-                param1: 1,
-                param2: 1
+                crossoverType: 1,
+                elitism: 0.65,
+                mutationRate: 0.08,
+                noGenerations: 200,
+                noIndividuals: 10,
+                selectionType: 1
             },
             tabu: {
                 multiplierLimit: 2,

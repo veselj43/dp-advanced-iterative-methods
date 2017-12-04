@@ -3,7 +3,7 @@ export default {
         var parsed = "";
         if (processTime) {
             if (processTime < 1) {
-                return "< 1ms";
+                return "< 1 ms";
             }
 
             var time = [
@@ -12,7 +12,7 @@ export default {
                 {name: "ms", value: Math.floor(processTime % 1000)}
             ];
             time.filter(unit => unit.value > 0).forEach(unit => {
-                parsed += " " + unit.value + unit.name;
+                parsed += " " + unit.value + " " + unit.name;
             });
         }
         return parsed;
