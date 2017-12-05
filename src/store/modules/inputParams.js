@@ -25,6 +25,11 @@ const initState = {
                 multiplierTabuSize: 1,
                 tabuSize2: 4
             }
+        },
+        isValid: {
+            annealing: true,
+            genetic: true,
+            tabu: true
         }
     },
     files: {
@@ -43,6 +48,9 @@ const getters = {
     },
     problemEnum () {
         return enums.problems;
+    },
+    getIsValidParams (state) {
+        return state.params.isValid[state.params.method.id];
     },
     getInputData (state) {
         return {
@@ -73,6 +81,9 @@ const mutations = {
     },
     updateParams (state, payload) {
         state.params.methodParams[payload.id] = payload.data;
+    },
+    updateParamsValidation (state, payload) {
+        state.params.isValid[state.params.method.id] = payload.data;
     },
     selectInstance (state, selected) {
         state.files.selected.id = selected.id;

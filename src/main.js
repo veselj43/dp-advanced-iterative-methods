@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import Tooltip from 'vue-directive-tooltip';
+import VeeValidate from 'vee-validate';
 import App from './App';
 import store from './store';
 import router from './router';
@@ -14,6 +15,8 @@ window.$eventBus = new Vue();
 Vue.config.productionTip = process.env.NODE_ENV === 'demo';
 
 Vue.use(Tooltip);
+Vue.use(VeeValidate);
+
 Vue.use(ToastedWrapper);
 
 for (var filterKey in Filters) {

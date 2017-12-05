@@ -105,6 +105,30 @@ const mutations = {
         }
 
         updateComparingResultsComputedValues(state.comparingResults);
+    },
+
+    toggleAllComparingResults(state, checkedAll) {
+        if (checkedAll) {
+            state.comparingResults.info.items = {};
+            state.comparingResults.chart.dataSets = [];
+            state.comparingResults.info.activeCount = 0;
+        }
+        else {
+            state.comparingResults.info.items = {};
+            state.comparingResults.chart.dataSets = [];
+            state.comparingResults.info.activeCount = 0;
+
+            state.computingHistory.forEach(toAdd => {
+                Vue.set(state.comparingResults.info.items, toAdd.id, {
+                    instance: toAdd.instance,
+                    params: toAdd.params,
+                    result: toAdd.data.result
+                });
+                state.comparingResults.chart.dataSets.push(new GeneratedDataSet(toAdd));
+            });
+        }
+
+        updateComparingResultsComputedValues(state.comparingResults);
     }
 }
 

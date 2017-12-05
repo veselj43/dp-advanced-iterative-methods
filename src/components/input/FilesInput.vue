@@ -13,7 +13,7 @@
                 </button>
                 <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
             </div>
-            <div class="header-text">Input files</div>
+            <div class="header-text header-instances">Input instances</div>
         </div>
 
         <div class="fileList-wrapper">
@@ -24,7 +24,7 @@
                     <span class="select" v-on:click="selectInstance({index, id: instance.id})" v-bind:title="instance.file.name">{{instance.file.name}}</span>
                 </li>
             </ul>
-            <p v-if="files.length === 0" class="help-block">No files uploaded.</p>
+            <p v-if="files.length === 0" class="help-block">No instances uploaded or generated.</p>
         </div>
 
         <sweet-modal ref="generatorModal" overlay-theme="dark">
@@ -33,7 +33,6 @@
         </sweet-modal>
 
         <sweet-modal ref="removeConfirm" overlay-theme="dark">
-            <template slot="title"><strong>Are you sure?</strong></template>
             {{confirmAction.bodyText}}
             <template slot="button">
                 <button class="btn btn-info" v-on:click="$refs.removeConfirm.close()">No</button>
@@ -152,6 +151,10 @@ export default {
 
     .fileManager > * {
         flex-shrink: 0;
+    }
+
+    .fileManager .header .header-instances {
+        font-size: 85%;
     }
 
     .fileManager input#filesToLoad,

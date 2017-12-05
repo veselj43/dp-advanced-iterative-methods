@@ -1,10 +1,10 @@
 <template>
     <div class="params">
-        <div class="form-group">
+        <div class="form-group" v-bind:class="{'has-error': errors.has('noIndividuals')}">
             <label class="" for="generation-size" data-toggle="tooltip">Number of individuals</label>
             <span class="form-tooltip" v-tooltip.right="'Number of individuals in each generation'"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="">
-                <input class="form-control" type="number" id="generation-size" v-model="params.noIndividuals" placeholder="">
+                <input class="form-control" type="number" id="generation-size" v-model="params.noIndividuals" name="noIndividuals" v-validate.initial="{ required: true, max_value: 1000, regex: /^[0-9]+$/ }">
             </div>
         </div>
         <div class="form-group">
@@ -88,6 +88,12 @@
             params: {
                 handler: function (params) {
                     this.$store.commit('updateParams', {id: 'genetic', data: params})
+                },
+                deep: true
+            },
+            errors: {
+                handler: function (errors) {
+                    this.$store.commit('updateParamsValidation', {id: 'genetic', data: errors.items.length === 0});
                 },
                 deep: true
             }

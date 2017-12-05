@@ -1,10 +1,9 @@
 <template>
     <div class="computingHistory">
-        <div class="header">Computed instances</div>
+        <div class="header">Computation history</div>
         <div class="header historyControls">
-            <button class="btn btn-primary" v-on:click="deselectAll">
-                Select first
-            </button>
+            <div class="height-filler"></div>
+            <input class="btn-checkbox" type="checkbox" v-model="checkedAll">
             <button class="btn btn-danger pull-right" v-on:click="$refs.clearComputingHistoryConfirm.open()">
                 Clear history
             </button>
@@ -19,8 +18,7 @@
         </div>
 
         <sweet-modal ref="clearComputingHistoryConfirm" overlay-theme="dark">
-            <template slot="title"><strong>Are you sure?</strong></template>
-            Do you want to clear computing history?
+            Do you want to clear computation history?
             <template slot="button">
                 <button class="btn btn-info" v-on:click="$refs.clearComputingHistoryConfirm.close()">No</button>
                 <button class="btn btn-danger" v-on:click="confirm">Yes</button>
@@ -30,7 +28,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import { SweetModal } from 'sweet-modal-vue';
 import ComputingHistoryItem from './ComputingHistoryItem';
 
@@ -40,6 +38,17 @@ export default {
         ComputingHistoryItem
     },
     computed: {
+        checkedAll: {
+            get() {
+                return (
+                    this.$store.state.outputData.comparingResults.info.activeCount > 0 &&
+                    this.$store.state.outputData.comparingResults.info.activeCount === this.$store.state.outputData.computingHistory.length
+                );
+            },
+            set() {
+                this.toggleAllComparingResults(this.checkedAll);
+            }
+        },
         ...mapState({
             computingHistory: (state) => state.outputData.computingHistory.reverse()
         }),
@@ -61,6 +70,10 @@ export default {
             this.$refs.clearComputingHistoryConfirm.close();
         },
 
+        ...mapMutations([
+            'toggleAllComparingResults'
+        ]),
+
         ...mapActions([
             'clearComputingHistory'
         ])
@@ -77,5 +90,18 @@ export default {
         padding-right: 1em;
         padding-bottom: .5em;
         /*text-align: right;*/
+    }
+
+    .height-filler {
+        width: 1px;
+        height: 24px;
+        display: inline-block;
+    }
+
+    .btn-checkbox {
+        -ms-transform: scale(2); /* IE */
+        -moz-transform: scale(2); /* FF */
+        -webkit-transform: scale(2); /* Safari and Chrome */
+        -o-transform: scale(2); /* Opera */
     }
 </style>
