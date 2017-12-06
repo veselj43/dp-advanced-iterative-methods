@@ -9,8 +9,8 @@ const defaultOptions = {
     },
     elements: {
         point:{
-            radius: 1,
-            hoverRadius: 5
+            radius: 0,
+            hoverRadius: 0
         },
         line: {
             tension: 0
@@ -20,13 +20,10 @@ const defaultOptions = {
         display: false
     },
     hover: {
-        mode: 'index',
-        intersect: false
-        // enabled: false
+        enabled: false
     },
     tooltips: {
-        mode: 'index',
-        intersect: false
+        enabled: false
     },
     scales: {
         xAxes: [{
@@ -106,11 +103,6 @@ export default Line.extend({
     },
     mounted () {
         this.renderLineChart();
-
-        var context = this;
-        // $eventBus.$on('LiveLaneChart_update', function() {
-        //     context.smartUpdate(true);
-        // });
     },
     methods: {
         renderLineChart: function() {

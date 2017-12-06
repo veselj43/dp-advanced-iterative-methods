@@ -41,7 +41,7 @@ const defaultOptions = {
                 min: 0,
                 stepSize: 10,
                 beginAtZero: true,
-                // maxRotation: 0,
+                maxRotation: 0,
                 autoSkip: true
             }
         }],
