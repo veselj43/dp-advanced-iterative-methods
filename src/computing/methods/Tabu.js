@@ -76,14 +76,14 @@ export class TabuSolver {
         return this.formula.params.numberOfClausules;// + getWeight(configuration);
     }
 
-    _process(limit, maxTabuSize, maxTabuSize2) {
+    _process(iterationLimit, tabuSize, tabuSizeShort) {
         var state = this.state0;
         var sBest = state;
         var tabuStates = [];            // Queue
         var tabuStatesSearch = [];      // HashSet
         var tabuChanges = [];           // List
 
-        for (var n = 0; n < limit; n++) {
+        for (var n = 0; n < iterationLimit; n++) {
             this._workerInterface.reply('progress', { counter: this.counter, fitness: this._fitness(state) });
 
             var bestCandidate = null;
@@ -135,10 +135,10 @@ export class TabuSolver {
             tabuStatesSearch[state.toString()] = true;
             tabuChanges.push(bestCandidateIndex);
 
-            if (tabuStates.length > maxTabuSize) {
+            if (tabuStates.length > tabuSize) {
                 delete tabuStatesSearch[tabuStates.shift().toString()];
             }
-            if (tabuChanges.length > maxTabuSize2) {
+            if (tabuChanges.length > tabuSizeShort) {
                 tabuChanges.shift();
             }
         }
@@ -151,16 +151,16 @@ export class TabuSolver {
         this.formula = cnf;
         this.counter = 0;
 
-        var limit = Math.round(this.formula.params.numberOfClausules * this.params.multiplierLimit);
-        var maxTabuSize = Math.round(this.formula.params.numberOfVariables * this.params.multiplierTabuSize);
-        var maxTabuSize2 = this.params.tabuSize2;
+        var iterationLimit = this.params.iterationLimit;
+        var tabuSize = this.params.tabuSize;
+        var tabuSizeShort = this.params.tabuSizeShort;
 
-        console.log("params: ", limit, maxTabuSize, maxTabuSize2);
-        this._workerInterface.reply('init', { numberOfIterations: limit, maxFitness: this.formula.params.numberOfClausules });
+        console.log("params: ", iterationLimit, tabuSize, tabuSizeShort);
+        this._workerInterface.reply('init', { numberOfIterations: iterationLimit, maxFitness: this.formula.params.numberOfClausules });
 
         this.state0 = new Configuration(this.formula.params.numberOfVariables);
 
-        var best = this._process(limit, maxTabuSize, maxTabuSize2);
+        var best = this._process(iterationLimit, tabuSize, tabuSizeShort);
 
         return new Result(best.selection, this._fitness(best), this.counter);
     }

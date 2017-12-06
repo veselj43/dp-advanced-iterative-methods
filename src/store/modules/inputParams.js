@@ -21,9 +21,9 @@ const initState = {
                 selectionType: 1
             },
             tabu: {
-                multiplierLimit: 2,
-                multiplierTabuSize: 1,
-                tabuSize2: 4
+                iterationLimit: 200,
+                tabuSize: 5,
+                tabuSizeShort: 2
             }
         },
         isValid: {

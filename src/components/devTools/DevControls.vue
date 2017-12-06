@@ -10,8 +10,8 @@
                         <li class="btn btn-default" v-on:click="deleteDB">Delete db</li>
                     </ul>
                 </li>
-                <li class="btn btn-default">
-                    <span v-on:click="show = false">close</span>
+                <li v-on:click="show = false" class="btn btn-default">
+                    <span>close</span>
                 </li>
             </ul>
         </div>

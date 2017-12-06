@@ -14,7 +14,9 @@ window.$eventBus = new Vue();
 
 Vue.config.productionTip = process.env.NODE_ENV === 'demo';
 
-Vue.use(Tooltip);
+Vue.use(Tooltip, {
+    delay: 0
+});
 Vue.use(VeeValidate);
 
 Vue.use(ToastedWrapper);
