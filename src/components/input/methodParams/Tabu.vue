@@ -3,7 +3,7 @@
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuIterationLimit')}">
             <label class="" for="iterationLimit">Iteration limit</label>
             <span class="form-tooltip" v-tooltip.right="'Tooltip text'"><span class="glyphicon glyphicon-question-sign"></span></span>
-            <input type="number"
+            <input type="number" min="1"
                 class="form-control" id="iterationLimit" name="tabuIterationLimit"
                 v-model="params.iterationLimit"
                 data-vv-as="iteration limit" v-validate.initial="{ required: true, min_value: 1, max_value: 10000, regex: /^[0-9]+$/ }"

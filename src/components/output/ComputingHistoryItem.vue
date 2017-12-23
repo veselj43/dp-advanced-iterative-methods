@@ -15,9 +15,9 @@
         <div class="list-group-item-text collapsable" v-bind:class="{'collapsed': !isOpen}">
             <table class="table">
                 <tbody>
-                    <tr v-for="(param, key) in item.params">
+                    <tr v-for="(param, key) in item.params" :key="key">
                         <td>{{key}}</td>
-                        <td><strong>{{param}}</strong></td></td>
+                        <td><strong>{{param}}</strong></td>
                     </tr>
                 </tbody>
             </table>

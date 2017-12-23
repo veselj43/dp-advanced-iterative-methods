@@ -1,10 +1,10 @@
 <template>
     <div class="computingHistory">
+        <input class="btn-checkbox" type="checkbox" v-model="checkedAll">
         <div class="header">Computation history</div>
         <div class="header historyControls">
-            <div class="height-filler"></div>
-            <input class="btn-checkbox" type="checkbox" v-model="checkedAll">
-            <button class="btn btn-danger pull-right" v-on:click="$refs.clearComputingHistoryConfirm.open()">
+            <!-- <div class="height-filler"></div> -->
+            <button class="btn btn-danger" v-on:click="$refs.clearComputingHistoryConfirm.open()" :disabled="!computingHistory || computingHistory.length === 0">
                 Clear history
             </button>
         </div>
@@ -86,10 +86,14 @@ export default {
         overflow-y: auto;
     }
 
+    .computingHistory input + .header {
+        display: inline-block;
+    }
+
     .historyControls {
         padding-right: 1em;
         padding-bottom: .5em;
-        /*text-align: right;*/
+        text-align: right;
     }
 
     .height-filler {
@@ -99,9 +103,11 @@ export default {
     }
 
     .btn-checkbox {
-        -ms-transform: scale(2); /* IE */
-        -moz-transform: scale(2); /* FF */
-        -webkit-transform: scale(2); /* Safari and Chrome */
-        -o-transform: scale(2); /* Opera */
+        margin-left: 1em;
+        transform: scale(1.5);
+        -ms-transform: scale(1.5); /* IE */
+        -moz-transform: scale(1.5); /* FF */
+        -webkit-transform: scale(1.5); /* Safari and Chrome */
+        -o-transform: scale(1.5); /* Opera */
     }
 </style>
