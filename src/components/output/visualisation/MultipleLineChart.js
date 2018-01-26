@@ -1,3 +1,4 @@
+// "vue-chartjs": "2.8.7",
 import { Line } from 'vue-chartjs'
 
 // chartjs options

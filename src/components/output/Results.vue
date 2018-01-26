@@ -41,7 +41,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in comparingResultsInfo.items">
+                    <tr v-for="(item, index) in comparingResultsInfo.items" :key="index">
                         <td>{{item.instance}}</td>
                         <td>{{item.result.cost}}</td>
                         <td>{{item.result.counter}}</td>
