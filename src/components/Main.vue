@@ -10,6 +10,7 @@
 
         <div class="right-panel">
             <computing-history></computing-history>
+            <info></info>
         </div>
 
         <div class="main-panel center-panel __above-disable-layer">
@@ -32,6 +33,7 @@ import FilesInput from './input/FilesInput'
 
 import Results from './output/Results'
 import ComputingHistory from './output/ComputingHistory'
+import Info from './Info'
 
 export default {
     components: {
@@ -40,7 +42,8 @@ export default {
         ProblemSelect,
         FilesInput,
         Results,
-        ComputingHistory
+        ComputingHistory,
+        Info
     }
 }
 </script>

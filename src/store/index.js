@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { missingFeatures, metFeatures } from './featureSupportCheck';
+import { deps, missingFeatures, metFeatures } from './featureSupportCheck';
 import database from './modules/database/index';
 import inputParams from './modules/inputParams';
 import liveData from './modules/liveData';
@@ -15,8 +15,9 @@ export default new Vuex.Store({
     state: {
         debugMode: debug,
         requiredDependencies: {
-            missingFeatures,
-            metFeatures
+            deps,
+            missingFeatures: missingFeatures.length,
+            metFeatures: metFeatures.length
         }
     },
     modules: {

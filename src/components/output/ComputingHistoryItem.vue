@@ -80,6 +80,12 @@ export default {
 
         .checkbox {
             margin: 0;
+            margin-right: 10px;
+            overflow: hidden;
+
+            label {
+                width: 100%;
+            }
         }
 
         .collapse-header {

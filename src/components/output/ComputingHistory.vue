@@ -1,20 +1,24 @@
 <template>
     <div class="computingHistory">
-        <input class="btn-checkbox" type="checkbox" v-model="checkedAll">
-        <div class="header">Computation history</div>
+        <div>
+            <input class="btn-checkbox" type="checkbox" v-model="checkedAll">
+            <div class="header">Computation history</div>
+        </div>
         <div class="header historyControls">
             <!-- <div class="height-filler"></div> -->
             <button class="btn btn-danger" v-on:click="$refs.clearComputingHistoryConfirm.open()" :disabled="!computingHistory || computingHistory.length === 0">
                 Clear history
             </button>
         </div>
-        <div class="list-group">
-            <computing-history-item
-                v-for="(result, index) in computingHistory"
-                :key="result.id"
-                :item="result"
-                :index="index"
-            ></computing-history-item>
+        <div class="scroll-area">
+            <div class="list-group">
+                <computing-history-item
+                    v-for="(result, index) in computingHistory"
+                    :key="result.id"
+                    :item="result"
+                    :index="index"
+                ></computing-history-item>
+            </div>
         </div>
 
         <sweet-modal ref="clearComputingHistoryConfirm" overlay-theme="dark">
@@ -81,13 +85,20 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .computingHistory {
-        overflow-y: auto;
+        input, input + .header {
+            display: inline-block;
+        }
     }
 
-    .computingHistory input + .header {
-        display: inline-block;
+    .scroll-area {
+        overflow-y: auto;
+        border-top: #ccc 1px solid;
+    }
+
+    .list-group {
+        margin-bottom: .2em;
     }
 
     .historyControls {

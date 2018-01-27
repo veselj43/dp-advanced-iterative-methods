@@ -7,7 +7,7 @@ function checkObj(dependencyName, supportCheckCondition, consequence, longDescri
     }
 }
 
-const deps = [
+export const deps = [
     checkObj(
         'IndexedDB',
         window.indexedDB,
