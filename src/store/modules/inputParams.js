@@ -49,6 +49,9 @@ const getters = {
     problemEnum () {
         return enums.problems;
     },
+    methodParamsTitles () {
+        return enums.methodParamsTitles;
+    },
     getIsValidParams (state) {
         return state.params.isValid[state.params.method.id];
     },

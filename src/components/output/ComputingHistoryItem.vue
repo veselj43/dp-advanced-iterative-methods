@@ -16,7 +16,7 @@
             <table class="table">
                 <tbody>
                     <tr v-for="(param, key) in item.params" :key="key">
-                        <td>{{key}}</td>
+                        <td>{{methodParamsTitles[activeMethod][key]}}</td>
                         <td><strong>{{param}}</strong></td>
                     </tr>
                 </tbody>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
     props: ['item', 'index'],
@@ -44,7 +44,15 @@ export default {
             set() {
                 this.toggleIndexInComparingResults(this.index);
             }
-        }
+        },
+
+        ...mapState({
+            activeMethod: state => state.inputParams.params.method.id
+        }),
+
+        ...mapGetters([
+            'methodParamsTitles'
+        ])
     },
 
     methods: {

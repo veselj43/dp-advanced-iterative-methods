@@ -24,3 +24,25 @@ export const problems = [
         text: "Knapsack"
     }
 ];
+
+export const methodParamsTitles = {
+    annealing: {
+        start_temp: "Starting temperature",
+        cool_coef: "Cooling coefficient",
+        min_temp: "Minimal temperature",
+        equil: "Equilibrium"
+    },
+    genetic: {
+        crossoverType: "Crossover type",
+        elitism: "Elitism",
+        mutationRate: "Mutation rate",
+        noGenerations: "Number of generations",
+        noIndividuals: "Number of individuals",
+        selectionType: "Selection type"
+    },
+    tabu: {
+        iterationLimit: "Iteration limit",
+        tabuSize: "State tabu size",
+        tabuSizeShort: "Changes tabu size"
+    }
+}
