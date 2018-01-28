@@ -1,82 +1,14 @@
-import Resource from '@/services/resource';
-import __mapValues from 'lodash/mapValues';
 import __extend from 'lodash/extend';
+import Resource from '@/services/resource';
+import * as DBSchema from './DBSchema';
 import DBManager from './DBManager';
 
-const dbName = "MyTestDatabase";
-const dbVersion = 1;
-
-const defaultPK = {
-    keyPath: "id",
-    autoIncrement: true
-};
-const problemIndex = {
-    name: "by_problem",
-    column: "problem",
-    options: {unique: false}
-};
-
-const dbStructure = {
-    annealingComputingHistory: {
-        name: "annealingComputingHistory",
-        pk: defaultPK,
-        indexes: [problemIndex]
-    },
-    geneticComputingHistory: {
-        name: "geneticComputingHistory",
-        pk: defaultPK,
-        indexes: [problemIndex]
-    },
-    tabuComputingHistory: {
-        name: "tabuComputingHistory",
-        pk: defaultPK,
-        indexes: [problemIndex]
-    },
-    instances: {
-        name: "instances",
-        pk: defaultPK,
-        indexes: [problemIndex]
-    }
-};
-const dbTables = __mapValues(dbStructure, (tableMetaData) => tableMetaData.name);
-const mode = {
-    RO: 'readonly',
-    RW: 'readwrite'
-};
-
-const mockData = {
-    tabuComputingHistory: [
-        { problem: 0, instance: 'SAT instance 01', params: { a: 1, b: 2 } },
-        { problem: 1, instance: 'KNAP instance 01', params: { a: 1, b: 2 } },
-        { problem: 0, instance: 'SAT instance 01', params: { c: 4, d: 3 } }
-    ],
-    instances: [
-        { content: "instance content as string ???" }
-    ]
-};
-
-function upgradeDB(db) {
-    // The database did not previously exist, so create object stores and indexes.
-    console.log("[DB] Creating database");
-
-    for (var tableKey in dbStructure) {
-        var tableMetaData = dbStructure[tableKey];
-        var tableObjectStore = db.createObjectStore(tableMetaData.name, tableMetaData.pk);
-
-        if (tableMetaData.indexes) {
-            for (var i = 0, index; index = tableMetaData.indexes[i]; i++) {
-                tableObjectStore.createIndex(index.name, index.column, index.options);
-            }
-        }
-    }
-}
-
-var dbm = new DBManager(dbName, dbVersion, upgradeDB);
+var dbm = new DBManager(DBSchema.dbName, DBSchema.dbVersion, DBSchema.upgradeDB);
 var exampleInstanceAdded = false;
 
 function getTableNameByMethod(inputData) {
     var table = inputData.method + 'ComputingHistory';
-    return dbTables[table];
+    return DBSchema.dbTables[table];
 }
 
 // initial state
@@ -102,6 +34,9 @@ const actions = {
             commit('updateComputingHistory', data);
             commit('initComparingResults', true);
             return true;
+        }, function (err) {
+            console.log(err);
+            return false;
         });
     },
 
@@ -115,7 +50,7 @@ const actions = {
             }
         });
         var table = getTableNameByMethod(objForDB);
-        return dbm.getStore(table, mode.RW).then(function(store) {
+        return dbm.getStore(table, DBSchema.mode.RW).then(function(store) {
             return store.add(objForDB).then(function(data) {
                 return dispatch('loadComputingHistory');
             });
@@ -125,7 +60,7 @@ const actions = {
     clearComputingHistory ({ getters, dispatch }) {
         var params = getters.getInputData;
         var table = getTableNameByMethod(params);
-        dbm.getStore(table, mode.RW).then(function(store) {
+        dbm.getStore(table, DBSchema.mode.RW).then(function(store) {
             return store.clear();
         }).then(function(data) {
             console.log("[DB] history cleared");
@@ -135,7 +70,7 @@ const actions = {
 
     loadInstances ({ getters, commit }) {
         var params = getters.getInputData;
-        return dbm.getAll(dbTables.instances, "by_problem", params.problem).then(function(instances) {
+        return dbm.getAll(DBSchema.dbTables.instances, "by_problem", params.problem).then(function(instances) {
             if (instances.length > 0 || exampleInstanceAdded) {
                 exampleInstanceAdded = true;
                 commit('updateInstances', instances);
@@ -152,7 +87,7 @@ const actions = {
                             content: data.bodyText
                         }
                     };
-                    return dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+                    return dbm.getStore(DBSchema.dbTables.instances, DBSchema.mode.RW).then(function(store) {
                         return store.add(instanceDbObj).then(function() {
                             commit('updateInstances', [instanceDbObj, ...instances]);
                             return true;
@@ -165,7 +100,7 @@ const actions = {
 
     addInstances ({ getters, dispatch }, filesArray) {
         var inputParams = getters.getInputData;
-        return dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+        return dbm.getStore(DBSchema.dbTables.instances, DBSchema.mode.RW).then(function(store) {
             var addPromises = [];
 
             for (var i = 0, fileDbObj; fileDbObj = filesArray[i]; i++) {
@@ -184,7 +119,7 @@ const actions = {
 
     addGeneratedInstances ({ getters, dispatch }, stringFilesArray) {
         var inputParams = getters.getInputData;
-        return dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+        return dbm.getStore(DBSchema.dbTables.instances, DBSchema.mode.RW).then(function(store) {
             var addPromises = [];
 
             for (var i = 0, fileDbObj; fileDbObj = stringFilesArray[i]; i++) {
@@ -202,13 +137,13 @@ const actions = {
     },
 
     removeInstance ({ dispatch }, id) {
-        return dbm.remove(dbTables.instances, id).then(function(ok) {
+        return dbm.remove(DBSchema.dbTables.instances, id).then(function(ok) {
             return dispatch('loadInstances');
         });
     },
 
     clearInstances ({ dispatch }) {
-        return dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+        return dbm.getStore(DBSchema.dbTables.instances, DBSchema.mode.RW).then(function(store) {
             return store.clear();
         }).then(function(data) {
             console.log("[DB] instances cleared");

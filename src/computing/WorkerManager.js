@@ -63,6 +63,8 @@ export class WorkerManager {
             methodName: arguments[0],
             methodArguments: Array.prototype.slice.call(arguments, 1)
         });
+
+        return this;
     }
 
     terminate() {
@@ -71,5 +73,7 @@ export class WorkerManager {
         }
         this.terminated = true;
         this.inProgress = false;
+
+        return this;
     }
 }
