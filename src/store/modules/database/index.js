@@ -1,4 +1,4 @@
-import Resource from '../../../services/resource';
+import Resource from '@/services/resource';
 import __mapValues from 'lodash/mapValues';
 import __extend from 'lodash/extend';
 import DBManager from './DBManager';
@@ -98,9 +98,10 @@ const actions = {
     loadComputingHistory ({ getters, commit }) {
         var params = getters.getInputData;
         var table = getTableNameByMethod(params);
-        dbm.getAll(table, "by_problem", params.problem).then(function(data) {
+        return dbm.getAll(table, "by_problem", params.problem).then(function(data) {
             commit('updateComputingHistory', data);
             commit('initComparingResults', true);
+            return true;
         });
     },
 
@@ -114,9 +115,9 @@ const actions = {
             }
         });
         var table = getTableNameByMethod(objForDB);
-        dbm.getStore(table, mode.RW).then(function(store) {
-            store.add(objForDB).then(function(data) {
-                dispatch('loadComputingHistory');
+        return dbm.getStore(table, mode.RW).then(function(store) {
+            return store.add(objForDB).then(function(data) {
+                return dispatch('loadComputingHistory');
             });
         });
     },
@@ -128,18 +129,21 @@ const actions = {
             return store.clear();
         }).then(function(data) {
             console.log("[DB] history cleared");
-            dispatch('loadComputingHistory');
+            return dispatch('loadComputingHistory');
         });
     },
 
     loadInstances ({ getters, commit }) {
         var params = getters.getInputData;
-        dbm.getAll(dbTables.instances, "by_problem", params.problem).then(function(instances) {
+        return dbm.getAll(dbTables.instances, "by_problem", params.problem).then(function(instances) {
             if (instances.length > 0 || exampleInstanceAdded) {
+                exampleInstanceAdded = true;
                 commit('updateInstances', instances);
+                return true;
             }
             else {
-                Resource.getExampleInstance().then(function(data) {
+                exampleInstanceAdded = true;
+                return Resource.getExampleInstance().then(function(data) {
                     var instanceDbObj = {
                         problem: 0,
                         type: 'string',
@@ -148,20 +152,20 @@ const actions = {
                             content: data.bodyText
                         }
                     };
-                    dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
-                        store.add(instanceDbObj).then(function() {
+                    return dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+                        return store.add(instanceDbObj).then(function() {
                             commit('updateInstances', [instanceDbObj, ...instances]);
+                            return true;
                         });
                     });
                 });
             }
-            exampleInstanceAdded = true;
         });
     },
 
     addInstances ({ getters, dispatch }, filesArray) {
         var inputParams = getters.getInputData;
-        dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+        return dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
             var addPromises = [];
 
             for (var i = 0, fileDbObj; fileDbObj = filesArray[i]; i++) {
@@ -172,15 +176,15 @@ const actions = {
                 }));
             }
 
-            Promise.all(addPromises).then(function(values) {
-                dispatch('loadInstances');
+            return Promise.all(addPromises).then(function(values) {
+                return dispatch('loadInstances');
             });
         });
     },
 
     addGeneratedInstances ({ getters, dispatch }, stringFilesArray) {
         var inputParams = getters.getInputData;
-        dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+        return dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
             var addPromises = [];
 
             for (var i = 0, fileDbObj; fileDbObj = stringFilesArray[i]; i++) {
@@ -191,31 +195,31 @@ const actions = {
                 }));
             }
 
-            Promise.all(addPromises).then(function(values) {
-                dispatch('loadInstances');
+            return Promise.all(addPromises).then(function(values) {
+                return dispatch('loadInstances');
             });
         });
     },
 
     removeInstance ({ dispatch }, id) {
-        dbm.remove(dbTables.instances, id).then(function(ok) {
-            dispatch('loadInstances');
+        return dbm.remove(dbTables.instances, id).then(function(ok) {
+            return dispatch('loadInstances');
         });
     },
 
     clearInstances ({ dispatch }) {
-        dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
+        return dbm.getStore(dbTables.instances, mode.RW).then(function(store) {
             return store.clear();
         }).then(function(data) {
             console.log("[DB] instances cleared");
-            dispatch('loadInstances');
+            return dispatch('loadInstances');
         });
     },
 
     // dev tools
     deleteDB (context) {
         console.log("[DB] deleting...");
-        dbm.deleteDB();
+        return dbm.deleteDB();
     }
 }
 

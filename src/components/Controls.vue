@@ -10,7 +10,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-import { WorkerManager } from '../computing/WorkerManager.js';
+import { WorkerManager } from '@/computing/WorkerManager.js';
 
 export default {
     data() {
@@ -26,7 +26,7 @@ export default {
         ])
     },
     mounted () {
-        var myWorker = require("worker-loader!../computing/IterativeMethodWorker.js");
+        var myWorker = require("worker-loader!@/computing/IterativeMethodWorker.js");
         this.workerManager = new WorkerManager(this, myWorker);
 
         this.workerManager
@@ -91,13 +91,13 @@ export default {
             }
             else {
                 this.pushResult(result);
-                this.setStatusDone(result);
-                $eventBus.$emit('LiveLaneChart_update');
+                this.setStatusProcessingResults(result);
             }
         },
 
         ...mapMutations([
             'setStatusRunning',
+            'setStatusProcessingResults',
             'setStatusStopped',
             'setStatusDone',
             'setStatusError',

@@ -133,11 +133,7 @@ const mutations = {
 }
 
 // actions
-const actions = {
-    pushResult({ dispatch }, data) {
-        dispatch('pushComputingHistory', data);
-    }
-}
+const actions = {}
 
 // modules
 const modules = {}

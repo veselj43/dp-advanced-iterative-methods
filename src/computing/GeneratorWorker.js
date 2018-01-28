@@ -1,5 +1,5 @@
 import { WorkerInterface } from './WorkerInterface.js';
-import Resource from '../services/resource';
+import Resource from '@/services/resource';
 
 var methods = {
     work: function(data) {

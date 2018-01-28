@@ -1,6 +1,8 @@
 
 const stateName = {
+    ready: "Ready",
     running: "In progress",
+    processingResults: "Processing results",
     stopped: "Stopped",
     done: "Done",
     error: "Error"
@@ -9,8 +11,7 @@ const stateName = {
 // initial state
 const state = {
     computingStatus: {
-        isRunning: false,
-        text: "Ready",
+        text: stateName.ready,
         file: {},
         bestResult: null
     },
@@ -34,6 +35,12 @@ const getters = {
     },
     getChartValues(store) {
         return store.data.chart.values;
+    },
+    computingIsRunning(store) {
+        return store.computingStatus.text === stateName.running;
+    },
+    computingIsProcessingResults(store) {
+        return store.computingStatus.text === stateName.processingResults;
     }
 }
 
@@ -42,28 +49,27 @@ const mutations = {
     setStatusRunning(store, fileObj) {
         store.data = state.data;
         store.computingStatus.file = fileObj;
-        store.computingStatus.isRunning = true;
         store.computingStatus.text = stateName.running;
+    },
+    setStatusProcessingResults(store, result) {
+        store.computingStatus.text = stateName.processingResults;
+        store.computingStatus.bestResult = result;
     },
     setStatusStopped(store) {
         var file = store.computingStatus.file;
         store.computingStatus.file = null;
-        store.computingStatus.isRunning = false;
         store.computingStatus.text = stateName.stopped;
         return file;
     },
-    setStatusDone(store, result) {
+    setStatusDone(store) {
         var file = store.computingStatus.file;
         store.computingStatus.file = null;
-        store.computingStatus.isRunning = false;
         store.computingStatus.text = stateName.done;
-        store.computingStatus.bestResult = result;
         return file;
     },
     setStatusError(store) {
         var file = store.computingStatus.file;
         store.computingStatus.file = null;
-        store.computingStatus.isRunning = false;
         store.computingStatus.text = stateName.error;
         return file;
     },
@@ -83,7 +89,14 @@ const mutations = {
 }
 
 // actions
-const actions = {}
+const actions = {
+    pushResult({ commit, dispatch }, data) {
+        var x = dispatch('pushComputingHistory', data);
+        x.then(function(res) {
+            commit('setStatusDone');
+        });
+    }
+}
 
 // modules
 const modules = {}

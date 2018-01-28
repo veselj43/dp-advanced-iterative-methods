@@ -1,8 +1,9 @@
 <template>
     <div class="results">
-        <h3>Results</h3>
+        <h3>Results <small v-if="computingIsProcessingResults">{{computingStatus.text}}</small></h3>
+        <img v-if="computingIsProcessingResults" src="/static/img/loading_01.svg" alt="Processing results">
 
-        <div v-if="computingStatus.isRunning">
+        <div v-if="computingIsRunning || computingIsProcessingResults">
 
             <live-line-chart class="chart"
                 v-bind="liveData.chart"
@@ -62,6 +63,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import LiveLineChart from './visualisation/LiveLineChart';
 import MultipleLineChart from './visualisation/MultipleLineChart';
 import ConfVisual from './visualisation/Configuration';
@@ -80,6 +82,13 @@ export default {
             comparingResultsInfo: this.$store.state.outputData.comparingResults.info,
             dataForMultipleLineChart: this.$store.state.outputData.comparingResults.chart
         }
+    },
+
+    computed: {
+        ...mapGetters([
+            'computingIsRunning',
+            'computingIsProcessingResults'
+        ])
     }
 }
 </script>
