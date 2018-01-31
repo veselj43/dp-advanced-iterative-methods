@@ -3,8 +3,10 @@
         <h3>Results <small v-if="computingIsProcessingResults">{{computingStatus.text}}</small></h3>
         <img v-if="computingIsProcessingResults" src="/static/img/loading_01.svg" alt="Processing results">
 
-        <div id="lineChart"></div>
+        <button class="btn btn-default" v-on:click="addData">addData</button>
+
         <div id="scatterChart"></div>
+        <div id="lineChart"></div>
 
         <!-- <div v-if="computingIsRunning || computingIsProcessingResults">
 
@@ -96,61 +98,56 @@ export default {
         ])
     },
 
-    mounted() {
-        function point(x, y) {
-            return {x: x, y: y};
+    methods: {
+        addData() {
+            var d3 = dc.d3;
+            var crossfilter = dc.crossfilter;
+
+            var simpleData = this.dataForMultipleLineChart.dataSets[0].data;
+
+            simpleData = simpleData.map(function (x, i) {
+                return {x: i, y: x};
+            });
+            
+            this.chart1 = dc.scatterPlot('#scatterChart');
+
+            var dataFilter = crossfilter(simpleData);
+            var dim1 = dataFilter.dimension(function (d) {
+                return [d.x, d.y];
+            });
+            var group1 = dim1.group();
+
+            this.chart1
+                .dimension(dim1)
+                .x(dc.d3.scale.linear().domain([0, this.dataForMultipleLineChart.labels.length]))
+                .y(dc.d3.scale.linear().domain([0, 110]))
+                .group(group1)
+                .brushOn(false)
+                .transitionDuration(0);
+            this.chart1.render();
+
+            // var chart2 = dc.lineChart('#lineChart');
+
+            // var dataFilter2 = crossfilter(this.simpleData);
+            // var dim2 = dataFilter2.dimension(function (d, c) {
+            //     return d;
+            // });
+            // var group2 = dim2.group().reduceSum(function (d) {
+            //     return d;
+            // });
+
+            // chart2
+            //     .dimension(dim2)
+            //     .x(dc.d3.scale.linear().domain([0, 1000]))
+            //     // .y(dc.d3.scale.linear().domain([0, 10]))
+            //     .group(group2)
+            //     // .x(d3.scale.ordinal())
+            //     // .xUnits(dc.units.ordinal)
+            //     .valueAccessor(function(kv) { return +kv.key; })
+            //     .brushOn(false);
+
+            // chart2.render();
         }
-
-        var d3 = dc.d3;
-        var crossfilter = dc.crossfilter;
-
-        var data = [
-            point(1, 5),
-            point(2, 6),
-            point(3, 3),
-            point(4, 8),
-            point(5, 7)
-        ];
-
-        var simpleData = [5,4,8,11,8];
-
-        var chart1 = dc.scatterPlot('#scatterChart');
-
-        var dataFilter1 = crossfilter(simpleData);
-        var dim1 = dataFilter1.dimension(function (d, i) {
-            return [i, d];
-        });
-        var group1 = dim1.group();
-
-        chart1
-            .dimension(dim1)
-            .x(dc.d3.scale.linear().domain([0, 10]))
-            .y(dc.d3.scale.linear().domain([0, 15]))
-            .group(group1)
-            .brushOn(false);
-        chart1.render();
-
-        var chart2 = dc.lineChart('#lineChart');
-
-        var dataFilter2 = crossfilter(data);
-        var dim2 = dataFilter2.dimension(function (d, c) {
-            return d.x;
-        });
-        var group2 = dim2.group().reduceSum(function (d) {
-            return d.y;
-        });
-        
-
-        chart2
-            .dimension(dim2)
-            .x(dc.d3.scale.linear().domain([0, 10]))
-            // .y(dc.d3.scale.linear().domain([0, 10]))
-            .group(group2)
-            .x(d3.scale.ordinal())
-            .xUnits(dc.units.ordinal)
-            .brushOn(false);
-
-        chart2.render();
     }
 }
 </script>
