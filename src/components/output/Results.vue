@@ -3,7 +3,10 @@
         <h3>Results <small v-if="computingIsProcessingResults">{{computingStatus.text}}</small></h3>
         <img v-if="computingIsProcessingResults" src="/static/img/loading_01.svg" alt="Processing results">
 
-        <div v-if="computingIsRunning || computingIsProcessingResults">
+        <div id="lineChart"></div>
+        <div id="scatterChart"></div>
+
+        <!-- <div v-if="computingIsRunning || computingIsProcessingResults">
 
             <live-line-chart class="chart"
                 v-bind="liveData.chart"
@@ -57,7 +60,7 @@
 
         <div v-else>
             <p>Compute an instance or check instances to compare from the right panel.</p>
-        </div>
+        </div> -->
 
     </div>
 </template>
@@ -67,6 +70,8 @@ import { mapGetters } from 'vuex';
 import LiveLineChart from './visualisation/LiveLineChart';
 import MultipleLineChart from './visualisation/MultipleLineChart';
 import ConfVisual from './visualisation/Configuration';
+
+import dc from 'dc';
 
 export default {
     components: {
@@ -89,6 +94,63 @@ export default {
             'computingIsRunning',
             'computingIsProcessingResults'
         ])
+    },
+
+    mounted() {
+        function point(x, y) {
+            return {x: x, y: y};
+        }
+
+        var d3 = dc.d3;
+        var crossfilter = dc.crossfilter;
+
+        var data = [
+            point(1, 5),
+            point(2, 6),
+            point(3, 3),
+            point(4, 8),
+            point(5, 7)
+        ];
+
+        var simpleData = [5,4,8,11,8];
+
+        var chart1 = dc.scatterPlot('#scatterChart');
+
+        var dataFilter1 = crossfilter(simpleData);
+        var dim1 = dataFilter1.dimension(function (d, i) {
+            return [i, d];
+        });
+        var group1 = dim1.group();
+
+        chart1
+            .dimension(dim1)
+            .x(dc.d3.scale.linear().domain([0, 10]))
+            .y(dc.d3.scale.linear().domain([0, 15]))
+            .group(group1)
+            .brushOn(false);
+        chart1.render();
+
+        var chart2 = dc.lineChart('#lineChart');
+
+        var dataFilter2 = crossfilter(data);
+        var dim2 = dataFilter2.dimension(function (d, c) {
+            return d.x;
+        });
+        var group2 = dim2.group().reduceSum(function (d) {
+            return d.y;
+        });
+        
+
+        chart2
+            .dimension(dim2)
+            .x(dc.d3.scale.linear().domain([0, 10]))
+            // .y(dc.d3.scale.linear().domain([0, 10]))
+            .group(group2)
+            .x(d3.scale.ordinal())
+            .xUnits(dc.units.ordinal)
+            .brushOn(false);
+
+        chart2.render();
     }
 }
 </script>
