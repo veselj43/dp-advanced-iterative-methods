@@ -5,7 +5,6 @@
 
         <button class="btn btn-default" v-on:click="addData">addData</button>
 
-        <div id="scatterChart"></div>
         <div id="lineChart"></div>
 
         <!-- <div v-if="computingIsRunning || computingIsProcessingResults">
@@ -75,6 +74,9 @@ import ConfVisual from './visualisation/Configuration';
 
 import dc from 'dc';
 
+var d3 = dc.d3;
+var crossfilter = dc.crossfilter;
+
 export default {
     components: {
         LiveLineChart,
@@ -100,53 +102,38 @@ export default {
 
     methods: {
         addData() {
-            var d3 = dc.d3;
-            var crossfilter = dc.crossfilter;
-
             var simpleData = this.dataForMultipleLineChart.dataSets[0].data;
+            var simpleData2 = this.dataForMultipleLineChart.dataSets[1].data;
 
-            simpleData = simpleData.map(function (x, i) {
-                return {x: i, y: x};
-            });
-            
-            this.chart1 = dc.scatterPlot('#scatterChart');
+            var chart2 = dc.compositeChart('#lineChart');
 
-            var dataFilter = crossfilter(simpleData);
-            var dim1 = dataFilter.dimension(function (d) {
-                return [d.x, d.y];
-            });
-            var group1 = dim1.group();
+            var dataFilter1 = crossfilter(simpleData);
+            var dim1 = dataFilter1.dimension((d, c) => c);
+            var group1 = dim1.group().reduceSum((d) => d);
 
-            this.chart1
+            var dataFilter2 = crossfilter(simpleData2);
+            var dim2 = dataFilter2.dimension((d, c) => c);
+            var group2 = dim2.group().reduceSum((d) => (d - 10));
+
+            chart2
+                .width(800).height(300)
+                .margins({ top: 10, right: 10, bottom: 20, left: 40 })
                 .dimension(dim1)
-                .x(dc.d3.scale.linear().domain([0, this.dataForMultipleLineChart.labels.length]))
-                .y(dc.d3.scale.linear().domain([0, 110]))
-                .group(group1)
+                .compose([
+                    dc.lineChart(chart2)
+                        .group(group1)
+                        .colors('#f00'),
+                    dc.lineChart(chart2)
+                        .group(group2)
+                        .colors('#00f')
+                ])
+                .x(d3.scale.linear().domain([0, this.dataForMultipleLineChart.labels.length]))
+                .y(d3.scale.linear().domain([0, 100]))
+                .elasticX(true)
                 .brushOn(false)
                 .transitionDuration(0);
-            this.chart1.render();
 
-            // var chart2 = dc.lineChart('#lineChart');
-
-            // var dataFilter2 = crossfilter(this.simpleData);
-            // var dim2 = dataFilter2.dimension(function (d, c) {
-            //     return d;
-            // });
-            // var group2 = dim2.group().reduceSum(function (d) {
-            //     return d;
-            // });
-
-            // chart2
-            //     .dimension(dim2)
-            //     .x(dc.d3.scale.linear().domain([0, 1000]))
-            //     // .y(dc.d3.scale.linear().domain([0, 10]))
-            //     .group(group2)
-            //     // .x(d3.scale.ordinal())
-            //     // .xUnits(dc.units.ordinal)
-            //     .valueAccessor(function(kv) { return +kv.key; })
-            //     .brushOn(false);
-
-            // chart2.render();
+            chart2.render();
         }
     }
 }
@@ -155,5 +142,9 @@ export default {
 <style scoped>
     .chart {
         padding: 1em 0;
+    }
+
+    div.dc-chart {
+        float: unset;
     }
 </style>
