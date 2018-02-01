@@ -3,8 +3,6 @@
         <h3>Results <small v-if="computingIsProcessingResults">{{computingStatus.text}}</small></h3>
         <img v-if="computingIsProcessingResults" src="/static/img/loading_01.svg" alt="Processing results">
 
-        <button class="btn btn-default" v-on:click="addData">addData</button>
-
         <div id="lineChart"></div>
 
         <!-- <div v-if="computingIsRunning || computingIsProcessingResults">
@@ -86,6 +84,8 @@ export default {
 
     data() {
         return {
+            maxDatasetLength: 0,
+
             computingStatus: this.$store.state.liveData.computingStatus,
             liveData: this.$store.state.liveData.data,
             comparingResultsInfo: this.$store.state.outputData.comparingResults.info,
@@ -100,40 +100,70 @@ export default {
         ])
     },
 
+    mounted() {
+        this.compositeChart = dc.compositeChart('#lineChart');
+        this.compositeChart
+            .width(800).height(300)
+            .x(d3.scale.linear().domain([0, 100]))
+            .y(d3.scale.linear().domain([0, 100]))
+            .elasticX(true)
+            .elasticY(true)
+            .brushOn(false)
+            .transitionDuration(0);
+        this.compositeChart.render();
+    },
+
     methods: {
-        addData() {
-            var simpleData = this.dataForMultipleLineChart.dataSets[0].data;
-            var simpleData2 = this.dataForMultipleLineChart.dataSets[1].data;
+        updateCompositeChart(options) {
+            var compositeChart = this.compositeChart;
+            var dataSets = this.dataForMultipleLineChart.dataSets;
 
-            var chart2 = dc.compositeChart('#lineChart');
+            if (dataSets.length === 0) return;
 
-            var dataFilter1 = crossfilter(simpleData);
-            var dim1 = dataFilter1.dimension((d, c) => c);
-            var group1 = dim1.group().reduceSum((d) => d);
+            var colors = ['#f00', '#00f', '#f0f', '#ff0', '#0ff'];
+            var maxLengthIndex = 0;
 
-            var dataFilter2 = crossfilter(simpleData2);
-            var dim2 = dataFilter2.dimension((d, c) => c);
-            var group2 = dim2.group().reduceSum((d) => (d - 10));
+            dataSets = dataSets.map((dataSet) => dataSet.data);
+            dataSets = dataSets.map((dataSet, i) => {
+                maxLengthIndex = (dataSet.length > dataSets[maxLengthIndex].length) ? maxLengthIndex : i;
+                var cf = crossfilter(dataSet);
+                return cf.dimension((d, c) => c);
+            });
+            
+            var dim = dataSets[maxLengthIndex];
 
-            chart2
-                .width(800).height(300)
-                .margins({ top: 10, right: 10, bottom: 20, left: 40 })
-                .dimension(dim1)
-                .compose([
-                    dc.lineChart(chart2)
-                        .group(group1)
-                        .colors('#f00'),
-                    dc.lineChart(chart2)
-                        .group(group2)
-                        .colors('#00f')
-                ])
-                .x(d3.scale.linear().domain([0, this.dataForMultipleLineChart.labels.length]))
-                .y(d3.scale.linear().domain([0, 100]))
-                .elasticX(true)
-                .brushOn(false)
-                .transitionDuration(0);
+            dataSets = dataSets.map((dataSet, i) => {
+                var grp = dataSet.group().reduceSum((d) => d);
+                return dc.lineChart(compositeChart).group(grp).colors(colors[i % colors.length]);
+            });
 
-            chart2.render();
+            compositeChart
+                .dimension(dim)
+                .compose(dataSets);
+
+            if (options && options.render) {
+                compositeChart.render();
+            }
+            else {
+                compositeChart.redraw();
+            }
+        }
+    },
+
+    watch: {
+        'dataForMultipleLineChart.dataSets.length'(newValue, oldValue) {
+            var oldMaxDatasetLength = this.maxDatasetLength;
+            this.maxDatasetLength = Math.max(...this.dataForMultipleLineChart.dataSets.map(d => d.data.length));
+            if (
+                newValue < oldValue || 
+                oldValue === 0 ||
+                oldMaxDatasetLength < this.maxDatasetLength
+            ) {
+                this.updateCompositeChart({ render: true });
+            }
+            else {
+                this.updateCompositeChart();
+            }
         }
     }
 }

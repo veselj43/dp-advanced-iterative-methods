@@ -2,7 +2,7 @@
     <div class="controls __above-disable-layer">
         <span class="status">Status: <b>{{status.text}}</b></span>
         <span class="control-buttons">
-            <button v-if="!status.isRunning" class="btn btn-success" :disabled="!getIsValidParams" v-on:click="start">Start</button>
+            <button v-if="!computingIsRunning" class="btn btn-success" :disabled="!getIsValidParams" v-on:click="start">Start</button>
             <button v-else class="btn btn-danger" v-on:click="stop">Stop</button>
         </span>
     </div>
@@ -22,7 +22,8 @@ export default {
     computed: {
         ...mapGetters([
             'getIsValidParams',
-            'getSelectedFile'
+            'getSelectedFile',
+            'computingIsRunning'
         ])
     },
     mounted () {
