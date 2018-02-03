@@ -5,11 +5,7 @@
 
         <div v-show="computingIsRunning || computingIsProcessingResults">
 
-            <!-- <live-line-chart class="chart"
-                v-bind="liveData.chart"
-                :height="300"
-            ></live-line-chart> -->
-            <div id="liveLineChart"></div>
+            <live-chart></live-chart>
 
             <table class="table table-bordered table-hover">
                 <tbody>
@@ -28,11 +24,7 @@
 
         <div v-show="comparingResultsInfo.activeCount > 0 && !(computingIsRunning || computingIsProcessingResults)">
 
-            <!-- <multiple-line-chart class="chart"
-                v-bind="dataForMultipleLineChart"
-                :height="300"
-            ></multiple-line-chart> -->
-            <div id="multipleLineChart"></div>
+            <comparison-chart></comparison-chart>
 
             <table class="table table-bordered table-hover">
                 <thead>
@@ -66,8 +58,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import LiveLineChart from './visualisation/LiveLineChart';
-import MultipleLineChart from './visualisation/MultipleLineChart';
+import LiveChart from './visualisation/LiveChart';
+import ComparisonChart from './visualisation/ComparisonChart';
 import ConfVisual from './visualisation/Configuration';
 
 import dc from 'dc';
@@ -77,9 +69,9 @@ var crossfilter = dc.crossfilter;
 
 export default {
     components: {
-        LiveLineChart,
-        MultipleLineChart,
-        ConfVisual
+        LiveChart,
+        ComparisonChart,
+        ConfVisual,
     },
 
     data() {
@@ -89,7 +81,7 @@ export default {
             computingStatus: this.$store.state.liveData.computingStatus,
             liveData: this.$store.state.liveData.data,
             comparingResultsInfo: this.$store.state.outputData.comparingResults.info,
-            dataForMultipleLineChart: this.$store.state.outputData.comparingResults.chart
+            // dataForMultipleLineChart: this.$store.state.outputData.comparingResults.chart
         }
     },
 
@@ -99,133 +91,12 @@ export default {
             'computingIsProcessingResults'
         ])
     },
-
-    mounted() {
-        this.multipleLineChart = dc.compositeChart('#multipleLineChart');
-        this.multipleLineChart
-            .width(800).height(300)
-            .x(d3.scale.linear().domain([0, 100]))
-            .y(d3.scale.linear().domain([0, 100]))
-            .elasticX(true)
-            .elasticY(true)
-            .brushOn(false)
-            .transitionDuration(0);
-        this.multipleLineChart.render();
-
-        this.liveLineChart = dc.compositeChart('#liveLineChart');
-        this.liveLineChart
-            .width(800).height(300)
-            .x(d3.scale.linear().domain([0, 100]))
-            .y(d3.scale.linear().domain([0, 100]))
-            .brushOn(false)
-            .transitionDuration(0);
-        this.liveLineChart.render();
-    },
-
-    methods: {
-        updateLiveLineChart(options) {
-            var liveLineChart = this.liveLineChart;
-            var liveData = this.liveData;
-
-            if (options && options.init) {
-                liveLineChart
-                    .x(d3.scale.linear().domain([0, liveData.chart.labels.length + 100]))
-                    .y(d3.scale.linear().domain([0, liveData.best + 10]))
-                    .compose([]);
-                liveLineChart.render();
-
-                return;
-            }
-
-            var dim = crossfilter(liveData.chart.values).dimension((d, c) => c);
-            var grp = dim.group().reduceSum((d) => d);
-
-            liveLineChart
-                .dimension(dim)
-                .compose([
-                    dc.lineChart(liveLineChart)
-                        .group(grp)
-                        .colors('red')
-                ]);
-
-            if (options && options.render) {
-                liveLineChart.render();
-            }
-            else {
-                liveLineChart.redraw();
-            }
-        },
-        
-        updateMultipleLineChart(options) {
-            var multipleLineChart = this.multipleLineChart;
-            var dataSets = this.dataForMultipleLineChart.dataSets;
-
-            if (dataSets.length === 0) return;
-
-            var colors = ['#f00', '#00f', '#f0f', '#ff0', '#0ff'];
-            var maxLengthIndex = 0;
-
-            dataSets = dataSets.map((dataSet) => dataSet.data);
-            dataSets = dataSets.map((dataSet, i) => {
-                maxLengthIndex = (dataSet.length > dataSets[maxLengthIndex].length) ? maxLengthIndex : i;
-                var cf = crossfilter(dataSet);
-                return cf.dimension((d, c) => c);
-            });
-            
-            var dim = dataSets[maxLengthIndex];
-
-            dataSets = dataSets.map((dataSet, i) => {
-                var grp = dataSet.group().reduceSum((d) => d);
-                return dc.lineChart(multipleLineChart).group(grp).colors(colors[i % colors.length]);
-            });
-
-            multipleLineChart
-                .dimension(dim)
-                .compose(dataSets);
-
-            if (options && options.render) {
-                multipleLineChart.render();
-            }
-            else {
-                multipleLineChart.redraw();
-            }
-        }
-    },
-
-    watch: {
-        'liveData.chart.values.length'(newValue, oldValue) {
-            if (newValue < oldValue || oldValue === 0) {
-                this.updateLiveLineChart({ init: true });
-            }
-            else {
-                this.updateLiveLineChart();
-            }
-        },
-
-        'dataForMultipleLineChart.dataSets.length'(newValue, oldValue) {
-            var oldMaxDatasetLength = this.maxDatasetLength;
-            this.maxDatasetLength = Math.max(...this.dataForMultipleLineChart.dataSets.map(d => d.data.length));
-            if (
-                newValue < oldValue || 
-                oldValue === 0 ||
-                oldMaxDatasetLength < this.maxDatasetLength
-            ) {
-                this.updateMultipleLineChart({ render: true });
-            }
-            else {
-                this.updateMultipleLineChart();
-            }
-        }
-    }
 }
 </script>
 
 <style scoped>
-    .chart {
-        padding: 1em 0;
-    }
-
     div.dc-chart {
+        padding: 1em 0;
         float: unset;
     }
 </style>
