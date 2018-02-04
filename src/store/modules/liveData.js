@@ -19,7 +19,7 @@ const state = {
         actual: 0,
         best: 0,
         chart: {
-            labels: [],
+            noValues: 0,
             values: []
         }
     }
@@ -76,7 +76,7 @@ const mutations = {
 
     dataInit(store, data) {
         store.computingStatus.bestResult = null;
-        store.data.chart.labels = _.range(Number(data.numberOfIterations) + 1);
+        store.data.chart.noValues = Number(data.numberOfIterations) + 1;
         store.data.chart.values = [];
         store.data.best = 0;
         store.data.actual = 0;
