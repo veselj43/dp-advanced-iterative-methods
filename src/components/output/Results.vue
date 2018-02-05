@@ -1,7 +1,7 @@
 <template>
     <div class="results">
         <h3>Results <small v-if="computingIsProcessingResults">{{computingStatus.text}}</small></h3>
-        <img v-if="computingIsProcessingResults" src="/static/img/loading_01.svg" alt="Processing results">
+        <img v-if="computingIsProcessingResults" src="@/assets/loading_01.svg" alt="Processing results">
 
         <div v-show="computingIsRunning || computingIsProcessingResults">
 
