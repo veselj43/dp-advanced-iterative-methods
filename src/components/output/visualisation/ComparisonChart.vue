@@ -11,7 +11,7 @@ var crossfilter = dc.crossfilter;
 export default {
     data() {
         return {
-            comparingResults: this.$store.state.outputData.comparingResults
+            comparingResults: this.$store.state.outputData.comparingResults,
         }
     },
 
@@ -54,14 +54,15 @@ export default {
 
             multipleLineChart
                 .dimension(dim)
-                .compose(dataSets);
+                .compose([]);
 
             if (options && options.render) {
                 multipleLineChart.render();
             }
-            else {
-                multipleLineChart.redraw();
-            }
+            
+            multipleLineChart.compose(dataSets);
+
+            multipleLineChart.redraw();
         }
     },
 

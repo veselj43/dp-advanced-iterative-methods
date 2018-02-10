@@ -13,7 +13,9 @@ export default {
         return {
             liveData: this.$store.state.liveData.data,
             liveValuesBuffer: [],
+            lastUpdatedIndex: 0,
             lastUpdate: 0,
+            redrawDebounce: 0,
         }
     },
 
@@ -71,15 +73,21 @@ export default {
         'liveData.chart.values'(newValue, oldValue) {
             if (newValue.length < oldValue.length || oldValue.length === 0) {
                 this.liveValuesBuffer = [];
+                this.lastUpdatedIndex = 0;
+                this.redrawDebounce = 50;
                 this.initLiveLineChart();
                 return;
             }
 
-            this.liveValuesBuffer.push(newValue[newValue.length - 1]);
+            this.liveValuesBuffer.push(...newValue.slice(this.lastUpdatedIndex + 1, newValue.length - 1));
+            this.lastUpdatedIndex = newValue.length - 1;
 
-            if (performance.now() - this.lastUpdate > 50 || newValue.length === newValue.noValues) {
+            if (performance.now() - this.lastUpdate > this.redrawDebounce || newValue.length === newValue.noValues) {
+                var beforeUpdate = performance.now();
                 this.updateLiveLineChart();
                 this.lastUpdate = performance.now();
+                var updateTime = (this.lastUpdate - beforeUpdate) * 4;
+                if (this.redrawDebounce < updateTime) this.redrawDebounce = updateTime / 2;
             }
         },
     }

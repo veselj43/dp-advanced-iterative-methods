@@ -34,6 +34,7 @@ export default {
             .setHandler('message', this.$notifier.push)
             .setHandler('init', this.dataInit)
             .setHandler('progress', this.dataProgress)
+            .setHandler('progressBuffered', this.dataProgressBuffered)
             .setHandler('result', this.done)
             .setHandler('error', (message, type) => {
                 this.done(null);
@@ -103,7 +104,8 @@ export default {
             'setStatusDone',
             'setStatusError',
             'dataInit',
-            'dataProgress'
+            'dataProgress',
+            'dataProgressBuffered',
         ]),
         ...mapActions([
             'pushResult'

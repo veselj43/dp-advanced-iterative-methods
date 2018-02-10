@@ -13,10 +13,6 @@
                         <th>Best found fitness</th>
                         <td>{{liveData.best}}</td>
                     </tr>
-                    <tr>
-                        <th>Actual finess</th>
-                        <td>{{liveData.actual}}</td>
-                    </tr>
                 </tbody>
             </table>
 
@@ -80,8 +76,7 @@ export default {
 
             computingStatus: this.$store.state.liveData.computingStatus,
             liveData: this.$store.state.liveData.data,
-            comparingResultsInfo: this.$store.state.outputData.comparingResults.info,
-            // dataForMultipleLineChart: this.$store.state.outputData.comparingResults.chart
+            comparingResultsInfo: this.$store.state.outputData.comparingResults.info
         }
     },
 

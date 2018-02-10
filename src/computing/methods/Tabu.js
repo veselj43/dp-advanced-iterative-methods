@@ -1,4 +1,5 @@
 import Result from '../_common/Result.js';
+import BufferedReply from '../_common/BufferedReply';
 
 // tabu configuration model
 class Configuration {
@@ -47,6 +48,8 @@ export class TabuSolver {
     constructor(workerInterface, params) {
         this._workerInterface = workerInterface;
         this.params = params;
+
+        this._bufferedReply = new BufferedReply(this._workerInterface, 'progressBuffered', 75);
     }
 
     //     getWeight(configuration) {
@@ -84,7 +87,8 @@ export class TabuSolver {
         var tabuChanges = [];           // List
 
         for (var n = 0; n < iterationLimit; n++) {
-            this._workerInterface.reply('progress', { counter: this.counter, fitness: this._fitness(state) });
+            // this._workerInterface.reply('progress', { counter: this.counter, fitness: this._fitness(state) });
+            this._bufferedReply.addMessageWithAutoFlush({ fitness: this._fitness(state) });
 
             var bestCandidate = null;
             var tabuBestCandidate = null;
@@ -142,7 +146,8 @@ export class TabuSolver {
                 tabuChanges.shift();
             }
         }
-        this._workerInterface.reply('progress', { counter: this.counter, fitness: this._fitness(state) });
+        // this._workerInterface.reply('progress', { counter: this.counter, fitness: this._fitness(state) });
+        this._bufferedReply.addMessage({ fitness: this._fitness(state) }).flush();
 
         return sBest;
     }

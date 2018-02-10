@@ -16,7 +16,6 @@ const state = {
         bestResult: null
     },
     data: {
-        actual: 0,
         best: 0,
         chart: {
             noValues: 0,
@@ -79,13 +78,17 @@ const mutations = {
         store.data.chart.noValues = Number(data.numberOfIterations) + 1;
         store.data.chart.values = [];
         store.data.best = 0;
-        store.data.actual = 0;
     },
     dataProgress(store, data) {
-        store.data.actual = data.fitness;
-        store.data.chart.values.push(store.data.actual);
-        store.data.best = Math.max(store.data.best, store.data.actual);
-    }
+        store.data.chart.values.push(store.data.fitness);
+        store.data.best = Math.max(store.data.best, store.data.fitness);
+    },
+    dataProgressBuffered(store, data) {
+        if (data.length === 0) return;
+        var fitnessBuffer = data.map(x => x.fitness);
+        store.data.chart.values.push(...fitnessBuffer);
+        store.data.best = Math.max(store.data.best, ...fitnessBuffer);
+    },
 }
 
 // actions
