@@ -49,6 +49,7 @@ export class TabuSolver {
         this._workerInterface = workerInterface;
         this.params = params;
 
+        // buffers messages to reduce communication overhead while sending computation progress every cycle
         this._bufferedReply = new BufferedReply(this._workerInterface, 'progressBuffered', 75);
     }
 
@@ -87,7 +88,6 @@ export class TabuSolver {
         var tabuChanges = [];           // List
 
         for (var n = 0; n < iterationLimit; n++) {
-            // this._workerInterface.reply('progress', { counter: this.counter, fitness: this._fitness(state) });
             this._bufferedReply.addMessageWithAutoFlush({ fitness: this._fitness(state) });
 
             var bestCandidate = null;
@@ -146,7 +146,7 @@ export class TabuSolver {
                 tabuChanges.shift();
             }
         }
-        // this._workerInterface.reply('progress', { counter: this.counter, fitness: this._fitness(state) });
+        // added flush to send remaining progress data before terminating
         this._bufferedReply.addMessage({ fitness: this._fitness(state) }).flush();
 
         return sBest;
@@ -160,13 +160,14 @@ export class TabuSolver {
         var tabuSize = this.params.tabuSize;
         var tabuSizeShort = this.params.tabuSizeShort;
 
-        console.log("params: ", iterationLimit, tabuSize, tabuSizeShort);
+        // initial message to set up the interface for the computation
         this._workerInterface.reply('init', { numberOfIterations: iterationLimit, maxFitness: this.formula.params.numberOfClausules });
 
         this.state0 = new Configuration(this.formula.params.numberOfVariables);
 
         var best = this._process(iterationLimit, tabuSize, tabuSizeShort);
 
+        // return Result class managing data format
         return new Result(best.selection, this._fitness(best), this.counter);
     }
 }
