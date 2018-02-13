@@ -1,5 +1,6 @@
 import { WorkerInterface } from './WorkerInterface.js';
 import * as SAT from './problems/SAT';
+import * as Knapsack from './problems/Knapsack';
 import * as Tabu from './methods/Tabu';
 import * as Genetic from './methods/Genetic';
 import * as Annealing from './methods/Annealing';
@@ -7,7 +8,7 @@ import * as Annealing from './methods/Annealing';
 var methods = {
     work: function(data, params) {
         var job = new Job(data, params);
-        job.run();
+        job.run(params.methodParams[params.method.id]);
     }
 }
 
@@ -19,16 +20,16 @@ class Job {
         this.problem = null;
         this.method = null;
 
-        if (params.problem.id === 0) this.problem = new SAT.Input(inputData);
-        else if (params.problem.id === 1) this.problem = new SAT.Input(inputData);
-        else if (params.problem.id === 2) this.problem = new SAT.Input(inputData);
+        if (params.problem.id === 0) this.problem = new SAT.SAT(inputData);
+        else if (params.problem.id === 1) this.problem = new SAT.SAT(inputData);
+        else if (params.problem.id === 2) this.problem = new Knapsack.Knapsack(inputData);
 
-        if (params.method.id === 'tabu') this.method = new Tabu.TabuSolver(workerInterface, params.methodParams.tabu);
-        if (params.method.id === 'genetic') this.method = new Genetic.GeneticSolver(workerInterface, params.methodParams.genetic);
-        else if(params.method.id === 'annealing') this.method = new Annealing.AnnealingSolver(workerInterface, params.methodParams.annealing);
+        if (params.method.id === 'tabu') this.method = new Tabu.TabuSolver(workerInterface);
+        else if (params.method.id === 'genetic') this.method = new Genetic.GeneticSolver(workerInterface);
+        else if (params.method.id === 'annealing') this.method = new Annealing.AnnealingSolver(workerInterface);
     }
 
-    run() {
+    run(methodParams) {
         if (this.problem === null) {
             workerInterface.reply('error', "Unknown problem selected");
             return null;
@@ -39,7 +40,7 @@ class Job {
         }
 
         var t0 = performance.now();
-        var result = this.method.solve(this.problem.input);
+        var result = this.method.solve(this.problem, methodParams);
         var t1 = performance.now();
 
         result.setProcessTime(t1 - t0);

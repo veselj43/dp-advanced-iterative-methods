@@ -1,53 +1,10 @@
 import Result from '../_common/Result.js';
 import BufferedReply from '../_common/BufferedReply';
 
-// tabu configuration model
-class Configuration {
-    constructor(size, fromSelection) {
-        if (fromSelection) {
-            this.selection = fromSelection.map(x => x);
-        }
-        else {
-            this.selection = [];
-            for (var i = 0; i < size; i++)
-                this.selection[i] = false;
-        }
-    }
-
-    copy() {
-        return new Configuration(this.selection.length, this.selection);
-    }
-
-    _changeOn(position) {
-        this.selection[position] = !this.selection[position];
-        return this;
-    }
-
-    getNeighbor(position) {
-        return this.copy()._changeOn(position);
-    }
-
-    toString() {
-        var str = "";
-        for (var i in this.selection) {
-            str += (this.selection[i]) ? "1" : "0";
-        }
-        return str;
-    }
-
-    equals(other) {
-        if (other == null) return false;
-        for (var i = 0; i < this.selection.length; i++)
-            if (this.selection[i] != other.selection[i]) return false;
-        return true;
-    }
-}
-
 // Tabu method
 export class TabuSolver {
-    constructor(workerInterface, params) {
+    constructor(workerInterface) {
         this._workerInterface = workerInterface;
-        this.params = params;
 
         // buffers messages to reduce communication overhead while sending computation progress every cycle
         this._bufferedReply = new BufferedReply(this._workerInterface, 'progressBuffered', 75);
@@ -73,36 +30,30 @@ export class TabuSolver {
         return set[configuration.toString()] === true;
     }
 
-    _fitness(configuration) {
-        if (configuration === null) return -1;
-        var trueClauses = this.formula.check(configuration);
-        if (trueClauses < this.formula.params.numberOfClausules) return trueClauses;
-        return this.formula.params.numberOfClausules;// + getWeight(configuration);
-    }
-
     _process(iterationLimit, tabuSize, tabuSizeShort) {
-        var state = this.state0;
+        var state = this.problem.getConfiguration();
+        console.log(state._bitArray);
         var sBest = state;
         var tabuStates = [];            // Queue
         var tabuStatesSearch = [];      // HashSet
         var tabuChanges = [];           // List
 
         for (var n = 0; n < iterationLimit; n++) {
-            this._bufferedReply.addMessageWithAutoFlush({ fitness: this._fitness(state) });
+            this._bufferedReply.addMessageWithAutoFlush({ fitness: this.problem.getFitness(state) });
 
             var bestCandidate = null;
             var tabuBestCandidate = null;
             var bestCandidateIndex = -1;
             var tabuBestCandidateIndex = -1;
 
-            for (var i = 0; i < this.formula.params.numberOfVariables; i++) {
+            for (var i = 0; i < state.getSize(); i++) {
                 this.counter++;
 
-                var sCandidate = state.getNeighbor(i);
+                var sCandidate = state.getNeighbour(i);
 
-                if (tabuChanges.indexOf(i) !== -1 && this._fitness(sCandidate) < this._fitness(sBest)) continue;
+                if (tabuChanges.indexOf(i) !== -1 && this.problem.getFitness(sCandidate) < this.problem.getFitness(sBest)) continue;
 
-                if (this._fitness(sCandidate) >= this._fitness(bestCandidate)) {
+                if (this.problem.getFitness(sCandidate) >= this.problem.getFitness(bestCandidate)) {
                     if (!this._containsSearch(tabuStatesSearch, sCandidate)) {
                         bestCandidate = sCandidate;
                         bestCandidateIndex = i;
@@ -125,7 +76,7 @@ export class TabuSolver {
             else {
                 state = bestCandidate;
             }
-            if (this._fitness(state) > this._fitness(sBest)) {
+            if (this.problem.getFitness(state) > this.problem.getFitness(sBest)) {
                 sBest = state;
 //                if (this.formula.check(sBest) === this.formula.params.numberOfClausules) {
 //                    console.log(
@@ -147,27 +98,25 @@ export class TabuSolver {
             }
         }
         // added flush to send remaining progress data before terminating
-        this._bufferedReply.addMessage({ fitness: this._fitness(state) }).flush();
+        this._bufferedReply.addMessage({ fitness: this.problem.getFitness(state) }).flush();
 
         return sBest;
     }
 
-    solve(cnf) {
-        this.formula = cnf;
+    solve(problem, params) {
+        this.problem = problem;
         this.counter = 0;
 
-        var iterationLimit = this.params.iterationLimit;
-        var tabuSize = this.params.tabuSize;
-        var tabuSizeShort = this.params.tabuSizeShort;
+        var iterationLimit = params.iterationLimit;
+        var tabuSize = params.tabuSize;
+        var tabuSizeShort = params.tabuSizeShort;
 
         // initial message to set up the interface for the computation
-        this._workerInterface.reply('init', { numberOfIterations: iterationLimit, maxFitness: this.formula.params.numberOfClausules });
-
-        this.state0 = new Configuration(this.formula.params.numberOfVariables);
+        this._workerInterface.reply('init', { numberOfIterations: iterationLimit });
 
         var best = this._process(iterationLimit, tabuSize, tabuSizeShort);
 
         // return Result class managing data format
-        return new Result(best.selection, this._fitness(best), this.counter);
+        return new Result(best.getBitArray(), this.problem.getFitness(best), this.counter);
     }
 }

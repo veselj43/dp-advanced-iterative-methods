@@ -31,10 +31,9 @@ export class Clausule {
     }
 }
 
-// SAT input type
-export class CNF {
+export class SAT {
     constructor(data) {
-        this.clausules = [];
+        this._clausules = [];
         var dataSet = data
             .split('\n')
             .filter(row => row.trim()[0] !== 'c');
@@ -64,21 +63,22 @@ export class CNF {
             });
 
         for (var row in dataSet) {
-            this.clausules.push(new Clausule(dataSet[row]));
+            this._clausules.push(new Clausule(dataSet[row]));
         };
     }
 
     check(conf) {
         var satisfied = 0;
-        this.clausules.forEach(clausule => {
+        this._clausules.forEach(clausule => {
             if (clausule.check(conf)) satisfied++;
         });
         return satisfied;
     }
-}
 
-export class Input {
-    constructor(data) {
-        this.input = new CNF(data);
+    fitness(configuration) {
+        if (configuration === null) return -1;
+        var trueClauses = this.formula.check(configuration);
+        if (trueClauses < this.formula.params.numberOfClausules) return trueClauses;
+        return this.formula.params.numberOfClausules;// + getWeight(configuration);
     }
 }
