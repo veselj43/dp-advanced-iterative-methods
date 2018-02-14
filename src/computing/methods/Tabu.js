@@ -10,14 +10,6 @@ export class TabuSolver {
         this._bufferedReply = new BufferedReply(this._workerInterface, 'progressBuffered', 75);
     }
 
-    //     getWeight(configuration) {
-    //         return configuration.getWeight(this.formula.getWeights());
-    //     }
-    //
-    //     getResultWeight(configuration) {
-    //         return (this.formula.check(configuration) < this.formula.params.numberOfClausules) ? 0 : this.getWeight(configuration);
-    //     }
-
     _compareIndexesOf(queue, c1, c2) {
         for (var i in queue) {
             if (queue[i].equals(c1)) return 1;
@@ -32,7 +24,6 @@ export class TabuSolver {
 
     _process(iterationLimit, tabuSize, tabuSizeShort) {
         var state = this.problem.getConfiguration();
-        console.log(state._bitArray);
         var sBest = state;
         var tabuStates = [];            // Queue
         var tabuStatesSearch = [];      // HashSet
@@ -78,12 +69,6 @@ export class TabuSolver {
             }
             if (this.problem.getFitness(state) > this.problem.getFitness(sBest)) {
                 sBest = state;
-//                if (this.formula.check(sBest) === this.formula.params.numberOfClausules) {
-//                    console.log(
-//                        (this.counter - tabuChanges[tabuChanges.length-1]) + "\t" +
-//                        this._getWeight(sBest)
-//                    );
-//                }
             }
 
             tabuStates.push(state);
