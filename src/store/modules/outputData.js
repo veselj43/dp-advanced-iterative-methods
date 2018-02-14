@@ -10,8 +10,6 @@ function GeneratedDataSet(historyRecord) {
     this._itemId = historyRecord.id;
     this.label = historyRecord.instance;
     this.data = historyRecord.data.dataSet;
-    this.borderColor = "#f87979";
-    this.backgroundColor = "transparent";
 }
 
 function updateComparingResultsComputedValues(comparingResults) {

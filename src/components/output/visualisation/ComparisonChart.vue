@@ -12,23 +12,50 @@ export default {
     data() {
         return {
             comparingResults: this.$store.state.outputData.comparingResults,
+            options: {
+                minWidth: 100,
+                width: 800,
+                height: 300,
+                margin: {
+                    right: 200,
+                }
+            },
         }
     },
 
     mounted() {
+        var options = this.options;
+        window.addEventListener("load", this.windowResize);
+        window.addEventListener("resize", this.windowResize);
+        
         this.multipleLineChart = dc.compositeChart('#comparisonChart');
         this.multipleLineChart
-            .width(800).height(300)
+            .width(options.width).height(options.height)
             .x(d3.scale.linear().domain([0, 100]))
             .y(d3.scale.linear().domain([0, 100]))
             .elasticX(true)
             .elasticY(true)
             .brushOn(false)
-            .transitionDuration(0);
+            // .mouseZoomable(true)
+            .renderHorizontalGridLines(true)
+            .transitionDuration(0)
+            .legend(dc.legend().x(options.width - options.margin.right + 15).y(5).itemHeight(13).gap(5));
+
+        this.multipleLineChart.margins().right = options.margin.right;
         this.multipleLineChart.render();
     },
 
     methods: {
+        windowResize(event) {
+            var options = this.options;
+            options.width = Math.max(options.minWidth + options.margin.right, document.getElementById('comparisonChart').offsetWidth);
+
+            this.multipleLineChart
+                .width(options.width)
+                .legend(dc.legend().x(options.width - options.margin.right + 15).y(5).itemHeight(13).gap(5));
+            this.multipleLineChart.redraw();
+        },
+        
         updateMultipleLineChart(options) {
             var multipleLineChart = this.multipleLineChart;
             var dataSets = this.comparingResults.chart.dataSets;
@@ -38,6 +65,7 @@ export default {
             var colors = ['#f00', '#00f', '#f0f', '#ff0', '#0ff'];
             var maxLengthIndex = 0;
 
+            var labels = dataSets.map((dataSet) => dataSet.label);
             dataSets = dataSets.map((dataSet) => dataSet.data);
             dataSets = dataSets.map((dataSet, i) => {
                 maxLengthIndex = (dataSet.length > dataSets[maxLengthIndex].length) ? maxLengthIndex : i;
@@ -49,7 +77,11 @@ export default {
 
             dataSets = dataSets.map((dataSet, i) => {
                 var grp = dataSet.group().reduceSum((d) => d);
-                return dc.lineChart(multipleLineChart).group(grp).colors(colors[i % colors.length]);
+                return dc.lineChart(multipleLineChart)
+                    .group(grp, labels[i])
+                    .colors(colors[i % colors.length])
+                    .brushOn(false)
+                    .xyTipsOn(true);
             });
 
             multipleLineChart
@@ -63,7 +95,7 @@ export default {
             multipleLineChart.compose(dataSets);
 
             multipleLineChart.redraw();
-        }
+        },
     },
 
     watch: {

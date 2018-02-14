@@ -11,27 +11,53 @@ var crossfilter = dc.crossfilter;
 export default {
     data() {
         return {
+            computingStatus: this.$store.state.liveData.computingStatus,
             liveData: this.$store.state.liveData.data,
             liveValuesBuffer: [],
             lastUpdatedIndex: 0,
             lastUpdate: 0,
             redrawDebounce: 0,
+            options: {
+                minWidth: 100,
+                width: 800,
+                height: 300,
+                margin: {
+                    right: 200,
+                },
+            },
         }
     },
 
     mounted() {
+        var options = this.options;
+        window.addEventListener("load", this.windowResize);
+        window.addEventListener("resize", this.windowResize);
+
         this.liveLineChart = dc.compositeChart('#liveChart');
         this.liveLineChart
-            .width(800).height(300)
+            .width(options.width).height(options.height)
             .x(d3.scale.linear().domain([0, 100]))
             .y(d3.scale.linear().domain([0, 100]))
             .brushOn(false)
+            .renderHorizontalGridLines(true)
+            // .legend(dc.legend().x(options.width - options.margin.right + 15).y(5).itemHeight(13).gap(5))
             .transitionDuration(0);
+
+        this.liveLineChart.margins().right = options.margin.right;
         this.liveLineChart.render();
     },
 
     methods: {
+        windowResize(event) {
+            var options = this.options;
+            options.width = Math.max(options.minWidth + options.margin.right, document.getElementById('liveChart').offsetWidth);
+
+            this.liveLineChart.width(options.width);
+            this.liveLineChart.redraw();
+        },
+
         initLiveLineChart() {
+            this.windowResize();
             var liveData = this.liveData;
             var liveDataValues = liveData.chart.values;
 
@@ -64,7 +90,6 @@ export default {
                         .colors('red')
                 ]);
                 
-            // console.log("redrawing");
             liveLineChart.redraw();
         },
     },
