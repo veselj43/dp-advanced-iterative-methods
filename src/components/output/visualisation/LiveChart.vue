@@ -48,7 +48,7 @@ export default {
     },
 
     methods: {
-        windowResize(event) {
+        windowResize() {
             var options = this.options;
             options.width = Math.max(options.minWidth + options.margin.right, document.getElementById('liveChart').offsetWidth);
 

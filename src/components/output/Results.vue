@@ -1,7 +1,7 @@
 <template>
-    <div class="results">
+    <div class="results" id="chartBaseContainer">
         <h3>Results <small v-if="computingIsProcessingResults">{{computingStatus.text}}</small></h3>
-        <img v-if="computingIsProcessingResults" src="@/assets/loading_01.svg" alt="Processing results">
+        <img v-show="computingIsProcessingResults" src="@/assets/loading_01.svg" alt="Processing results">
 
         <div v-show="computingIsRunning || computingIsProcessingResults">
 
@@ -20,7 +20,7 @@
 
         <div v-show="comparingResultsInfo.activeCount > 0 && !(computingIsRunning || computingIsProcessingResults)">
 
-            <comparison-chart></comparison-chart>
+            <comparison-chart :width="chartBaseContainerWidth"></comparison-chart>
 
             <table class="table table-bordered table-hover">
                 <thead>
@@ -45,7 +45,7 @@
 
         </div>
 
-        <div v-show="!(comparingResultsInfo.activeCount > 0 && !(computingIsRunning || computingIsProcessingResults))">
+        <div v-show="!(comparingResultsInfo.activeCount > 0) && !(computingIsRunning || computingIsProcessingResults)">
             <p>Compute an instance or check instances to compare from the right panel.</p>
         </div>
 
@@ -72,11 +72,10 @@ export default {
 
     data() {
         return {
-            maxDatasetLength: 0,
-
             computingStatus: this.$store.state.liveData.computingStatus,
             liveData: this.$store.state.liveData.data,
-            comparingResultsInfo: this.$store.state.outputData.comparingResults.info
+            comparingResultsInfo: this.$store.state.outputData.comparingResults.info,
+            chartBaseContainerWidth: 0,
         }
     },
 
@@ -85,6 +84,17 @@ export default {
             'computingIsRunning',
             'computingIsProcessingResults'
         ])
+    },
+
+    mounted() {
+        window.addEventListener("load", this.updateWidths);
+        window.addEventListener("resize", this.updateWidths);
+    },
+
+    methods: {
+        updateWidths() {
+            this.chartBaseContainerWidth = document.getElementById('chartBaseContainer').offsetWidth;
+        },
     },
 }
 </script>

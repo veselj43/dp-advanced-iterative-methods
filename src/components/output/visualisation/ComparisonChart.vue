@@ -9,6 +9,10 @@ var d3 = dc.d3;
 var crossfilter = dc.crossfilter;
 
 export default {
+    props: {
+        width: Number
+    },
+
     data() {
         return {
             comparingResults: this.$store.state.outputData.comparingResults,
@@ -25,7 +29,6 @@ export default {
 
     mounted() {
         var options = this.options;
-        window.addEventListener("load", this.windowResize);
         window.addEventListener("resize", this.windowResize);
         
         this.multipleLineChart = dc.compositeChart('#comparisonChart');
@@ -46,9 +49,9 @@ export default {
     },
 
     methods: {
-        windowResize(event) {
+        windowResize() {
             var options = this.options;
-            options.width = Math.max(options.minWidth + options.margin.right, document.getElementById('comparisonChart').offsetWidth);
+            options.width = Math.max(options.minWidth + options.margin.right, this.width, document.getElementById('comparisonChart').offsetWidth);
 
             this.multipleLineChart
                 .width(options.width)
@@ -81,7 +84,7 @@ export default {
                     .group(grp, labels[i])
                     .colors(colors[i % colors.length])
                     .brushOn(false)
-                    .xyTipsOn(true);
+                    .xyTipsOn(false); // true is nice-to-have, but stomps performance
             });
 
             multipleLineChart
@@ -123,6 +126,11 @@ export default {
             }
             else {
                 this.updateMultipleLineChart();
+            }
+
+            // first load of the component
+            if (this.comparingResults.info.activeCount === 1) {
+                this.windowResize();
             }
         }
     },
