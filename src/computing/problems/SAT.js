@@ -1,3 +1,4 @@
+import { BitArray } from "./configurationTypes/BitArray";
 
 // common SAT input
 export class Literal {
@@ -22,10 +23,10 @@ export class Clausule {
         });
     }
 
-    check(configuration) {
+    check(bitArray) {
         for (var literal in this.literals) {
-            if (configuration.selection[this.literals[literal].id] && !this.literals[literal].inv) return true;
-            if (!configuration.selection[this.literals[literal].id] && this.literals[literal].inv) return true;
+            if (bitArray[this.literals[literal].id] && !this.literals[literal].inv) return true;
+            if (!bitArray[this.literals[literal].id] && this.literals[literal].inv) return true;
         }
         return false;
     }
@@ -67,18 +68,28 @@ export class SAT {
         };
     }
 
-    check(conf) {
+    check(bitArray) {
         var satisfied = 0;
         this._clausules.forEach(clausule => {
-            if (clausule.check(conf)) satisfied++;
+            if (clausule.check(bitArray)) satisfied++;
         });
         return satisfied;
     }
 
-    fitness(configuration) {
-        if (configuration === null) return -1;
-        var trueClauses = this.formula.check(configuration);
-        if (trueClauses < this.formula.params.numberOfClausules) return trueClauses;
-        return this.formula.params.numberOfClausules;// + getWeight(configuration);
+    getFitness(bitArrayConfig) {
+        if (bitArrayConfig === null) return -1;
+
+        const bitArray = bitArrayConfig.getBitArray();
+
+        var trueClauses = this.check(bitArray);
+        if (trueClauses < this.params.numberOfClausules) return trueClauses;
+        return this.params.numberOfClausules;// + getWeight(configuration);
+    }
+
+    getConfiguration(random) {
+        return new BitArray({
+            size: this.params.numberOfVariables,
+            random: random
+        });
     }
 }

@@ -68,17 +68,25 @@ export default {
 
     watch: {
         'comparingResults.info.items'(newValue, oldValue) {
-            var itemRemoved = (this.activeCount && this.activeCount > this.comparingResults.info.activeCount);
-            this.activeCount = this.comparingResults.info.activeCount;
+            // nothing is actually rendered
+            var redraw = (this.comparingResults.info.activeCount === 0);
             
+            // dataset(s) removed - needs to be cleared
+            redraw = redraw || (this.activeCount && this.activeCount > this.comparingResults.info.activeCount);
+
+            // dataset replaced with just computed files and the length is the same
+            redraw = redraw || ((
+                this.activeCount === 1 && this.comparingResults.info.activeCount === 1) && 
+                (Object.keys(newValue)[0] !== Object.keys(oldValue)[0])
+            );
+            this.activeCount = this.comparingResults.info.activeCount;
+
+            // chart needs to be resized
             var oldMaxDatasetLength = this.maxDatasetLength;
             this.maxDatasetLength = Math.max(...this.comparingResults.chart.dataSets.map(d => d.data.length));
+            redraw = redraw || oldMaxDatasetLength < this.maxDatasetLength;
 
-            if (
-                this.comparingResults.info.activeCount === 0 ||
-                itemRemoved ||
-                oldMaxDatasetLength < this.maxDatasetLength
-            ) {
+            if (redraw) {
                 this.updateMultipleLineChart({ render: true });
             }
             else {

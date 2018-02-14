@@ -23,7 +23,7 @@ export class Knapsack {
     getFitness(bitArrayConfig) {
         if (bitArrayConfig === null) return -1;
 
-        var bitArray = bitArrayConfig.getBitArray();
+        const bitArray = bitArrayConfig.getBitArray();
 
         var sumValue = 0;
         var sumWeight = 0;
