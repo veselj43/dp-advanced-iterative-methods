@@ -17,7 +17,7 @@ export default {
         return {
             comparingResults: this.$store.state.outputData.comparingResults,
             lastActiveCount: 0,
-            labels: [],
+            labels: {},
             options: {
                 minWidth: 100,
                 width: 800,
@@ -53,13 +53,11 @@ export default {
 
             if (dataSets.length === 0) return [];
 
-            var labels = dataSets.map((dataSet) => dataSet.label);
-            dataSets = dataSets.map((dataSet) => dataSet.data);
-
             var mergedDatasets = [];
-            var data = dataSets[i];
+            var data = dataSets[i].data;
+            var id = dataSets[i].itemId;
 
-            return data.map((value, j) => ({dataset: i, index: j, value: value}));
+            return data.map((value, j) => ({dataset: id, index: j, value: value}));
         },
         
         initMultipleLineChart() {
@@ -75,8 +73,8 @@ export default {
 
             multipleLineChart
                 .width(chartOptions.width).height(chartOptions.height)
-                .x(d3.scale.linear().domain([0, 100]))
-                .y(d3.scale.linear().domain([0, 100]))
+                .x(d3.scale.linear().domain([0, 10]))
+                .y(d3.scale.linear().domain([0, 10]))
                 .yAxisLabel("Fitness")
                 .xAxisLabel("States checked")
                 .elasticX(true)
@@ -115,7 +113,9 @@ export default {
                 (Object.keys(newValue)[0] !== Object.keys(oldValue)[0])
             );
 
-            this.labels = this.comparingResults.chart.dataSets.map((dataSet) => dataSet.label);
+            for (var key in newValue) {
+                this.labels[key] = newValue[key].instance;
+            }
 
             if (remove) {
                 this.ndx.remove();
