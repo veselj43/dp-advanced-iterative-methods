@@ -100,6 +100,15 @@ export default {
 </script>
 
 <style scoped>
+    h3, img {
+        display: inline-block;
+    }
+
+    img {
+        height: 1.5em;
+        vertical-align: text-bottom;
+    }
+
     div.dc-chart {
         padding: 1em 0;
         float: unset;

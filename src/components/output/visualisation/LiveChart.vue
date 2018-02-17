@@ -11,7 +11,6 @@ var crossfilter = dc.crossfilter;
 export default {
     data() {
         return {
-            computingStatus: this.$store.state.liveData.computingStatus,
             liveData: this.$store.state.liveData.data,
             liveValuesBuffer: [],
             lastUpdatedIndex: 0,
@@ -33,17 +32,29 @@ export default {
         window.addEventListener("load", this.windowResize);
         window.addEventListener("resize", this.windowResize);
 
-        this.liveLineChart = dc.compositeChart('#liveChart');
+        this.liveLineChart = dc.lineChart('#liveChart');
+
+        this.ndx = crossfilter([]);
+        var dim = this.ndx.dimension(d => d.index);
+        var grp = dim.group().reduceSum(d => d.value);
+
         this.liveLineChart
             .width(options.width).height(options.height)
             .x(d3.scale.linear().domain([0, 100]))
-            .y(d3.scale.linear().domain([0, 100]))
+            .elasticY(true)
+            .yAxisLabel("Fitness")
+            .xAxisLabel("States checked")
             .brushOn(false)
+            .xyTipsOn(false)
             .renderHorizontalGridLines(true)
-            // .legend(dc.legend().x(options.width - options.margin.right + 15).y(5).itemHeight(13).gap(5))
-            .transitionDuration(0);
-
+            .transitionDuration(0)
+            .colors('red')
+            .dimension(dim)
+            .group(grp);
+        
         this.liveLineChart.margins().right = options.margin.right;
+        this.liveLineChart.margins().bottom += 5;
+        
         this.liveLineChart.render();
     },
 
@@ -58,48 +69,34 @@ export default {
 
         initLiveLineChart() {
             this.windowResize();
-            var liveData = this.liveData;
-            var liveDataValues = liveData.chart.values;
-
-            this.xFilter = crossfilter(liveDataValues)
-            this.dim = this.xFilter.dimension((d, c) => {
-                return liveDataValues.length - this.liveValuesBuffer.length + c;
-            });
-            this.grp = this.dim.group().reduceSum((d) => d);
+            this.ndx.remove();
 
             this.liveLineChart
-                .x(d3.scale.linear().domain([0, liveData.chart.noValues]))
-                // .y(d3.scale.linear().domain([0, liveData.best + 10]))
-                .compose([]);
-            this.liveLineChart.render();
+                .x(d3.scale.linear().domain([0, this.liveData.chart.noValues]));
+
+            this.liveLineChart.redraw();
         },
 
         updateLiveLineChart() {
-            var liveLineChart = this.liveLineChart;
-            var liveDataValues = this.liveData.chart.values;
+            var indexOffset = this.ndx.size();
+            var filterData = this.liveValuesBuffer.map((d, i) => ({
+                index: indexOffset + i, 
+                value: d
+            }));
 
-            this.xFilter.add(this.liveValuesBuffer);
-
+            this.ndx.add(filterData);
             this.liveValuesBuffer = [];
-
-            liveLineChart
-                .dimension(this.dim)
-                .compose([
-                    dc.lineChart(liveLineChart)
-                        .group(this.grp)
-                        .colors('red')
-                ]);
-                
-            liveLineChart.redraw();
+            this.liveLineChart.redraw();
         },
     },
 
     watch: {
         'liveData.chart.values'(newValue, oldValue) {
+
             if (newValue.length < oldValue.length || oldValue.length === 0) {
                 this.liveValuesBuffer = [];
-                this.lastUpdatedIndex = 0;
-                this.redrawDebounce = 50;
+                this.lastUpdatedIndex = -1;
+                this.redrawDebounce = 10;
                 this.initLiveLineChart();
                 return;
             }
@@ -107,7 +104,7 @@ export default {
             this.liveValuesBuffer.push(...newValue.slice(this.lastUpdatedIndex + 1, newValue.length - 1));
             this.lastUpdatedIndex = newValue.length - 1;
 
-            if (performance.now() - this.lastUpdate > this.redrawDebounce || newValue.length === newValue.noValues) {
+            if (performance.now() - this.lastUpdate > this.redrawDebounce || newValue.length === this.liveData.chart.noValues) {
                 var beforeUpdate = performance.now();
                 this.updateLiveLineChart();
                 this.lastUpdate = performance.now();
