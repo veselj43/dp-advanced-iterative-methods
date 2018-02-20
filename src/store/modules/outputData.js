@@ -7,20 +7,11 @@ function GeneratedInfo(index, params) {
 }
 
 function GeneratedDataSet(historyRecord) {
-    this._itemId = historyRecord.id;
-    this.label = historyRecord.instance;
+    this.itemId = historyRecord.id;
     this.data = historyRecord.data.dataSet;
-    this.borderColor = "#f87979";
-    this.backgroundColor = "transparent";
 }
 
 function updateComparingResultsComputedValues(comparingResults) {
-    var maxLength = 0;
-    comparingResults.chart.dataSets.forEach(function(set) {
-        maxLength = Math.max(maxLength, set.data.length);
-    });
-
-    comparingResults.chart.labels = __range(maxLength);
     comparingResults.info.activeCount = comparingResults.chart.dataSets.length;
 }
 
@@ -29,7 +20,6 @@ const state = {
     computingHistory: [],
     comparingResults: {
         chart: {
-            labels: [],
             dataSets: []
         },
         info: {
@@ -87,7 +77,7 @@ const mutations = {
         if (state.comparingResults.info.items[toAdd.id]) {
             var removeIndex = -1;
             for (var i in state.comparingResults.chart.dataSets) {
-                if (state.comparingResults.chart.dataSets[i]._itemId === toAdd.id) {
+                if (state.comparingResults.chart.dataSets[i].itemId === toAdd.id) {
                     removeIndex = i;
                     break;
                 }

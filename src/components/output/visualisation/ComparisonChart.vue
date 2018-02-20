@@ -9,88 +9,128 @@ var d3 = dc.d3;
 var crossfilter = dc.crossfilter;
 
 export default {
+    props: {
+        width: Number
+    },
+
     data() {
         return {
             comparingResults: this.$store.state.outputData.comparingResults,
+            lastActiveCount: 0,
+            labels: {},
+            options: {
+                minWidth: 100,
+                width: 800,
+                height: 300,
+                margin: {
+                    right: 200,
+                }
+            },
         }
     },
 
     mounted() {
-        this.multipleLineChart = dc.compositeChart('#comparisonChart');
-        this.multipleLineChart
-            .width(800).height(300)
-            .x(d3.scale.linear().domain([0, 100]))
-            .y(d3.scale.linear().domain([0, 100]))
-            .elasticX(true)
-            .elasticY(true)
-            .brushOn(false)
-            .transitionDuration(0);
-        this.multipleLineChart.render();
+        window.addEventListener("resize", this.windowResize);
+        
+        this.multipleLineChart = dc.seriesChart('#comparisonChart');
+
+        this.initMultipleLineChart();
     },
 
     methods: {
-        updateMultipleLineChart(options) {
-            var multipleLineChart = this.multipleLineChart;
+        windowResize() {
+            var options = this.options;
+            options.width = Math.max(options.minWidth + options.margin.right, this.width, document.getElementById('comparisonChart').offsetWidth);
+
+            this.multipleLineChart
+                .width(options.width)
+                .legend(dc.legend().x(options.width - options.margin.right + 15).y(5).itemHeight(13).gap(5));
+            this.multipleLineChart.redraw();
+        },
+
+        processData(i) {
             var dataSets = this.comparingResults.chart.dataSets;
 
-            if (dataSets.length === 0) return;
+            if (dataSets.length === 0) return [];
 
-            var colors = ['#f00', '#00f', '#f0f', '#ff0', '#0ff'];
-            var maxLengthIndex = 0;
+            var mergedDatasets = [];
+            var data = dataSets[i].data;
+            var id = dataSets[i].itemId;
 
-            dataSets = dataSets.map((dataSet) => dataSet.data);
-            dataSets = dataSets.map((dataSet, i) => {
-                maxLengthIndex = (dataSet.length > dataSets[maxLengthIndex].length) ? maxLengthIndex : i;
-                var cf = crossfilter(dataSet);
-                return cf.dimension((d, c) => c);
-            });
-            
-            var dim = dataSets[maxLengthIndex];
+            return data.map((value, j) => ({dataset: id, index: j, value: value}));
+        },
+        
+        initMultipleLineChart() {
+            var multipleLineChart = this.multipleLineChart;
+            var chartOptions = this.options;
 
-            dataSets = dataSets.map((dataSet, i) => {
-                var grp = dataSet.group().reduceSum((d) => d);
-                return dc.lineChart(multipleLineChart).group(grp).colors(colors[i % colors.length]);
-            });
+            this.ndx = crossfilter(this.processData(0));
+
+            var runDimension = this.ndx.dimension(d => [+d.dataset, +d.index]);
+            var runGroup = runDimension.group().reduceSum(d => +d.value);
+
+            var componentContext = this;
 
             multipleLineChart
-                .dimension(dim)
-                .compose([]);
+                .width(chartOptions.width).height(chartOptions.height)
+                .x(d3.scale.linear().domain([0, 10]))
+                .y(d3.scale.linear().domain([0, 10]))
+                .yAxisLabel("Fitness")
+                .xAxisLabel("States checked")
+                .elasticX(true)
+                .elasticY(true)
+                .brushOn(false)
+                // .mouseZoomable(true)
+                .renderHorizontalGridLines(true)
+                .transitionDuration(0)
+                .legend(dc.legend().x(chartOptions.width - chartOptions.margin.right + 15).y(5).itemHeight(13).gap(5))
+                .seriesAccessor(function(d) {return componentContext.labels[d.key[0]] + " (" + d.key[0] + ")";})
+                .keyAccessor(d => +d.key[1])
+                .valueAccessor(d => +d.value)
+                .chart(function(c) {
+                    return dc.lineChart(c).xyTipsOn(false);
+                })
+                .dimension(runDimension)
+                .group(runGroup);
 
-            if (options && options.render) {
-                multipleLineChart.render();
-            }
-            
-            multipleLineChart.compose(dataSets);
+            multipleLineChart.margins().right = chartOptions.margin.right;
+            multipleLineChart.margins().bottom += 5;
 
-            multipleLineChart.redraw();
-        }
+            multipleLineChart.render();
+        },
     },
 
     watch: {
         'comparingResults.info.items'(newValue, oldValue) {
-            // nothing is actually rendered
-            var redraw = (this.comparingResults.info.activeCount === 0);
-            
+            var newActiveCount = this.comparingResults.info.activeCount;
+
             // dataset(s) removed - needs to be cleared
-            redraw = redraw || (this.activeCount && this.activeCount > this.comparingResults.info.activeCount);
+            var remove = (this.lastActiveCount && this.lastActiveCount > newActiveCount);
 
             // dataset replaced with just computed files and the length is the same
-            redraw = redraw || ((
-                this.activeCount === 1 && this.comparingResults.info.activeCount === 1) && 
+            remove = remove || ((
+                this.lastActiveCount === 1 && newActiveCount === 1) && 
                 (Object.keys(newValue)[0] !== Object.keys(oldValue)[0])
             );
-            this.activeCount = this.comparingResults.info.activeCount;
 
-            // chart needs to be resized
-            var oldMaxDatasetLength = this.maxDatasetLength;
-            this.maxDatasetLength = Math.max(...this.comparingResults.chart.dataSets.map(d => d.data.length));
-            redraw = redraw || oldMaxDatasetLength < this.maxDatasetLength;
-
-            if (redraw) {
-                this.updateMultipleLineChart({ render: true });
+            for (var key in newValue) {
+                this.labels[key] = newValue[key].instance;
             }
-            else {
-                this.updateMultipleLineChart();
+
+            if (remove) {
+                this.ndx.remove();
+            }
+            for (var i = (remove) ? 0 : this.lastActiveCount; i < newActiveCount; i++) {
+                this.ndx.add(this.processData(i));
+            }
+
+            this.lastActiveCount = newActiveCount;
+
+            this.multipleLineChart.redraw();
+
+            // first load of the component
+            if (newActiveCount === 1) {
+                this.windowResize();
             }
         }
     },

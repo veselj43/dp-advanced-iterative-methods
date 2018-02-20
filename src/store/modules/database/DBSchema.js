@@ -54,7 +54,7 @@ export const mockData = {
 
 export function upgradeDB(db) {
     // The database did not previously exist, so create object stores and indexes.
-    console.log("[DB] Creating database");
+    console.log("[DB] Creating database", db.oldVersion); // db.oldVersion === 0 means it didnt exist
 
     for (var tableKey in dbStructure) {
         var tableMetaData = dbStructure[tableKey];
