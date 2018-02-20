@@ -52,13 +52,19 @@
                 <div class="form-group">
                     <label for="genParam2">Sum of items weights</label>
                     <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[2].sumOfWeights" placeholder="">
+                    <input type="number" class="form-control" id="genParam3" v-model="generatorParams[2].sumOfWeights" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label for="genParam2">Max value</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam4" v-model="generatorParams[2].maxValue" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="genParam2">Granularity</label>
                     <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[2].granularity" placeholder="">
+                    <input type="number" class="form-control" id="genParam5" v-model="generatorParams[2].granularity" placeholder="">
                 </div>
 
             </div>
@@ -95,8 +101,8 @@ export default {
             generatorParams: {
                 instanceName: "instance",
                 0: {
-                    noVariables: 20,
-                    noClausules: 91
+                    noVariables: 4,
+                    noClausules: 7
                 },
                 1: {
                     noNodes: 5,
@@ -106,6 +112,7 @@ export default {
                     capacity: 100,
                     noItems: 5,
                     sumOfWeights: 200,
+                    maxValue: 200,
                     granularity: 1
                 }
             }
@@ -132,7 +139,7 @@ export default {
                 this.$notifier.put("worker-info", "Work is in progress.", "info");
                 return;
             }
-            this.workerManager.sendWork('work', this.generatorParams);
+            this.workerManager.sendWork('work', this.generatorParams, this.problemKey);
             this.isGenerating = true;
         },
 
