@@ -1,6 +1,9 @@
 import Result from '../_common/Result.js';
 import BufferedReply from '../_common/BufferedReply';
 
+/**
+ * Class for solving problems using simulated annealing
+ */
 export class AnnealingSolver{
   constructor(workerInterface){
     this._workerInterface = workerInterface;
@@ -9,6 +12,12 @@ export class AnnealingSolver{
     this._bufferedReply = new BufferedReply(this._workerInterface, 'progressBuffered', 75);
   }
 
+  /**
+   * Main function method, solves the problem using simulated annealing
+   * @param  {object} problem type of problem
+   * @param  {object} params  problem parameters
+   * @return {Result} final configuration, its fitness and number of iterations
+   */
   solve(problem, params){
       var currentTemp = params.start_temp;
       var currentConfiguration = problem.getConfiguration();
@@ -17,14 +26,16 @@ export class AnnealingSolver{
 
       this._workerInterface.reply('init', { numberOfIterations: 10000 });
 
+      // main cycle depending on temperature
       while (currentTemp > params.min_temp) {
+          //inner cycle, equilibrium
           for(var i = 0; i < params.equil; i++){
               this._bufferedReply.addMessageWithAutoFlush({ fitness: problem.getFitness(currentConfiguration) });
-
+              //next is better
               if(problem.getFitness(currentConfiguration) < problem.getFitness(currentNeighbour)){
                   currentConfiguration = currentNeighbour;
               }
-
+              // next is worse
               else {
                   if(Math.random() < Math.exp((problem.getFitness(currentNeighbour) - problem.getFitness(currentConfiguration)) / currentTemp)){
                       currentConfiguration = currentNeighbour;
@@ -39,8 +50,56 @@ export class AnnealingSolver{
       this._bufferedReply.addMessage({ fitness: problem.getFitness(currentConfiguration) }).flush();
       return new Result(currentConfiguration.getBitArray(), problem.getFitness(currentConfiguration), counter);
   }
+  /**
+   * Function to compute starting temperature
+   * @param  {object} problem type of problem
+   * @param  {object} params  problem parameters
+   * @return {int} calculated starting temperature
+   */
+  computeStartingTemp(problem, params){
+      var currentConfiguration = problem.getConfiguration();
+      var currentNeighbour = currentConfiguration.getNeighbour();
+      var arrayOfEnergyStates = [];
 
-  computeStartingTemp(){
+      var wantedPropability = 0.5;
+      var currentPropability = 0;
 
+      var maxSum;
+      var minSum;
+      var newEnergyState;
+
+      var temperature = 100;
+
+      // filling array with random transitions, more precisly with energies of those transitions (max and min fitness)
+      while(100*currentConfiguration.getSize() !== arrayOfEnergyStates.length)
+      {
+          newEnergyState = {
+              max: Math.max(problem.getFitness(currentConfiguration), problem.getFitness(currentNeighbour)),
+              min: Math.min(problem.getFitness(currentConfiguration), problem.getFitness(currentNeighbour))
+          };
+          if(newEnergyState.max > 0 && newEnergyState.min > 0) arrayOfEnergyStates.push(newEnergyState);
+
+          currentConfiguration = currentNeighbour;
+          currentNeighbour = currentConfiguration.getNeighbour();
+      }
+      //calculating temperature for which is the propability of accepting average worse state equals to wantedPropability
+      while(Math.abs(wantedPropability - currentPropability) > 0.005)
+      {
+          maxSum = 0;
+          minSum = 0;
+
+          for(var i = 0; i < arrayOfEnergyStates.length; i++)
+          {
+              maxSum += Math.exp(-arrayOfEnergyStates[i].max / temperature);
+              minSum += Math.exp(-arrayOfEnergyStates[i].min / temperature);
+          }
+
+          currentPropability = maxSum / minSum;
+          //console.log(currentPropability);
+          temperature = temperature * (-Math.log(currentPropability) / -Math.log(wantedPropability));
+          console.log(currentPropability);
+      }
+
+      return temperature;
   }
 }

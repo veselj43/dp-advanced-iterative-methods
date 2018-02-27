@@ -1,6 +1,12 @@
 import { BitArray } from "./configurationTypes/BitArray";
-
+/**
+ * Knapsack problem class, used for knapsack problem solving, works with BitArray configuration
+ */
 export class Knapsack {
+    /**
+     * Constructor, construct the class from the data file selected
+     * @param {string} data instance of a problem coded as string
+     */
     constructor(data) {
         this._items = [];
         this._capacity;
@@ -19,7 +25,11 @@ export class Knapsack {
             });
         }
     }
-
+    /**
+     * Returns fitness of selected configuration(BitArray)
+     * @param  {class} bitArrayConfig BitArray of which fitness we want
+     * @return {int}  calculated fitness of the configuration
+     */
     getFitness(bitArrayConfig) {
         if (bitArrayConfig === null) return -1;
 
@@ -37,7 +47,11 @@ export class Knapsack {
 
         return (sumWeight > this._capacity) ? this._capacity - sumWeight : sumValue;
     }
-
+    /**
+     * Returns random, or all 0, configuration of knapsack problem(BitArray configuration)
+     * @param  {bool} random random or all 0
+     * @return {class}  new BitArray class
+     */
     getConfiguration(random) {
         return new BitArray({
             size: this._items.length,

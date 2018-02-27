@@ -16,14 +16,14 @@
         </div>
         <div class="form-group">
             <label class="" for="param3">Minimal temperature</label>
-            <span class="form-tooltip" v-tooltip.right="'Tooltip text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+            <span class="form-tooltip" v-tooltip.right="'When the method reaches this temperatue it stops'"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="">
                 <input class="form-control" type="number" id="param3" v-model="params.min_temp" placeholder="">
             </div>
         </div>
         <div class="form-group">
             <label class="" for="param4">Equilibrium</label>
-            <span class="form-tooltip" v-tooltip.right="'Tooltip text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+            <span class="form-tooltip" v-tooltip.right="'Size of the inner cyrcle, how many configurations the algorithm tries before changing temperature'"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="">
                 <input class="form-control" type="number" id="param4" v-model="params.equil" placeholder="">
             </div>
