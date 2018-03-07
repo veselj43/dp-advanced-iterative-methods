@@ -1,8 +1,19 @@
+/**
+ * Class for generating knapsack problem instances
+ * @type {class}
+ */
 export class KnapsackGenerator {
+    /**
+     * Class constructor
+     * @param {object} params parameters of the generated instance
+     */
   constructor (params) {
     this.params = params;
   }
-
+  /**
+   * Generate instance based on parameters
+   * @return {String} instance of knapsack problem coded as String
+   */
   generate () {
     var generatedInstance = this.params.noItems + " " + this.params.capacity + " ";
     var currentWeight = 0;
@@ -17,16 +28,28 @@ export class KnapsackGenerator {
     console.log(generatedInstance);
     return generatedInstance;
   }
-  //generate random array with fixed sum
+
+  /**
+   * Generate random array with fixed sum
+   * @return {array} array with fixed sum of values
+   */
   _fixedSumArray() {
     var myArray = [];
     var currentWeight = 0;
     var newWeight = 0;
 
-    for(var i = 0; i < this.params.noItems; i++)
+    var generatedWeight;
+
+    while(myArray.length !== this.params.noItems)
     {
-      myArray.push(Math.round(Math.random() * this.params.sumOfWeights * (this.params.noItems - 1)));
-      currentWeight += myArray[i];
+        generatedWeight = Math.round(Math.random() * this.params.sumOfWeights);
+        // granularity checking, 0 = random, +x = more bigger things, -x more smaller things
+        if(this.params.granularity === 0 ||
+        (this.params.granularity > 0 && Math.random() < 1/Math.pow(this.params.sumOfWeights - generatedWeight, this.params.granularity)) ||
+        (this.params.granularity < 0 && Math.random() < 1/Math.pow(generatedWeight, -this.params.granularity))) {
+            myArray.push(generatedWeight);
+            currentWeight += myArray[i];
+        }
     }
 
     for(i = 0; i < this.params.noItems; i++)

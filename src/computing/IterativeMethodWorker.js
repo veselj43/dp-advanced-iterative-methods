@@ -1,6 +1,7 @@
 import { WorkerInterface } from './WorkerInterface.js';
 import * as SAT from './problems/SAT';
 import * as Knapsack from './problems/Knapsack';
+import * as Vertex from './problems/MinimalVertexCover';
 import * as Tabu from './methods/Tabu';
 import * as Genetic from './methods/Genetic';
 import * as Annealing from './methods/Annealing';
@@ -23,6 +24,7 @@ class Job {
         if (params.problem.id === 0) this.problem = new SAT.SAT(inputData);
         else if (params.problem.id === 1) this.problem = new SAT.SAT(inputData);
         else if (params.problem.id === 2) this.problem = new Knapsack.Knapsack(inputData);
+        else if (params.problem.id === 3) this.problem = new Vertex.MinimalVertexCover(inputData);
 
         if (params.method.id === 'tabu') this.method = new Tabu.TabuSolver(workerInterface);
         else if (params.method.id === 'genetic') this.method = new Genetic.GeneticSolver(workerInterface);

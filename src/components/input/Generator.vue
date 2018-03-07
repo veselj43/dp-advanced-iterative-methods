@@ -69,6 +69,16 @@
 
             </div>
 
+            <div v-if="problemKey === 3">
+
+                <div class="form-group">
+                    <label for="genParam1">Number of nodes</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p1'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[3].size" placeholder="">
+                </div>
+
+            </div>
+
             <div class="form-group">
                 <label for="instanceName">Instance name</label>
                 <span class="form-tooltip" v-tooltip.right="'Name that will be shown in instance list'"><span class="glyphicon glyphicon-question-sign"></span></span>
@@ -114,7 +124,11 @@ export default {
                     sumOfWeights: 200,
                     maxValue: 200,
                     granularity: 1
+                },
+                3: {
+                    size : 10
                 }
+
             }
         }
     },

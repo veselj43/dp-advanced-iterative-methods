@@ -22,6 +22,9 @@ export const problems = [
     }, {
         id: 2,
         text: "Knapsack"
+    }, {
+        id: 3,
+        text: "Minimal vertex cover"
     }
 ];
 

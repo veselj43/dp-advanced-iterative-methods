@@ -19,7 +19,7 @@ export class AnnealingSolver{
    * @return {Result} final configuration, its fitness and number of iterations
    */
   solve(problem, params){
-      var currentTemp = params.start_temp;
+      var currentTemp = +params.start_temp;
       var currentConfiguration = problem.getConfiguration();
       var currentNeighbour = currentConfiguration.getNeighbour();
       var counter = 0;
@@ -27,10 +27,9 @@ export class AnnealingSolver{
       this._workerInterface.reply('init', { numberOfIterations: 10000 });
 
       // main cycle depending on temperature
-      while (currentTemp > params.min_temp) {
+      while (currentTemp > +params.min_temp) {
           //inner cycle, equilibrium
-          for(var i = 0; i < params.equil; i++){
-              this._bufferedReply.addMessageWithAutoFlush({ fitness: problem.getFitness(currentConfiguration) });
+          for(var i = 0; i < +params.equil; i++){
               //next is better
               if(problem.getFitness(currentConfiguration) < problem.getFitness(currentNeighbour)){
                   currentConfiguration = currentNeighbour;
@@ -46,6 +45,7 @@ export class AnnealingSolver{
               counter++;
           }
           currentTemp *= params.cool_coef;
+          this._bufferedReply.addMessageWithAutoFlush({ fitness: problem.getFitness(currentConfiguration) });
       }
       this._bufferedReply.addMessage({ fitness: problem.getFitness(currentConfiguration) }).flush();
       return new Result(currentConfiguration.getBitArray(), problem.getFitness(currentConfiguration), counter);
