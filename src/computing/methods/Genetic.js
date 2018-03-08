@@ -1,14 +1,16 @@
 import Result from '../_common/Result';
+import BufferedReply from "../_common/BufferedReply";
 
 export class GeneticSolver {
-    constructor(workerInterface, params) {
+    constructor(workerInterface) {
         this._workerInterface = workerInterface;
-        this.params = params;
+        // buffers messages to reduce communication overhead while sending computation progress every cycle
+        this._bufferedReply = new BufferedReply(this._workerInterface, 'progressBuffered', 75);
     }
 
-    solve (problemInput) {
-        this.problemInput = problemInput;
-        
+    solve (problem, params) {
+        this.problem = problem;
+
         this.result = [];
         this.cost = 0;
         this.count = this.params.noGenerations;

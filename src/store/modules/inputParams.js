@@ -13,12 +13,16 @@ const initState = {
                 equil: 50
             },
             genetic: {
-                crossoverType: 1,
-                elitism: 0.65,
-                mutationRate: 0.08,
+                populationSize: 20,
                 noGenerations: 100,
-                noIndividuals: 10,
-                selectionType: 1
+                selectionType: "roulette",
+                tourneySize: 3,
+                scaleMin: 0,
+                scaleMax: 100,
+                crossoverProb: 0.8,
+                crossoverType: 1,
+                mutationRate: 0.08,
+                elitism: 1
             },
             tabu: {
                 iterationLimit: 200,
