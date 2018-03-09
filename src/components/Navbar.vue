@@ -36,4 +36,8 @@ export default {
     nav ul.nav li {
         cursor: pointer;
     }
+
+    .nav-pills>li>a {
+        border-radius: unset;
+    }
 </style>

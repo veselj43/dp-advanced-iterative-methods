@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import __range from 'lodash/range';
 
 function GeneratedInfo(index, params) {
     this.index = index;

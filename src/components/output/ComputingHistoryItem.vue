@@ -17,7 +17,7 @@
                 <tbody>
                     <tr v-for="(param, key) in item.params" :key="key">
                         <td>{{methodParamsTitles[activeMethod][key]}}</td>
-                        <td><strong>{{param}}</strong></td>
+                        <td class="text-right"><strong>{{param}}</strong></td>
                     </tr>
                 </tbody>
             </table>
