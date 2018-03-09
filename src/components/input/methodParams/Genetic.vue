@@ -9,7 +9,7 @@
         </div>
         <div class="form-group">
             <label class="" for="generation-count">Number of generations</label>
-            <span class="form-tooltip" v-tooltip.right="'Number of generations/steps in genetic algorithm '"><span class="glyphicon glyphicon-question-sign"></span></span>
+            <span class="form-tooltip" v-tooltip.right="'Number of generations/steps in genetic algorithm after which algorithm stops computation'"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="">
                 <input class="form-control" type="number" min="1" id="generation-count" v-model="params.noGenerations" placeholder="">
             </div>
@@ -31,10 +31,10 @@
                 <label class="">Linear scaling</label>
                 <span class="form-tooltip" v-tooltip.right="'Linear scaling tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <!--TODO min a max do jednoho radku-->
-                <div class="">
-                    <label class="" for="scale-min">Min</label>
+                <div class="input-group">
+                    <!--<label class="" for="scale-min">Min</label>-->
                     <input class="form-control" type="number" id="scale-min" v-model="params.scaleMin" placeholder="">
-                    <label class="" for="scale-max">Max</label>
+                    <!--<label class="" for="scale-max">Max</label>-->
                     <input class="form-control" type="number" id="scale-max" v-model="params.scaleMax" placeholder="">
                 </div>
             </div>

@@ -13,10 +13,10 @@ export class GeneticSolver {
 
         this.result = [];
         this.cost = 0;
-        this.count = this.params.noGenerations;
+        this.count = params.noGenerations;
         this.counter = 0;
 
-        console.log("params: ", this.params);
+        console.log("params: ", params);
 
         this._workerInterface.reply('init', { numberOfIterations: this.count, maxFitness: this.problemInput.params.numberOfClausules });
 
