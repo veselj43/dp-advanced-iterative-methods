@@ -5,7 +5,7 @@
             <div class="form-group">
                 <label for="problemKey">Problem</label>
                 <select class="form-control" id="problemKey" v-model="problemKey">
-                    <option v-for="(problem, index) in problemEnum" :value="index">{{problem.text}}</option>
+                    <option v-for="(problem, index) in problemEnum" :key="index" :value="index">{{problem.text}}</option>
                 </select>
             </div>
 
@@ -34,6 +34,4 @@ export default {
 </script>
 
 <style scoped>
-    .problemSelect {
-    }
 </style>

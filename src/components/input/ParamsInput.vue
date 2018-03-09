@@ -1,12 +1,10 @@
 <template>
     <div class="paramsSelection">
-        <form class="">
-
-            <keep-alive>
-                <component :is="methodKey"></component>
-            </keep-alive>
-
-        </form>
+        
+        <keep-alive>
+            <component :is="methodKey"></component>
+        </keep-alive>
+            
     </div>
 </template>
 
@@ -32,6 +30,4 @@ export default {
 </script>
 
 <style scoped>
-    .paramsSelection {
-    }
 </style>

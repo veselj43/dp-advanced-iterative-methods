@@ -3,49 +3,18 @@
         <h3>Results <small v-if="computingIsProcessingResults">{{computingStatus.text}}</small></h3>
         <img v-show="computingIsProcessingResults" src="@/assets/loading_01.svg" alt="Processing results">
 
-        <div v-show="computingIsRunning || computingIsProcessingResults">
+        <div v-show="methodResultActiveSection">
 
-            <live-chart></live-chart>
-
-            <table class="table table-bordered table-hover">
-                <tbody>
-                    <tr>
-                        <th>Best found fitness</th>
-                        <td>{{liveData.best}}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
-
-        <div v-show="comparingResultsInfo.activeCount > 0 && !(computingIsRunning || computingIsProcessingResults)">
-
-            <comparison-chart :width="chartBaseContainerWidth"></comparison-chart>
-
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Instance</th>
-                        <th>Fitness</th>
-                        <th>States checked</th>
-                        <th>Processing time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in comparingResultsInfo.items" :key="index">
-                        <td>{{item.instance}}</td>
-                        <td>{{item.result.cost}}</td>
-                        <td>{{item.result.counter}}</td>
-                        <td>{{item.result.processTime | parseTime}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <component
+                :is="methodResultComponent"
+                :activeSection="methodResultActiveSection">
+            </component>
 
             <conf-visual></conf-visual>
 
         </div>
 
-        <div v-show="!(comparingResultsInfo.activeCount > 0) && !(computingIsRunning || computingIsProcessingResults)">
+        <div v-show="!methodResultActiveSection">
             <p>Compute an instance or check instances to compare from the right panel.</p>
         </div>
 
@@ -54,28 +23,21 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import LiveChart from './visualisation/LiveChart';
-import ComparisonChart from './visualisation/ComparisonChart';
 import ConfVisual from './visualisation/Configuration';
-
-import dc from 'dc';
-
-var d3 = dc.d3;
-var crossfilter = dc.crossfilter;
+import Tabu from './methodResult/Tabu';
+// TODO import and add to components other methods
 
 export default {
     components: {
-        LiveChart,
-        ComparisonChart,
         ConfVisual,
+        Annealing: Tabu, // change here (delete Tabu)
+        Genetic: Tabu, // change here (delete Tabu)
+        Tabu,
     },
 
     data() {
         return {
             computingStatus: this.$store.state.liveData.computingStatus,
-            liveData: this.$store.state.liveData.data,
-            comparingResultsInfo: this.$store.state.outputData.comparingResults.info,
-            chartBaseContainerWidth: 0,
         }
     },
 
@@ -83,23 +45,34 @@ export default {
         ...mapGetters([
             'computingIsRunning',
             'computingIsProcessingResults'
-        ])
-    },
+        ]),
 
-    mounted() {
-        window.addEventListener("load", this.updateWidths);
-        window.addEventListener("resize", this.updateWidths);
-    },
+        methodResultActiveSection() {
+            var isRunning = this.computingIsRunning;
+            var isProcessingResult = this.computingIsProcessingResults;
+            var activeCount = this.$store.state.outputData.comparingResults.info.activeCount;
 
-    methods: {
-        updateWidths() {
-            this.chartBaseContainerWidth = document.getElementById('chartBaseContainer').offsetWidth;
+            if (isRunning || isProcessingResult) {
+                return 'live';
+            }
+            if (activeCount > 0) {
+                return 'comparison';
+            }
+            return null;
         },
+
+        methodResultComponent() {
+            return this.$store.state.inputParams.params.method.id;
+        }
     },
 }
 </script>
 
 <style scoped>
+    #chartBaseContainer {
+        width: 100%;
+    }
+
     h3, img {
         display: inline-block;
     }

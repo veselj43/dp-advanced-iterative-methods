@@ -20,7 +20,7 @@ export default {
             labels: {},
             options: {
                 minWidth: 100,
-                width: 800,
+                width: (document.getElementById('comparisonChart') ? document.getElementById('comparisonChart').offsetWidth : 800),
                 height: 300,
                 margin: {
                     right: 200,
@@ -38,9 +38,16 @@ export default {
     },
 
     methods: {
+        updateElementWidth() {
+            var actualWidth = document.getElementById('comparisonChart').offsetWidth;
+            if (actualWidth > 0) {
+                this.options.width = Math.max(this.options.minWidth + this.options.margin.right, actualWidth);
+            }
+        },
+
         windowResize() {
+            this.updateElementWidth();
             var options = this.options;
-            options.width = Math.max(options.minWidth + options.margin.right, this.width, document.getElementById('comparisonChart').offsetWidth);
 
             this.multipleLineChart
                 .width(options.width)
@@ -61,6 +68,7 @@ export default {
         },
         
         initMultipleLineChart() {
+            this.updateElementWidth();
             var multipleLineChart = this.multipleLineChart;
             var chartOptions = this.options;
 
@@ -136,3 +144,10 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+    #comparisonChart {
+        width: 100%;
+    }
+</style>
+

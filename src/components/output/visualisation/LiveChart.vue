@@ -28,9 +28,10 @@ export default {
     },
 
     mounted() {
-        var options = this.options;
-        window.addEventListener("load", this.windowResize);
         window.addEventListener("resize", this.windowResize);
+
+        this.updateElementWidth();
+        var options = this.options;
 
         this.liveLineChart = dc.lineChart('#liveChart');
 
@@ -59,9 +60,16 @@ export default {
     },
 
     methods: {
+        updateElementWidth() {
+            var activeWidth = document.getElementById('liveChart').offsetWidth;
+            if (activeWidth) {
+                this.options.width = Math.max(this.options.minWidth + this.options.margin.right, activeWidth);
+            }
+        },
+
         windowResize() {
+            this.updateElementWidth();
             var options = this.options;
-            options.width = Math.max(options.minWidth + options.margin.right, document.getElementById('liveChart').offsetWidth);
 
             this.liveLineChart.width(options.width);
             this.liveLineChart.redraw();
@@ -115,3 +123,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    #liveChart {
+        width: 100%;
+    }
+</style>
