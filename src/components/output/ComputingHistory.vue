@@ -4,14 +4,14 @@
             <input class="btn-checkbox" type="checkbox" v-model="checkedAll">
             <div class="header">Computation history</div>
         </div>
-        <div class="header historyControls">
+        <div class="header history-controls">
             <!-- <div class="height-filler"></div> -->
             <button class="btn btn-danger" v-on:click="$refs.clearComputingHistoryConfirm.open()" :disabled="!computingHistory || computingHistory.length === 0">
                 Clear history
             </button>
         </div>
         <div class="scroll-area">
-            <div class="list-group">
+            <div class="history-list">
                 <computing-history-item
                     v-for="(result, index) in computingHistory"
                     :key="result.id"
@@ -97,11 +97,11 @@ export default {
         border-top: #ccc 1px solid;
     }
 
-    .list-group {
+    .history-list {
         margin-bottom: .2em;
     }
 
-    .historyControls {
+    .history-controls {
         padding-right: 1em;
         padding-bottom: .5em;
         text-align: right;

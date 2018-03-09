@@ -1,3 +1,3 @@
 module.exports = {
-  NODE_ENV: '"demo"'
+  NODE_ENV: '"production"'
 }

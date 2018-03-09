@@ -1,19 +1,19 @@
 <template>
-    <div class="list-group-item">
-        <div class="list-group-item-heading">
-            <div class="checkbox">
-                <label>
+    <div class="history-list-item">
+        <div class="history-list-item-heading">
+            <label>
+                <div class="history-list-item-label">
                     <input type="checkbox" v-model="checked">
                     <div class="collapse-header">{{item.instance}}</div>
-                </label>
-            </div>
+                </div>
+            </label>
             <span class="collapse-switch" v-on:click="toggle">
                 <span v-if="isOpen" class="glyphicon glyphicon-triangle-bottom"></span>
                 <span v-else class="glyphicon glyphicon-triangle-left"></span>
             </span>
         </div>
-        <div class="list-group-item-text collapsable" v-bind:class="{'collapsed': !isOpen}">
-            <table class="table">
+        <div class="history-list-item-text collapsable" v-bind:class="{'collapsed': !isOpen}">
+            <table class="table table-condensed">
                 <tbody>
                     <tr v-for="(param, key) in item.params" :key="key">
                         <td>{{methodParamsTitles[activeMethod][key]}}</td>
@@ -68,31 +68,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    $duration-primary: 400ms;
+    $duration-primary: 200ms;
     $duration-secondary: 300ms;
 
     .historyList {
         margin-top: 1em;
     }
 
-    .list-group-item {
+    .history-list-item {
         padding: 0;
     }
 
-    .list-group-item-heading {
+    .history-list-item-heading {
         position: relative;
         display: block;
         margin: 0;
-        padding: 10px 15px;
-        cursor: pointer;
+        padding: 0;
+        background-color: #fff;
+        border-bottom: #ddd 1px solid;
 
-        .checkbox {
+        label {
+            width: 100%;
             margin: 0;
-            margin-right: 10px;
-            overflow: hidden;
+            padding: 5px;
+            font-weight: 400;
+            cursor: pointer;
 
-            label {
-                width: 100%;
+            input[type=checkbox] {
+                position: absolute;
+                margin-left: -20px;
+            }
+
+            .history-list-item-label {
+                margin: 0;
+                margin-right: 25px;
+                padding-left: 20px;
             }
         }
 
@@ -107,24 +117,25 @@ export default {
             top: 50%;
             right: 0;
             transform: translateY(-50%);
-            padding: 10px 1em;
+            padding: 7px;
             font-size: 90%;
+            cursor: pointer;
         }
     }
 
-    .list-group-item-text {
+    .history-list-item-text {
         .table {
             margin: 0;
         }
 
         &.collapsable {
             max-height: 500px;
-            padding: 10px;
-            padding-left: 25px;
+            padding: 5px;
+            padding-left: 20px;
             overflow: hidden;
             background-color: #ddd;
-            -webkit-transition: max-height $duration-secondary, padding-top $duration-primary, padding-bottom $duration-primary;
-            transition: max-height $duration-secondary, padding-top $duration-primary, padding-bottom $duration-primary;
+            -webkit-transition: max-height $duration-primary, padding-top $duration-secondary, padding-bottom $duration-secondary;
+            transition: max-height $duration-primary, padding-top $duration-secondary, padding-bottom $duration-secondary;
 
             &.collapsed {
                 max-height: 0;

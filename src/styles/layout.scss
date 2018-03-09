@@ -56,6 +56,23 @@ html, body {
     background: $bg-secondary;
     border-right: $border-color-primary 1px solid;
     overflow-y: auto;
+
+    .component {
+        padding: 1em 1em 0 1em;
+    }
+
+    .form-group {
+        margin-bottom: 8px;
+
+        label {
+            margin-bottom: 2px;
+        }
+
+        .form-control {
+            height: 30px;
+            padding: 4px 12px;
+        }
+    }
 }
 
 .right-panel {
@@ -80,10 +97,6 @@ html, body {
         padding-right: .5em;
         border-top: #ccc 1px solid;
     }
-}
-
-.left-panel .component {
-    padding: 1em 1em 0 1em;
 }
 
 .left-panel .header,
