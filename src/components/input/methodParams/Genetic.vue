@@ -4,19 +4,20 @@
             <label class="" for="generation-size" data-toggle="tooltip">Population size</label>
             <span class="form-tooltip" v-tooltip.right="'Number of individuals in each generation'"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="">
-                <input class="form-control" type="number" id="generation-size" v-model="params.populationSize" name="noIndividuals" v-validate.initial="{ required: true, max_value: 1000, regex: /^[0-9]+$/ }">
+                <input class="form-control" type="number" min="1" id="generation-size" v-model="params.populationSize" name="noIndividuals" v-validate.initial="{ required: true, max_value: 1000, regex: /^[0-9]+$/ }">
             </div>
         </div>
         <div class="form-group">
             <label class="" for="generation-count">Number of generations</label>
             <span class="form-tooltip" v-tooltip.right="'Number of generations/steps in genetic algorithm '"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="">
-                <input class="form-control" type="number" id="generation-count" v-model="params.noGenerations" placeholder="">
+                <input class="form-control" type="number" min="1" id="generation-count" v-model="params.noGenerations" placeholder="">
             </div>
         </div>
         <div id="selection">
             <div class="form-group">
                 <label class="" for="selection-type">Selection type</label>
+                <!--TODO stukturovany tooltip do vice radku-->
                 <span class="form-tooltip" v-tooltip.right="'Selection type tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <div class="">
                     <select class="form-control" id="selection-type" v-model="params.selectionType"> <!--v-on:change="selectionChange(this)"-->
@@ -29,6 +30,7 @@
             <div class="form-group" id="roulette" v-if="params.selectionType === 'roulette'">
                 <label class="">Linear scaling</label>
                 <span class="form-tooltip" v-tooltip.right="'Linear scaling tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <!--TODO min a max do jednoho radku-->
                 <div class="">
                     <label class="" for="scale-min">Min</label>
                     <input class="form-control" type="number" id="scale-min" v-model="params.scaleMin" placeholder="">
@@ -65,6 +67,7 @@
 
             <div class="form-group">
                 <label class="" for="crossover-type">Crossover type</label>
+                <!--TODO stukturovany tooltip do vice radku-->
                 <span class="form-tooltip" v-tooltip.right="'Crossover type tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <div class="">
                     <select class="form-control" id="crossover-type" v-model="params.crossoverType">
@@ -87,7 +90,7 @@
         <div id="new-generation">
             <div class="form-group">
                 <label class="" for="elitism">Elitism</label>
-                <span class="form-tooltip" v-tooltip.right="'Elitism tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="'How many best individuals are copied from previous generation to the new one. Note that the greater elitism is the lower new individuals are created.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <div class="">
                     <input class="form-control" type="number" min="0" max="1" step="0.01" id="elitism" v-model="params.elitism" placeholder="">
                 </div>
