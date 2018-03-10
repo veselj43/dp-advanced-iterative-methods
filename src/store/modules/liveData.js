@@ -8,6 +8,33 @@ const stateName = {
     error: "Error"
 }
 
+const dataProgressBufferedMapping = {
+    annealing: {
+        transform(data) {
+            return data;
+        },
+        getBest(actualBest, transformedData) {
+            return Math.max(actualBest, ...transformedData);
+        }
+    },
+    genetic: {
+        transform(data) {
+            return data;
+        },
+        getBest(actualBest, transformedData) {
+            return Math.max(actualBest, ...transformedData);
+        }
+    },
+    tabu: {
+        transform(data) {
+            return data.map(x => x.fitness);
+        },
+        getBest(actualBest, transformedData) {
+            return Math.max(actualBest, ...transformedData);
+        }
+    }
+}
+
 // initial state
 const state = {
     computingStatus: {
@@ -79,15 +106,11 @@ const mutations = {
         store.data.chart.values = [];
         store.data.best = 0;
     },
-    dataProgress(store, data) {
-        store.data.chart.values.push(store.data.fitness);
-        store.data.best = Math.max(store.data.best, store.data.fitness);
-    },
-    dataProgressBuffered(store, data) {
-        if (data.length === 0) return;
-        var fitnessBuffer = data.map(x => x.fitness);
-        store.data.chart.values.push(...fitnessBuffer);
-        store.data.best = Math.max(store.data.best, ...fitnessBuffer);
+    dataProgressBuffered(store, argObject) {
+        if (argObject.data.length === 0) return;
+        var transformedBuffer = dataProgressBufferedMapping[argObject.methodId].transform(argObject.data);
+        store.data.chart.values.push(...transformedBuffer);
+        store.data.best = dataProgressBufferedMapping[argObject.methodId].getBest(store.data.best, transformedBuffer);
     },
 }
 

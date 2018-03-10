@@ -49,3 +49,19 @@ export const methodParamsTitles = {
         tabuSizeShort: "Changes tabu size"
     }
 }
+
+const getters = {
+    methodEnum() {
+        return methods;
+    },
+    problemEnum() {
+        return problems;
+    },
+    methodParamsTitles() {
+        return methodParamsTitles;
+    }
+}
+
+export default {
+    getters
+}

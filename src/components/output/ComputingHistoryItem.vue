@@ -16,7 +16,7 @@
             <table class="table table-condensed">
                 <tbody>
                     <tr v-for="(param, key) in item.params" :key="key">
-                        <td>{{methodParamsTitles[activeMethod][key]}}</td>
+                        <td>{{methodParamsTitles[selectedMethodId][key]}}</td>
                         <td class="text-right"><strong>{{param}}</strong></td>
                     </tr>
                 </tbody>
@@ -46,12 +46,9 @@ export default {
             }
         },
 
-        ...mapState({
-            activeMethod: state => state.inputParams.params.method.id
-        }),
-
         ...mapGetters([
-            'methodParamsTitles'
+            'methodParamsTitles',
+            'selectedMethodId'
         ])
     },
 

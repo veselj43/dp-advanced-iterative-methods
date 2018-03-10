@@ -2,7 +2,7 @@
     <div class="paramsSelection">
         
         <keep-alive>
-            <component :is="methodKey"></component>
+            <component :is="selectedMethodId"></component>
         </keep-alive>
             
     </div>
@@ -22,9 +22,9 @@ export default {
         'Tabu': TabuParams
     },
     computed: {
-        ...mapState({
-            methodKey: (state) => state.inputParams.params.method.id
-        })
+        ...mapGetters([
+            'selectedMethodId'
+        ])
     }
 }
 </script>

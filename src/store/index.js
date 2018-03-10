@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { deps, missingFeatures, metFeatures } from './featureSupportCheck';
 import database from './modules/database/index';
+import enums from './modules/_enums';
 import inputParams from './modules/inputParams';
 import liveData from './modules/liveData';
 import outputData from './modules/outputData';
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     },
     modules: {
         database,
+        enums,
         inputParams,
         liveData,
         outputData

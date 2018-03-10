@@ -23,7 +23,8 @@ export default {
         ...mapGetters([
             'getIsValidParams',
             'getSelectedFile',
-            'computingIsRunning'
+            'computingIsRunning',
+            'selectedMethodId'
         ])
     },
     mounted () {
@@ -33,8 +34,9 @@ export default {
         this.workerManager
             .setHandler('message', this.$notifier.push)
             .setHandler('init', this.dataInit)
-            .setHandler('progress', this.dataProgress)
-            .setHandler('progressBuffered', this.dataProgressBuffered)
+            .setHandler('progressBuffered', (data) => {
+                this.dataProgressBuffered({methodId: this.selectedMethodId, data});
+            })
             .setHandler('result', this.done)
             .setHandler('error', (message, type) => {
                 this.done(null);
@@ -104,7 +106,6 @@ export default {
             'setStatusDone',
             'setStatusError',
             'dataInit',
-            'dataProgress',
             'dataProgressBuffered',
         ]),
         ...mapActions([

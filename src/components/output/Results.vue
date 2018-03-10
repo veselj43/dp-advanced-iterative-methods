@@ -62,7 +62,7 @@ export default {
         },
 
         methodResultComponent() {
-            return this.$store.state.inputParams.params.method.id;
+            return this.$store.getters.selectedMethodId;
         }
     },
 }

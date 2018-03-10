@@ -47,14 +47,8 @@ const initState = {
 
 // getters
 const getters = {
-    methodEnum () {
-        return enums.methods;
-    },
-    problemEnum () {
-        return enums.problems;
-    },
-    methodParamsTitles () {
-        return enums.methodParamsTitles;
+    selectedMethodId(state) {
+        return state.params.method.id;
     },
     getIsValidParams (state) {
         return state.params.isValid[state.params.method.id];
