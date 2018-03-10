@@ -36,12 +36,16 @@ export const methodParamsTitles = {
         equil: "Equilibrium"
     },
     genetic: {
-        crossoverType: "Crossover type",
-        elitism: "Elitism",
-        mutationRate: "Mutation rate",
+        populationSize: "Population size",
         noGenerations: "Number of generations",
-        noIndividuals: "Number of individuals",
-        selectionType: "Selection type"
+        selectionType: "Selection type",
+        tourneySize: "Tourney size",
+        scaleMin: "Min scale",
+        scaleMax: "Max scale",
+        crossoverProb: "Crossover probability",
+        crossoverType: "Crossover type",
+        mutationRate: "Mutation rate",
+        elitism: "Elitism"
     },
     tabu: {
         iterationLimit: "Iteration limit",
