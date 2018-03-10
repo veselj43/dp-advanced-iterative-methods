@@ -5,10 +5,12 @@
 
         <div v-show="methodResultActiveSection">
 
-            <component
-                :is="methodResultComponent"
-                :activeSection="methodResultActiveSection">
-            </component>
+            <!-- <keep-alive> -->
+                <component
+                    :is="methodResultComponent"
+                    :activeSection="methodResultActiveSection">
+                </component>
+            <!-- </keep-alive> -->
 
             <conf-visual></conf-visual>
 
@@ -24,7 +26,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import ConfVisual from './visualisation/Configuration';
-import Tabu from './methodResult/Tabu';
+import Tabu from './methodResult/tabu/Tabu';
 // TODO import and add to components other methods
 
 export default {

@@ -19,8 +19,8 @@ export default {
             lastActiveCount: 0,
             labels: {},
             options: {
-                minWidth: 100,
-                width: (document.getElementById('comparisonChart') ? document.getElementById('comparisonChart').offsetWidth : 800),
+                minWidth: 200,
+                width: 800,
                 height: 300,
                 margin: {
                     right: 200,
@@ -60,7 +60,6 @@ export default {
 
             if (dataSets.length === 0) return [];
 
-            var mergedDatasets = [];
             var data = dataSets[i].data;
             var id = dataSets[i].itemId;
 
@@ -72,7 +71,7 @@ export default {
             var multipleLineChart = this.multipleLineChart;
             var chartOptions = this.options;
 
-            this.ndx = crossfilter(this.processData(0));
+            this.ndx = crossfilter([]);
 
             var runDimension = this.ndx.dimension(d => [+d.dataset, +d.index]);
             var runGroup = runDimension.group().reduceSum(d => +d.value);

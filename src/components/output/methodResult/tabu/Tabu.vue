@@ -1,5 +1,6 @@
 <template>
     <div class="methodResult">
+
         <div v-show="activeSection === 'live'">
 
             <live-chart></live-chart>
@@ -39,12 +40,13 @@
             </table>
 
         </div>
+        
     </div>
 </template>
 
 <script>
-import LiveChart from '../visualisation/LiveChart';
-import ComparisonChart from '../visualisation/ComparisonChart';
+import LiveChart from './LiveChart';
+import ComparisonChart from './ComparisonChart';
 
 export default {
     props: {
