@@ -1,7 +1,7 @@
 import Result from '../../_common/Result';
 import BufferedReply from "../../_common/BufferedReply";
 import {TourneySelection} from "./Selection";
-import {UniformCrossover} from "./Crossover";
+import {OnePointCrossover, TwoPointCrossover, UniformCrossover} from "./Crossover";
 
 
 export class GeneticSolver {
@@ -86,7 +86,7 @@ export class GeneticSolver {
             this.problem.evaluateIndividual(generation[i]);
         }
         generation.sort(function(a, b){return a.getFitness() - b.getFitness()});
-        console.log(generation[0].getFitness() + " " + generation[generation.length-1]);
+        console.log('gen: ' +  generation[0].getFitness() + ' ' + generation[generation.length-1].getFitness());
         //update best solution
         if (this.bestFitness < generation[generation.length-1].getFitness()) {
             this.bestFitness = generation[generation.length-1].getFitness();
