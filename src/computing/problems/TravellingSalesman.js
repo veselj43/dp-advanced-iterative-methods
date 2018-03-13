@@ -48,7 +48,7 @@ export class TravellingSalesman {
     }
 
     /**
-     * Floyd warshall algorithm to calculate n:n distances between nodes(vertexes), saves it to _distanceArray
+     * Floyd warshall algorithm to calculate n:n distances between nodes(vertexes), saves it to _distanceArray, _pathArray for path reconstruction
      * @return {null}
      */
     _floydWarshall() {
@@ -66,29 +66,39 @@ export class TravellingSalesman {
             }
         }
     }
+
     /**
-     * Rebuild the current path using _pathArray
-     * @param  {class} permutationConfig Permutation of which path we are building
-     * @return {String} return the calculated path
+     * Binds the permutaion from Permutation configuration, to the actual nodes to visit
+     * @param  {[type]} permutationConfig [description]
+     * @return {[type]}                   [description]
      */
-    rebuildPath(permutationConfig) {
-        var path = this._startingNode;
+    _bindToNodes(permutationConfig) {
         var myPermutation = permutationConfig.map(x=>x);
 
-        //binding permutation to actual nodes to visit
         for(var i = 0; i < this._noNodesToVisit; i++)
         {
             myPermutation[i] = this._nodesToVisit[myPermutation[i]];
         }
 
-        myPermutation.unshift(this._startingNode);
+        return myPermutation;
+    }
+    /**
+     * Rebuild the current path using _pathArray
+     * @param  {class} permutationConfig Permutation of which path we are building
+     * @return {String} return the rebuilded path
+     */
+    rebuildPath(permutationConfig) {
+        var path = this._startingNode;
+        var permutation = this._bindToNodes(permutationConfig);
 
-        for(var i = 1; i < myPermutation.length; i++)
+        permutation.unshift(this._startingNode);
+
+        for(var i = 1; i < permutation.length; i++)
         {
-            while(myPermutation[i-1] != myPermutation[i])
+            while(permutation[i-1] != permutation[i])
             {
-                myPermutation[i-1] = this._pathArray[myPermutation[i-1]][myPermutation[i]];
-                path += "-" + myPermutation[i-1];
+                permutation[i-1] = this._pathArray[permutation[i-1]][permutation[i]];
+                path += "-" + permutation[i-1];
             }
         }
 
@@ -102,13 +112,7 @@ export class TravellingSalesman {
      */
     getFitness(permutationConfig) {
         var price = 0;
-        var permutation = permutationConfig.getArray().map(x=>x);
-
-        //binding permutation to actual nodes to visit
-        for(var i = 0; i < this._noNodesToVisit; i++)
-        {
-            permutation[i] = this._nodesToVisit[permutation[i]];
-        }
+        var permutation = this._bindToNodes(permutationConfig.getArray());
 
         permutation.unshift(this._startingNode);
 

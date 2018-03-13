@@ -7,13 +7,13 @@
 
                 <div class="form-group">
                     <label for="genParam1">Number of clausules</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p1'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of clausules in the generated instance'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam1" v-model="generatorParams[0].noClausules" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="genParam2">Number of variables</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of variables in the generated instance'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[0].noVariables" placeholder="">
                 </div>
 
@@ -23,25 +23,25 @@
 
                 <div class="form-group">
                     <label for="genParam1">Number of nodes</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p1'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of vertexes(nodes) in the generated problem'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam1" v-model="generatorParams[1].noNodes" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="genParam2">Number of edges</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of edges, the actual number is 2 times this value, because the edges are not oriented'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].noEdges" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="genParam2">Number of nodes to visit</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of the nodes, that the salesman has to visit, must be max number of nodes -1'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].noNodesToVisit" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="genParam2">Maximum price of an edge</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Maximum price of each edge'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].maxPrice" placeholder="">
                 </div>
 
@@ -51,31 +51,31 @@
 
                 <div class="form-group">
                     <label for="genParam1">Capacity</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p1'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Capacity of the knapsack, should be lower than sum of weights'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam1" v-model="generatorParams[2].capacity" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="genParam2">Number of items</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of items in the instance'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[2].noItems" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="genParam2">Sum of items weights</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Sum of the weights of all items'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam3" v-model="generatorParams[2].sumOfWeights" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="genParam2">Max value</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Maximum value of each item'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam4" v-model="generatorParams[2].maxValue" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="genParam2">Granularity</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'For number > 0 the instance will contain more heavier things, for < 0 more lighter things. Each item has 1/(maxWeight - weight)^granularity chance to be in the instance for heavier things and 1/weight^(-granularity) for lighter things. WARNING!!! for realy high numbers(or really low for lighter things) the generation take a lot of time because most things will be thrown away. So for best result use number between <-1, 1>. For 0 the generating is random.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam5" v-model="generatorParams[2].granularity" placeholder="">
                 </div>
 
@@ -85,7 +85,7 @@
 
                 <div class="form-group">
                     <label for="genParam1">Number of nodes</label>
-                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p1'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of nodes in the generated graph.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam1" v-model="generatorParams[3].size" placeholder="">
                 </div>
 
