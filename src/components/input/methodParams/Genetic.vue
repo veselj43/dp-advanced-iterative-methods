@@ -68,9 +68,9 @@
                 <!--TODO stukturovany tooltip do vice radku-->
                 <span class="form-tooltip" v-tooltip.right="'Crossover type tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="crossover-type" v-model="params.crossoverType">
-                    <option value="1">one-point</option>
-                    <option value="2">two-point</option>
-                    <option value="3">uniform</option>
+                    <option value="one-point">one-point</option>
+                    <option value="two-point">two-point</option>
+                    <option value="uniform">uniform</option>
                 </select>
             </div>
         </div>

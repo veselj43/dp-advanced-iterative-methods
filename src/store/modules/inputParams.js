@@ -15,12 +15,12 @@ const initState = {
             genetic: {
                 populationSize: 20,
                 noGenerations: 100,
-                selectionType: "roulette",
+                selectionType: "tourney",
                 tourneySize: 3,
                 scaleMin: 0,
                 scaleMax: 100,
                 crossoverProb: 0.8,
-                crossoverType: 1,
+                crossoverType: "uniform",
                 mutationRate: 0.08,
                 elitism: 1
             },

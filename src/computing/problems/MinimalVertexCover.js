@@ -1,13 +1,15 @@
 import { BitArray } from "./configurationTypes/BitArray";
+import {Problem} from "./Problem";
 /**
  * Minimal vertex cover problem class, used for minimal vertex cover problem solving, works with BitArray configuration
  */
-export class MinimalVertexCover {
+export class MinimalVertexCover extends Problem {
     /**
      * Constructor, construct the class from the data file selected
      * @param {string} data instance of a problem coded as string
      */
     constructor(data) {
+        super();
         data = data.split(/\s+/);
 
         this._size = +data[0];

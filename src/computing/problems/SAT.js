@@ -1,4 +1,5 @@
 import { BitArray } from "./configurationTypes/BitArray";
+import {Problem} from "./Problem";
 
 // common SAT input
 export class Literal {
@@ -32,8 +33,9 @@ export class Clausule {
     }
 }
 
-export class SAT {
+export class SAT extends Problem {
     constructor(data) {
+        super();
         this._clausules = [];
         var dataSet = data
             .split('\n')

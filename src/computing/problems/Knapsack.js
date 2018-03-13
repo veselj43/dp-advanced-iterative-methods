@@ -1,13 +1,15 @@
 import { BitArray } from "./configurationTypes/BitArray";
+import {Problem} from "./Problem";
 /**
  * Knapsack problem class, used for knapsack problem solving, works with BitArray configuration
  */
-export class Knapsack {
+export class Knapsack extends Problem {
     /**
      * Constructor, construct the class from the data file selected
      * @param {string} data instance of a problem coded as string
      */
     constructor(data) {
+        super();
         this._items = [];
         this._capacity;
 

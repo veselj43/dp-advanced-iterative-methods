@@ -4,7 +4,7 @@ import * as Knapsack from './problems/Knapsack';
 import * as Vertex from './problems/MinimalVertexCover';
 import * as Salesman from './problems/TravellingSalesman';
 import * as Tabu from './methods/Tabu';
-import * as Genetic from './methods/Genetic';
+import * as Genetic from './methods/genetic/Genetic';
 import * as Annealing from './methods/Annealing';
 
 var methods = {
