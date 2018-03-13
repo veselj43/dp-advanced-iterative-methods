@@ -40,15 +40,14 @@ export class AnnealingSolver{
                       currentConfiguration = currentNeighbour;
                   }
               }
-
               currentNeighbour = currentConfiguration.getNeighbour();
               counter++;
           }
-          currentTemp *= params.cool_coef;
+          currentTemp *= +params.cool_coef;
           this._bufferedReply.addMessageWithAutoFlush({ fitness: problem.getFitness(currentConfiguration) });
       }
       this._bufferedReply.addMessage({ fitness: problem.getFitness(currentConfiguration) }).flush();
-      return new Result(currentConfiguration.getBitArray(), problem.getFitness(currentConfiguration), counter);
+      return new Result(problem.getResult(currentConfiguration), problem.getFitness(currentConfiguration), counter);
   }
   /**
    * Function to compute starting temperature

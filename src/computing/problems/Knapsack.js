@@ -58,4 +58,13 @@ export class Knapsack {
             random: random
         });
     }
+
+    /**
+     * Returns the result of the config, in this case the config array
+     * @param  {class} bitArrayConfig the configuration of which result we want
+     * @return {Array} the bit array of the configuration
+     */
+    getResult(bitArrayConfig) {
+        return bitArrayConfig.getBitArray();
+    }
 }

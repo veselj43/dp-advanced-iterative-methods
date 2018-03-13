@@ -9,6 +9,11 @@ export class KnapsackGenerator {
      */
   constructor (params) {
     this.params = params;
+    this.params.noItems = +this.params.noItems;
+    this.params.capacity = +this.params.capacity;
+    this.params.maxValue = +this.params.maxValue;
+    this.params.sumOfWeights = +this.params.sumOfWeights;
+    this.params.granularity = +this.params.granularity;
   }
   /**
    * Generate instance based on parameters
@@ -48,11 +53,11 @@ export class KnapsackGenerator {
         (this.params.granularity > 0 && Math.random() < 1/Math.pow(this.params.sumOfWeights - generatedWeight, this.params.granularity)) ||
         (this.params.granularity < 0 && Math.random() < 1/Math.pow(generatedWeight, -this.params.granularity))) {
             myArray.push(generatedWeight);
-            currentWeight += myArray[i];
+            currentWeight += myArray[myArray.length - 1];
         }
     }
 
-    for(i = 0; i < this.params.noItems; i++)
+    for(var i = 0; i < this.params.noItems; i++)
     {
       myArray[i] = Math.round(myArray[i] / (currentWeight/this.params.sumOfWeights));
       newWeight += myArray[i];

@@ -33,6 +33,18 @@
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].noEdges" placeholder="">
                 </div>
 
+                <div class="form-group">
+                    <label for="genParam2">Number of nodes to visit</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].noNodesToVisit" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label for="genParam2">Maximum price of an edge</label>
+                    <span class="form-tooltip" v-tooltip.right="'Tooltip text p2'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].maxPrice" placeholder="">
+                </div>
+
             </div>
 
             <div v-if="problemKey === 2">
@@ -116,7 +128,9 @@ export default {
                 },
                 1: {
                     noNodes: 5,
-                    noEdges: 6
+                    noEdges: 6,
+                    noNodesToVisit: 2,
+                    maxPrice: 10
                 },
                 2: {
                     capacity: 100,

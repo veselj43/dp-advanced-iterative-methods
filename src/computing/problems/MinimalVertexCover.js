@@ -1,8 +1,12 @@
 import { BitArray } from "./configurationTypes/BitArray";
 /**
- * Knapsack problem class, used for minimal vertex cover problem solving, works with BitArray configuration
+ * Minimal vertex cover problem class, used for minimal vertex cover problem solving, works with BitArray configuration
  */
 export class MinimalVertexCover {
+    /**
+     * Constructor, construct the class from the data file selected
+     * @param {string} data instance of a problem coded as string
+     */
     constructor(data) {
         data = data.split(/\s+/);
 
@@ -29,6 +33,8 @@ export class MinimalVertexCover {
      * @return {int}  calculated fitness of the configuration
      */
     getFitness(bitArrayConfig) {
+        if (bitArrayConfig === null) return -1;
+
         var coveredArray = new Array(bitArrayConfig.getSize()).fill(0);
         const bitArray = bitArrayConfig.getBitArray();
         var numberOfCovered = 0;
@@ -61,5 +67,14 @@ export class MinimalVertexCover {
             size: this._size,
             random: random
         });
+    }
+
+    /**
+     * Returns the result of the config, in this case the config array
+     * @param  {class} bitArrayConfig the configuration of which result we want
+     * @return {Array} the bit array of the configuration
+     */
+    getResult(bitArrayConfig) {
+        return bitArrayConfig.getBitArray();
     }
 }

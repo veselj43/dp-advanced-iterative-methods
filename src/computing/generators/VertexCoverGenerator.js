@@ -9,6 +9,7 @@ export class VertexCoverGenerator {
      */
     constructor (params) {
       this.params = params;
+      this.params.size = +this.params.size;
     }
 
     /**
@@ -42,7 +43,6 @@ export class VertexCoverGenerator {
             }
             generatedInstance += "\n";
         }
-        console.log(generatedInstance);
         return generatedInstance;
     }
 }

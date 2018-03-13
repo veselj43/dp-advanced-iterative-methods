@@ -1,6 +1,8 @@
 export class SATGenerator {
   constructor (params) {
     this.params = params;
+    this.params.noVariables = +this.params.noVariables;
+    this.params.noClausules = +this.params.noClausules;
   }
 
   generate () {

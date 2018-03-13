@@ -1,6 +1,7 @@
 import { WorkerInterface } from './WorkerInterface.js';
 import Resource from '@/services/resource';
 import * as KnapGen from './generators/KnapsackGenerator';
+import * as SalesmanGen from './generators/TravellingSalesmanGenerator';
 import * as SATGen from './generators/SATGenerator';
 import * as CoverGen from './generators/VertexCoverGenerator';
 
@@ -25,6 +26,11 @@ class Job {
         if(this.problemKey === 0){
           var satGenerator = new SATGen.SATGenerator(this.params[0]);
           return satGenerator.generate();
+        }
+
+        else if (this.problemKey === 1) {
+          var salesmanGenerator = new SalesmanGen.TravellingSalesmanGenerator(this.params[1]);
+          return salesmanGenerator.generate();
         }
 
         else if (this.problemKey === 2) {
