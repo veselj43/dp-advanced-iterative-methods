@@ -15,6 +15,7 @@
         <div class="history-list-item-text collapsable" v-bind:class="{'collapsed': !isOpen}">
             <table class="table table-condensed">
                 <tbody>
+                    <!--TODO hide unused genetic algorithm params-->
                     <tr v-for="(param, key) in item.params" :key="key">
                         <td>{{methodParamsTitles[selectedMethodId][key]}}</td>
                         <td class="text-right"><strong>{{param}}</strong></td>
