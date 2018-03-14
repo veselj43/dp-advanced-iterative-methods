@@ -37,3 +37,35 @@ export class TourneySelection {
         return generation[getRandomInt(0, generation.length)];
     }
 }
+
+export class RouletteSelection {
+    constructor(min, max) {
+        //TODO
+    }
+    selectIndividuals(generation, number) {
+        var rankSum = this._rankIndividuals(generation);
+        var selected = [];
+        while (selected.length < number) {
+            selected.push(this._rouletteSelect(generation, rankSum))
+        }
+        return selected;
+    }
+    _rouletteSelect(generation, rankSum) {
+        var roulette = getRandomInt(0, rankSum);
+        //generation is sorted by fitness best individual is the last one
+        var i = generation.length;
+        do {
+            i--;
+            roulette -= generation[i].getRank();
+        } while (roulette >= 0/* && i > 0*/); //i > 0 just for precision errors
+        return generation[i];
+    }
+    _rankIndividuals(generation) {
+        var rankSum = 0;
+        for (var i = 0; i < generation.length; i++) {
+            generation[i].setRank(i+1);
+            rankSum += i+1;
+        }
+        return rankSum;
+    }
+}

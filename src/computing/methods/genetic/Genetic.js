@@ -1,6 +1,6 @@
 import Result from '../../_common/Result';
 import BufferedReply from "../../_common/BufferedReply";
-import {TourneySelection} from "./Selection";
+import {RouletteSelection, TourneySelection} from "./Selection";
 import {OnePointCrossover, TwoPointCrossover, UniformCrossover} from "./Crossover";
 
 
@@ -82,11 +82,14 @@ export class GeneticSolver {
         // generation.forEach(function(individual){
         //     this.problem.evaluateIndividual(individual);
         // });
+        var average = 0;
         for (var i = 0; i < generation.length; i++) {
             this.problem.evaluateIndividual(generation[i]);
+            average += generation[i].getFitness();
         }
+        average = average/generation.length;
         generation.sort(function(a, b){return a.getFitness() - b.getFitness()});
-        console.log('gen: ' +  generation[0].getFitness() + ' ' + generation[generation.length-1].getFitness());
+        console.log('worst: ' +  generation[0].getFitness() + ' average: ' + average + " mean: " + generation[Math.floor(generation.length/2)].getFitness() + " best: " + generation[generation.length-1].getFitness());
         //update best solution
         if (this.bestFitness < generation[generation.length-1].getFitness()) {
             this.bestFitness = generation[generation.length-1].getFitness();

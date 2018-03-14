@@ -1,6 +1,7 @@
 export class Individual {
     constructor() {
         this._fitness = null;
+        this._rank = null;
         if (this.constructor === Individual) {
             throw new TypeError('Abstract class "Individual" cannot be instantiated directly.');
         }
@@ -13,6 +14,12 @@ export class Individual {
     }
     setFitness(fitness) {
         this._fitness = fitness;
+    }
+    getRank() {
+        return this._rank;
+    }
+    setRank(rank) {
+        this._rank = rank;
     }
     // getGenotype() {
     //     //abstract
