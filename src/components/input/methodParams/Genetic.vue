@@ -24,20 +24,23 @@
                 <!--TODO stukturovany tooltip do vice radku-->
                 <span class="form-tooltip" v-tooltip.right="'Selection type tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="selection-type" v-model="params.selectionType"> <!--v-on:change="selectionChange(this)"-->
-                    <option value="roulette">Roulette</option>
+                    <option value="roulette-rank">Roulette with ranking</option>
+                    <option value="roulette-linear">Roulette with linear scaling</option>
                     <option value="tourney">Tourney</option>
                 </select>
             </div>
 
-            <div class="form-group" id="roulette" v-if="params.selectionType === 'roulette'">
-                <label class="">Linear scaling</label>
-                <span class="form-tooltip" v-tooltip.right="'Linear scaling tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                <!--TODO min a max do jednoho radku/nahradit sliderem-->
+            <div class="form-group" id="roulette" v-if="params.selectionType === 'roulette-rank' || params.selectionType === 'roulette-linear'">
+                <!--<div v-if="params.selectionType === 'roulette-linear'">-->
+                <!--<label class="">Linear scaling</label>-->
+                <!--<span class="form-tooltip" v-tooltip.right="'Linear scaling tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>-->
+                <!--</div>-->
+                    <!--TODO min a max do jednoho radku/nahradit sliderem-->
                 <div class="">
-                    <label class="" for="scale-min">Min</label>
+                    <label class="" for="scale-min">Min scale</label>
                     <input class="form-control" type="number" id="scale-min" v-model="params.scaleMin">
-                    <label class="" for="scale-max">Max</label>
-                    <input class="form-control" type="number" id="scale-max" v-model="params.scaleMax">
+                    <label class="" for="scale-max" v-if="params.selectionType === 'roulette-linear'">Max scale</label>
+                    <input class="form-control" v-if="params.selectionType === 'roulette-linear'" type="number" id="scale-max" v-model="params.scaleMax">
                 </div>
             </div>
 

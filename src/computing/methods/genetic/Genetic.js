@@ -18,8 +18,11 @@ export class GeneticSolver {
         const populationSize = params.populationSize;
         const noGenerations = params.noGenerations;
         switch (params.selectionType) {
-            case "roulette":
-                this.selection = new RouletteSelection(params.scaleMin, params.scaleMax);
+            case "roulette-rank":
+                this.selection = new RouletteSelection("rank", params.scaleMin);
+                break;
+            case "roulette-linear":
+                this.selection = new RouletteSelection("linear", params.scaleMin, params.scaleMax);
                 break;
             case "tourney":
                 this.selection = new TourneySelection(params.tourneySize);

@@ -39,17 +39,31 @@ export class TourneySelection {
 }
 
 export class RouletteSelection {
-    constructor(min, max) {
-        //TODO
+    constructor(scale, min, max) {
+        this.scale = scale;
+        this.min = min;
+        this.max = max;
     }
+
     selectIndividuals(generation, number) {
-        var rankSum = this._rankIndividuals(generation);
+        var rankSum
+        switch (this.scale) {
+            case "rank":
+                rankSum = this._rankIndividuals(generation);
+                break;
+            case "linear":
+                rankSum = this._scaleIndividuals(generation);
+                break;
+            default:
+                throw new Error("Selection type " + this.scale + " is not supported.");
+        }
         var selected = [];
         while (selected.length < number) {
             selected.push(this._rouletteSelect(generation, rankSum))
         }
         return selected;
     }
+
     _rouletteSelect(generation, rankSum) {
         var roulette = getRandomInt(0, rankSum);
         //generation is sorted by fitness best individual is the last one
@@ -60,11 +74,25 @@ export class RouletteSelection {
         } while (roulette >= 0/* && i > 0*/); //i > 0 just for precision errors
         return generation[i];
     }
+
     _rankIndividuals(generation) {
         var rankSum = 0;
         for (var i = 0; i < generation.length; i++) {
-            generation[i].setRank(i+1);
-            rankSum += i+1;
+            var rank = this.min + i;
+            generation[i].setRank(rank);
+            rankSum += rank;
+        }
+        return rankSum;
+    }
+
+    _scaleIndividuals(generation) {
+        var fitMax = generation[generation.length-1].getFitness();
+        var fitMin = generation[0].getFitness();
+        var rankSum = 0;
+        for (var i = 0; i < generation.length; i++) {
+            var scaledRank = this.min + (generation[1].getFitness() - fitMin)*((this.max - this.min)/(fitMax - fitMin));
+            generation[i].setRank(scaledRank);
+            rankSum += scaledRank;
         }
         return rankSum;
     }

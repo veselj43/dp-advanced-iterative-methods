@@ -17,7 +17,7 @@ const initState = {
                 noGenerations: 100,
                 selectionType: "tourney",
                 tourneySize: 3,
-                scaleMin: 0,
+                scaleMin: 1,
                 scaleMax: 100,
                 crossoverProb: 0.8,
                 crossoverType: "uniform",
