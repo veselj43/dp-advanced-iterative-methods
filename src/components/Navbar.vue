@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar-default top-panel">
         <ul class="nav nav-pills nav-justified">
-            <li v-for="(method, index) in methodEnum" :key="index" v-on:click="selectMethod(index)" v-bind:class="{ active: selectedMethod.id === method.id }">
+            <li v-for="(method, index) in methodEnum" :key="index" v-on:click="selectMethod(index)" v-bind:class="{ active: selectedMethodId === method.id }">
                 <a>{{method.text}}</a>
             </li>
         </ul>
@@ -13,11 +13,9 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
     computed: {
-        ...mapState({
-            selectedMethod: state => state.inputParams.params.method
-        }),
         ...mapGetters([
-            'methodEnum'
+            'methodEnum',
+            'selectedMethodId'
         ])
     },
     methods: {
