@@ -10,6 +10,11 @@ export class TabuSolver {
         this._bufferedReply = new BufferedReply(this._workerInterface, 'progressBuffered', 75);
     }
 
+    _getCost(state) {
+        if (state === null) return -Infinity;
+        return this.problem.getFitness(state);
+    }
+
     _compareIndexesOf(queue, c1, c2) {
         for (var i in queue) {
             if (queue[i].equals(c1)) return 1;
@@ -23,32 +28,39 @@ export class TabuSolver {
     }
 
     _process(iterationLimit, tabuSize, tabuSizeShort) {
-        var state = this.problem.getConfiguration();
-        var sBest = state;
+        var state = this.problem.getConfiguration();    // initial state
+        var sBest = state;                              // initial best found state
         var tabuStates = [];            // Queue
         var tabuStatesSearch = [];      // HashSet
         var tabuChanges = [];           // List
 
+        // tabu iterations
         for (var n = 0; n < iterationLimit; n++) {
-            this._bufferedReply.addMessageWithAutoFlush({ fitness: this.problem.getFitness(state) });
+            this._bufferedReply.addMessageWithAutoFlush(this._getCost(state));
 
+            // init for this loop
             var bestCandidate = null;
             var tabuBestCandidate = null;
             var bestCandidateIndex = -1;
             var tabuBestCandidateIndex = -1;
 
+            // checking neighbours
             for (var i = 0; i < state.getSize(); i++) {
                 this.counter++;
 
                 var sCandidate = state.getNeighbour(i);
 
-                if (tabuChanges.indexOf(i) !== -1 && this.problem.getFitness(sCandidate) < this.problem.getFitness(sBest)) continue;
+                // check change for tabu and if it is tabu, check if we dont miss the best found state
+                if (tabuChanges.indexOf(i) !== -1 && this._getCost(sCandidate) < this._getCost(sBest)) continue;
 
-                if (this.problem.getFitness(sCandidate) >= this.problem.getFitness(bestCandidate)) {
+                // is current candidate better than best candidate in this step?
+                if (this._getCost(sCandidate) >= this._getCost(bestCandidate)) {
+                    // is current candidate tabu?
                     if (!this._containsSearch(tabuStatesSearch, sCandidate)) {
                         bestCandidate = sCandidate;
                         bestCandidateIndex = i;
                     }
+                    // if it is, remember the least tabu candidate
                     else if (this._compareIndexesOf(tabuStates, sCandidate, tabuBestCandidate) > 0) {
                         tabuBestCandidate = sCandidate;
                         tabuBestCandidateIndex = i;
@@ -56,25 +68,31 @@ export class TabuSolver {
                 }
             }
 
-            if (bestCandidate === null) {
-                if (tabuBestCandidate === null) {
+            // all candidates are tabu
+            if (bestCandidateIndex === -1) {
+                // there are non even tabu candidates, we have nowhere to go
+                if (tabuBestCandidateIndex === -1) {
                     console.log("-- no candidates --");
                     break;
                 }
                 state = tabuBestCandidate;
                 bestCandidateIndex = tabuBestCandidateIndex;
             }
+            // normal situation, not tabu state
             else {
                 state = bestCandidate;
             }
-            if (this.problem.getFitness(state) > this.problem.getFitness(sBest)) {
+            // keep best state found up to date
+            if (this._getCost(state) > this._getCost(sBest)) {
                 sBest = state;
             }
 
+            // update tabu lists
             tabuStates.push(state);
             tabuStatesSearch[state.toString()] = true;
             tabuChanges.push(bestCandidateIndex);
 
+            // remove oldest from tabu if its full
             if (tabuStates.length > tabuSize) {
                 delete tabuStatesSearch[tabuStates.shift().toString()];
             }
@@ -83,7 +101,7 @@ export class TabuSolver {
             }
         }
         // added flush to send remaining progress data before terminating
-        this._bufferedReply.addMessage({ fitness: this.problem.getFitness(state) }).flush();
+        this._bufferedReply.addMessage(this._getCost(state)).flush();
 
         return sBest;
     }
@@ -102,6 +120,6 @@ export class TabuSolver {
         var best = this._process(iterationLimit, tabuSize, tabuSizeShort);
 
         // return Result class managing data format
-        return new Result(best.getBitArray(), this.problem.getFitness(best), this.counter);
+        return new Result(problem.getResult(best), this._getCost(best), this.counter);
     }
 }

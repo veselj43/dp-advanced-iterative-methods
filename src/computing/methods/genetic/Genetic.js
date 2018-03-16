@@ -69,6 +69,9 @@ export class GeneticSolver {
             this.counter++;
         }
 
+        // make sure all messages in buffer are sent (if there are some in buffer, it will send them)
+        this._bufferedReply.flush();
+
         return new Result(this.result, this.bestFitness, this.counter);
     }
 

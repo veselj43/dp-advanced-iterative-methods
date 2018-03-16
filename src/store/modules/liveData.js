@@ -27,7 +27,7 @@ const dataProgressBufferedMapping = {
     },
     tabu: {
         transform(data) {
-            return data.map(x => x.fitness);
+            return data;
         },
         getBest(actualBest, transformedData) {
             return Math.max(actualBest, ...transformedData);

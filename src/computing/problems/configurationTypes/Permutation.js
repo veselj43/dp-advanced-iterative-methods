@@ -103,7 +103,7 @@ export class Permutation {
     }
     /**
      * Returns the type of the configuration, needed for specific method functions(like mutation for example)
-     * @return {[type]} [description]
+     * @return {string} [description]
      */
     getType() {
         return 'permutation';
@@ -125,9 +125,9 @@ export class Permutation {
      * @return {bool} equals or not
      */
     equals(other) {
-        if (other == null) return false;
+        if (!other) return false; // checks for null, undefined, empty, etc.
         for (var i = 0; i < this._Array.length; i++)
-            if (this._Array[i] != other._Array[i]) return false;
+            if (this._Array[i] !== other._Array[i]) return false;
         return true;
     }
 }

@@ -9,10 +9,6 @@ var d3 = dc.d3;
 var crossfilter = dc.crossfilter;
 
 export default {
-    props: {
-        width: Number
-    },
-
     data() {
         return {
             comparingResults: this.$store.state.outputData.comparingResults,
@@ -39,7 +35,8 @@ export default {
 
     methods: {
         updateElementWidth() {
-            var actualWidth = document.getElementById('comparisonChart').offsetWidth;
+            // it has to be an already rendered container to resize properly
+            var actualWidth = document.getElementById('chartBaseContainer').offsetWidth;
             if (actualWidth > 0) {
                 this.options.width = Math.max(this.options.minWidth + this.options.margin.right, actualWidth);
             }
