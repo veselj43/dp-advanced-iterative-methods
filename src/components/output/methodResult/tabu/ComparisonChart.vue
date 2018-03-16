@@ -52,13 +52,17 @@ export default {
             this.multipleLineChart.redraw();
         },
 
-        processData(i) {
+        processData(i, checkDuplicates) {
             var dataSets = this.comparingResults.chart.dataSets;
 
             if (dataSets.length === 0) return [];
 
             var data = dataSets[i].data;
             var id = dataSets[i].itemId;
+
+            if (checkDuplicates && this.labels[id]) {
+                return [];
+            }
 
             return data.map((value, j) => ({dataset: id, index: j, value: value}));
         },
@@ -112,20 +116,21 @@ export default {
             var remove = (this.lastActiveCount && this.lastActiveCount > newActiveCount);
 
             // dataset replaced with just computed files and the length is the same
-            remove = remove || ((
-                this.lastActiveCount === 1 && newActiveCount === 1) && 
+            remove = remove || (
+                (this.lastActiveCount === 1 && newActiveCount === 1) && 
                 (Object.keys(newValue)[0] !== Object.keys(oldValue)[0])
             );
-
-            for (var key in newValue) {
-                this.labels[key] = newValue[key].instance;
-            }
 
             if (remove) {
                 this.ndx.remove();
             }
-            for (var i = (remove) ? 0 : this.lastActiveCount; i < newActiveCount; i++) {
-                this.ndx.add(this.processData(i));
+            for (var i = 0; i < newActiveCount; i++) {
+                this.ndx.add(this.processData(i, !remove));
+            }
+
+            this.labels = {};
+            for (var key in newValue) {
+                this.labels[key] = newValue[key].instance;
             }
 
             this.lastActiveCount = newActiveCount;

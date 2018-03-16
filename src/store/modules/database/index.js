@@ -1,5 +1,6 @@
 import __extend from 'lodash/extend';
-import Resource from '@/services/resource';
+import { storage, storageKeys, storageUtils } from '@/services/localStorage'
+import resource from '@/services/resource';
 import * as DBSchema from './DBSchema';
 import DBManager from './DBManager';
 
@@ -27,12 +28,14 @@ const actions = {
         dispatch('loadInstances');
     },
 
-    loadComputingHistory ({ getters, commit }) {
+    loadComputingHistory({ getters, commit }, pushOnly) {
         var params = getters.getInputData;
         var table = getTableNameByMethod(params);
+        var selectedIndexes = JSON.parse(storage.get(storageUtils.getSelectedIndexesByTypeKey())) || [0];
+        if (pushOnly) selectedIndexes = [0]; // show just computed result
         return dbm.getAll(table, "by_problem", params.problem).then(function(data) {
             commit('updateComputingHistory', data);
-            commit('initComparingResults', true);
+            commit('initComparingResults', selectedIndexes);
             return true;
         }, function (err) {
             console.log(err);
@@ -52,7 +55,7 @@ const actions = {
         var table = getTableNameByMethod(objForDB);
         return dbm.getStore(table, DBSchema.mode.RW).then(function(store) {
             return store.add(objForDB).then(function(data) {
-                return dispatch('loadComputingHistory');
+                return dispatch('loadComputingHistory', true);
             });
         });
     },
@@ -78,7 +81,7 @@ const actions = {
             }
             else {
                 exampleInstanceAdded = true;
-                return Resource.getExampleInstance().then(function(data) {
+                return resource.getExampleInstance().then(function(data) {
                     var instanceDbObj = {
                         problem: 0,
                         type: 'string',

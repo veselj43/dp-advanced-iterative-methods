@@ -1,16 +1,11 @@
-import storage from '@/services/localStorage'
+import { storage, storageKeys } from '@/services/localStorage'
 import * as enums from './_enums'
-
-const storageKeysEnum = {
-    method: "activeMethod",
-    problem: "activeProblem"
-}
 
 // initial state
 const initState = {
     params: {
-        method: enums.methods[storage.get(storageKeysEnum.method) || 2],
-        problem: enums.problems[storage.get(storageKeysEnum.problem) || 0],
+        method: enums.methods[storage.get(storageKeys.method) || 0],
+        problem: enums.problems[storage.get(storageKeys.problem) || 0],
         methodParams: {
             annealing: {
                 start_temp: 100,
@@ -79,13 +74,13 @@ const mutations = {
     selectMethod (state, index) {
         if (enums.methods[index]) {
             state.params.method = enums.methods[index];
-            storage.set(storageKeysEnum.method, index);
+            storage.set(storageKeys.method, index);
         }
     },
     selectProblem (state, index) {
         if (enums.problems[index]) {
             state.params.problem = enums.problems[index];
-            storage.set(storageKeysEnum.problem, index);
+            storage.set(storageKeys.problem, index);
         }
     },
     updateParams (state, payload) {

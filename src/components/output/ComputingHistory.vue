@@ -54,7 +54,7 @@ export default {
             }
         },
         ...mapState({
-            computingHistory: (state) => state.outputData.computingHistory.reverse()
+            computingHistory: (state) => state.outputData.computingHistory
         }),
         ...mapGetters([
             'methodEnum',
@@ -65,10 +65,6 @@ export default {
         this.$store.dispatch('loadComputingHistory');
     },
     methods: {
-        deselectAll() {
-            this.$store.commit('initComparingResults');
-        },
-
         confirm() {
             this.clearComputingHistory();
             this.$refs.clearComputingHistoryConfirm.close();

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { storage, storageKeys, storageUtils } from '@/services/localStorage'
 
 function GeneratedInfo(index, params) {
     this.index = index;
@@ -12,6 +13,7 @@ function GeneratedDataSet(historyRecord) {
 
 function updateComparingResultsComputedValues(comparingResults) {
     comparingResults.info.activeCount = comparingResults.chart.dataSets.length;
+    storage.set(storageUtils.getSelectedIndexesByTypeKey(), JSON.stringify(comparingResults.info.selectedIndexes));
 }
 
 // initial state
@@ -23,7 +25,8 @@ const state = {
         },
         info: {
             activeCount: 0,
-            items: {}
+            items: {},
+            selectedIndexes: []
         }
     }
 }
@@ -41,28 +44,31 @@ const getters = {
 // mutations
 const mutations = {
     updateComputingHistory(state, data) {
-        state.computingHistory = data;
+        state.computingHistory = data.reverse();
     },
 
-    initComparingResults(state, fromDB) {
-        var index = (fromDB) ? state.computingHistory.length - 1 : 0;
-        var toAdd = state.computingHistory[index];
-
-        state.comparingResults.info.items = {};
+    initComparingResults(state, indexesToActivate) {
+        // reset comparingResults state
         state.comparingResults.chart.dataSets = [];
+        state.comparingResults.info.items = {};
         state.comparingResults.info.activeCount = 0;
 
-        if (!toAdd) {
-            return;
-        }
+        state.comparingResults.info.selectedIndexes = indexesToActivate.filter(index => {
+            var toAdd = state.computingHistory[index];
+            if (!toAdd) {
+                return false;
+            }
 
-        Vue.set(state.comparingResults.info.items, toAdd.id, {
-            instance: toAdd.instance,
-            params: toAdd.params,
-            result: toAdd.data.result
+            Vue.set(state.comparingResults.info.items, toAdd.id, {
+                instance: toAdd.instance,
+                params: toAdd.params,
+                result: toAdd.data.result
+            });
+
+            state.comparingResults.chart.dataSets.push(new GeneratedDataSet(toAdd));
+
+            return true;
         });
-
-        state.comparingResults.chart.dataSets.push(new GeneratedDataSet(toAdd));
 
         updateComparingResultsComputedValues(state.comparingResults);
     },
@@ -83,6 +89,7 @@ const mutations = {
             }
             state.comparingResults.chart.dataSets.splice(removeIndex, 1);
             Vue.delete(state.comparingResults.info.items, toAdd.id);
+            state.comparingResults.info.selectedIndexes.splice(state.comparingResults.info.selectedIndexes.indexOf(index), 1);
         }
         else {
             Vue.set(state.comparingResults.info.items, toAdd.id, {
@@ -91,29 +98,27 @@ const mutations = {
                 result: toAdd.data.result
             });
             state.comparingResults.chart.dataSets.push(new GeneratedDataSet(toAdd));
+            state.comparingResults.info.selectedIndexes.push(index);
         }
 
         updateComparingResultsComputedValues(state.comparingResults);
     },
 
     toggleAllComparingResults(state, checkedAll) {
-        if (checkedAll) {
-            state.comparingResults.info.items = {};
-            state.comparingResults.chart.dataSets = [];
-            state.comparingResults.info.activeCount = 0;
-        }
-        else {
-            state.comparingResults.info.items = {};
-            state.comparingResults.chart.dataSets = [];
-            state.comparingResults.info.activeCount = 0;
+        state.comparingResults.chart.dataSets = [];
+        state.comparingResults.info.items = {};
+        state.comparingResults.info.activeCount = 0;
+        state.comparingResults.info.selectedIndexes = [];
 
-            state.computingHistory.forEach(toAdd => {
+        if (!checkedAll) {
+            state.computingHistory.forEach((toAdd, index) => {
                 Vue.set(state.comparingResults.info.items, toAdd.id, {
                     instance: toAdd.instance,
                     params: toAdd.params,
                     result: toAdd.data.result
                 });
                 state.comparingResults.chart.dataSets.push(new GeneratedDataSet(toAdd));
+                state.comparingResults.info.selectedIndexes.push(index);
             });
         }
 
