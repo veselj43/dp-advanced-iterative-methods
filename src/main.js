@@ -7,7 +7,7 @@ import App from './App';
 import store from './store';
 import router from './router';
 import ToastedWrapper from './plugins/Notifier';
-import Filters from './services/filters';
+import filters from './services/filters';
 
 window._ = require('lodash');
 window.$eventBus = new Vue();
@@ -21,8 +21,8 @@ Vue.use(VeeValidate);
 
 Vue.use(ToastedWrapper);
 
-for (var filterKey in Filters) {
-    Vue.filter(filterKey, Filters[filterKey]);
+for (var filterKey in filters) {
+    Vue.filter(filterKey, filters[filterKey]);
 }
 
 new Vue({

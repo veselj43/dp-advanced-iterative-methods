@@ -20,7 +20,8 @@ export default {
                 height: 300,
                 margin: {
                     right: 200,
-                }
+                },
+                maxYAxeValueMarginMultiplier: 1.1
             },
         }
     },
@@ -31,6 +32,13 @@ export default {
         this.multipleLineChart = dc.seriesChart('#comparisonChart');
 
         this.initMultipleLineChart();
+
+        this.$store.subscribe((mutation) => {
+            if (mutation.type === 'selectProblem') {
+                this.ndx.remove();
+                this.labels = {};
+            }
+        });
     },
 
     methods: {
@@ -83,10 +91,10 @@ export default {
                 .width(chartOptions.width).height(chartOptions.height)
                 .x(d3.scale.linear().domain([0, 10]))
                 .y(d3.scale.linear().domain([0, 10]))
-                .yAxisLabel("Fitness")
                 .xAxisLabel("States checked")
+                .yAxisLabel("Value")
                 .elasticX(true)
-                .elasticY(true)
+                // .elasticY(true)
                 .brushOn(false)
                 // .mouseZoomable(true)
                 .renderHorizontalGridLines(true)
@@ -134,6 +142,17 @@ export default {
             }
 
             this.lastActiveCount = newActiveCount;
+
+            var maxYAxeValue = Math.max(...Object.keys(newValue).map(key => newValue[key].result.cost));
+            if (maxYAxeValue >= 0) {
+                this.multipleLineChart
+                    .elasticY(false)
+                    .y(d3.scale.linear().domain([0, maxYAxeValue * this.options.maxYAxeValueMarginMultiplier]));
+            }
+            else {
+                this.multipleLineChart
+                    .elasticY(true);
+            }
 
             this.multipleLineChart.redraw();
 

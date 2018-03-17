@@ -3,13 +3,13 @@
         <table class="config" v-if="itemsArray">
             <tr>
                 <td>Instance</td>
-                <td v-for="(value, index) in varCount">
+                <td v-for="(value, index) in varCount" :key="index">
                     {{index}}
                 </td>
             </tr>
-            <tr v-for="item in itemsArray">
+            <tr v-for="(item, itemIndex) in itemsArray" :key="itemIndex">
                 <td class="instanceName">{{item.instance}}</td>
-                <td v-for="(value, index) in item.result.result" :class="{true: value, false: !value}">
+                <td v-for="(value, configIndex) in item.result.result" :class="{true: value, false: !value}" :key="configIndex">
                     {{value ? 'T' : 'F'}}
                 </td>
             </tr>
