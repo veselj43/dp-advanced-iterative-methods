@@ -11,6 +11,7 @@ var crossfilter = dc.crossfilter;
 export default {
     data() {
         return {
+            $storeUnsubscribe: null,
             comparingResults: this.$store.state.outputData.comparingResults,
             lastActiveCount: 0,
             labels: {},
@@ -33,12 +34,16 @@ export default {
 
         this.initMultipleLineChart();
 
-        this.$store.subscribe((mutation) => {
+        this.$storeUnsubscribe = this.$store.subscribe((mutation) => {
             if (mutation.type === 'selectProblem') {
                 this.ndx.remove();
                 this.labels = {};
             }
         });
+    },
+
+    destroyed() {
+        if (this.$storeUnsubscribe) this.$storeUnsubscribe();
     },
 
     methods: {

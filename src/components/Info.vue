@@ -1,13 +1,29 @@
 <template>
-    <div class="info">
-        <div v-on:click="$refs.deps.open()">
-            <span v-if="requiredDependencies.missingFeatures > 0" class="info-btn text-danger">
-                <i class="material-icons">warning</i>
-            </span>
-            <span v-if="requiredDependencies.metFeatures > 0" class="info-btn text-success">
-                <i class="material-icons">check_circle</i>
-            </span>
+    <div>
+        <div class="info text-right">
+            <div v-on:click="$refs.settings.open()">
+                <i class="material-icons">settings</i>
+            </div>
+            <div>
+                <router-link to="/help">
+                    <i class="material-icons">help</i>
+                </router-link>
+            </div>
+            <div v-on:click="$refs.deps.open()">
+                <i v-if="requiredDependencies.missingFeatures > 0" class="material-icons text-danger">warning</i>
+                <i v-if="requiredDependencies.metFeatures > 0" class="material-icons text-success">check_circle</i>
+            </div>
         </div>
+
+        <sweet-modal ref="settings" title="Settings" overlay-theme="dark">
+            <!-- TODO -->
+            <div>
+                Clear history for all sections
+            </div>
+            <div>
+                Clear input instances for all problems
+            </div>
+        </sweet-modal>
 
         <sweet-modal ref="deps" title="Dependencies" overlay-theme="dark">
             <table class="table table-hover">
@@ -56,9 +72,8 @@ export default {
 </script>
 
 <style scoped>
-    .info-btn {
+    .info>div {
         display: inline-block;
-        float: right;
         padding: .2em .1em 0 .1em;
         cursor: pointer;
     }

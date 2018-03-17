@@ -124,7 +124,7 @@ html, body {
     padding-bottom: 5em;
 }
 
-.__router-view {
+.main-page {
     @include reset-offsets();
     position: relative;
     height: $content-panels-height;
