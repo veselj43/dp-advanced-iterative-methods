@@ -3,11 +3,9 @@
         <div class="panel-body">
             <ul class="dev-control-menu">
                 <li class="btn btn-default">
-                    <span>DB</span>
+                    <span>Section</span>
                     <ul class="btn-group-vertical">
-                        <li class="btn btn-default" v-on:click="clearComputingHistory">Clear history</li>
-                        <li class="btn btn-default" v-on:click="clearInstances">Clear instances</li>
-                        <li class="btn btn-default" v-on:click="deleteDB">Delete db</li>
+                        <li class="btn btn-default" v-on:click="none">Item</li>
                     </ul>
                 </li>
                 <li v-on:click="show = false" class="btn btn-default">
@@ -19,8 +17,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
 export default {
     data() {
         return {
@@ -29,11 +25,7 @@ export default {
     },
 
     methods: {
-        ...mapActions([
-            'clearComputingHistory',
-            'clearInstances',
-            'deleteDB'
-        ])
+        none() {}
     }
 }
 </script>
@@ -50,6 +42,10 @@ export default {
         z-index: 1000;
         background-color: $dev-bg-color;
         border: $dev-border-color 1px solid;
+
+        .panel-body {
+            padding: 10px 15px;
+        }
 
         ul.dev-control-menu {
             &, & ul {

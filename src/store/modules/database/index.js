@@ -60,7 +60,7 @@ const actions = {
         });
     },
 
-    clearComputingHistory ({ getters, dispatch }) {
+    clearSelectedMethodComputingHistory ({ getters, dispatch }) {
         var params = getters.getInputData;
         var table = getTableNameByMethod(params);
         dbm.getStore(table, DBSchema.mode.RW).then(function(store) {

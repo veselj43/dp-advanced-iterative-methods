@@ -1,22 +1,22 @@
 <template>
     <div id="advancedIterativeMethods">
         <router-view class="__router-view"></router-view>
-        <dev-controls v-if="debugMode"></dev-controls>
+        <!-- <dev-controls v-if="debugMode"></dev-controls> -->
     </div>
 </template>
 
 <script>
-import DevControls from './components/devTools/DevControls';
+// import DevControls from './components/devTools/DevControls';
 
 export default {
     name: 'advancedIterativeMethods',
     components: {
-        DevControls
+        // DevControls
     },
 
     data() {
         return {
-            debugMode: this.$store.state.debugMode
+            // debugMode: this.$store.state.debugMode
         }
     },
 }

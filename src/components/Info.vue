@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- CONTROL PANEL -->
         <div class="info text-right">
             <div v-on:click="$refs.settings.open()">
                 <i class="material-icons">settings</i>
@@ -15,16 +16,21 @@
             </div>
         </div>
 
+        <!-- SETTINGS -->
         <sweet-modal ref="settings" title="Settings" overlay-theme="dark">
-            <!-- TODO -->
-            <div>
+            <button class="btn btn-default btn-block" v-on:click="clearHistory">
                 Clear history for all sections
-            </div>
-            <div>
+                <!-- (TODO, its this method atm) -->
+            </button>
+            <button class="btn btn-default btn-block" v-on:click="clearAllInstances">
                 Clear input instances for all problems
-            </div>
+            </button>
+            <button class="btn btn-default btn-block" v-on:click="deleteDatabase">
+                Delete database (history, instances)
+            </button>
         </sweet-modal>
 
+        <!-- DEPENDENCIES -->
         <sweet-modal ref="deps" title="Dependencies" overlay-theme="dark">
             <table class="table table-hover">
                 <thead>
@@ -48,11 +54,20 @@
                 <button class="btn btn-info" v-on:click="$refs.deps.close()">OK</button>
             </template>
         </sweet-modal>
+
+        <!-- CONFIRMATION -->
+        <sweet-modal ref="confirmation" overlay-theme="dark">
+            Proceed action: {{confirmation.message}}?
+            <template slot="button">
+                <button class="btn btn-info" v-on:click="$refs.confirmation.close()">No</button>
+                <button class="btn btn-danger" v-on:click="confirm">Yes</button>
+            </template>
+        </sweet-modal>
     </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import { SweetModal } from 'sweet-modal-vue';
 
 export default {
@@ -61,12 +76,54 @@ export default {
     },
     data() {
         return {
-            requiredDependencies: this.$store.state.requiredDependencies
+            requiredDependencies: this.$store.state.requiredDependencies,
+            confirmation: {
+                message: 'undefined',
+                proceedAction: null
+            }
         }
     },
     mounted () {
     },
     methods: {
+        requiresConfirmation(action, message) {
+            this.confirmation.proceedAction = action;
+            this.confirmation.message = message;
+            this.$refs.confirmation.open();
+        },
+        confirm() {
+            this.confirmation.proceedAction();
+            this.confirmation.proceedAction = null;
+            this.$refs.confirmation.close();
+            this.$notifier.push('Action: "' + this.confirmation.message + '" was succesful', 'success');
+        },
+
+        clearHistory() {
+            this.requiresConfirmation(
+                this.clearSelectedMethodComputingHistory, 
+                "Clear history"
+            );
+        },
+
+        clearAllInstances() {
+            this.requiresConfirmation(
+                this.clearInstances, 
+                "Clear all instances"
+            );
+        },
+
+        deleteDatabase() {
+            this.requiresConfirmation(
+                this.deleteDB, 
+                "Delete database"
+            );
+        },
+
+        ...mapActions([
+            'clearSelectedMethodComputingHistory',
+            'clearInstances',
+            'deleteDB'
+        ])
     }
 }
 </script>
