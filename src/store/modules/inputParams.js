@@ -51,6 +51,9 @@ const getters = {
     selectedMethodId(state) {
         return state.params.method.id;
     },
+    selectedProblemId(state) {
+        return state.params.problem.id;
+    },
     getIsValidParams (state) {
         return state.params.isValid[state.params.method.id];
     },

@@ -38,6 +38,9 @@ const getters = {
     },
     comparingResultsInfo(state) {
         return state.comparingResults.info;
+    },
+    comparingResultsItems(state) {
+        return state.comparingResults.info.items;
     }
 }
 

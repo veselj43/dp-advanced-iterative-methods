@@ -1,6 +1,6 @@
 export default class Result {
-    constructor(result, cost, counter) {
-        this.result = result;
+    constructor(config, cost, counter) {
+        this.config = config;
         this.cost = cost;
         this.counter = counter;
     }

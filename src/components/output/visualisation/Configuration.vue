@@ -1,71 +1,49 @@
 <template>
     <div class="visualizeConfiguration">
-        <table class="config" v-if="itemsArray">
-            <tr>
-                <td>Instance</td>
-                <td v-for="(value, index) in varCount" :key="index">
-                    {{index}}
-                </td>
-            </tr>
-            <tr v-for="(item, itemIndex) in itemsArray" :key="itemIndex">
-                <td class="instanceName">{{item.instance}}</td>
-                <td v-for="(value, configIndex) in item.result.result" :class="{true: value, false: !value}" :key="configIndex">
-                    {{value ? 'T' : 'F'}}
-                </td>
-            </tr>
-        </table>
+        <permutation v-if="selectedProblemId === 1"></permutation>
+        <bit-array v-else></bit-array>
     </div>
 </template>
 
 <script>
-export default {
-    computed: {
-        itemsArray() {
-            return this.$store.state.outputData.comparingResults.info.items;
-        },
+import { mapGetters } from 'vuex';
+import BitArray from './configType/BitArray';
+import Permutation from './configType/Permutation';
 
-        varCount() {
-            var count = 0;
-            for (var i in this.itemsArray) {
-                count = Math.max(count, this.itemsArray[i].result.result.length);
-            }
-            return _.range(count);
-        }
+export default {
+    components: {
+        BitArray,
+        Permutation
+    },
+    computed: {
+        ...mapGetters([
+            'selectedProblemId'
+        ])
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss">
     .visualizeConfiguration {
         display: inline-block;
-    }
+        
+        table {
+            margin: 0;
+            padding: 0;
+            margin-right: 1em;
 
-    table.config {
-        margin: 0;
-        padding: 0;
-        margin-right: 1em;
-    }
+            td {
+                width: 2em;
+                margin: 0;
+                padding: .1em .4em;
+                text-align: center;
+                font-weight: bold;
+                border: #333 1px solid;
 
-    table.config td {
-        width: 2em;
-        margin: 0;
-        padding: .1em .4em;
-        text-align: center;
-        font-weight: bold;
-        border: #333 1px solid;
-    }
-
-    table.config td.true {
-        background: #3c3;
-        color: #000;
-    }
-
-    table.config td.false {
-        background: #c33;
-        color: #fff;
-    }
-
-    table td.instanceName {
-        white-space: nowrap;
+                &.instanceName {
+                    white-space: nowrap;
+                }
+            }
+        }
     }
 </style>

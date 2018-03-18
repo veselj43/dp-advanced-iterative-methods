@@ -8,7 +8,7 @@
             <table class="table table-bordered table-hover">
                 <tbody>
                     <tr>
-                        <th>Best found fitness</th>
+                        <th>Best found value</th>
                         <td>{{liveData.best}}</td>
                     </tr>
                 </tbody>
@@ -24,7 +24,7 @@
                 <thead>
                     <tr>
                         <th>Instance</th>
-                        <th>Fitness</th>
+                        <th>Best value</th>
                         <th>States checked</th>
                         <th>Processing time</th>
                     </tr>

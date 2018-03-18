@@ -88,7 +88,7 @@ export class TravellingSalesman {
      * @return {String} return the rebuilded path
      */
     rebuildPath(permutationConfig) {
-        var path = this._startingNode;
+        var path = [this._startingNode];
         var permutation = this._bindToNodes(permutationConfig);
 
         permutation.unshift(this._startingNode);
@@ -98,7 +98,7 @@ export class TravellingSalesman {
             while(permutation[i-1] != permutation[i])
             {
                 permutation[i-1] = this._pathArray[permutation[i-1]][permutation[i]];
-                path += "-" + permutation[i-1];
+                path.push(permutation[i-1]);
             }
         }
 
@@ -142,7 +142,6 @@ export class TravellingSalesman {
      * @return {String} the actual path as string
      */
     getResult(permutationConfig) {
-        console.log(this.rebuildPath(permutationConfig.getArray()));
         return this.rebuildPath(permutationConfig.getArray());
     }
 }

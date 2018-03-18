@@ -2,7 +2,7 @@ import {BinaryIndividual} from "../methods/genetic/Individual";
 
 export class Problem {
     constructor() {
-        //abstract
+        // abstract
         if (this.constructor === Problem) {
             throw new TypeError('Abstract class "Problem" cannot be instantiated directly.');
         }
@@ -27,11 +27,15 @@ export class Problem {
     }
 
     getConfiguration(random) {
-        //abstract
+        // abstract
     }
 
     getFitness() {
-        //abstract
+        // abstract
+    }
+
+    getResult() {
+        // abstract
     }
 }
 
