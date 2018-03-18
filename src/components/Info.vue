@@ -57,7 +57,7 @@
 
         <!-- CONFIRMATION -->
         <sweet-modal ref="confirmation" overlay-theme="dark">
-            Proceed action: {{confirmation.message}}?
+            <strong>Proceed action: {{confirmation.message}}?</strong>
             <template slot="button">
                 <button class="btn btn-info" v-on:click="$refs.confirmation.close()">No</button>
                 <button class="btn btn-danger" v-on:click="confirm">Yes</button>

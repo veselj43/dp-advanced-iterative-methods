@@ -23,20 +23,18 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
+                        <th class="toggle-detail"></th>
                         <th>Instance</th>
                         <th>Best value</th>
                         <th>States checked</th>
                         <th>Processing time</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr v-for="(item, index) in comparingResultsInfo.items" :key="index">
-                        <td>{{item.instance}}</td>
-                        <td>{{item.result.cost}}</td>
-                        <td>{{item.result.counter}}</td>
-                        <td>{{item.result.processTime | parseTime}}</td>
-                    </tr>
-                </tbody>
+                    <comparison-table-item 
+                        v-for="(item, index) in comparingResultsInfo.items"
+                        :key="index"
+                        :item="item">
+                    </comparison-table-item>
             </table>
 
         </div>
@@ -47,6 +45,7 @@
 <script>
 import LiveChart from './LiveChart';
 import ComparisonChart from './ComparisonChart';
+import ComparisonTableItem from './ComparisonTableItem';
 
 export default {
     props: {
@@ -58,13 +57,31 @@ export default {
     components: {
         LiveChart,
         ComparisonChart,
+        ComparisonTableItem,
     },
 
     data() {
         return {
             liveData: this.$store.state.liveData.data,
             comparingResultsInfo: this.$store.state.outputData.comparingResults.info,
+            expanded: {}
         }
     },
 }
 </script>
+
+<style scoped>
+    .info-tooltip {
+        padding: 0;
+    }
+
+    .info-tooltip>span {
+        display: block;
+        padding: 8px;
+        line-height: inherit;
+    }
+
+    .toggle-detail {
+        width: 36px;
+    }
+</style>

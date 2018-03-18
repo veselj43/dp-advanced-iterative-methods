@@ -16,7 +16,7 @@
             <table class="table table-condensed">
                 <tbody>
                     <!--TODO hide unused genetic algorithm params-->
-                    <tr v-for="(param, key) in item.params" :key="key">
+                    <tr v-for="(param, key) in itemParams" :key="key">
                         <td>{{methodParamsTitles[selectedMethodId][key]}}</td>
                         <td class="text-right"><strong>{{param}}</strong></td>
                     </tr>
@@ -45,6 +45,15 @@ export default {
             set() {
                 this.toggleIndexInComparingResults(this.index);
             }
+        },
+
+        itemParams() {
+            if (this.selectedMethodId === 'genetic') {
+                var params = {...this.item.params}; // one way to copy an object
+                // TODO delete params.unusedParameter;
+                return params;
+            }
+            return this.item.params;
         },
 
         ...mapGetters([

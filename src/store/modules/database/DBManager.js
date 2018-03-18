@@ -67,5 +67,8 @@ export default class DBManager {
         }, function() {
             console.log("[DB] delete error");
         });
+        
+        // until IndexedDB.deleteDatabase() is fixed
+        window.location.reload();
     }
 }
