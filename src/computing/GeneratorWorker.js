@@ -47,9 +47,9 @@ class Job {
     }
 }
 
-this.postMessage = postMessage;
+this.postMessage = self.postMessage;
 
 // msg recieved event
-onmessage = function(event) {
+self.addEventListener('message', (event) => {
     workerInterface.onMessage(event);
-};
+});

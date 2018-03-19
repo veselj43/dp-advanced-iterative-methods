@@ -11,6 +11,7 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import { WorkerManager } from '@/computing/WorkerManager.js';
+import IterativeMethodWorker from '@/computing/IterativeMethodWorker.js';
 
 export default {
     data() {
@@ -28,8 +29,7 @@ export default {
         ])
     },
     mounted () {
-        var myWorker = require("worker-loader!@/computing/IterativeMethodWorker.js");
-        this.workerManager = new WorkerManager(this, myWorker);
+        this.workerManager = new WorkerManager(this, IterativeMethodWorker);
 
         this.workerManager
             .setHandler('message', this.$notifier.push)

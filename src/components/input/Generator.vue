@@ -108,7 +108,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { WorkerManager } from '../../computing/WorkerManager.js';
+import { WorkerManager } from '@/computing/WorkerManager.js';
+import GeneratorWorker from "@/computing/GeneratorWorker.js";
 
 import ProblemSelect from './ProblemSelect';
 
@@ -154,8 +155,7 @@ export default {
     },
 
     mounted () {
-        var myWorker = require("worker-loader!../../computing/GeneratorWorker.js");
-        this.workerManager = new WorkerManager(this, myWorker);
+        this.workerManager = new WorkerManager(this, GeneratorWorker);
         this.workerManager
             .setHandler('message', this.$notifier.push)
             .setHandler('result', this.result);
