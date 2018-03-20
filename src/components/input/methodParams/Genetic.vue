@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label class="" for="selection-type">Selection type</label>
                 <!--TODO stukturovany tooltip do vice radku-->
-                <span class="form-tooltip" v-tooltip.right="'Selection type tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip="{content: 'Defines selection mechanism:\n Tourney - Selects individuals uniformly in tourney the best one is selected.\n Roulette - \n  Ranking - \n  Linear Scaling', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="selection-type" v-model="params.selectionType"> <!--v-on:change="selectionChange(this)"-->
                     <option value="roulette-rank">Roulette with ranking</option>
                     <option value="roulette-linear">Roulette with linear scaling</option>
@@ -47,7 +47,7 @@
 
             <div class="form-group" id="tourney" v-if="params.selectionType === 'tourney'" v-bind:class="{'has-error': errors.has('genetic-tourney-size')}">
                 <label class="" for="tourney-size">Tourney size</label>
-                <span class="form-tooltip" v-tooltip.right="'Tourney size tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="'Defines how many individuals compete in single tourney'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <input class="form-control" type="number" min="1" step="0.5"
                        id="tourney-size" name="genetic-tourney-size" v-model="params.tourneySize"
                        data-vv-as="number of generations" v-validate.initial="{ required: true, min_value: 1, max_value: params.populationSize, regex: /^([0-9]*[.])?[0-9]+$/ }"
@@ -58,7 +58,7 @@
         <div id="crossover">
             <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-cross-prob')}">
                 <label class="" for="crossover-prob">Crossover probability</label>
-                <span class="form-tooltip" v-tooltip.right="'Crossover probability tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="'Probability that individual goes into crossover after selection'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <input class="form-control" type="number" min="0" max="1" step="0.05"
                        id="crossover-prob" name="genetic-cross-prob" v-model="params.crossoverProb"
                        data-vv-as="crossover probability" v-validate.initial="{ required: true, min_value: 0, max_value: 1, regex: /^([0-9]*[.])?[0-9]+$/ }"
@@ -69,7 +69,7 @@
             <div class="form-group">
                 <label class="" for="crossover-type">Crossover type</label>
                 <!--TODO stukturovany tooltip do vice radku-->
-                <span class="form-tooltip" v-tooltip.right="'Crossover type tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip="{content: 'Defines crossover mechanism:\n One-point - Individuals are split at one point and recombined\n Two-point - Individuals are split at two points and recombined\n Uniform - Each bit of parent goes into first or second offspring with equal probability', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="crossover-type" v-model="params.crossoverType">
                     <option value="one-point">one-point</option>
                     <option value="two-point">two-point</option>
@@ -80,7 +80,7 @@
         <div id="mutation">
             <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-mutation-rate')}">
                 <label class="" for="mutation-rate">Mutation rate</label>
-                <span class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each bit inveterted'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each bit inverted'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <input class="form-control" type="number" min="0" max="1" step="0.01"
                        id="mutation-rate" name="genetic-mutation-rate" v-model="params.mutationRate"
                        data-vv-as="mutation rate" v-validate.initial="{ required: true, min_value: 0, max_value: 1, regex: /^([0-9]*[.])?[0-9]+$/ }"
