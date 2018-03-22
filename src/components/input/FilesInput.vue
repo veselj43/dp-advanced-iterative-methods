@@ -29,7 +29,7 @@
 
         <sweet-modal ref="generatorModal" overlay-theme="dark">
             <template slot="title"><strong>Instance generator</strong></template>
-            <generator></generator>
+            <generator v-on:closeGeneratorModal="$refs.generatorModal.close();"></generator>
         </sweet-modal>
 
         <sweet-modal ref="removeConfirm" overlay-theme="dark">

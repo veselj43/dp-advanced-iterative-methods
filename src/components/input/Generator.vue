@@ -100,6 +100,8 @@
             <div class="form-group">
                 <button v-if="!isGenerating" class="btn btn-success" v-on:click="generate">Generate</button>
                 <button v-else class="btn btn-danger" v-on:click="stop">Cancel</button>
+
+                <label id="generate-next" class="checkbox"><input type="checkbox" v-model="geterateNext"> Keep generator open</label>
             </div>
         </div>
 
@@ -120,6 +122,7 @@ export default {
 
     data() {
         return {
+            geterateNext: false,
             isGenerating: false,
             generatorParams: {
                 instanceName: "instance",
@@ -180,15 +183,18 @@ export default {
             this.isGenerating = false;
         },
 
-        result: function(result) {
+        result: function(result, errorMessage) {
             this.workerManager.terminate();
             this.isGenerating = false;
             if (result === null) {
-                this.$notifier.push("Error while generating instance.", "error");
+                this.$notifier.push((errorMessage) ? errorMessage : "Error while generating instance.", "error");
             }
             else {
                 this.addGeneratedInstances([{name: this.generatorParams.instanceName, content: result}]);
                 this.$notifier.push("Instance added to list.", "success");
+                if (!this.geterateNext) {
+                    this.$emit('closeGeneratorModal');
+                }
             }
         },
 
@@ -207,5 +213,11 @@ export default {
     .form-tooltip {
         display: inline-block;
         padding-left: .3em;
+    }
+
+    #generate-next {
+        display: inline-block;
+        margin-left: 30px;
+        font-weight: normal;
     }
 </style>

@@ -9,7 +9,12 @@ var methods = {
     work: function(data, problemKey) {
         var job = new Job(data, problemKey);
         var result = job.run();
-        workerInterface.reply('result', result);
+        if (result) {
+            workerInterface.reply('result', result);
+        }
+        else {
+            workerInterface.reply('result', null, "Selected problem wasn't recognised");
+        }
     }
 }
 
@@ -22,28 +27,29 @@ class Job {
     }
 
     run() {
-        // TODO real generator
-        if(this.problemKey === 0){
-          var satGenerator = new SATGen.SATGenerator(this.params[0]);
-          return satGenerator.generate();
-        }
+        let Generator = null;
+        let generatorParams = this.params[this.problemKey];
 
+        if (this.problemKey === 0) {
+            Generator = SATGen.SATGenerator;
+        }
         else if (this.problemKey === 1) {
-          var salesmanGenerator = new SalesmanGen.TravellingSalesmanGenerator(this.params[1]);
-          return salesmanGenerator.generate();
+            Generator = SalesmanGen.TravellingSalesmanGenerator;
         }
-
         else if (this.problemKey === 2) {
-          var knapsackGenerator = new KnapGen.KnapsackGenerator(this.params[2]);
-          return knapsackGenerator.generate();
+            Generator = KnapGen.KnapsackGenerator;
+        }
+        else if (this.problemKey === 3) {
+            Generator = CoverGen.VertexCoverGenerator;
         }
 
-        else if (this.problemKey === 3) {
-          var VertexCoverGenerator = new CoverGen.VertexCoverGenerator(this.params[3]);
-          return VertexCoverGenerator.generate();
+        if (Generator && generatorParams) {
+            return new Generator(generatorParams).generate();
         }
-        else
-        return "c Priklad CNF\nc 4 promenne a 6 klauzuli\nc kazda klauzule konci nulou (ne novym radkem)\np cnf 4 6\n1 -3 4 0\n-1 2 -3 0\n3 4 0\n1 2 -3 -4 0\n-2 3 0\n-3 -4 0\n";
+        else {
+            return null;
+            // return "c Priklad CNF\nc 4 promenne a 6 klauzuli\nc kazda klauzule konci nulou (ne novym radkem)\np cnf 4 6\n1 -3 4 0\n-1 2 -3 0\n3 4 0\n1 2 -3 -4 0\n-2 3 0\n-3 -4 0\n";
+        }
     }
 }
 
