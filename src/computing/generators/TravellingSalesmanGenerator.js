@@ -1,7 +1,8 @@
 /**
  * Class for generating travelling salesman problem instances
+ * @type {class}
  */
-export class TravellingSalesmanGenerator {
+export default class TravellingSalesmanGenerator {
     /**
      * Class constructor
      * @param {object} params parameters of the generated instance

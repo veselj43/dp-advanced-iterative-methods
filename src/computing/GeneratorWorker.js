@@ -1,9 +1,9 @@
 import { WorkerInterface } from './WorkerInterface.js';
 import Resource from '@/services/resource';
-import * as KnapGen from './generators/KnapsackGenerator';
-import * as SalesmanGen from './generators/TravellingSalesmanGenerator';
-import * as SATGen from './generators/SATGenerator';
-import * as CoverGen from './generators/VertexCoverGenerator';
+import KnapGen from './generators/KnapsackGenerator';
+import SalesmanGen from './generators/TravellingSalesmanGenerator';
+import SATGen from './generators/SATGenerator';
+import CoverGen from './generators/VertexCoverGenerator';
 
 var methods = {
     work: function(data, problemKey) {

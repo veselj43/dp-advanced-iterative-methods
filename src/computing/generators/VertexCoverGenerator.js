@@ -2,7 +2,7 @@
  * Class for generating minimal vertex cover problem instances
  * @type {class}
  */
-export class VertexCoverGenerator {
+export default class VertexCoverGenerator {
     /**
      * Class constructor
      * @param {object} params parameters of the generated instance

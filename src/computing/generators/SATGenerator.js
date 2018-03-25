@@ -1,4 +1,8 @@
-export class SATGenerator {
+/**
+ * Class for generating SAT problem instances
+ * @type {class}
+ */
+export default class SATGenerator {
   constructor (params) {
     this.params = params;
     this.params.noVariables = +this.params.noVariables;

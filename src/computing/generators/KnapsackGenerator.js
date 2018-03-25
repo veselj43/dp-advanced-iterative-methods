@@ -2,7 +2,7 @@
  * Class for generating knapsack problem instances
  * @type {class}
  */
-export class KnapsackGenerator {
+export default class KnapsackGenerator {
     /**
      * Class constructor
      * @param {object} params parameters of the generated instance

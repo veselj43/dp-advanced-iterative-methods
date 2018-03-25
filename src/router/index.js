@@ -21,5 +21,10 @@ export default new Router({
             name: 'TestBlbosti',
             component: TestBlbosti
         }
-    ]
+    ],
+    scrollBehavior: (to, from, savedPosition) => (
+        (savedPosition) ? savedPosition : {
+            selector: `a[href='${to.hash}']`
+        }
+    )
 })
