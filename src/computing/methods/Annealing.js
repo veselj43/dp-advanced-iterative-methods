@@ -44,9 +44,9 @@ export class AnnealingSolver{
               counter++;
           }
           currentTemp *= +params.cool_coef;
-          this._bufferedReply.addMessageWithAutoFlush({ fitness: problem.getFitness(currentConfiguration) });
+          this._bufferedReply.addMessageWithAutoFlush( problem.getFitness(currentConfiguration) );
       }
-      this._bufferedReply.addMessage({ fitness: problem.getFitness(currentConfiguration) }).flush();
+      this._bufferedReply.addMessage( problem.getFitness(currentConfiguration) ).flush();
       return new Result(problem.getResult(currentConfiguration), problem.getFitness(currentConfiguration), counter);
   }
   /**

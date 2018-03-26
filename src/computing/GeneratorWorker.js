@@ -31,16 +31,16 @@ class Job {
         let generatorParams = this.params[this.problemKey];
 
         if (this.problemKey === 0) {
-            Generator = SATGen.SATGenerator;
+            Generator = SATGen;
         }
         else if (this.problemKey === 1) {
-            Generator = SalesmanGen.TravellingSalesmanGenerator;
+            Generator = SalesmanGen;
         }
         else if (this.problemKey === 2) {
-            Generator = KnapGen.KnapsackGenerator;
+            Generator = KnapGen;
         }
         else if (this.problemKey === 3) {
-            Generator = CoverGen.VertexCoverGenerator;
+            Generator = CoverGen;
         }
 
         if (Generator && generatorParams) {
