@@ -27,13 +27,14 @@
 import { mapGetters } from 'vuex';
 import ConfVisual from './visualisation/Configuration';
 import Tabu from './methodResult/tabu/Tabu';
+import Genetic from './methodResult/genetic/Genetic';
 // TODO import and add to components other methods
 
 export default {
     components: {
         ConfVisual,
         Annealing: Tabu, // change here (delete Tabu)
-        Genetic: Tabu, // change here (delete Tabu)
+        Genetic,
         Tabu,
     },
 

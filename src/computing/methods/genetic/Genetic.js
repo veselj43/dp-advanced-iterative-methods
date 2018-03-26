@@ -64,8 +64,6 @@ export class GeneticSolver {
             var potentialParents = this.selection.selectIndividuals(generation, populationSize-elitism);
             generation = this._doNewGeneration(potentialParents, crossoverProb).concat(generation.slice(populationSize-elitism, populationSize));
             this._evaluateGeneration(generation);
-            //this._workerInterface.reply('progress', { counter: g, fitness: generation[0] });
-            this._bufferedReply.addMessageWithAutoFlush({ fitness: generation[0] });
             this.counter++;
         }
 
@@ -95,7 +93,15 @@ export class GeneticSolver {
         }
         average = average/generation.length;
         generation.sort(function(a, b){return a.getFitness() - b.getFitness()});
-        console.log('worst: ' +  generation[0].getFitness() + ' average: ' + average + " mean: " + generation[Math.floor(generation.length/2)].getFitness() + " best: " + generation[generation.length-1].getFitness());
+
+        this._bufferedReply.addMessageWithAutoFlush({
+            worst: generation[0].getFitness(),
+            average: average,
+            mean: generation[Math.floor(generation.length/2)].getFitness(),
+            best: generation[generation.length-1].getFitness()
+        });
+        // console.log('worst: ' +  generation[0].getFitness() + ' average: ' + average + " mean: " + generation[Math.floor(generation.length/2)].getFitness() + " best: " + generation[generation.length-1].getFitness());
+
         //update best solution
         if (this.bestFitness < generation[generation.length-1].getFitness()) {
             this.bestFitness = generation[generation.length-1].getFitness();
