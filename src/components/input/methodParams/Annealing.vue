@@ -6,7 +6,7 @@
             <div class="">
                 <input class="form-control" type="number" id="param1" v-model="params.start_temp" placeholder=""
                 name="startTemp"
-                v-validate.initial="{ required: true, min_value: params.min_temp + 1, regex: /^[0-9]+$/ }"
+                v-validate.initial="{ required: true, min_value: +params.min_temp + 1, regex: /^[0-9]+$/ }"
                 >
                 <span v-show="errors.has('startTemp')" class="help-block">{{ errors.first('startTemp') }}</span>
             </div>
@@ -17,7 +17,7 @@
             <div class="">
                 <input class="form-control" type="number" min="0" max="1" step="0.001" id="param2" v-model="params.cool_coef" placeholder=""
                 name="coolingCoef"
-                v-validate.initial="{ required: true, min_value: 0.001, max_value: 1, regex: /^[0-9]+$/ }"
+                v-validate.initial="{ required: true, min_value: 0.001, max_value: 1, regex: /^(0(\.\d+)?|1(\.0+)?)$/ }"
                 >
                 <span v-show="errors.has('coolingCoef')" class="help-block">{{ errors.first('coolingCoef') }}</span>
             </div>
@@ -28,7 +28,7 @@
             <div class="">
                 <input class="form-control" type="number" id="param3" v-model="params.min_temp" placeholder=""
                 name="minTemp"
-                v-validate.initial="{ required: true, min_value: 0.1, max_value: params.start_tempTemp - 1, regex: /^[0-9]+$/ }"
+                v-validate.initial="{ required: true, min_value: 0.1, max_value: +params.start_temp - 1, regex: /^[0-9]+$/ }"
                 >
                 <span v-show="errors.has('minTemp')" class="help-block">{{ errors.first('minTemp') }}</span>
             </div>
