@@ -24,7 +24,7 @@ export class AnnealingSolver{
       var currentNeighbour = currentConfiguration.getNeighbour();
       var counter = 0;
 
-      this._workerInterface.reply('init', { numberOfIterations: Math.ceil((Math.log(+params.min_temp) - Math.log(+params.start_temp)) / Math.log(+params.cool_coef)) * +params.equil });
+      this._workerInterface.reply('init', { numberOfIterations: Math.ceil((Math.log(+params.min_temp) - Math.log(+params.start_temp)) / Math.log(+params.cool_coef))});
 
       // main cycle depending on temperature
       while (currentTemp > +params.min_temp) {
@@ -76,8 +76,10 @@ export class AnnealingSolver{
               max: Math.max(problem.getFitness(currentConfiguration), problem.getFitness(currentNeighbour)),
               min: Math.min(problem.getFitness(currentConfiguration), problem.getFitness(currentNeighbour))
           };
-          if(newEnergyState.max > 0 && newEnergyState.min > 0) arrayOfEnergyStates.push(newEnergyState);
-
+          if(Math.sign(newEnergyState.max) === Math.sign(newEnergyState.min))
+          {
+            arrayOfEnergyStates.push(newEnergyState);
+          }
           currentConfiguration = currentNeighbour;
           currentNeighbour = currentConfiguration.getNeighbour();
       }
@@ -96,10 +98,9 @@ export class AnnealingSolver{
           currentPropability = maxSum / minSum;
           //console.log(currentPropability);
           temperature = temperature * (-Math.log(currentPropability) / -Math.log(wantedPropability));
-          console.log(currentPropability);
       }
 
-      return temperature;
+      return Math.round(temperature);
   }
 
   /**
