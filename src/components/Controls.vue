@@ -12,6 +12,7 @@
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import { WorkerManager } from '@/computing/WorkerManager.js';
 import IterativeMethodWorker from '@/computing/IterativeMethodWorker.js';
+import { getDbFileContent } from "@/services/fileReader";
 
 export default {
     data() {
@@ -45,36 +46,19 @@ export default {
     },
     methods: {
         start: function() {
-            var context = this;
             var fileDbObj = this.getSelectedFile;
-
-            if (!fileDbObj.type) {
-                this.$notifier.put("inFile", "No input file.");
-                return;
-            }
 
             if (this.workerManager.inProgress) {
                 this.$notifier.put("workerInfo", "Work is in progress.", "info");
                 return;
             }
 
-            var compute = (fileObj) => (data) => {
-                context.workerManager.sendWork('work', data, context.params);
-                context.setStatusRunning(fileObj);
-            };
-
-            if (fileDbObj.type === 'file') {
-                var reader = new FileReader();
-
-                reader.onLoadCallback = compute(fileDbObj.file);
-                reader.onload = function(event) {
-                    this.onLoadCallback(event.target.result);
-                };
-                reader.readAsBinaryString(fileDbObj.file);
-            }
-            else if (fileDbObj.type === 'string') {
-                compute(fileDbObj.file)(fileDbObj.file.content);
-            }
+            getDbFileContent(fileDbObj).then((content) => {
+                this.workerManager.sendWork('work', content, this.params);
+                this.setStatusRunning(fileDbObj.file);
+            }, (errorMsg) => {
+                this.$notifier.put("inFile", errorMsg);
+            });
         },
 
         stop: function() {
