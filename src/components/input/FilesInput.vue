@@ -74,7 +74,7 @@ export default {
     },
 
     mounted() {
-        this.loadInstances();
+        this.loadInstances(true);
     },
 
     methods: {

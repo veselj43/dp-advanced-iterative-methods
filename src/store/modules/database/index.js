@@ -33,7 +33,7 @@ const actions = {
         var table = getTableNameByMethod(params);
         var selectedIndexes = JSON.parse(storage.get(storageUtils.getSelectedIndexesByTypeKey())) || [0];
         if (pushOnly) selectedIndexes = [0]; // show just computed result
-        return dbm.getAll(table, "problem", params.problem).then(function(data) {
+        return dbm.getAll(table, { problem: params.problem }).then(function(data) {
             commit('updateComputingHistory', data);
             commit('initComparingResults', selectedIndexes);
             return true;
@@ -52,7 +52,7 @@ const actions = {
             }
         });
         var table = getTableNameByMethod(objForDB);
-        return dbm.getStore(table).insert(objForDB).then(function(data) {
+        return dbm.insert(table, objForDB).then(function(data) {
             return dispatch('loadComputingHistory', true);
         });
     },
@@ -60,15 +60,14 @@ const actions = {
     clearSelectedMethodComputingHistory ({ getters, dispatch }) {
         var params = getters.getInputData;
         var table = getTableNameByMethod(params);
-        return dbm.getStore(table).remove().then(function(data) {
-            console.log("[DB] history cleared");
+        return dbm.remove(table, { problem: params.problem }).then(function(data) {
             return dispatch('loadComputingHistory');
         });
     },
 
-    loadInstances ({ getters, commit }) {
+    loadInstances ({ getters, commit }, firstLoad) { // todo rework exampleInstanceAdded to firstLoad
         var params = getters.getInputData;
-        return dbm.getAll(DBSchema.dbTables.instances, "problem", params.problem).then(function(instances) {
+        return dbm.getAll(DBSchema.dbTables.instances, { problem: params.problem }).then(function(instances) {
             if (instances.length > 0 || exampleInstanceAdded) {
                 exampleInstanceAdded = true;
                 commit('updateInstances', instances);
@@ -85,7 +84,7 @@ const actions = {
                             content: data.bodyText
                         }
                     };
-                    return dbm.getStore(DBSchema.dbTables.instances).insert(instanceDbObj).then(function() {
+                    return dbm.insert(DBSchema.dbTables.instances, instanceDbObj).then(function() {
                         commit('updateInstances', [instanceDbObj, ...instances]);
                         return true;
                     });
@@ -106,7 +105,7 @@ const actions = {
             });
         }
 
-        return dbm.getStore(DBSchema.dbTables.instances).insert(toInsert).then(function() {
+        return dbm.insert(DBSchema.dbTables.instances, toInsert).then(function() {
             return dispatch('loadInstances');
         });
     },
@@ -123,7 +122,7 @@ const actions = {
             });
         }
 
-        return dbm.getStore(DBSchema.dbTables.instances).insert(toInsert).then(function() {
+        return dbm.insert(DBSchema.dbTables.instances, toInsert).then(function() {
             return dispatch('loadInstances');
         });
     },
@@ -134,16 +133,16 @@ const actions = {
         });
     },
 
-    clearInstances ({ dispatch }) {
-        return dbm.remove(DBSchema.dbTables.instances).then(function() {
-            console.log("[DB] instances cleared");
+    clearInstances ({ getters, dispatch }) {
+        var params = getters.getInputData;
+        return dbm.remove(DBSchema.dbTables.instances, { problem: params.problem }).then(function() {
             return dispatch('loadInstances');
         });
     },
 
     // dev tools
     deleteDB (context) {
-        console.log("[DB] deleting...");
+        console.log("[DB] deleting database ...");
         return dbm.deleteDB();
     }
 }

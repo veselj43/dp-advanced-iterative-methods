@@ -29,18 +29,26 @@ export default class DBManager {
             });
     }
 
-    getAll(dbTable, byIndex, value) {
+    getAll(dbTable, findObj) {
         return this.getStore(dbTable)
-            .find()
+            .find(findObj)
             .toArray((error, docs) => {
                 if (error) { throw error; }
             });
     }
 
-    remove(dbTable, value) {
+    insert(dbTable, data) {
         return this.getStore(dbTable)
-            .remove((value) ? {_id: value} : undefined)
-            .then((error) => {
+            .insert(data, (error) => {
+                if (error) { throw error; }
+            });
+    }
+
+    remove(dbTable, findObj) {
+        if (Number.isInteger(findObj)) findObj = {_id: findObj};
+
+        return this.getStore(dbTable)
+            .remove(findObj, (error) => {
                 if (error) { throw error; }
             });
     }
