@@ -22,7 +22,7 @@ const dataProgressBufferedMapping = {
             return data;
         },
         getBest(actualBest, transformedData) {
-            return Math.max(actualBest, ...transformedData);
+            return Math.max(actualBest, ...transformedData.map(x => x.best));
         }
     },
     tabu: {
