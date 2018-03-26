@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label class="" for="selection-type">Selection type</label>
                 <!--TODO stukturovany tooltip do vice radku-->
-                <span class="form-tooltip" v-tooltip="{content: 'Defines selection mechanism:\n Tourney - Selects individuals uniformly in tourney the best one is selected.\n Roulette - \n  Ranking - \n  Linear Scaling', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="{content: 'Defines selection mechanism:\n Tourney - Selects individuals uniformly in tourney the best one is selected.\n Roulette - \n  Ranking - \n  Linear Scaling', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="selection-type" v-model="params.selectionType"> <!--v-on:change="selectionChange(this)"-->
                     <option value="roulette-rank">Roulette with ranking</option>
                     <option value="roulette-linear">Roulette with linear scaling</option>
