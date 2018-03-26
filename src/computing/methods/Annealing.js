@@ -24,7 +24,7 @@ export class AnnealingSolver{
       var currentNeighbour = currentConfiguration.getNeighbour();
       var counter = 0;
 
-      this._workerInterface.reply('init', { numberOfIterations: 10000 });
+      this._workerInterface.reply('init', { numberOfIterations: Math.ceil((Math.log(+params.min_temp) - Math.log(+params.start_temp)) / Math.log(+params.cool_coef)) * +params.equil });
 
       // main cycle depending on temperature
       while (currentTemp > +params.min_temp) {
@@ -55,7 +55,7 @@ export class AnnealingSolver{
    * @param  {object} params  problem parameters
    * @return {int} calculated starting temperature
    */
-  computeStartingTemp(problem, params){
+  computeStartingTemp(problem){
       var currentConfiguration = problem.getConfiguration();
       var currentNeighbour = currentConfiguration.getNeighbour();
       var arrayOfEnergyStates = [];
@@ -100,5 +100,14 @@ export class AnnealingSolver{
       }
 
       return temperature;
+  }
+
+  /**
+   * Compute the size of inner cycle, its constant * size of the problem
+   * @param  {[type]} problem [description]
+   * @return {[type]}         [description]
+   */
+  computeEquil(problem){
+    return problem.getConfiguration().getSize() * 10;
   }
 }

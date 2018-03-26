@@ -12,7 +12,7 @@ export default class TravellingSalesmanGenerator {
         this.params.noNodes = +this.params.noNodes;
         this.params.noEdges = +this.params.noEdges;
         this.params.noNodesToVisit = +this.params.noNodesToVisit;
-        this.params.maxPrice = +this.params.maxPrice; 
+        this.params.maxPrice = +this.params.maxPrice;
     }
 
     /**
@@ -36,16 +36,6 @@ export default class TravellingSalesmanGenerator {
             generatedGraph[i] = new Array(this.params.noNodes);
             generatedGraph[i].fill(0);
         }
-
-        var toPrint = "";
-        for(var i = 0; i < this.params.noNodes; i ++)
-        {
-            for(var j = 0; j < this.params.noNodes; j ++){
-                toPrint += generatedGraph[i][j] +" ";
-            }
-            toPrint += "\n";
-        }
-        console.log(toPrint);
 
         //visiting all nodes
         if(this.params.noNodesToVisit === this.params.noNodes - 1) {
@@ -77,15 +67,6 @@ export default class TravellingSalesmanGenerator {
                 }
             }
         }
-        var toPrint = "";
-        for(var i = 0; i < this.params.noNodes; i ++)
-        {
-            for(var j = 0; j < this.params.noNodes; j ++){
-                toPrint += generatedGraph[i][j] +" ";
-            }
-            toPrint += "\n";
-        }
-        console.log(toPrint);
 
         // generating the desired amount of edges
         while(this.params.noEdges !== numberOfCreatedEdges)
