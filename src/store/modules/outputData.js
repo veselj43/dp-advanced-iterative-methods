@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { storage, storageKeys, storageUtils } from '@/services/localStorage'
+import { storage, storageKeys, storageUtils } from '@/services/localStorage';
+import { pk } from './database/DBSchema';
 
 function GeneratedInfo(index, params) {
     this.index = index;
@@ -7,7 +8,7 @@ function GeneratedInfo(index, params) {
 }
 
 function GeneratedDataSet(historyRecord) {
-    this.itemId = historyRecord.id;
+    this.itemId = historyRecord[pk];
     this.data = historyRecord.data.dataSet;
 }
 
@@ -62,7 +63,7 @@ const mutations = {
                 return false;
             }
 
-            Vue.set(state.comparingResults.info.items, toAdd.id, {
+            Vue.set(state.comparingResults.info.items, toAdd[pk], {
                 instance: toAdd.instance,
                 params: toAdd.params,
                 result: toAdd.data.result
@@ -82,20 +83,20 @@ const mutations = {
             return;
         }
 
-        if (state.comparingResults.info.items[toAdd.id]) {
+        if (state.comparingResults.info.items[toAdd[pk]]) {
             var removeIndex = -1;
             for (var i in state.comparingResults.chart.dataSets) {
-                if (state.comparingResults.chart.dataSets[i].itemId === toAdd.id) {
+                if (state.comparingResults.chart.dataSets[i].itemId === toAdd[pk]) {
                     removeIndex = i;
                     break;
                 }
             }
             state.comparingResults.chart.dataSets.splice(removeIndex, 1);
-            Vue.delete(state.comparingResults.info.items, toAdd.id);
+            Vue.delete(state.comparingResults.info.items, toAdd[pk]);
             state.comparingResults.info.selectedIndexes.splice(state.comparingResults.info.selectedIndexes.indexOf(index), 1);
         }
         else {
-            Vue.set(state.comparingResults.info.items, toAdd.id, {
+            Vue.set(state.comparingResults.info.items, toAdd[pk], {
                 instance: toAdd.instance,
                 params: toAdd.params,
                 result: toAdd.data.result
@@ -115,7 +116,7 @@ const mutations = {
 
         if (!checkedAll) {
             state.computingHistory.forEach((toAdd, index) => {
-                Vue.set(state.comparingResults.info.items, toAdd.id, {
+                Vue.set(state.comparingResults.info.items, toAdd[pk], {
                     instance: toAdd.instance,
                     params: toAdd.params,
                     result: toAdd.data.result

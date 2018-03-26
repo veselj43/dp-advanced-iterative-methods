@@ -1,71 +1,53 @@
 import idb from 'idb';
+import zango from 'zangodb';
 
 export default class DBManager {
-    constructor(dbName, version, onUpgradeNeeded) {
+    constructor(dbName, dbSchema, version, onUpgradeNeeded) {
         this._dbName = dbName;
         this._version = version;
         this._onUpgradeNeeded = onUpgradeNeeded;
-        this.initDB();
-
-        this.setDefaultRejectFn(function(e) {
-            console.log("[DB] error", e);
-            return null;
-        });
+        this.initDB(dbSchema);
     }
 
-    initDB() {
-        this._dbPromise = idb.open(this._dbName, this._version, this._onUpgradeNeeded);
+    initDB(dbSchema) {
+        this._db = new zango.Db(this._dbName, dbSchema);
     }
 
-    setDefaultRejectFn(rejectFn) {
-        this._defaultRejectFn = rejectFn;
+    getDb() {
+        return this._db;
     }
 
-    query(resolveFn, rejectFn) {
-        if (!rejectFn) rejectFn = this._defaultRejectFn;
-        return this._dbPromise.then(resolveFn, rejectFn);
+    getStore(dbTable) {
+        return this._db.collection(dbTable);
     }
 
-    getStore(dbTable, mode) {
-        return this.query(function(db) {
-            return db.transaction(dbTable, mode).objectStore(dbTable);
-        });
-    }
-
-    get(dbTable, byIndex, value) {
-        return this.getStore(dbTable).then(function(store) {
-            var index = byIndex ? store.index(byIndex) : store;
-            return index.get(value);
-        });
+    get(dbTable, key, value) {
+        return this.getStore(dbTable)
+            .findOne({ key: value })
+            .then(result => {
+                return result;
+            });
     }
 
     getAll(dbTable, byIndex, value) {
-        return this.getStore(dbTable).then(function(store) {
-            var index = byIndex ? store.index(byIndex) : store;
-            return index.getAll(value);
-        });
+        return this.getStore(dbTable)
+            .find()
+            .toArray((error, docs) => {
+                if (error) { throw error; }
+            });
     }
 
     remove(dbTable, value) {
-        return this.getStore(dbTable, 'readwrite').then(function(store) {
-            store.openCursor(value).then(function(cursor) {
-                if (!cursor) return false;
-                return cursor.delete().then(function() {
-                    return true;
-                }, function(err) {
-                    console.log("[DB] record remove error", err);
-                    return false;
-                });
+        return this.getStore(dbTable)
+            .remove((value) ? {_id: value} : undefined)
+            .then((error) => {
+                if (error) { throw error; }
             });
-        });
     }
 
     deleteDB() {
-        idb.delete(this._dbName).then(function() {
-            console.log("[DB] deleted");
-            this.initDB();
-        }, function() {
-            console.log("[DB] delete error");
+        this._db.drop((error) => {
+            console.log("[DB] delete", error);
         });
         
         // until IndexedDB.deleteDatabase() is fixed

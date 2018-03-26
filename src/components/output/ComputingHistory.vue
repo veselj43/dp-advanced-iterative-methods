@@ -14,7 +14,7 @@
             <div class="history-list">
                 <computing-history-item
                     v-for="(result, index) in computingHistory"
-                    :key="result.id"
+                    :key="result._id"
                     :item="result"
                     :index="index"
                 ></computing-history-item>

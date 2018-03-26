@@ -40,7 +40,7 @@ export default {
     computed: {
         checked: {
             get() {
-                return !!this.$store.state.outputData.comparingResults.info.items[this.item.id];
+                return !!this.$store.state.outputData.comparingResults.info.items[this.item._id];
             },
             set() {
                 this.toggleIndexInComparingResults(this.index);

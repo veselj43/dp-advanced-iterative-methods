@@ -104,16 +104,16 @@ const mutations = {
             return;
         }
         if (state.files.selected.id === -1) {
-            state.files.selected.id = state.files.instances[0].id;
+            state.files.selected.id = state.files.instances[0]._id;
             state.files.selected.index = 0;
             return;
         }
-        if (state.files.selected.index >= state.files.instances.length || state.files.selected.id < state.files.instances[state.files.selected.index].id) {
+        if (state.files.selected.index >= state.files.instances.length || state.files.selected.id < state.files.instances[state.files.selected.index]._id) {
             state.files.selected.index--;
             if (state.files.selected.index < 0) state.files.selected.index = 0;
         }
 
-        state.files.selected.id = state.files.instances[state.files.selected.index].id;
+        state.files.selected.id = state.files.instances[state.files.selected.index]._id;
     }
 }
 

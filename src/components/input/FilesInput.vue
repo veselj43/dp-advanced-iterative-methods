@@ -18,10 +18,10 @@
 
         <div class="fileList-wrapper">
             <ul v-if="files.length > 0">
-                <li v-for="(instance, index) in files" :key="instance.id" v-bind:class="{ active: index === selectedFile }">
-                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeFile(instance.id, instance.file.name)"></span>
+                <li v-for="(instance, index) in files" :key="instance._id" v-bind:class="{ active: index === selectedFile }">
+                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeFile(instance._id, instance.file.name)"></span>
                     <span class="download glyphicon glyphicon-download-alt" v-on:click="downloadInstance(index)"></span>
-                    <span class="select" v-on:click="selectInstance({index, id: instance.id})" v-bind:title="instance.file.name">{{instance.file.name}}</span>
+                    <span class="select" v-on:click="selectInstance({index, id: instance._id})" v-bind:title="instance.file.name">{{instance.file.name}}</span>
                 </li>
             </ul>
             <p v-if="files.length === 0" class="help-block">No instances uploaded or generated.</p>
