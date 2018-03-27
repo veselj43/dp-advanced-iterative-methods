@@ -100,7 +100,7 @@ export class AnnealingSolver{
           temperature = temperature * (-Math.log(currentPropability) / -Math.log(wantedPropability));
       }
 
-      return Math.round(temperature);
+      return Math.ceil(temperature);
   }
 
   /**

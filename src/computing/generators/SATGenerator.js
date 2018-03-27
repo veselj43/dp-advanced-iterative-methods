@@ -22,14 +22,16 @@ export default class SATGenerator {
       empty = true;
       for (var i = 0; i < this.params.noVariables; i++)
       {
-        sign = Math.round(Math.random() * 2 - 1);
-        if(sign < 0) {
-          newClausule += "-" + (i+1) + " ";
-          empty = false;
-        }
-        else if(sign > 0) {
-          newClausule += (i+1) + " ";
-          empty = false;
+        if(Math.random() < 1/(this.params.noVariables / 10)) {
+          sign = Math.round(Math.random() * 2 - 1);
+          if(sign < 0) {
+            newClausule += "-" + (i+1) + " ";
+            empty = false;
+          }
+          else if(sign > 0) {
+            newClausule += (i+1) + " ";
+            empty = false;
+          }
         }
       }
       if(!empty) {
