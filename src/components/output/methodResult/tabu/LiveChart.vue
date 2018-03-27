@@ -103,14 +103,14 @@ export default {
 
             if (newValue.length < oldValue.length || oldValue.length === 0) {
                 this.liveValuesBuffer = [];
-                this.lastUpdatedIndex = -1;
+                this.lastUpdatedIndex = 0;
                 this.redrawDebounce = 10;
                 this.initLiveLineChart();
                 return;
             }
 
-            this.liveValuesBuffer.push(...newValue.slice(this.lastUpdatedIndex + 1, newValue.length - 1));
-            this.lastUpdatedIndex = newValue.length - 1;
+            this.liveValuesBuffer.push(...newValue.slice(this.lastUpdatedIndex, newValue.length));
+            this.lastUpdatedIndex = newValue.length;
 
             if (performance.now() - this.lastUpdate > this.redrawDebounce || newValue.length === this.liveData.chart.noValues) {
                 var beforeUpdate = performance.now();
