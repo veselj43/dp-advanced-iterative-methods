@@ -11,6 +11,18 @@ var methods = {
     work: function(data, params) {
         var job = new Job(data, params);
         job.run(params.methodParams[params.method.id]);
+    },
+
+    computeStartingTemp: function(data, problemId) {
+        let params = {
+            problem: { id: problemId },
+            method: { id: 'annealing' }
+        };
+        let job = new Job(data, params);
+
+        let result = job.method.computeStartingTemp(job.problem);
+
+        workerInterface.reply('result', result);
     }
 }
 

@@ -51,12 +51,9 @@
 </template>
 
 <script>
-import * as Annealing from '@/computing/methods/Annealing';
-import * as SAT from '@/computing/problems/SAT';
-import * as Knapsack from '@/computing/problems/Knapsack';
-import * as Vertex from '@/computing/problems/MinimalVertexCover';
-import * as Salesman from '@/computing/problems/TravellingSalesman';
 import { mapGetters } from 'vuex';
+import { WorkerManager } from '@/computing/WorkerManager.js';
+import IterativeMethodWorker from '@/computing/IterativeMethodWorker.js';
 import { getDbFileContent } from "@/services/fileReader";
 
 export default {
@@ -72,23 +69,29 @@ export default {
             'selectedProblemId'
         ])
     },
+    mounted () {
+        this.workerManager = new WorkerManager(this, IterativeMethodWorker);
+
+        this.workerManager
+            .setHandler('result', this.onResult)
+    },
     methods: {
         calcTemp() {
-            var problemId = this.selectedProblemId;
-            this.problem = null;
+            if (this.workerManager.inProgress) {
+                this.$notifier.put("workerInfo", "Already computing starting temperature.", "info");
+                return;
+            }
 
             getDbFileContent(this.getSelectedFile).then((content) => {
-                if (problemId === 0) this.problem = new SAT.SAT(content);
-                else if (problemId === 1) this.problem = new Salesman.TravellingSalesman(content);
-                else if (problemId === 2) this.problem = new Knapsack.Knapsack(content);
-                else if (problemId === 3) this.problem = new Vertex.MinimalVertexCover(content);
-
-                var method = new Annealing.AnnealingSolver();
-
-                this.params.start_temp = method.computeStartingTemp(this.problem);
+                this.workerManager.sendWork('computeStartingTemp', content, this.selectedProblemId);
             }, (errorMsg) => {
                 this.$notifier.put("inFile", errorMsg);
             });
+        },
+
+        onResult(result) {
+            this.workerManager.terminate();
+            this.params.start_temp = result;
         }
     },
     watch: {
