@@ -29,7 +29,7 @@ export default {
 
     mounted() {
         window.addEventListener("resize", this.windowResize);
-        
+
         this.multipleLineChart = dc.seriesChart('#comparisonChart');
 
         this.initMultipleLineChart();
@@ -76,7 +76,7 @@ export default {
             if (checkDuplicates && this.labels[id]) {
                 return [];
             }
-            
+
             var filterData = [];
 
             data.forEach((d, j) => {
@@ -95,7 +95,7 @@ export default {
 
             return filterData;
         },
-        
+
         initMultipleLineChart() {
             this.updateElementWidth();
             var multipleLineChart = this.multipleLineChart;
@@ -115,7 +115,7 @@ export default {
                 .xAxisLabel("States checked")
                 .yAxisLabel("Value")
                 .elasticX(true)
-                // .elasticY(true)
+                .elasticY(true)
                 .brushOn(false)
                 // .mouseZoomable(true)
                 .renderHorizontalGridLines(true)
@@ -151,7 +151,7 @@ export default {
 
             // dataset replaced with just computed files and the length is the same
             remove = remove || (
-                (this.lastActiveCount === 1 && newActiveCount === 1) && 
+                (this.lastActiveCount === 1 && newActiveCount === 1) &&
                 (Object.keys(newValue)[0] !== Object.keys(oldValue)[0])
             );
 
@@ -169,16 +169,17 @@ export default {
 
             this.lastActiveCount = newActiveCount;
 
-            var maxYAxeValue = Math.max(...Object.keys(newValue).map(key => newValue[key].result.cost));
-            if (maxYAxeValue >= 0) {
-                this.multipleLineChart
-                    .elasticY(false)
-                    .y(d3.scale.linear().domain([0, maxYAxeValue * this.options.maxYAxeValueMarginMultiplier]));
-            }
-            else {
-                this.multipleLineChart
-                    .elasticY(true);
-            }
+            // var maxYAxeValue = Math.max(...Object.keys(newValue).map(key => newValue[key].result.cost));
+            // var minYAxeValue = Math.min(...Object.keys(newValue).map(key => newValue[key].result.cost));
+            // // if (maxYAxeValue >= 0) {
+            //    this.multipleLineChart
+            //         .elasticY(false)
+            //         .y(d3.scale.linear().domain([minYAxeValue * this.options.maxYAxeValueMarginMultiplier, maxYAxeValue * this.options.maxYAxeValueMarginMultiplier]));
+            // // }
+            // // else {
+            // //     this.multipleLineChart
+            // //         .elasticY(true);
+            // // }
 
             this.multipleLineChart.redraw();
 

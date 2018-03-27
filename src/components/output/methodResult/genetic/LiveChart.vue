@@ -13,7 +13,7 @@ export default {
         return {
             liveData: this.$store.state.liveData.data,
             liveValuesBuffer: [],
-            lastUpdatedIndex: 0,
+            lastUpdatedIndex: -1, //0
             lastUpdate: 0,
             redrawDebounce: 0,
             options: {
@@ -43,8 +43,8 @@ export default {
             .width(options.width).height(options.height)
             .x(d3.scale.linear().domain([0, 100]))
             .elasticY(true)
-            .xAxisLabel("States checked")
-            .yAxisLabel("Value")
+            .xAxisLabel("Generation")
+            .yAxisLabel("Fitness")
             .brushOn(false)
             // .xyTipsOn(false)
             .renderHorizontalGridLines(true)
@@ -59,10 +59,10 @@ export default {
             })
             .dimension(dim)
             .group(grp);
-        
+
         this.liveSeriesChart.margins().right = options.margin.right;
         this.liveSeriesChart.margins().bottom += 5;
-        
+
         this.liveSeriesChart.render();
     },
 
@@ -87,28 +87,28 @@ export default {
         initliveSeriesChart() {
             this.windowResize();
             this.ndx.remove();
+            this.indexOffset = 0;
 
             this.liveSeriesChart
-                .x(d3.scale.linear().domain([0, this.liveData.chart.noValues]));
+                .x(d3.scale.linear().domain([0, this.liveData.chart.noValues-1]));
 
             this.liveSeriesChart.redraw();
         },
 
         updateliveSeriesChart() {
-            var indexOffset = this.ndx.size();
             var filterData = [];
             this.liveValuesBuffer.forEach((d, i) => {
                 filterData.push(
                     ...Object.keys(d).map(key => {
                         return {
-                            index: indexOffset + i,
+                            index: this.indexOffset + i,
                             type: key,
                             value: +d[key]
                         }
                     })
                 )
             });
-
+            this.indexOffset += this.liveValuesBuffer.length;
             this.ndx.add(filterData);
             this.liveValuesBuffer = [];
             this.liveSeriesChart.redraw();
@@ -123,13 +123,11 @@ export default {
                 this.lastUpdatedIndex = -1;
                 this.redrawDebounce = 10;
                 this.initliveSeriesChart();
-                return;
             }
-
-            this.liveValuesBuffer.push(...newValue.slice(this.lastUpdatedIndex + 1, newValue.length - 1));
+            this.liveValuesBuffer.push(...newValue.slice(this.lastUpdatedIndex + 1, newValue.length));
             this.lastUpdatedIndex = newValue.length - 1;
 
-            if (performance.now() - this.lastUpdate > this.redrawDebounce || newValue.length === this.liveData.chart.noValues) {
+            if (performance.now() - this.lastUpdate > this.redrawDebounce || newValue.length >= this.liveData.chart.noValues) {
                 var beforeUpdate = performance.now();
                 this.updateliveSeriesChart();
                 this.lastUpdate = performance.now();
