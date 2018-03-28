@@ -1,18 +1,22 @@
 <template>
     <div class="config-permutation">
-        <table v-if="comparingResultsItems">
-            <tr>
-                <td>Instance</td>
-                <td v-for="(value, index) in varCount" :key="index">
-                    {{index + 1}}.
-                </td>
-            </tr>
-            <tr v-for="(item, itemIndex) in comparingResultsItems" :key="itemIndex">
-                <td class="instanceName">{{item.instance}}</td>
-                <td v-for="(value, configIndex) in item.result.config" :class="{true: value, false: !value}" :key="configIndex">
-                    {{value}}
-                </td>
-            </tr>
+        <table v-if="comparingResultsItems" class="table-hover">
+            <thead>
+                <tr>
+                    <td>Instance</td>
+                    <td v-for="(value, index) in varCount" :key="index">
+                        {{index + 1}}.
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, itemIndex) in comparingResultsItems" :key="itemIndex">
+                    <td class="instanceName">{{item.instance}}</td>
+                    <td v-for="(value, configIndex) in item.result.config" :class="{true: value, false: !value}" :key="configIndex">
+                        {{value}}
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </template>

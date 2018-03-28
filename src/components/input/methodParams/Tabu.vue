@@ -2,7 +2,9 @@
     <div class="params">
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuIterationLimit')}">
             <label class="" for="iterationLimit">Iteration limit</label>
-            <span class="form-tooltip" v-tooltip.right="'Tooltip text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+            <span class="form-tooltip" v-tooltip.right="'Limit of states choosed as next step'">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </span>
             <input type="number" min="1"
                 class="form-control" id="iterationLimit" name="tabuIterationLimit"
                 v-model="params.iterationLimit"
@@ -12,7 +14,9 @@
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuSize')}">
             <label class="" for="tabuSize">State tabu size</label>
-            <span class="form-tooltip" v-tooltip.right="'Tooltip text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+            <span class="form-tooltip" v-tooltip.right="'Number of states in tabu queue'">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </span>
             <input type="number" min="0" max="1000"
                 class="form-control" id="tabuSize" name="tabuSize"
                 v-model="params.tabuSize"
@@ -22,7 +26,9 @@
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuSizeShort')}">
             <label class="" for="tabuSizeShort">Changes tabu size</label>
-            <span class="form-tooltip" v-tooltip.right="'Tooltip text'"><span class="glyphicon glyphicon-question-sign"></span></span>
+            <span class="form-tooltip" v-tooltip.right="'Number of iterations for which is configuration variable change tabu'">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </span>
             <input type="number" min="0" max="1000"
                 class="form-control" id="tabuSizeShort" name="tabuSizeShort"
                 v-model="params.tabuSizeShort"

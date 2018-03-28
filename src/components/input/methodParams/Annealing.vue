@@ -139,6 +139,12 @@ export default {
                 this.$store.commit('updateParams', {id: 'annealing', data: params});
             },
             deep: true
+        },
+        errors: {
+            handler: function (errors) {
+                this.$store.commit('updateParamsValidation', {data: errors.items.length === 0});
+            },
+            deep: true
         }
     }
 }
