@@ -19,7 +19,7 @@ export class GeneticSolver {
         const noGenerations = params.noGenerations;
         switch (params.selectionType) {
             case "roulette-rank":
-                this.selection = new RouletteSelection("rank", params.scaleMin);
+                this.selection = new RouletteSelection("rank", params.scaleMin, params.scaleMax);
                 break;
             case "roulette-linear":
                 this.selection = new RouletteSelection("linear", params.scaleMin, params.scaleMax);

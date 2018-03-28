@@ -78,7 +78,7 @@ export class RouletteSelection {
     _rankIndividuals(generation) {
         var rankSum = 0;
         for (var i = 0; i < generation.length; i++) {
-            var rank = this.min + i;
+            var rank = this.min + i * ((this.max - this.min)/(generation.length - 1));
             generation[i].setRank(rank);
             rankSum += rank;
         }
@@ -90,7 +90,7 @@ export class RouletteSelection {
         var fitMin = generation[0].getFitness();
         var rankSum = 0;
         for (var i = 0; i < generation.length; i++) {
-            var scaledRank = this.min + (generation[1].getFitness() - fitMin)*((this.max - this.min)/(fitMax - fitMin));
+            var scaledRank = this.min + (generation[i].getFitness() - fitMin)*((this.max - this.min)/(fitMax - fitMin));
             generation[i].setRank(scaledRank);
             rankSum += scaledRank;
         }
