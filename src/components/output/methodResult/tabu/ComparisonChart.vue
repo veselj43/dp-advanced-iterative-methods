@@ -1,5 +1,7 @@
 <template>
-    <div id="comparisonChart"></div>
+    <div id="comparisonChart">
+        <div class="chart-hover-info"></div>
+    </div>
 </template>
 
 <script>
@@ -22,7 +24,7 @@ export default {
                 margin: {
                     right: 200,
                 },
-                maxYAxeValueMarginMultiplier: 1.1
+                yAxisLeftOffset: 41
             },
         }
     },
@@ -99,7 +101,8 @@ export default {
                 .xAxisLabel("States checked")
                 .yAxisLabel("Value")
                 .elasticX(true)
-                // .elasticY(true)
+                .elasticY(true)
+                .yAxisPadding(10)
                 .brushOn(false)
                 // .mouseZoomable(true)
                 .renderHorizontalGridLines(true)
@@ -112,7 +115,35 @@ export default {
                     return dc.lineChart(c).xyTipsOn(false);
                 })
                 .dimension(runDimension)
-                .group(runGroup);
+                .group(runGroup)
+                .on('renderlet', function(chart) {
+                    let referencedContainer = chart.select('svg');
+                    if (referencedContainer) {
+                        let chartAreaWidth = referencedContainer[0][0].width.animVal.value - chartOptions.margin.right - chartOptions.yAxisLeftOffset;
+                        let xAxisMax = Math.max(...componentContext.comparingResults.chart.dataSets.map(dataset => dataset.data.length)) - 1;
+                        referencedContainer.on('mousemove', function(d) {
+                            let mouseCoords = d3.mouse(this);
+                            let xCoord = Math.floor(mouseCoords[0]) - chartOptions.yAxisLeftOffset;
+                            let xValue = Math.round(xAxisMax * xCoord / chartAreaWidth);
+                            if (xValue < 0 || xValue > xAxisMax) {
+                                chart.select('.chart-hover-info').style('display', 'none');
+                                return;
+                            }
+                            chart.select('.chart-hover-info').style('display', null);
+                            chart.select('.chart-hover-info').style('top', mouseCoords[1]+20 + 'px');
+                            chart.select('.chart-hover-info').style('left', mouseCoords[0]+20 + 'px');
+                            let yValue = componentContext.comparingResults.chart.dataSets.map(dataset => dataset.data[xValue]);
+                            let htmlCoodrs = yValue.reduce((acc, value) => {
+                                if (value) {
+                                    return acc += "<li>" + value + "</li>";
+                                }
+                                return acc;
+                            }, xValue + ': <ul>');
+                            htmlCoodrs += "</ul>";
+                            chart.select('.chart-hover-info').html(htmlCoodrs);
+                        })
+                    }
+                });
 
             multipleLineChart.margins().right = chartOptions.margin.right;
             multipleLineChart.margins().bottom += 5;
@@ -148,17 +179,6 @@ export default {
 
             this.lastActiveCount = newActiveCount;
 
-            var maxYAxeValue = Math.max(...Object.keys(newValue).map(key => newValue[key].result.cost));
-            if (maxYAxeValue >= 0) {
-                this.multipleLineChart
-                    .elasticY(false)
-                    .y(d3.scale.linear().domain([0, maxYAxeValue * this.options.maxYAxeValueMarginMultiplier]));
-            }
-            else {
-                this.multipleLineChart
-                    .elasticY(true);
-            }
-
             this.multipleLineChart.redraw();
 
             // first load of the component
@@ -170,9 +190,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
     #comparisonChart {
+        position: relative;
         width: 100%;
+    }
+
+    .chart-hover-info {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        padding: 5px;
+        background-color: #ffffffdd;
+        border: #ddd 1px solid;
+
+        & > ul {
+            margin: 0;
+            padding-left: 10px;
+            list-style: none;
+        }
     }
 </style>
 
