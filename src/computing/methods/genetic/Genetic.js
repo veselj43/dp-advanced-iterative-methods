@@ -1,6 +1,6 @@
 import Result from '../../_common/Result';
 import BufferedReply from "../../_common/BufferedReply";
-import {RouletteSelection, TourneySelection} from "./Selection";
+import {RouletteSelection, TournamentSelection} from "./Selection";
 import {OnePointCrossover, TwoPointCrossover, UniformCrossover} from "./Crossover";
 
 
@@ -24,8 +24,8 @@ export class GeneticSolver {
             case "roulette-linear":
                 this.selection = new RouletteSelection("linear", params.scaleMin, params.scaleMax);
                 break;
-            case "tourney":
-                this.selection = new TourneySelection(params.tourneySize);
+            case "tournament":
+                this.selection = new TournamentSelection(params.tournamentSize);
                 break;
             default:
                 throw new Error("Selection type " + params.selectionType + " is not supported.");
@@ -52,7 +52,7 @@ export class GeneticSolver {
         this.bestFitness = 0;
         this.counter = 0;
 
-        console.log("params: ", params);
+        //console.log("params: ", params);
 
         this._workerInterface.reply('init', { numberOfIterations: params.noGenerations/*, maxFitness: this.problemInput.params.numberOfClausules*/ });
 

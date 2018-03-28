@@ -26,11 +26,11 @@
                         <th class="toggle-detail"></th>
                         <th>Instance</th>
                         <th>Best value</th>
-                        <th>States checked</th>
+                        <th>Generations</th>
                         <th>Processing time</th>
                     </tr>
                 </thead>
-                    <comparison-table-item 
+                    <comparison-table-item
                         v-for="(item, index) in comparingResultsInfo.items"
                         :key="index"
                         :item="item">
@@ -38,7 +38,7 @@
             </table>
 
         </div>
-        
+
     </div>
 </template>
 

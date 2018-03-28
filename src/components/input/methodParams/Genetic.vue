@@ -22,11 +22,11 @@
             <div class="form-group">
                 <label class="" for="selection-type">Selection type</label>
                 <!--TODO stukturovany tooltip do vice radku-->
-                <span class="form-tooltip" v-tooltip.right="{content: 'Defines selection mechanism:\n Tourney - Selects individuals uniformly in tourney the best one is selected.\n Roulette - \n  Ranking - \n  Linear Scaling', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="{content: 'Defines selection mechanism:\n Tournament - Selects individuals uniformly in tournament the best one is selected.\n Roulette - \n  Ranking - \n  Linear Scaling', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="selection-type" v-model="params.selectionType"> <!--v-on:change="selectionChange(this)"-->
                     <option value="roulette-rank">Roulette with ranking</option>
                     <option value="roulette-linear">Roulette with linear scaling</option>
-                    <option value="tourney">Tourney</option>
+                    <option value="tournament">Tournament</option>
                 </select>
             </div>
 
@@ -45,14 +45,14 @@
             </div>
 
 
-            <div class="form-group" id="tourney" v-if="params.selectionType === 'tourney'" v-bind:class="{'has-error': errors.has('genetic-tourney-size')}">
-                <label class="" for="tourney-size">Tourney size</label>
-                <span class="form-tooltip" v-tooltip.right="'Defines how many individuals compete in single tourney'"><span class="glyphicon glyphicon-question-sign"></span></span>
+            <div class="form-group" id="tournament" v-if="params.selectionType === 'tournament'" v-bind:class="{'has-error': errors.has('genetic-tournament-size')}">
+                <label class="" for="tournament-size">Tournament size</label>
+                <span class="form-tooltip" v-tooltip.right="'Defines how many individuals compete in single tournament'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <input class="form-control" type="number" min="1" step="0.5"
-                       id="tourney-size" name="genetic-tourney-size" v-model="params.tourneySize"
+                       id="tournament-size" name="genetic-tournament-size" v-model="params.tournamentSize"
                        data-vv-as="number of generations" v-validate.initial="{ required: true, min_value: 1, max_value: params.populationSize, regex: /^([0-9]*[.])?[0-9]+$/ }"
                 >
-                <span v-show="errors.has('genetic-tourney-size')" class="help-block">{{ errors.first('genetic-tourney-size') }}</span>
+                <span v-show="errors.has('genetic-tournament-size')" class="help-block">{{ errors.first('genetic-tournament-size') }}</span>
             </div>
         </div>
         <div id="crossover">
