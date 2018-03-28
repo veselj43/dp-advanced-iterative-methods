@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label class="" for="selection-type">Selection type</label>
                 <!--TODO stukturovany tooltip do vice radku-->
-                <span class="form-tooltip" v-tooltip.right="{content: 'Defines selection mechanism:\n Tournament - Selects individuals uniformly in tournament the best one is selected.\n Roulette - \n  Ranking - \n  Linear Scaling', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="{content: 'Defines selection mechanism:\nTournament - Selects individuals uniformly in \n     tournament the best one is selected\n Roulette - Each individual is selected based on \n     portions in roulette\n', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="selection-type" v-model="params.selectionType"> <!--v-on:change="selectionChange(this)"-->
                     <option value="roulette-rank">Roulette with ranking</option>
                     <option value="roulette-linear">Roulette with linear scaling</option>
@@ -30,49 +30,32 @@
                 </select>
             </div>
 
-            <div class="form-group" id="roulette" v-if="params.selectionType === 'roulette-rank' || params.selectionType === 'roulette-linear'">
-                <!--<div v-if="params.selectionType === 'roulette-linear'">-->
-                <!--<label class="">Linear scaling</label>-->
-                <!--<span class="form-tooltip" v-tooltip.right="'Linear scaling tooltip TODO text'"><span class="glyphicon glyphicon-question-sign"></span></span>-->
-                <!--</div>-->
-                    <!--TODO min a max do jednoho radku/nahradit sliderem-->
-                <!--<div class="row">-->
-                <!--<div class="input-group row">-->
-                    <!--<div class="input-group-prepend  col-xs-6">-->
-                        <!--<span class="input-group-text" id="">First and last name</span>-->
-                    <!--</div>-->
-                <!--<label>Scaling</label>-->
-                <!--<div class="form-group input-group">-->
-                    <!--&lt;!&ndash;<div class="input-group-prepend col-xs-2">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<span class="input-group-text">Min</span>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-                    <!--<div class="input-group-addon">Min</div>-->
-                    <!--&lt;!&ndash;<div class="col-xs-4">&ndash;&gt;-->
-                    <!--<input type="text" class="form-control">-->
-                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-                    <!--<input type="text" class="form-control">-->
-                    <!--&lt;!&ndash;<div class="col-xs-4">&ndash;&gt;-->
-                    <!--<div class="input-group-addon">Max</div>-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<div class="input-group-append col-xs-2">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<span class="input-group-text">Max</span>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                <!--</div>-->
-                <!--</div>-->
-
-                    <label class="" for="scale-min">Min scale</label>
-                    <input class="form-control" type="number" id="scale-min" v-model="params.scaleMin">
-                    <label class="" for="scale-max">Max scale</label>
-                    <input class="form-control" type="number" id="scale-max" v-model="params.scaleMax">
-
+            <div class="form-group" v-bind:class="{'has-error': (errors.has('genetic-scale-min') || errors.has('genetic-scale-max'))}" id="roulette" v-if="params.selectionType === 'roulette-rank' || params.selectionType === 'roulette-linear'">
+                <div v-if="params.selectionType === 'roulette-rank'">
+                <label class="">Rank scale</label>
+                <span class="form-tooltip" v-tooltip.right="'Roulette portions are linearly scaled from min to max according to rank'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                </div>
+                <div v-if="params.selectionType === 'roulette-linear'">
+                <label class="">Linear scaling</label>
+                <span class="form-tooltip" v-tooltip.right="'Roulette portions are linearly scaled from min to max according to fitness'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">Min</div>
+                    <input class="form-control" type="number" min="0" id="scale-min" name="genetic-scale-min" v-model="params.scaleMin"
+                           data-vv-as="minimum scale" v-validate.initial="{ required: true, min_value: 0, regex: /^([0-9]*[.])?[0-9]+$/ }">
+                    <div class="input-group-addon">-</div>
+                    <input class="form-control" type="number" min="1" id="scale-max" name="genetic-scale-max" v-model="params.scaleMax"
+                           data-vv-as="maximum scale" v-validate.initial="{ required: true, min_value: (1 > params.scaleMin) ? 1 : params.scaleMin, regex: /^([0-9]*[.])?[0-9]+$/ }">
+                    <div class="input-group-addon">Max</div>
+                </div>
+                <span v-show="errors.has('genetic-scale-min')" class="help-block">{{ errors.first('genetic-scale-min') }}</span>
+                <span v-show="errors.has('genetic-scale-max')" class="help-block">{{ errors.first('genetic-scale-max') }}</span>
             </div>
 
 
             <div class="form-group" id="tournament" v-if="params.selectionType === 'tournament'" v-bind:class="{'has-error': errors.has('genetic-tournament-size')}">
                 <label class="" for="tournament-size">Tournament size</label>
-                <span class="form-tooltip" v-tooltip.right="'Defines how many individuals compete in single tournament'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="'Defines how many individuals compete in single tournament. If number isn\'t integer sizes of tournaments varies based on decimal part.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <input class="form-control" type="number" min="1" step="0.5"
                        id="tournament-size" name="genetic-tournament-size" v-model="params.tournamentSize"
                        data-vv-as="number of generations" v-validate.initial="{ required: true, min_value: 1, max_value: params.populationSize, regex: /^([0-9]*[.])?[0-9]+$/ }"
@@ -94,7 +77,7 @@
             <div class="form-group">
                 <label class="" for="crossover-type">Crossover type</label>
                 <!--TODO stukturovany tooltip do vice radku-->
-                <span class="form-tooltip" v-tooltip="{content: 'Defines crossover mechanism:\n One-point - Individuals are split at one point and recombined\n Two-point - Individuals are split at two points and recombined\n Uniform - Each bit of parent goes into first or second offspring with equal probability', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOne-point - Individuals are split at one point and\n     recombined\nTwo-point - Individuals are split at two points and\n     recombined\nUniform - Each bit of parent goes into first or\n     second offspring with equal probability', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="crossover-type" v-model="params.crossoverType">
                     <option value="one-point">one-point</option>
                     <option value="two-point">two-point</option>
