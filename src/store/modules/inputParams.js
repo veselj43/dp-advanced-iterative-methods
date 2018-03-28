@@ -16,8 +16,8 @@ const initState = {
             genetic: {
                 populationSize: 20,
                 noGenerations: 100,
-                selectionType: "tourney",
-                tourneySize: 3,
+                selectionType: "tournament",
+                tournamentSize: 3,
                 scaleMin: 1,
                 scaleMax: 100,
                 crossoverProb: 0.8,

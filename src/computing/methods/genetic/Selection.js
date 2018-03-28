@@ -1,11 +1,11 @@
 import {getRandomInt} from "./Random";
 
-export class TourneySelection {
-    constructor(tourneySize) {
-        this._tourneySize = tourneySize;
-        this._smaller = Math.floor(this._tourneySize);
-        this._bigger = Math.ceil(this._tourneySize);
-        this._rest = this._tourneySize - this._smaller;
+export class TournamentSelection {
+    constructor(tournamentSize) {
+        this._tournamentSize = tournamentSize;
+        this._smaller = Math.floor(this._tournamentSize);
+        this._bigger = Math.ceil(this._tournamentSize);
+        this._rest = this._tournamentSize - this._smaller;
     }
 
     selectIndividuals(generation, number) {
@@ -22,9 +22,9 @@ export class TourneySelection {
         return selected;
     }
 
-    _findWinner(generation, tourneySize) {
+    _findWinner(generation, tournamentSize) {
         var winner = this._selectRandomIndividual(generation);
-        for (var i = 1; i < tourneySize; i++) {
+        for (var i = 1; i < tournamentSize; i++) {
             var challenger = this._selectRandomIndividual(generation);
             if (challenger.getFitness() > winner.getFitness()) {
                 winner = challenger;
@@ -78,7 +78,7 @@ export class RouletteSelection {
     _rankIndividuals(generation) {
         var rankSum = 0;
         for (var i = 0; i < generation.length; i++) {
-            var rank = this.min + i;
+            var rank = this.min + i * ((this.max - this.min)/(generation.length - 1));
             generation[i].setRank(rank);
             rankSum += rank;
         }
@@ -90,7 +90,7 @@ export class RouletteSelection {
         var fitMin = generation[0].getFitness();
         var rankSum = 0;
         for (var i = 0; i < generation.length; i++) {
-            var scaledRank = this.min + (generation[1].getFitness() - fitMin)*((this.max - this.min)/(fitMax - fitMin));
+            var scaledRank = this.min + (generation[i].getFitness() - fitMin)*((this.max - this.min)/(fitMax - fitMin));
             generation[i].setRank(scaledRank);
             rankSum += scaledRank;
         }
