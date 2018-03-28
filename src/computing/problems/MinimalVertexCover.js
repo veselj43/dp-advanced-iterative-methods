@@ -60,6 +60,17 @@ export class MinimalVertexCover extends Problem {
     }
 
     /**
+     * Return price function value that will be displayed in graph
+     * @param  {class} bitArrayConfig config for which we want the value for the graph
+     * @return {int}  the returned value
+     */
+    getProblemCost(bitArrayConfig){
+      var toReturn = this.getFitness(bitArrayConfig);
+      if(toReturn > 0) return this._size - toReturn;
+      else return toReturn;
+    }
+
+    /**
      * Returns random, or all 0, configuration of knapsack problem(BitArray configuration)
      * @param  {bool} random random or all 0
      * @return {class}  new BitArray class

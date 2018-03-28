@@ -29,7 +29,7 @@ export class AnnealingSolver{
       // main cycle depending on temperature
       while (currentTemp > +params.min_temp) {
           //inner cycle, equilibrium
-          for(var i = 0; i < +params.equil; i++){
+          for(var i = 0; i < +params.innerCycle; i++){
               //next is better
               if(problem.getFitness(currentConfiguration) < problem.getFitness(currentNeighbour)){
                   currentConfiguration = currentNeighbour;
@@ -44,10 +44,10 @@ export class AnnealingSolver{
               counter++;
           }
           currentTemp *= +params.cool_coef;
-          this._bufferedReply.addMessageWithAutoFlush( problem.getFitness(currentConfiguration) );
+          this._bufferedReply.addMessageWithAutoFlush( problem.getProblemCost(currentConfiguration) );
       }
-      this._bufferedReply.addMessage( problem.getFitness(currentConfiguration) ).flush();
-      return new Result(problem.getResult(currentConfiguration), problem.getFitness(currentConfiguration), counter);
+      this._bufferedReply.addMessage( problem.getProblemCost(currentConfiguration) ).flush();
+      return new Result(problem.getResult(currentConfiguration), problem.getProblemCost(currentConfiguration), counter);
   }
   /**
    * Function to compute starting temperature
@@ -66,20 +66,30 @@ export class AnnealingSolver{
       var maxSum;
       var minSum;
       var newEnergyState;
+      var size = currentConfiguration.getSize();
+      var conf, neigh = 0;
 
       var temperature = 100;
 
       // filling array with random transitions, more precisly with energies of those transitions (max and min fitness)
-      while(100*currentConfiguration.getSize() !== arrayOfEnergyStates.length)
+      while(10*size !== arrayOfEnergyStates.length)
       {
-          newEnergyState = {
-              max: Math.max(problem.getFitness(currentConfiguration), problem.getFitness(currentNeighbour)),
-              min: Math.min(problem.getFitness(currentConfiguration), problem.getFitness(currentNeighbour))
-          };
-          if(Math.sign(newEnergyState.max) === Math.sign(newEnergyState.min))
+          conf = problem.getFitness(currentConfiguration);
+          neigh = problem.getFitness(currentNeighbour);
+          if(Math.sign(conf) === Math.sign(neigh))
           {
+            if(Math.sign(conf) === -1) {
+              conf = -conf;
+              neigh = -neigh;
+            }
+            newEnergyState = {
+                max: Math.max(conf, neigh),
+                min: Math.min(conf, neigh)
+            };
             arrayOfEnergyStates.push(newEnergyState);
           }
+
+
           currentConfiguration = currentNeighbour;
           currentNeighbour = currentConfiguration.getNeighbour();
       }
@@ -94,10 +104,12 @@ export class AnnealingSolver{
               maxSum += Math.exp(-arrayOfEnergyStates[i].max / temperature);
               minSum += Math.exp(-arrayOfEnergyStates[i].min / temperature);
           }
-
+          if(maxSum === 0 && minSum === 0) break;
           currentPropability = maxSum / minSum;
-          //console.log(currentPropability);
+          if(currentPropability === 1) return 1;
+
           temperature = temperature * (-Math.log(currentPropability) / -Math.log(wantedPropability));
+          console.log(temperature);
       }
 
       return Math.ceil(temperature);
@@ -108,7 +120,7 @@ export class AnnealingSolver{
    * @param  {[type]} problem [description]
    * @return {[type]}         [description]
    */
-  computeEquil(problem){
-    return problem.getConfiguration().getSize() * 10;
+  computeInnerCycle(problem){
+    return problem.getConfiguration().getSize();
   }
 }

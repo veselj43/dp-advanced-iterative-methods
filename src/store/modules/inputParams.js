@@ -11,7 +11,7 @@ const initState = {
                 start_temp: 100,
                 cool_coef: 0.995,
                 min_temp: 10,
-                equil: 50
+                innerCycle: 50
             },
             genetic: {
                 populationSize: 20,

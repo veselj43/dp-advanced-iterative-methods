@@ -12,6 +12,9 @@
                 <div class="input-group-addon btn btn-default" v-on:click="calcTemp" v-tooltip.right="'Automatically calculate'">Set</div>
             </div>
             <span v-show="errors.has('startTemp')" class="help-block">{{ errors.first('startTemp') }}</span>
+            <div id="loading">
+              <img id="loading-image" style="display: none;" src="@/assets/loading_01.svg" alt="Loading..." />
+            </div>
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('coolingCoef')}">
             <label class="" for="param2">Cooling coefficient</label>
@@ -38,14 +41,15 @@
         <div class="form-group" v-bind:class="{'has-error': errors.has('equil')}">
             <label class="" for="param4">Inner cycle</label>
             <span class="form-tooltip" v-tooltip.right="'Size of the inner cyrcle, how many configurations the algorithm tries before changing temperature'"><span class="glyphicon glyphicon-question-sign"></span></span>
-            <div class="">
-                <input class="form-control" type="number" id="param4" v-model="params.equil" placeholder=""
+            <div class="input-group">
+                <input class="form-control" type="number" id="param4" v-model="params.innerCycle" placeholder=""
                 name="equil"
                 data-vv-as="inner cycle"
                 v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
                 >
-                <span v-show="errors.has('equil')" class="help-block">{{ errors.first('equil') }}</span>
+                <div class="input-group-addon btn btn-default" v-on:click="calcInnerCycle" v-tooltip.right="'Automatically calculate'">Set</div>
             </div>
+            <span v-show="errors.has('equil')" class="help-block">{{ errors.first('equil') }}</span>
         </div>
     </div>
 </template>
@@ -55,6 +59,11 @@ import { mapGetters } from 'vuex';
 import { WorkerManager } from '@/computing/WorkerManager.js';
 import IterativeMethodWorker from '@/computing/IterativeMethodWorker.js';
 import { getDbFileContent } from "@/services/fileReader";
+import * as Annealing from '@/computing/methods/Annealing';
+import * as Vertex from '@/computing/problems/MinimalVertexCover';
+import * as Salesman from '@/computing/problems/TravellingSalesman';
+import * as SAT from '@/computing/problems/SAT';
+import * as Knapsack from '@/computing/problems/Knapsack';
 
 export default {
     data () {
@@ -76,7 +85,12 @@ export default {
             .setHandler('result', this.onResult)
     },
     methods: {
+        /**
+         * Calculate starting temp for selected instance problem
+         * @return {null} returns nothing
+         */
         calcTemp() {
+            document.getElementById('loading').style.display = 'block';
             if (this.workerManager.inProgress) {
                 this.$notifier.put("workerInfo", "Already computing starting temperature.", "info");
                 return;
@@ -89,9 +103,34 @@ export default {
             });
         },
 
+        /**
+         * Called when starting temp is calculated to set it to the calculated value, terminates the worker
+         * @param  {int} result calculated value
+         * @return {null}  has no return
+         */
         onResult(result) {
             this.workerManager.terminate();
             this.params.start_temp = result;
+        },
+
+        /**
+         * Set value for inner cycle, function for calculation in Annealing.js
+         * @return {[type]} [description]
+         */
+        calcInnerCycle() {
+          getDbFileContent(this.getSelectedFile).then((content) => {
+              var method = new Annealing.AnnealingSolver();
+              this.problem = null;
+
+              if (this.selectedProblemId === 0) this.problem = new SAT.SAT(content);
+              else if (this.selectedProblemId === 1) this.problem = new Salesman.TravellingSalesman(content);
+              else if (this.selectedProblemId === 2) this.problem = new Knapsack.Knapsack(content);
+              else if (this.selectedProblemId === 3) this.problem = new Vertex.MinimalVertexCover(content);
+
+              this.params.innerCycle = method.computeInnerCycle(this.problem);
+          }, (errorMsg) => {
+              this.$notifier.put("inFile", errorMsg);
+          });
         }
     },
     watch: {

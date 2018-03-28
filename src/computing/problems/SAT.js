@@ -96,6 +96,15 @@ export class SAT extends Problem {
     }
 
     /**
+     * Return price function value that will be displayed in graph
+     * @param  {class} bitArrayConfig config for which we want the value for the graph
+     * @return {int}  the returned value
+     */
+    getProblemCost(bitArrayConfig){
+      return this.getFitness(bitArrayConfig);
+    }
+
+    /**
      * Returns the result of the config, in this case the config array
      * @param  {class} bitArrayConfig the configuration of which result we want
      * @return {Array} the bit array of the configuration

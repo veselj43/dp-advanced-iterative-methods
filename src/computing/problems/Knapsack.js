@@ -49,6 +49,16 @@ export class Knapsack extends Problem {
 
         return (sumWeight > this._capacity) ? this._capacity - sumWeight : sumValue;
     }
+
+    /**
+     * Return price function value that will be displayed in graph
+     * @param  {class} bitArrayConfig config for which we want the value for the graph
+     * @return {int}  the returned value
+     */
+    getProblemCost(bitArrayConfig){
+      return this.getFitness(bitArrayConfig);
+    }
+
     /**
      * Returns random, or all 0, configuration of knapsack problem(BitArray configuration)
      * @param  {bool} random random or all 0

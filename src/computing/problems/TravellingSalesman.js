@@ -12,12 +12,11 @@ export class TravellingSalesman {
         this._noEdges = +data[1];
         this._noNodesToVisit = +data[2];
         this._maxPrice = +data[3];
-        this._startingNode = +data[4];
         this._nodesToVisit = [];
 
         for(var i = 0; i < this._noNodesToVisit; i++)
         {
-            this._nodesToVisit.push(+data[5 + i]);
+            this._nodesToVisit.push(+data[4 + i]);
         }
 
         this._distanceArray = new Array(this._noNodes);
@@ -33,8 +32,8 @@ export class TravellingSalesman {
         {
             for(var j = 0; j < this._noNodes; j++)
             {
-                if(+data[5 + this._noNodesToVisit + i * this._noNodes + j] !== 0 || i === j) {
-                    this._distanceArray[i][j] = +data[5 + this._noNodesToVisit + i * this._noNodes + j];
+                if(+data[4 + this._noNodesToVisit + i * this._noNodes + j] !== 0 || i === j) {
+                    this._distanceArray[i][j] = +data[4 + this._noNodesToVisit + i * this._noNodes + j];
                     this._pathArray[i][j] = j;
                 }
                 else {
@@ -88,10 +87,8 @@ export class TravellingSalesman {
      * @return {String} return the rebuilded path
      */
     rebuildPath(permutationConfig) {
-        var path = [this._startingNode];
         var permutation = this._bindToNodes(permutationConfig);
-
-        permutation.unshift(this._startingNode);
+        var path = [permutation[0]];
 
         for(var i = 1; i < permutation.length; i++)
         {
@@ -114,14 +111,21 @@ export class TravellingSalesman {
         var price = 0;
         var permutation = this._bindToNodes(permutationConfig.getArray());
 
-        permutation.unshift(this._startingNode);
-
         for(var i = 0; i < permutation.length - 1; i++)
         {
             price -= this._distanceArray[permutation[i]][permutation[i+1]];
         }
 
         return price;
+    }
+
+    /**
+     * Return price function value that will be displayed in graph
+     * @param  {class} bitArrayConfig config for which we want the value for the graph
+     * @return {int}  the returned value
+     */
+    getProblemCost(bitArrayConfig){
+      return -this.getFitness(bitArrayConfig);
     }
 
     /**

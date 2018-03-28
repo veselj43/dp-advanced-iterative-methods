@@ -27,7 +27,6 @@ export default class TravellingSalesmanGenerator {
         var noOfNotConnected = 0;
         var numberToConnect = 0;
         var lastConnected = Math.round(Math.random() * (this.params.noNodes - 1));
-        var startingNode = Math.round(Math.random() * (this.params.noNodes - 1));
 
         var numberOfCreatedEdges = this.params.noNodes - 1;
 
@@ -38,10 +37,10 @@ export default class TravellingSalesmanGenerator {
         }
 
         //visiting all nodes
-        if(this.params.noNodesToVisit === this.params.noNodes - 1) {
+        if(this.params.noNodesToVisit === this.params.noNodes) {
             for(var i = 0; i < this.params.noNodes; i++)
             {
-                if(i !== startingNode) toVisit.push(i);
+                toVisit.push(i);
             }
         }
 
@@ -56,7 +55,7 @@ export default class TravellingSalesmanGenerator {
                 if(toConnect[j] === 0) noOfNotConnected++;
                 if(noOfNotConnected === numberToConnect) {
                     //adding nodes to visit randomly
-                    if(toVisit.length < this.params.noNodesToVisit && lastConnected !== startingNode) {
+                    if(toVisit.length < this.params.noNodesToVisit) {
                         toVisit.push(lastConnected);
                     }
                     toConnect[j] = 1;
@@ -90,8 +89,6 @@ export default class TravellingSalesmanGenerator {
 
         //generate instance from array
         var generatedInstance = this.params.noNodes + "\n" + this.params.noEdges + "\n" + this.params.noNodesToVisit + "\n" + this.params.maxPrice + "\n";
-
-        generatedInstance += startingNode + " ";
 
         for(var i = 0; i < this.params.noNodesToVisit; i++)
         {

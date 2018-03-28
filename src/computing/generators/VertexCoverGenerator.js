@@ -10,6 +10,7 @@ export default class VertexCoverGenerator {
     constructor (params) {
       this.params = params;
       this.params.size = +this.params.size;
+      this.params.noEdges = +this.params.noEdges;
     }
 
     /**
@@ -18,22 +19,32 @@ export default class VertexCoverGenerator {
      */
     generate() {
         var generatedInstance = this.params.size + "\n";
+        var noEdges = 0;
 
         var array = new Array(this.params.size);
         for(var i = 0; i < this.params.size; i++)
         {
-            array[i] = new Array(this.params.size);
+            array[i] = new Array(this.params.size).fill(0);
             array[i][i] = 1;
         }
 
-        for(var i = 0; i < this.params.size; i ++)
+        while(noEdges !== this.params.noEdges)
         {
-            for(var j = i + 1; j < this.params.size; j++)
+            for(var i = 0; i < this.params.size; i ++)
             {
-                array[i][j] = Math.round(Math.random());
-                array[j][i] = array[i][j];
+                for(var j = 0; j < this.params.size; j++)
+                {
+                    if(Math.round(Math.random()) && noEdges !== this.params.noEdges && !array[i][j]){
+                      array[i][j] = 1;
+                      noEdges++;
+                      //for more variety
+                      break;
+                    }
+                }
             }
         }
+
+        console.log(noEdges);
 
         for(var i = 0; i < this.params.size; i ++)
         {

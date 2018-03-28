@@ -33,7 +33,7 @@ export const methodParamsTitles = {
         start_temp: "Starting temperature",
         cool_coef: "Cooling coefficient",
         min_temp: "Minimal temperature",
-        equil: "Equilibrium"
+        innerCycle: "Inner cycle"
     },
     genetic: {
         populationSize: "Population size",
