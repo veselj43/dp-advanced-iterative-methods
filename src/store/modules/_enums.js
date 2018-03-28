@@ -39,7 +39,7 @@ export const methodParamsTitles = {
         populationSize: "Population size",
         noGenerations: "Number of generations",
         selectionType: "Selection type",
-        tourneySize: "Tourney size",
+        tournamentSize: "Tournament size",
         scaleMin: "Min scale",
         scaleMax: "Max scale",
         crossoverProb: "Crossover probability",
