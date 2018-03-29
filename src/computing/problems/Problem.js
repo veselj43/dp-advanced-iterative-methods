@@ -34,6 +34,10 @@ export class Problem {
         // abstract
     }
 
+    getProblemCost() {
+        //abstract
+    }
+
     getResult() {
         // abstract
     }

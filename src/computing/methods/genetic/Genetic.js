@@ -49,7 +49,8 @@ export class GeneticSolver {
 
 
         this.result = [];
-        this.bestFitness = 0;
+        this.bestFitness = Number.NEGATIVE_INFINITY;
+        this.bestCost = 0;
         this.counter = 0;
 
         //console.log("params: ", params);
@@ -70,7 +71,9 @@ export class GeneticSolver {
         // make sure all messages in buffer are sent (if there are some in buffer, it will send them)
         this._bufferedReply.flush();
 
-        return new Result(this.result, this.bestFitness, this.counter);
+        console.log(this.bestCost);
+
+        return new Result(this.result, this.bestCost, this.counter);
     }
 
     _initGeneration(populationSize) {
@@ -83,28 +86,25 @@ export class GeneticSolver {
     }
 
     _evaluateGeneration(generation) {
-        // generation.forEach(function(individual){
-        //     this.problem.evaluateIndividual(individual);
-        // });
         var average = 0;
         for (var i = 0; i < generation.length; i++) {
             this.problem.evaluateIndividual(generation[i]);
-            average += generation[i].getFitness();
+            average += this.problem.getProblemCost(generation[i]);
         }
         average = average/generation.length;
         generation.sort(function(a, b){return a.getFitness() - b.getFitness()});
+        var bestCost = this.problem.getProblemCost(generation[generation.length-1]);
 
         this._bufferedReply.addMessageWithAutoFlush({
-            worst: generation[0].getFitness(),
+            worst: this.problem.getProblemCost(generation[0]),
             average: average,
-            mean: generation[Math.floor(generation.length/2)].getFitness(),
-            best: generation[generation.length-1].getFitness()
+            mean: this.problem.getProblemCost(generation[Math.floor(generation.length/2)]),
+            best: bestCost
         });
-        // console.log('worst: ' +  generation[0].getFitness() + ' average: ' + average + " mean: " + generation[Math.floor(generation.length/2)].getFitness() + " best: " + generation[generation.length-1].getFitness());
-
         //update best solution
         if (this.bestFitness < generation[generation.length-1].getFitness()) {
             this.bestFitness = generation[generation.length-1].getFitness();
+            this.bestCost = bestCost;
             this.result = generation[generation.length-1].getBitArray();
         }
     }
