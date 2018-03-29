@@ -15,7 +15,7 @@ export class Permutation {
         }
         else if (options.size && options.random) {
             for (var i = 0; i < options.size; i++) {
-                this._Array = randomPermutation(options.size);
+                this._Array = this.randomPermutation(options.size);
             }
         }
         else if (options.size) {
@@ -31,6 +31,20 @@ export class Permutation {
      * @return {array} the generated permutation as array
      */
     randomPermutation(size) {
+        // first generate number sequence
+        var permArray = new Array(size);
+        for(var i = 0; i < size; i++){
+            permArray[i] = i;
+        }
+        // draw out of the number sequence
+        for (var i = size-1; i >= 0; --i){
+            var randPos = Math.floor(i * Math.random());
+            var tmpStore = permArray[i];
+            permArray[i] = permArray[randPos];
+            permArray[randPos] = tmpStore;
+        }
+        return permArray;
+        /*wtf is this shit
         var randomPermutation = [];
         var wasPicked = new Array(size).fill(0);
 
@@ -39,7 +53,7 @@ export class Permutation {
 
         while(randomPermutation.length !== size)
         {
-            randomNumber = new Math.round(Math.random() * (size - randomPermutation.length));
+            randomNumber = Math.round(Math.random() * (size - randomPermutation.length));
             noOfZeros = 0;
             for(var i = 0; i < size; i++)
             {
@@ -51,6 +65,7 @@ export class Permutation {
             }
         }
         return randomPermutation;
+        */
     }
     /**
      * Return copy of the class

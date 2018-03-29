@@ -1,4 +1,4 @@
-import {BinaryIndividual} from "../methods/genetic/Individual";
+import { BinaryIndividual, PermutationIndividual } from '../methods/genetic/Individual'
 
 export class Problem {
     constructor() {
@@ -9,10 +9,13 @@ export class Problem {
     }
 
     createNewIndividual() {
-        if (this.isBinary()) {
-            return new BinaryIndividual(this.getConfiguration(true).getBitArray());
-        } else {
-            throw new TypeError('Non binary problems not supported.');
+        switch (this.getType()) {
+            case "binary":
+                return new BinaryIndividual(this.getConfiguration(true).getBitArray());
+            case "permutation":
+                return new PermutationIndividual(this.getConfiguration(true).getArray());
+            default:
+                throw new TypeError('This type of problem not supported.');
         }
     }
 
@@ -22,8 +25,8 @@ export class Problem {
         }
     }
 
-    isBinary() {
-        return true;
+    getType() {
+        // abstract
     }
 
     getConfiguration(random) {

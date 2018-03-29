@@ -79,4 +79,8 @@ export class Knapsack extends Problem {
     getResult(bitArrayConfig) {
         return bitArrayConfig.getBitArray();
     }
+
+    getType() {
+        return "binary";
+    }
 }

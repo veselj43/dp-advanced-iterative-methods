@@ -79,9 +79,14 @@
                 <!--TODO stukturovany tooltip do vice radku-->
                 <span class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOne-point - Individuals are split at one point and\n     recombined\nTwo-point - Individuals are split at two points and\n     recombined\nUniform - Each bit of parent goes into first or\n     second offspring with equal probability', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="crossover-type" v-model="params.crossoverType">
-                    <option value="one-point">one-point</option>
-                    <option value="two-point">two-point</option>
-                    <option value="uniform">uniform</option>
+                    <!--binary-->
+                    <option value="one-point">One-point</option>
+                    <option value="two-point">Two-point</option>
+                    <option value="uniform">Uniform</option>
+                    <!--permutation-->
+                    <option value="order">Order</option>
+                    <option value="partially-matched">Partially matched</option>
+                    <option value="cycle">Cycle</option>
                 </select>
             </div>
         </div>
@@ -117,6 +122,7 @@
         data () {
             return {
                 params: _.cloneDeep(this.$store.state.inputParams.params.methodParams.genetic)
+//                ,problem: _.cloneDeep(this.$store.state.inputParams.params.problem)
             }
         },
         watch: {

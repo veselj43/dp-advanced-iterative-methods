@@ -112,4 +112,8 @@ export class SAT extends Problem {
     getResult(bitArrayConfig) {
         return bitArrayConfig.getBitArray();
     }
+
+    getType() {
+        return "binary";
+    }
 }

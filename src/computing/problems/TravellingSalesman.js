@@ -1,11 +1,14 @@
 import { Permutation } from "./configurationTypes/Permutation";
-export class TravellingSalesman {
+import {Problem} from "./Problem";
+
+export class TravellingSalesman extends Problem {
     /**
      * Constructor, construct the class from the data file selected.
      * Calculates n:n distance between nodes using Floyd-Warshall algorithm
      * @param {string} data instance of a problem coded as string
      */
     constructor(data) {
+        super();
         data = data.split(/\s+/);
 
         this._noNodes = +data[0];
@@ -147,5 +150,9 @@ export class TravellingSalesman {
      */
     getResult(permutationConfig) {
         return this.rebuildPath(permutationConfig.getArray());
+    }
+
+    getType() {
+        return "permutation";
     }
 }

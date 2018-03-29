@@ -1,7 +1,11 @@
 import Result from '../../_common/Result';
 import BufferedReply from "../../_common/BufferedReply";
 import {RouletteSelection, TournamentSelection} from "./Selection";
-import {OnePointCrossover, TwoPointCrossover, UniformCrossover} from "./Crossover";
+import {
+    CycleCrossover,
+    OnePointCrossover, OrderCrossover, PartiallyMatchedCrossover, TwoPointCrossover,
+    UniformCrossover
+} from './Crossover'
 
 
 export class GeneticSolver {
@@ -41,6 +45,15 @@ export class GeneticSolver {
             case "uniform":
                 this.crossover = new UniformCrossover();
                 break;
+            case "order":
+                this.crossover = new OrderCrossover();
+                break;
+            case "partially-matched":
+                this.crossover = new PartiallyMatchedCrossover();
+                break;
+            case "cycle":
+                this.crossover = new CycleCrossover();
+                break;
             default:
                 throw new Error("Crossover type " + params.selectionType + " is not supported.");
 
@@ -52,8 +65,6 @@ export class GeneticSolver {
         this.bestFitness = Number.NEGATIVE_INFINITY;
         this.bestCost = 0;
         this.counter = 0;
-
-        //console.log("params: ", params);
 
         this._workerInterface.reply('init', { numberOfIterations: params.noGenerations/*, maxFitness: this.problemInput.params.numberOfClausules*/ });
 
@@ -70,8 +81,6 @@ export class GeneticSolver {
 
         // make sure all messages in buffer are sent (if there are some in buffer, it will send them)
         this._bufferedReply.flush();
-
-        console.log(this.bestCost);
 
         return new Result(this.result, this.bestCost, this.counter);
     }
@@ -93,6 +102,7 @@ export class GeneticSolver {
         }
         average = average/generation.length;
         generation.sort(function(a, b){return a.getFitness() - b.getFitness()});
+
         var bestCost = this.problem.getProblemCost(generation[generation.length-1]);
 
         this._bufferedReply.addMessageWithAutoFlush({
@@ -105,7 +115,7 @@ export class GeneticSolver {
         if (this.bestFitness < generation[generation.length-1].getFitness()) {
             this.bestFitness = generation[generation.length-1].getFitness();
             this.bestCost = bestCost;
-            this.result = generation[generation.length-1].getBitArray();
+            this.result = generation[generation.length-1].getGenotype();
         }
     }
 
