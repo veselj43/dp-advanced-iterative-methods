@@ -31,41 +31,20 @@ export class Permutation {
      * @return {array} the generated permutation as array
      */
     randomPermutation(size) {
-        // first generate number sequence
+        // generate number sequence
         var permArray = new Array(size);
         for(var i = 0; i < size; i++){
             permArray[i] = i;
         }
-        // draw out of the number sequence
-        for (var i = size-1; i >= 0; --i){
+        // shuffle sequence
+        for (var i = size; i > 1; --i){
             var randPos = Math.floor(i * Math.random());
-            var tmpStore = permArray[i];
-            permArray[i] = permArray[randPos];
+            var tmpStore = permArray[i-1];
+            permArray[i-1] = permArray[randPos];
             permArray[randPos] = tmpStore;
         }
+        console.log(permArray);
         return permArray;
-        /*wtf is this shit
-        var randomPermutation = [];
-        var wasPicked = new Array(size).fill(0);
-
-        var noOfZeros = 0;
-        var randomNumber = 0;
-
-        while(randomPermutation.length !== size)
-        {
-            randomNumber = Math.round(Math.random() * (size - randomPermutation.length));
-            noOfZeros = 0;
-            for(var i = 0; i < size; i++)
-            {
-                if(wasPicked[i] === 0) noOfZeros++;
-                if(noOfZeros === randomNumber){
-                    randomPermutation.push(i);
-                    break;
-                }
-            }
-        }
-        return randomPermutation;
-        */
     }
     /**
      * Return copy of the class
