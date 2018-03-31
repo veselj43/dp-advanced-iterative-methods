@@ -54,6 +54,30 @@ export const methodParamsTitles = {
     }
 }
 
+export const problemParamsTitles = {
+    0: {
+        noVariables: "Variables",
+        noClausules: "Clausules"
+    },
+    1: {
+        noNodes: "Nodes",
+        noEdges: "Edges",
+        noNodesToVisit: "Nodes to visit",
+        maxPrice: "Maximal price"
+    },
+    2: {
+        capacity: "Capacity",
+        noItems: "Items",
+        sumOfWeights: "Sum of weights",
+        maxValue: "Max value",
+        granularity: "Granularity"
+    },
+    3: {
+        size : "Size",
+        noEdges : "Edges"
+    }
+}
+
 const getters = {
     methodEnum() {
         return methods;
@@ -63,6 +87,9 @@ const getters = {
     },
     methodParamsTitles() {
         return methodParamsTitles;
+    },
+    problemParamsTitles() {
+        return problemParamsTitles;
     }
 }
 

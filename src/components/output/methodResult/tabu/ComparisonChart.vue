@@ -126,10 +126,10 @@ export default {
                             let xCoord = Math.floor(mouseCoords[0]) - chartOptions.yAxisLeftOffset;
                             let xValue = Math.round(xAxisMax * xCoord / chartAreaWidth);
                             if (xValue < 0 || xValue > xAxisMax) {
-                                chart.select('.chart-hover-info').style('display', 'none');
+                                chart.select('.chart-hover-info').style('display', null);
                                 return;
                             }
-                            chart.select('.chart-hover-info').style('display', null);
+                            chart.select('.chart-hover-info').style('display', 'block');
                             chart.select('.chart-hover-info').style('top', mouseCoords[1]+20 + 'px');
                             chart.select('.chart-hover-info').style('left', mouseCoords[0]+20 + 'px');
                             let yValue = componentContext.comparingResults.chart.dataSets.map(dataset => dataset.data[xValue]);
@@ -144,7 +144,7 @@ export default {
                         });
 
                         referencedContainer.on('mouseout', function() {
-                            chart.select('.chart-hover-info').style('display', 'none');
+                            chart.select('.chart-hover-info').style('display', null);
                         });
                     }
                 });
@@ -202,6 +202,7 @@ export default {
 
     .chart-hover-info {
         position: absolute;
+        display: none;
         top: 0;
         left: 50%;
         padding: 5px;

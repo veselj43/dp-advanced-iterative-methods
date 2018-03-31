@@ -5404,6 +5404,12 @@ uid-number@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
 
+uiv@^0.21.3:
+  version "0.21.3"
+  resolved "https://registry.yarnpkg.com/uiv/-/uiv-0.21.3.tgz#ec2ac699fe0ed5f8325cabf4556b5b3cab68f7af"
+  dependencies:
+    vue-functional-data-merge "^2.0.3"
+
 ultron@~1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.1.tgz#9fe1536a10a664a65266a1e3ccf85fd36302bc9c"
@@ -5540,6 +5546,10 @@ vue-directive-tooltip@^1.4.1:
   resolved "https://registry.yarnpkg.com/vue-directive-tooltip/-/vue-directive-tooltip-1.4.2.tgz#480b3f405bbe1e1152a4f844cbe9dc6991ff15bb"
   dependencies:
     popper.js "^1.12.5"
+
+vue-functional-data-merge@^2.0.3:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-2.0.6.tgz#f08055adfb92458debcf2ad10c3aa712277f7fc2"
 
 vue-hot-reload-api@^2.2.0:
   version "2.2.4"

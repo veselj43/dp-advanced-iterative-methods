@@ -155,4 +155,15 @@ export class TravellingSalesman extends Problem {
     getType() {
         return "permutation";
     }
+
+    resolveInstanceParams(instanceContent) {
+        instanceContent = instanceContent.split(/\s+/);
+
+        return {
+            noNodes: +instanceContent[0],
+            noEdges: +instanceContent[1],
+            noNodesToVisit: +instanceContent[2],
+            maxPrice: +instanceContent[3]
+        }
+    }
 }

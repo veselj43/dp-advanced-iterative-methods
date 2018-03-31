@@ -1,6 +1,8 @@
 import __extend from 'lodash/extend';
-import { storage, storageKeys, storageUtils } from '@/services/localStorage'
+import { storage, storageKeys, storageUtils } from '@/services/localStorage';
 import resource from '@/services/resource';
+import { readFile } from "@/services/fileReader";
+import { getProblemClassFromId } from "@/services/classResolver";
 import * as DBSchema from './DBSchema';
 import DBManager from './DBManager';
 
@@ -67,6 +69,8 @@ const actions = {
 
     loadInstances ({ getters, commit }, firstLoad) { // todo rework exampleInstanceAdded to firstLoad
         var params = getters.getInputData;
+        var resolveInstanceParams = getProblemClassFromId(getters.selectedProblemId).prototype.resolveInstanceParams;
+
         return dbm.getAll(DBSchema.dbTables.instances, { problem: params.problem }).then(function(instances) {
             if (instances.length > 0 || exampleInstanceAdded) {
                 exampleInstanceAdded = true;
@@ -78,11 +82,11 @@ const actions = {
                 return resource.getExampleInstance().then(function(data) {
                     var instanceDbObj = {
                         problem: 0,
-                        type: 'string',
                         file: {
                             name: 'Example.cnf',
                             content: data.bodyText
-                        }
+                        },
+                        params: resolveInstanceParams(data.bodyText)
                     };
                     return dbm.insert(DBSchema.dbTables.instances, instanceDbObj).then(function() {
                         commit('updateInstances', [instanceDbObj, ...instances]);
@@ -94,33 +98,35 @@ const actions = {
     },
 
     addInstances ({ getters, dispatch }, filesArray) {
-        var inputParams = getters.getInputData;
-        var toInsert = [];
+        var stringFilesArray = [];
+        var promiseArray = [];
+
+        var resolveInstanceParams = getProblemClassFromId(getters.selectedProblemId).prototype.resolveInstanceParams;
 
         for (var i = 0, fileDbObj; fileDbObj = filesArray[i]; i++) {
-            toInsert.push({
-                problem: inputParams.problem,
-                type: 'file',
-                file: fileDbObj
-            });
+            promiseArray.push(
+                readFile(fileDbObj).then((file) => {
+                    stringFilesArray.push({
+                        file, 
+                        params: resolveInstanceParams(file.content)
+                    });
+                })
+            );
         }
 
-        return dbm.insert(DBSchema.dbTables.instances, toInsert).then(function() {
-            return dispatch('loadInstances');
+        return Promise.all(promiseArray).then(() => {
+            return dispatch('addGeneratedInstances', stringFilesArray);
         });
+
     },
 
-    addGeneratedInstances ({ getters, dispatch }, stringFilesArray) {
+    addGeneratedInstances ({ getters, dispatch }, filesArray) {
         var inputParams = getters.getInputData;
-        var toInsert = [];
-
-        for (var i = 0, fileDbObj; fileDbObj = stringFilesArray[i]; i++) {
-            toInsert.push({
-                problem: inputParams.problem,
-                type: 'string',
-                file: fileDbObj
-            });
-        }
+        var toInsert = filesArray.map(fileObj => ({
+            problem: inputParams.problem,
+            file: fileObj.file,
+            params: fileObj.params
+        }));
 
         return dbm.insert(DBSchema.dbTables.instances, toInsert).then(function() {
             return dispatch('loadInstances');

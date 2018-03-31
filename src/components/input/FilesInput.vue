@@ -21,7 +21,21 @@
                 <li v-for="(instance, index) in files" :key="instance._id" v-bind:class="{ active: index === selectedFile }">
                     <span class="remove glyphicon glyphicon-trash" v-on:click="removeFile(instance._id, instance.file.name)"></span>
                     <span class="download glyphicon glyphicon-download-alt" v-on:click="downloadInstance(index)"></span>
+                    <span v-if="instance.params" class="params glyphicon glyphicon-info-sign" :id="'instance-info-popover-'+index"></span>
                     <span class="select" v-on:click="selectInstance({index, id: instance._id})" v-bind:title="instance.file.name">{{instance.file.name}}</span>
+
+                    <popover v-if="instance.params" :target="'#instance-info-popover-'+index" trigger="hover" placement="right">
+                        <template slot="popover">
+                            <table class="table table-condensed table-params">
+                                <tbody>
+                                    <tr v-for="(param, key) in instance.params" :key="key">
+                                        <td>{{problemParamsTitles[selectedProblemId][key]}}</td>
+                                        <td class="text-right"><strong>{{param}}</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </template>
+                    </popover>
                 </li>
             </ul>
             <p v-if="files.length === 0" class="help-block">No instances uploaded or generated.</p>
@@ -43,9 +57,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import { SweetModal } from 'sweet-modal-vue';
-import { downloadFile } from '../../services/download';
+import { getDbFileContent } from "@/services/fileReader";
+import { downloadFile } from '@/services/download';
 import Generator from './Generator';
 
 function ConfirmAction(bodyText, name, payload) {
@@ -70,7 +85,12 @@ export default {
         ...mapState({
             selectedFile: state => state.inputParams.files.selected.index,
             files: state => state.inputParams.files.instances
-        })
+        }),
+
+        ...mapGetters([
+            'problemParamsTitles',
+            'selectedProblemId'
+        ])
     },
 
     mounted() {
@@ -80,21 +100,10 @@ export default {
     methods: {
         downloadInstance: function(index) {
             var fileDbObj = this.files[index];
-            if (fileDbObj.type === 'string') {
-                downloadFile(fileDbObj.file.name, btoa(fileDbObj.file.content));
-                return;
-            }
-            if (fileDbObj.type === 'file') {
-                var reader = new FileReader();
 
-                reader.fileName = fileDbObj.file.name;
-                reader.onLoadCallback = downloadFile;
-                reader.onload = function(event) {
-                    this.onLoadCallback(this.fileName, btoa(event.target.result));
-                };
-                reader.readAsBinaryString(fileDbObj.file);
-                return;
-            }
+            getDbFileContent(fileDbObj).then((content) => {
+                downloadFile(fileDbObj.file.name, btoa(content));
+            });
         },
 
         handleFileSelect: function(event) {
@@ -142,72 +151,72 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .fileManager {
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-    }
 
-    .fileManager > * {
-        flex-shrink: 0;
-    }
+        .header .header-instances {
+            font-size: 85%;
+        }
 
-    .fileManager .header .header-instances {
-        font-size: 85%;
-    }
+        input#filesToLoad,
+        p,
+        .fileLoadLabel {
+            padding: .5em 1em;
+        }
 
-    .fileManager input#filesToLoad,
-    .fileManager p,
-    .fileManager .fileLoadLabel {
-        padding: .5em 1em;
-    }
+        .fileList-wrapper {
+            margin-top: .5em;
+            /*overflow-y: auto;*/
+        }
 
-    .fileList-wrapper {
-        margin-top: .5em;
-        flex-shrink: 1;
-        /*overflow-y: auto;*/
-    }
+        ul {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f5faff;
+            border: #ddd 1px solid;
+            border-width: 1px 0;
 
-    .fileManager ul {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        background-color: #f5faff;
-        border: #ddd 1px solid;
-        border-width: 1px 0;
-    }
+            li {
+                position: relative;
+                display: block;
+                border-bottom: 1px #fff solid;
 
-    .fileManager ul li {
-        display: block;
-        border-bottom: 1px #fff solid;
-    }
+                &.active {
+                    background-color: #fc0;
+                }
 
-    .fileManager ul li.active {
-        background-color: #fc0;
-    }
+                span {
+                    display: block;
+                    line-height: 2em;
+                    padding: 0 .5em;
+                    cursor: pointer;
+                }
 
-    .fileManager ul li span {
-        display: block;
-        line-height: 2em;
-        padding: 0 .5em;
-        cursor: pointer;
-    }
+                .select {
+                    width: auto;
+                    overflow: hidden;
+                    cursor: pointer;
+                }
 
-    .fileManager ul li .select {
-        width: auto;
-        overflow: hidden;
-        cursor: pointer;
-    }
+                .params,
+                .download,
+                .remove {
+                    float: right;
+                }
 
-    .fileManager ul li .download {
-        float: right;
-        color: #03f;
-    }
+                .download {
+                    color: #03f;
+                }
 
-    .fileManager ul li .remove {
-        float: right;
-        color: #f30;
+                .remove {
+                    color: #f30;
+                }
+            }
+        }
     }
 
     .fileLoad,

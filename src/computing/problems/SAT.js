@@ -116,4 +116,21 @@ export class SAT extends Problem {
     getType() {
         return "binary";
     }
+    
+    resolveInstanceParams(instanceContent) {
+        var dataSet = instanceContent
+            .split('\n')
+            .filter(row => row.trim()[0] !== 'c');
+
+        var params = dataSet[0]
+            .split(/(\s+)/)
+            .filter(x => x.trim().length > 0)
+            .splice(2, 2)
+            .map(param => parseInt(param));
+
+        return {
+            noVariables: params[0],
+            noClausules: params[1]
+        }
+    }
 }

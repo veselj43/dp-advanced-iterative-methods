@@ -3,7 +3,7 @@
         <problem-select></problem-select>
 
         <div class="form">
-            <div v-if="problemKey === 0">
+            <div v-if="selectedProblemId === 0">
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfVariables')}">
                     <label for="SATgenParam1">Number of variables</label>
@@ -29,7 +29,7 @@
 
             </div>
 
-            <div v-if="problemKey === 1">
+            <div v-if="selectedProblemId === 1">
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfNodes')}">
                     <label for="SalegenParam1">Number of nodes</label>
@@ -77,7 +77,7 @@
 
             </div>
 
-            <div v-if="problemKey === 2">
+            <div v-if="selectedProblemId === 2">
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('Capacity')}">
                     <label for="KnapgenParam1">Capacity</label>
@@ -136,7 +136,7 @@
 
             </div>
 
-            <div v-if="problemKey === 3">
+            <div v-if="selectedProblemId === 3">
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('size')}">
                     <label for="MingenParam1">Number of nodes</label>
@@ -180,7 +180,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { WorkerManager } from '@/computing/WorkerManager.js';
 import GeneratorWorker from "@/computing/GeneratorWorker.js";
 
@@ -218,15 +218,14 @@ export default {
                     size : 10,
                     noEdges : 10
                 }
-
             }
         }
     },
 
     computed: {
-        ...mapState({
-            problemKey: (state) => state.inputParams.params.problem.id
-        })
+        ...mapGetters([
+            'selectedProblemId'
+        ])
     },
 
     mounted () {
@@ -242,7 +241,7 @@ export default {
                 this.$notifier.put("worker-info", "Work is in progress.", "info");
                 return;
             }
-            this.workerManager.sendWork('work', this.generatorParams, this.problemKey);
+            this.workerManager.sendWork('work', this.generatorParams, this.selectedProblemId);
             this.isGenerating = true;
         },
 
@@ -262,7 +261,13 @@ export default {
                 this.$notifier.push((errorMessage) ? errorMessage : "Error while generating instance.", "error");
             }
             else {
-                this.addGeneratedInstances([{name: this.generatorParams.instanceName, content: result}]);
+                this.addGeneratedInstances([{
+                    file: {
+                        name: this.generatorParams.instanceName, 
+                        content: result
+                    },
+                    params: this.generatorParams[this.selectedProblemId]
+                }]);
                 this.$notifier.push("Instance added to list.", "success");
                 if (!this.geterateNext) {
                     this.$emit('closeGeneratorModal');

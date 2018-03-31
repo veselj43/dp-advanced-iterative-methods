@@ -83,4 +83,13 @@ export class Knapsack extends Problem {
     getType() {
         return "binary";
     }
+
+    resolveInstanceParams(instanceContent) {
+        instanceContent = instanceContent.split(/\s+/);
+
+        return {
+            noItems: +instanceContent[0],
+            capacity: +instanceContent[1]
+        }
+    }
 }

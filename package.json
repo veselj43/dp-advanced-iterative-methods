@@ -19,6 +19,7 @@
     "idb": "^2.0.4",
     "lodash": "^4.17.5",
     "sweet-modal-vue": "^2.0.0",
+    "uiv": "^0.21.3",
     "vee-validate": "^2.0.0-rc.25",
     "vue": "^2.4.2",
     "vue-directive-tooltip": "^1.4.1",

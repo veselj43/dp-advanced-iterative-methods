@@ -94,4 +94,12 @@ export class MinimalVertexCover extends Problem {
     getType() {
         return "binary";
     }
+
+    resolveInstanceParams(instanceContent) {
+        instanceContent = instanceContent.split(/\s+/);
+
+        return {
+            size: +instanceContent[0]
+        }
+    }
 }

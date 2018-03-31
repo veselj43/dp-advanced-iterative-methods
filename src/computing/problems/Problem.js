@@ -44,5 +44,9 @@ export class Problem {
     getResult() {
         // abstract
     }
+
+    resolveInstanceParams() {
+        // abstract
+    }
 }
 

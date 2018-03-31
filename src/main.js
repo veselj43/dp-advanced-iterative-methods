@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import Tooltip from 'vue-directive-tooltip';
 import VeeValidate from 'vee-validate';
+import * as uiv from 'uiv';
 import App from './App';
 import store from './store';
 import router from './router';
@@ -14,11 +15,11 @@ window.$eventBus = new Vue();
 
 Vue.config.productionTip = process.env.NODE_ENV === 'demo';
 
+Vue.use(VeeValidate);
+Vue.use(uiv);
 Vue.use(Tooltip, {
     delay: 0
 });
-Vue.use(VeeValidate);
-
 Vue.use(ToastedWrapper);
 
 for (var filterKey in filters) {
