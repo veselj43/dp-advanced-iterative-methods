@@ -21,7 +21,6 @@
         <div id="selection">
             <div class="form-group">
                 <label class="" for="selection-type">Selection type</label>
-                <!--TODO stukturovany tooltip do vice radku-->
                 <span class="form-tooltip" v-tooltip.right="{content: 'Defines selection mechanism:\nTournament - Selects individuals uniformly in \n     tournament the best one is selected\n Roulette - Each individual is selected based on \n     portions in roulette\n', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="selection-type" v-model="params.selectionType"> <!--v-on:change="selectionChange(this)"-->
                     <option value="roulette-rank">Roulette with ranking</option>
@@ -76,17 +75,17 @@
 
             <div class="form-group">
                 <label class="" for="crossover-type">Crossover type</label>
-                <!--TODO stukturovany tooltip do vice radku-->
-                <span class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOne-point - Individuals are split at one point and\n     recombined\nTwo-point - Individuals are split at two points and\n     recombined\nUniform - Each bit of parent goes into first or\n     second offspring with equal probability', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span v-if="problemType === 'binary'" class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOne-point - Individuals are split at one point and\n     recombined\nTwo-point - Individuals are split at two points and\n     recombined\nUniform - Each bit of parent goes into first or\n     second offspring with equal probability', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span v-if="problemType === 'permutation'" class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOrder - Individual is copied to random point then \n     it starts copying values from second parent if \n     possible to preserve permutation\nPartially matched - Two random points designates\n     section where values on corresponding\n     positions are swapped\nCycle - Cycle starts at random point in first parent.\n     Next position of cycle is where gene has same\n     value as value at corresponding position in\n     other parent. Continue until the cycle is closed.\n     Leave the cycle how it is and swap all other\n     values between 2 parents.', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="crossover-type" v-model="params.crossoverType">
                     <!--binary-->
-                    <option value="one-point">One-point</option>
-                    <option value="two-point">Two-point</option>
-                    <option value="uniform">Uniform</option>
+                    <option v-if="problemType === 'binary'" value="one-point">One-point</option>
+                    <option v-if="problemType === 'binary'" value="two-point">Two-point</option>
+                    <option v-if="problemType === 'binary'" value="uniform">Uniform</option>
                     <!--permutation-->
-                    <option value="order">Order</option>
-                    <option value="partially-matched">Partially matched</option>
-                    <option value="cycle">Cycle</option>
+                    <option v-if="problemType === 'permutation'" value="order">Order</option>
+                    <option v-if="problemType === 'permutation'" value="partially-matched">Partially matched</option>
+                    <option v-if="problemType === 'permutation'" value="cycle">Cycle</option>
                 </select>
             </div>
         </div>
@@ -118,13 +117,18 @@
 </template>
 
 <script>
+    import { getProblemClassFromId } from '@/services/classResolver';
+    import { mapGetters, mapMutations } from 'vuex';
+
     export default {
         data () {
             return {
+                $storeUnsubscribe: null,
+                problemType: "" ,// drzi aktualni typ problemu
                 params: _.cloneDeep(this.$store.state.inputParams.params.methodParams.genetic)
-//                ,problem: _.cloneDeep(this.$store.state.inputParams.params.problem)
             }
         },
+
         watch: {
             params: {
                 handler: function (params) {
@@ -137,6 +141,43 @@
                     this.$store.commit('updateParamsValidation', {id: 'genetic', data: errors.items.length === 0});
                 },
                 deep: true
+            }
+        },
+        //problem
+        computed: {
+            ...mapGetters([
+                'selectedProblemId'
+            ])
+        },
+        mounted() {
+            this.updateProblemType(); // inicializace
+
+            this.$storeUnsubscribe = this.$store.subscribe((mutation) => {
+                // vyvolano pri zmene stavu ve vuex
+                if (mutation.type === 'selectProblem') {
+                    this.updateProblemType(); // update pri zmene
+                }
+            });
+        },
+
+        destroyed() {
+            if (this.$storeUnsubscribe) this.$storeUnsubscribe();
+        },
+        methods: {
+            updateProblemType() {
+                var type = this.problemType;
+                this.problemType = getProblemClassFromId(this.selectedProblemId).prototype.getType();
+                if (type !== this.problemType) {
+                    //reset crossover method
+                    switch (this.problemType) {
+                        case "binary":
+                            this.params.crossoverType = "one-point";
+                            break;
+                        case "permutation":
+                            this.params.crossoverType = "order";
+                            break;
+                    }
+                }
             }
         }
     }
