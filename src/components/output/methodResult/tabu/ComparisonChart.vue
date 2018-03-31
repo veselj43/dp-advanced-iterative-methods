@@ -141,7 +141,11 @@ export default {
                             }, xValue + ': <ul>');
                             htmlCoodrs += "</ul>";
                             chart.select('.chart-hover-info').html(htmlCoodrs);
-                        })
+                        });
+
+                        referencedContainer.on('mouseout', function() {
+                            chart.select('.chart-hover-info').style('display', 'none');
+                        });
                     }
                 });
 

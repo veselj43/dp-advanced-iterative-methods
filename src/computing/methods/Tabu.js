@@ -36,7 +36,7 @@ export class TabuSolver {
 
         // tabu iterations
         for (var n = 0; n < iterationLimit; n++) {
-            this._bufferedReply.addMessageWithAutoFlush(this._getCost(state));
+            this._bufferedReply.addMessageWithAutoFlush(this.problem.getProblemCost(state));
 
             // init for this loop
             var bestCandidate = null;
@@ -101,7 +101,7 @@ export class TabuSolver {
             }
         }
         // added flush to send remaining progress data before terminating
-        this._bufferedReply.addMessage(this._getCost(state)).flush();
+        this._bufferedReply.addMessage(this.problem.getProblemCost(state)).flush();
 
         return sBest;
     }
@@ -120,6 +120,6 @@ export class TabuSolver {
         var best = this._process(iterationLimit, tabuSize, tabuSizeShort);
 
         // return Result class managing data format
-        return new Result(problem.getResult(best), this._getCost(best), this.counter);
+        return new Result(problem.getResult(best), this.problem.getProblemCost(best), this.counter);
     }
 }
