@@ -1,11 +1,5 @@
-import { WorkerInterface } from './WorkerInterface.js';
-import * as SAT from './problems/SAT';
-import * as Knapsack from './problems/Knapsack';
-import * as Vertex from './problems/MinimalVertexCover';
-import * as Salesman from './problems/TravellingSalesman';
-import * as Tabu from './methods/Tabu';
-import * as Genetic from './methods/genetic/Genetic';
-import * as Annealing from './methods/Annealing';
+import { getProblemClassFromId, getMethodClassFromId } from '@/services/classResolver';
+import { WorkerInterface } from './WorkerInterface';
 
 var methods = {
     work: function(data, params) {
@@ -31,17 +25,10 @@ var workerInterface = new WorkerInterface(this, methods);
 // Job organization
 class Job {
     constructor(inputData, params) {
-        this.problem = null;
-        this.method = null;
-
-        if (params.problem.id === 0) this.problem = new SAT.SAT(inputData);
-        else if (params.problem.id === 1) this.problem = new Salesman.TravellingSalesman(inputData);
-        else if (params.problem.id === 2) this.problem = new Knapsack.Knapsack(inputData);
-        else if (params.problem.id === 3) this.problem = new Vertex.MinimalVertexCover(inputData);
-
-        if (params.method.id === 'tabu') this.method = new Tabu.TabuSolver(workerInterface);
-        else if (params.method.id === 'genetic') this.method = new Genetic.GeneticSolver(workerInterface);
-        else if (params.method.id === 'annealing') this.method = new Annealing.AnnealingSolver(workerInterface);
+        let problemClass = getProblemClassFromId(params.problem.id);
+        let methodClass = getMethodClassFromId(params.method.id);
+        this.problem = new problemClass(inputData);
+        this.method = new methodClass(workerInterface);
     }
 
     run(methodParams) {
