@@ -127,6 +127,12 @@ const mutations = {
         }
 
         updateComparingResultsComputedValues(state.comparingResults);
+    },
+
+    updateDatasetColors(state, colorsObj) {
+        Object.keys(colorsObj).forEach(key => {
+            Vue.set(state.comparingResults.info.items[key], 'color', colorsObj[key]);
+        });
     }
 }
 

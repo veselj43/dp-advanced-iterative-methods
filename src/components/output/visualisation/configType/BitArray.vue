@@ -11,7 +11,10 @@
             </thead>
             <tbody>
                 <tr v-for="(item, itemIndex) in comparingResultsItems" :key="itemIndex">
-                    <td class="instanceName">{{item.instance}}</td>
+                    <td class="instanceName">
+                        <span v-if="item.color" :style="'background-color: ' + item.color" class="chart-color-preview">&nbsp;</span>
+                        <span>{{item.instance}}</span>
+                    </td>
                     <td v-for="(value, configIndex) in item.result.config" :class="{true: value, false: !value}" :key="configIndex">
                         {{value ? 'T' : 'F'}}
                     </td>
@@ -47,5 +50,17 @@ export default {
     table td.false {
         background: #c33;
         color: #fff;
+    }
+
+    .chart-color-preview {
+        display: inline-block;
+        vertical-align: middle;
+        width: 13px;
+        height: 13px;
+    }
+
+    .chart-color-preview + span {
+        display: inline-block;
+        margin-left: .5em;
     }
 </style>

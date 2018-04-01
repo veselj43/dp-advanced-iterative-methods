@@ -4,7 +4,10 @@
             <td v-on:click="expanded = !expanded" class="toggle-detail">
                 <span class="glyphicon" :class="{'glyphicon-plus': !expanded, 'glyphicon-minus': expanded}"></span>
             </td>
-            <td>{{item.instance}}</td>
+            <td>
+                <span v-if="item.color" :style="'background-color: ' + item.color" class="chart-color-preview">&nbsp;</span>
+                <span>{{item.instance}}</span>
+            </td>
             <td class="text-right">{{item.result.cost}}</td>
             <td class="text-right">{{item.result.counter | numberToFormatedString}}</td>
             <td>{{item.result.processTime | parseTime}}</td>
@@ -68,6 +71,17 @@ export default {
 
     .toggle-detail>span {
         line-height: inherit;
+    }
+
+    .chart-color-preview {
+        display: inline-block;
+        vertical-align: middle;
+        width: 13px;
+    }
+
+    .chart-color-preview + span {
+        display: inline-block;
+        margin-left: .5em;
     }
 
     .comparison-detail td:first-child {

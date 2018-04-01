@@ -6,9 +6,13 @@
 
 <script>
 import dc from 'dc';
+import { mapMutations } from 'vuex';
 
 var d3 = dc.d3;
 var crossfilter = dc.crossfilter;
+
+var seriesAccessorFn = (context) => (d) => context.labels[d.key[0]] + " (" + d.key[0] + ")";
+var idFromSeriesLegend = (legend) => +legend.split('(')[1].split(')')[0];
 
 export default {
     data() {
@@ -17,6 +21,7 @@ export default {
             comparingResults: this.$store.state.outputData.comparingResults,
             lastActiveCount: 0,
             labels: {},
+            dcLegend: {},
             options: {
                 minWidth: 200,
                 width: 800,
@@ -49,6 +54,10 @@ export default {
     },
 
     methods: {
+        ...mapMutations([
+            'updateDatasetColors'
+        ]),
+
         updateElementWidth() {
             // it has to be an already rendered container to resize properly
             var actualWidth = document.getElementById('chartBaseContainer').offsetWidth;
@@ -108,7 +117,7 @@ export default {
                 .renderHorizontalGridLines(true)
                 .transitionDuration(0)
                 .legend(dc.legend().x(chartOptions.width - chartOptions.margin.right + 15).y(5).itemHeight(13).gap(5))
-                .seriesAccessor(function(d) {return componentContext.labels[d.key[0]] + " (" + d.key[0] + ")";})
+                .seriesAccessor(seriesAccessorFn(this))
                 .keyAccessor(d => +d.key[1])
                 .valueAccessor(d => +d.value)
                 .chart(function(c) {
@@ -117,33 +126,56 @@ export default {
                 .dimension(runDimension)
                 .group(runGroup)
                 .on('renderlet', function(chart) {
-                    let referencedContainer = chart.select('svg');
+                    let referencedContainer = chart.svg();
                     if (referencedContainer) {
                         let chartAreaWidth = referencedContainer[0][0].width.animVal.value - chartOptions.margin.right - chartOptions.yAxisLeftOffset;
                         let xAxisMax = Math.max(...componentContext.comparingResults.chart.dataSets.map(dataset => dataset.data.length)) - 1;
+                        let xHoverLine = referencedContainer[0][0].firstChild
+                            .appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'line'));
+
+                        xHoverLine.setAttribute('class', 'x-hover-line');
+                        xHoverLine.setAttribute('y1', 5);
+                        xHoverLine.setAttribute('y2', chartOptions.height - 42);
+                        xHoverLine.setAttribute('style', "stroke:rgb(255,0,0);stroke-width:1");
+                        xHoverLine.style.display = "none";
+
                         referencedContainer.on('mousemove', function(d) {
                             let mouseCoords = d3.mouse(this);
-                            let xCoord = Math.floor(mouseCoords[0]) - chartOptions.yAxisLeftOffset;
+                            mouseCoords.map(Math.floor);
+
+                            let xCoord = mouseCoords[0] - chartOptions.yAxisLeftOffset;
                             let xValue = Math.round(xAxisMax * xCoord / chartAreaWidth);
+
                             if (xValue < 0 || xValue > xAxisMax) {
                                 chart.select('.chart-hover-info').style('display', null);
+                                xHoverLine.style.display = "none";
                                 return;
                             }
+
+                            let xHoverLinePos = chartOptions.yAxisLeftOffset + Math.round(xValue * chartAreaWidth / xAxisMax);
+
+                            xHoverLine.setAttribute('x1', xHoverLinePos);
+                            xHoverLine.setAttribute('x2', xHoverLinePos);
+                            xHoverLine.style.display = null;
+
                             chart.select('.chart-hover-info').style('display', 'block');
-                            chart.select('.chart-hover-info').style('top', mouseCoords[1]+20 + 'px');
-                            chart.select('.chart-hover-info').style('left', mouseCoords[0]+20 + 'px');
-                            let yValue = componentContext.comparingResults.chart.dataSets.map(dataset => dataset.data[xValue]);
-                            let htmlCoodrs = yValue.reduce((acc, value) => {
-                                if (value) {
-                                    return acc += "<li>" + value + "</li>";
-                                }
-                                return acc;
+                            chart.select('.chart-hover-info').style('top', mouseCoords[1] + 20 + 'px');
+                            chart.select('.chart-hover-info').style('left', mouseCoords[0] + 20 + 'px');
+
+                            let yValue = componentContext.comparingResults.chart.dataSets.map(dataset => (dataset.data[xValue]) ? {id: dataset.itemId, value: dataset.data[xValue]} : null);
+
+                            let htmlCoodrs = yValue.reverse().reduce((acc, valueObj, i) => {
+                                if (!valueObj) return acc;
+                                let color = componentContext.dcLegend[valueObj.id] || '#000';
+                                return acc + '<li style="color: ' + color + '">' + valueObj.value + "</li>";
                             }, xValue + ': <ul>');
                             htmlCoodrs += "</ul>";
+
                             chart.select('.chart-hover-info').html(htmlCoodrs);
                         });
 
                         referencedContainer.on('mouseout', function() {
+                            xHoverLine.style.display = "none";
                             chart.select('.chart-hover-info').style('display', null);
                         });
                     }
@@ -153,6 +185,15 @@ export default {
             multipleLineChart.margins().bottom += 5;
 
             multipleLineChart.render();
+        },
+
+        resolveDatasetColors() {
+            this.dcLegend = {};
+            Array.prototype.forEach.call(this.multipleLineChart.select('.dc-legend')[0][0].childNodes, (legendItem) => {
+                let legend = legendItem.getElementsByTagName('text')[0].textContent;
+                this.dcLegend[idFromSeriesLegend(legend)] = legendItem.getElementsByTagName('rect')[0].getAttribute('fill');
+            });
+            this.updateDatasetColors(this.dcLegend);
         },
     },
 
@@ -184,6 +225,7 @@ export default {
             this.lastActiveCount = newActiveCount;
 
             this.multipleLineChart.redraw();
+            this.resolveDatasetColors();
 
             // first load of the component
             if (newActiveCount === 1) {
@@ -206,7 +248,7 @@ export default {
         top: 0;
         left: 50%;
         padding: 5px;
-        background-color: #ffffffdd;
+        background-color: #ffffff;
         border: #ddd 1px solid;
 
         & > ul {
