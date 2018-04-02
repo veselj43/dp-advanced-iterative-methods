@@ -51,6 +51,14 @@ export default {
             if (this.selectedMethodId === 'genetic') {
                 var params = {...this.item.params}; // one way to copy an object
                 // TODO delete params.unusedParameter;
+                if (params.selectionType !== "tournament") {
+                    delete params.tournamentSize;
+                }
+                if (params.selectionType !== "roulette-linear" && params.selectionType !== "roulette-rank") {
+                    delete params.scaleMin;
+                    delete params.scaleMax;
+                }
+
                 return params;
             }
             return this.item.params;
