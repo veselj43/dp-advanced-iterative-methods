@@ -15,7 +15,6 @@
         <div class="history-list-item-text collapsable" v-bind:class="{'collapsed': !isOpen}">
             <table class="table table-condensed">
                 <tbody>
-                    <!--TODO hide unused genetic algorithm params-->
                     <tr v-for="(param, key) in itemParams" :key="key">
                         <td>{{methodParamsTitles[selectedMethodId][key]}}</td>
                         <td class="text-right"><strong>{{param}}</strong></td>
@@ -28,6 +27,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
+import { SelectionEnum } from '@/computing/methods/genetic/Selection';
 
 export default {
     props: ['item', 'index'],
@@ -50,11 +50,10 @@ export default {
         itemParams() {
             if (this.selectedMethodId === 'genetic') {
                 var params = {...this.item.params}; // one way to copy an object
-                // TODO delete params.unusedParameter;
-                if (params.selectionType !== "tournament") {
+                if (params.selectionType !== SelectionEnum.TOURNAMENT) {
                     delete params.tournamentSize;
                 }
-                if (params.selectionType !== "roulette-linear" && params.selectionType !== "roulette-rank") {
+                if (params.selectionType !== SelectionEnum.ROULETTE_LINEAR && params.selectionType !== SelectionEnum.ROULETTE_RANK) {
                     delete params.scaleMin;
                     delete params.scaleMax;
                 }

@@ -1,5 +1,12 @@
 import {getRandomInt} from "./Random";
 
+export const SelectionEnum = {
+    TOURNAMENT: "Tournament",
+    ROULETTE_RANK: "Roulette-rank",
+    ROULETTE_LINEAR: "Roulette-linear"
+}
+
+
 export class TournamentSelection {
     constructor(tournamentSize) {
         this._tournamentSize = tournamentSize;
@@ -48,10 +55,10 @@ export class RouletteSelection {
     selectIndividuals(generation, number) {
         var rankSum
         switch (this.scale) {
-            case "rank":
+            case SelectionEnum.ROULETTE_RANK:
                 rankSum = this._rankIndividuals(generation);
                 break;
-            case "linear":
+            case SelectionEnum.ROULETTE_LINEAR:
                 rankSum = this._scaleIndividuals(generation);
                 break;
             default:

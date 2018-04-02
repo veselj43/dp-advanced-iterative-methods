@@ -43,7 +43,6 @@ export class Permutation {
             permArray[i-1] = permArray[randPos];
             permArray[randPos] = tmpStore;
         }
-        console.log(permArray);
         return permArray;
     }
     /**

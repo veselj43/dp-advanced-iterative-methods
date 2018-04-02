@@ -1,8 +1,8 @@
 import Result from '../../_common/Result';
 import BufferedReply from "../../_common/BufferedReply";
-import {RouletteSelection, TournamentSelection} from "./Selection";
+import { RouletteSelection, SelectionEnum, TournamentSelection } from './Selection'
 import {
-    CycleCrossover,
+    CycleCrossover, CrossoverEnum,
     OnePointCrossover, OrderCrossover, PartiallyMatchedCrossover, TwoPointCrossover,
     UniformCrossover
 } from './Crossover'
@@ -22,13 +22,13 @@ export class GeneticSolver {
         const populationSize = params.populationSize;
         const noGenerations = params.noGenerations;
         switch (params.selectionType) {
-            case "roulette-rank":
-                this.selection = new RouletteSelection("rank", params.scaleMin, params.scaleMax);
+            case SelectionEnum.ROULETTE_RANK:
+                this.selection = new RouletteSelection(SelectionEnum.ROULETTE_RANK, params.scaleMin, params.scaleMax);
                 break;
-            case "roulette-linear":
-                this.selection = new RouletteSelection("linear", params.scaleMin, params.scaleMax);
+            case SelectionEnum.ROULETTE_LINEAR:
+                this.selection = new RouletteSelection(SelectionEnum.ROULETTE_LINEAR, params.scaleMin, params.scaleMax);
                 break;
-            case "tournament":
+            case SelectionEnum.TOURNAMENT:
                 this.selection = new TournamentSelection(params.tournamentSize);
                 break;
             default:
@@ -36,22 +36,22 @@ export class GeneticSolver {
         }
         const crossoverProb = params.crossoverProb;
         switch (params.crossoverType) {
-            case "one-point":
+            case CrossoverEnum.ONE_POINT:
                 this.crossover = new OnePointCrossover();
                 break;
-            case "two-point":
+            case CrossoverEnum.TWO_POINT:
                 this.crossover = new TwoPointCrossover();
                 break;
-            case "uniform":
+            case CrossoverEnum.UNIFORM:
                 this.crossover = new UniformCrossover();
                 break;
-            case "order":
+            case CrossoverEnum.ORDER:
                 this.crossover = new OrderCrossover();
                 break;
-            case "partially-matched":
+            case CrossoverEnum.PMX:
                 this.crossover = new PartiallyMatchedCrossover();
                 break;
-            case "cycle":
+            case CrossoverEnum.CYCLE:
                 this.crossover = new CycleCrossover();
                 break;
             default:

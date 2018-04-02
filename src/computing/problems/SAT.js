@@ -1,5 +1,5 @@
 import { BitArray } from "./configurationTypes/BitArray";
-import {Problem} from "./Problem";
+import { Problem, ProblemTypeEnum } from './Problem'
 
 // common SAT input
 export class Literal {
@@ -114,9 +114,9 @@ export class SAT extends Problem {
     }
 
     getType() {
-        return "binary";
+        return ProblemTypeEnum.BINARY;
     }
-    
+
     resolveInstanceParams(instanceContent) {
         var dataSet = instanceContent
             .split('\n')

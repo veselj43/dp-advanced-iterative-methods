@@ -7,10 +7,10 @@
             <!--</li>-->
         <!--</ul>-->
         <!--TODO udelat dynamicky-->
-        <input type="checkbox" id="best" value="best" v-model="checkedTypes">
-        <label for="best">best</label>
         <input type="checkbox" id="average" value="average" v-model="checkedTypes">
         <label for="average">average</label>
+        <input type="checkbox" id="best" value="best" v-model="checkedTypes">
+        <label for="best">best</label>
         <input type="checkbox" id="mean" value="mean" v-model="checkedTypes">
         <label for="mean">mean</label>
         <input type="checkbox" id="worst" value="worst" v-model="checkedTypes">

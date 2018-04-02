@@ -1,5 +1,5 @@
 import { BitArray } from "./configurationTypes/BitArray";
-import {Problem} from "./Problem";
+import { Problem, ProblemTypeEnum } from './Problem'
 /**
  * Knapsack problem class, used for knapsack problem solving, works with BitArray configuration
  */
@@ -81,7 +81,7 @@ export class Knapsack extends Problem {
     }
 
     getType() {
-        return "binary";
+        return ProblemTypeEnum.BINARY;
     }
 
     resolveInstanceParams(instanceContent) {

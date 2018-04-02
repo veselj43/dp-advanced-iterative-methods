@@ -1,5 +1,5 @@
 import { BitArray } from "./configurationTypes/BitArray";
-import {Problem} from "./Problem";
+import { Problem, ProblemTypeEnum } from './Problem'
 /**
  * Minimal vertex cover problem class, used for minimal vertex cover problem solving, works with BitArray configuration
  */
@@ -92,7 +92,7 @@ export class MinimalVertexCover extends Problem {
     }
 
     getType() {
-        return "binary";
+        return ProblemTypeEnum.BINARY;
     }
 
     resolveInstanceParams(instanceContent) {

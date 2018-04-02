@@ -1,5 +1,10 @@
 import { BinaryIndividual, PermutationIndividual } from '../methods/genetic/Individual'
 
+export const ProblemTypeEnum = {
+    BINARY: "binary",
+    PERMUTATION: "permutation"
+}
+
 export class Problem {
     constructor() {
         // abstract
@@ -10,9 +15,9 @@ export class Problem {
 
     createNewIndividual() {
         switch (this.getType()) {
-            case "binary":
+            case ProblemTypeEnum.BINARY:
                 return new BinaryIndividual(this.getConfiguration(true).getBitArray());
-            case "permutation":
+            case ProblemTypeEnum.PERMUTATION:
                 return new PermutationIndividual(this.getConfiguration(true).getArray());
             default:
                 throw new TypeError('This type of problem not supported.');

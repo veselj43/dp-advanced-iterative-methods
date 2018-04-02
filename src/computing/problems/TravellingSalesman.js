@@ -1,5 +1,5 @@
 import { Permutation } from "./configurationTypes/Permutation";
-import {Problem} from "./Problem";
+import { Problem, ProblemTypeEnum } from './Problem'
 
 export class TravellingSalesman extends Problem {
     /**
@@ -153,7 +153,7 @@ export class TravellingSalesman extends Problem {
     }
 
     getType() {
-        return "permutation";
+        return ProblemTypeEnum.PERMUTATION;
     }
 
     resolveInstanceParams(instanceContent) {

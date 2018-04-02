@@ -1,5 +1,7 @@
 import { storage, storageKeys } from '@/services/localStorage'
 import * as enums from './_enums'
+import { SelectionEnum } from '@/computing/methods/genetic/Selection';
+import { CrossoverEnum } from '@/computing/methods/genetic/Crossover';
 
 // initial state
 const initState = {
@@ -16,12 +18,12 @@ const initState = {
             genetic: {
                 populationSize: 20,
                 noGenerations: 100,
-                selectionType: "tournament",
+                selectionType: SelectionEnum.ROULETTE_LINEAR,
                 tournamentSize: 2.5,
                 scaleMin: 1,
                 scaleMax: 3,
                 crossoverProb: 0.8,
-                crossoverType: "uniform",
+                crossoverType: CrossoverEnum.ONE_POINT,
                 mutationRate: 0.08,
                 elitism: 1
             },

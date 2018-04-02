@@ -1,6 +1,14 @@
 import {getRandomBoolean, getRandomInt} from "./Random";
 import { BinaryIndividual, PermutationIndividual } from './Individual'
 
+export const CrossoverEnum = {
+    UNIFORM: "Uniform",
+    ONE_POINT: "One-point",
+    TWO_POINT: "Two-point",
+    ORDER: "Order",
+    PMX: "Partially matched",
+    CYCLE: "Cycle",
+}
 
 //binary crossovers
 export class UniformCrossover {
