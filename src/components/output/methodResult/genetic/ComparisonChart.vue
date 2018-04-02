@@ -1,5 +1,22 @@
 <template>
-    <div id="comparisonChart"></div>
+    <div id='example-3'>
+        <!--<ul>-->
+            <!--<li v-for="valueType in Object.keys(this.comparingResults.chart.dataSets[0].data[0])">-->
+                <!--<input type="checkbox" :value="valueType" :id="valueType" v-model="checkedTypes">-->
+                <!--<label :for="valueType">{{valueType}}</label>-->
+            <!--</li>-->
+        <!--</ul>-->
+        <!--TODO udelat dynamicky-->
+        <input type="checkbox" id="best" value="best" v-model="checkedTypes">
+        <label for="best">best</label>
+        <input type="checkbox" id="average" value="average" v-model="checkedTypes">
+        <label for="average">average</label>
+        <input type="checkbox" id="mean" value="mean" v-model="checkedTypes">
+        <label for="mean">mean</label>
+        <input type="checkbox" id="worst" value="worst" v-model="checkedTypes">
+        <label for="worst">worst</label>
+        <div id="comparisonChart"></div>
+    </div>
 </template>
 
 <script>
@@ -8,11 +25,22 @@ import dc from 'dc';
 var d3 = dc.d3;
 var crossfilter = dc.crossfilter;
 
+function filterType(sourceGroup, typeArray) { // funkce vracejici fake_group (objekt)
+    return {
+        all: function() {
+            return sourceGroup.all().filter(function(d) {
+                return (typeArray && typeArray.length > 0) ? typeArray.filter(type => type === d.key[2]).length > 0 : true;
+            });
+        }
+    };
+}
+
 export default {
     data() {
         return {
             $storeUnsubscribe: null,
             comparingResults: this.$store.state.outputData.comparingResults,
+            checkedTypes: [],
             lastActiveCount: 0,
             labels: {},
             options: {
@@ -24,6 +52,7 @@ export default {
                 },
                 maxYAxeValueMarginMultiplier: 1.1
             },
+            runGroup: null
         }
     },
 
@@ -104,7 +133,7 @@ export default {
             this.ndx = crossfilter([]);
 
             var runDimension = this.ndx.dimension(d => [+d.dataset, +d.index, d.type]);
-            var runGroup = runDimension.group().reduceSum(d => +d.value);
+            this.runGroup = runDimension.group().reduceSum(d => +d.value);
 
             var componentContext = this;
 
@@ -112,8 +141,8 @@ export default {
                 .width(chartOptions.width).height(chartOptions.height)
                 .x(d3.scale.linear().domain([0, 10]))
                 .y(d3.scale.linear().domain([0, 10]))
-                .xAxisLabel("States checked")
-                .yAxisLabel("Value")
+                .xAxisLabel("Generation")
+                .yAxisLabel("Fitness")
                 .elasticX(true)
                 .elasticY(true)
                 .brushOn(false)
@@ -133,12 +162,16 @@ export default {
                         .xyTipsOn(false);
                 })
                 .dimension(runDimension)
-                .group(runGroup);
+                .group(this.runGroup);
 
             multipleLineChart.margins().right = chartOptions.margin.right;
             multipleLineChart.margins().bottom += 5;
 
             multipleLineChart.render();
+        },
+        filterValueTypes() {
+            this.multipleLineChart.group(filterType(this.runGroup, this.checkedTypes));
+            this.multipleLineChart.redraw();
         },
     },
 
@@ -187,6 +220,9 @@ export default {
             if (newActiveCount === 1) {
                 this.windowResize();
             }
+        },
+        'checkedTypes'() {
+            this.filterValueTypes();
         }
     },
 }
