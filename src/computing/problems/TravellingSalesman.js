@@ -101,6 +101,7 @@ export class TravellingSalesman extends Problem {
                 path.push(permutation[i-1]);
             }
         }
+        path.push(path[0]);
 
         return path;
     }
@@ -118,6 +119,8 @@ export class TravellingSalesman extends Problem {
         {
             price -= this._distanceArray[permutation[i]][permutation[i+1]];
         }
+
+        price -= this._distanceArray[permutation[permutation.length - 1]][permutation[0]];
 
         return price;
     }

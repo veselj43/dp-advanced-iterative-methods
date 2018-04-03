@@ -28,17 +28,15 @@ export class AnnealingSolver{
 
       // main cycle depending on temperature
       while (currentTemp > +params.min_temp) {
-          //inner cycle, equilibrium
+          //inner cycle
           for(var i = 0; i < +params.innerCycle; i++){
               //next is better
               if(problem.getFitness(currentConfiguration) < problem.getFitness(currentNeighbour)){
                   currentConfiguration = currentNeighbour;
               }
               // next is worse
-              else {
-                  if(Math.random() < Math.exp((problem.getFitness(currentNeighbour) - problem.getFitness(currentConfiguration)) / currentTemp)){
+              else if(Math.random() < Math.exp((problem.getFitness(currentNeighbour) - problem.getFitness(currentConfiguration)) / currentTemp)){
                       currentConfiguration = currentNeighbour;
-                  }
               }
               currentNeighbour = currentConfiguration.getNeighbour();
               counter++;
@@ -68,6 +66,7 @@ export class AnnealingSolver{
       var newEnergyState;
       var size = currentConfiguration.getSize();
       var conf, neigh = 0;
+      var max = 0;
 
       var temperature = 100;
 
@@ -86,6 +85,7 @@ export class AnnealingSolver{
                 max: Math.max(conf, neigh),
                 min: Math.min(conf, neigh)
             };
+            if(newEnergyState.max > max) max = newEnergyState.max > max;
             arrayOfEnergyStates.push(newEnergyState);
           }
 
@@ -93,6 +93,8 @@ export class AnnealingSolver{
           currentConfiguration = currentNeighbour;
           currentNeighbour = currentConfiguration.getNeighbour();
       }
+
+      temperature = max;
       //calculating temperature for which is the propability of accepting average worse state equals to wantedPropability
       while(Math.abs(wantedPropability - currentPropability) > 0.005)
       {
