@@ -39,7 +39,7 @@ export const problems = [
         text: "Minimal vertex cover",
         info: {
             goal: "min",
-            description: "Minimize number of verices"
+            description: "Minimize number of vertices"
         }
     }
 ];

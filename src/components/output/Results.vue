@@ -8,12 +8,12 @@
             <div class="col-md-6 problem-info text-right">
                 <h3>
                     <i v-if="selectedProblem.info.goal === 'min'" 
-                        class="material-icons trending-down btn-primary"
+                        class="material-icons bg-primary"
                         v-tooltip.left="'Minimalization problem'">
                         trending_down
                     </i>
                     <i v-if="selectedProblem.info.goal === 'max'" 
-                        class="material-icons trending-up btn-primary"
+                        class="material-icons bg-primary"
                         v-tooltip.left="'Maximalization problem'">
                         trending_up
                     </i>
