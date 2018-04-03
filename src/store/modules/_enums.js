@@ -15,16 +15,32 @@ export const methods = [
 export const problems = [
     {
         id: 0,
-        text: "SAT"
+        text: "SAT",
+        info: {
+            goal: "max",
+            description: "Maximize number of satisfied clauses"
+        }
     }, {
         id: 1,
-        text: "Travelling Salesman"
+        text: "Travelling Salesman",
+        info: {
+            goal: "min",
+            description: "Minimize path cost"
+        }
     }, {
         id: 2,
-        text: "Knapsack"
+        text: "Knapsack",
+        info: {
+            goal: "max",
+            description: "Maximize knapsack cost"
+        }
     }, {
         id: 3,
-        text: "Minimal vertex cover"
+        text: "Minimal vertex cover",
+        info: {
+            goal: "min",
+            description: "Minimize number of verices"
+        }
     }
 ];
 

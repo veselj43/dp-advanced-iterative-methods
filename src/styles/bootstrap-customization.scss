@@ -4,6 +4,12 @@
     &>.input-group-btn:not(:last-child) {
         border-right: none;
     }
+    
+    &>.form-control:last-child,
+    &>.input-group-addon:last-child,
+    &>.input-group-btn:last-child {
+        border-left: #ccc 1px solid;
+    }
 }
 
 .popover-content .table-params {
