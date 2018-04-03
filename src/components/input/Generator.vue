@@ -169,7 +169,7 @@
             </div>
 
             <div class="form-group">
-                <button v-if="!isGenerating" class="btn btn-success" v-on:click="generate">Generate</button>
+                <button v-if="!isGenerating" class="btn btn-success" v-on:click="generate" :disabled="errors.items.length > 0">Generate</button>
                 <button v-else class="btn btn-danger" v-on:click="stop">Cancel</button>
 
                 <label id="generate-next" class="checkbox"><input type="checkbox" v-model="geterateNext"> Keep generator open</label>

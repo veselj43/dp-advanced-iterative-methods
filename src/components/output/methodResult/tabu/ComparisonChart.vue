@@ -6,7 +6,7 @@
 
 <script>
 import dc from 'dc';
-import { mapMutations } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 var d3 = dc.d3;
 var crossfilter = dc.crossfilter;
@@ -18,7 +18,6 @@ export default {
     data() {
         return {
             $storeUnsubscribe: null,
-            comparingResults: this.$store.state.outputData.comparingResults,
             lastActiveCount: 0,
             labels: {},
             dcLegend: {},
@@ -34,12 +33,20 @@ export default {
         }
     },
 
+    computed: {
+        ...mapState({
+            comparingResults: (state) => state.outputData.comparingResults
+        }),
+    },
+
     mounted() {
         window.addEventListener("resize", this.windowResize);
         
         this.multipleLineChart = dc.seriesChart('#comparisonChart');
 
-        this.initMultipleLineChart();
+        this.updateElementWidth();
+        this.initMultipleLineChart(this.multipleLineChart);
+        this.afterMultipleLineChartInit(this.multipleLineChart);
 
         this.$storeUnsubscribe = this.$store.subscribe((mutation) => {
             if (mutation.type === 'selectProblem') {
@@ -91,9 +98,7 @@ export default {
             return data.map((value, j) => ({dataset: id, index: j, value: value}));
         },
         
-        initMultipleLineChart() {
-            this.updateElementWidth();
-            var multipleLineChart = this.multipleLineChart;
+        initMultipleLineChart(multipleLineChart) {
             var chartOptions = this.options;
 
             this.ndx = crossfilter([]);
@@ -124,67 +129,72 @@ export default {
                     return dc.lineChart(c).xyTipsOn(false);
                 })
                 .dimension(runDimension)
-                .group(runGroup)
-                .on('renderlet', function(chart) {
-                    let referencedContainer = chart.svg();
-                    if (referencedContainer) {
-                        let chartAreaWidth = referencedContainer[0][0].width.animVal.value - chartOptions.margin.right - chartOptions.yAxisLeftOffset;
-                        let xAxisMax = Math.max(...componentContext.comparingResults.chart.dataSets.map(dataset => dataset.data.length)) - 1;
-                        let xHoverLine = referencedContainer[0][0].firstChild
-                            .appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'line'));
-
-                        xHoverLine.setAttribute('class', 'x-hover-line');
-                        xHoverLine.setAttribute('y1', 5);
-                        xHoverLine.setAttribute('y2', chartOptions.height - 42);
-                        xHoverLine.setAttribute('style', "stroke:rgb(255,0,0);stroke-width:1");
-                        xHoverLine.style.display = "none";
-
-                        referencedContainer.on('mousemove', function(d) {
-                            let mouseCoords = d3.mouse(this);
-                            mouseCoords.map(Math.floor);
-
-                            let xCoord = mouseCoords[0] - chartOptions.yAxisLeftOffset;
-                            let xValue = Math.round(xAxisMax * xCoord / chartAreaWidth);
-
-                            if (xValue < 0 || xValue > xAxisMax) {
-                                chart.select('.chart-hover-info').style('display', null);
-                                xHoverLine.style.display = "none";
-                                return;
-                            }
-
-                            let xHoverLinePos = chartOptions.yAxisLeftOffset + Math.round(xValue * chartAreaWidth / xAxisMax);
-
-                            xHoverLine.setAttribute('x1', xHoverLinePos);
-                            xHoverLine.setAttribute('x2', xHoverLinePos);
-                            xHoverLine.style.display = null;
-
-                            chart.select('.chart-hover-info').style('display', 'block');
-                            chart.select('.chart-hover-info').style('top', mouseCoords[1] + 20 + 'px');
-                            chart.select('.chart-hover-info').style('left', mouseCoords[0] + 20 + 'px');
-
-                            let yValue = componentContext.comparingResults.chart.dataSets.map(dataset => (dataset.data[xValue]) ? {id: dataset.itemId, value: dataset.data[xValue]} : null);
-
-                            let htmlCoodrs = yValue.reverse().reduce((acc, valueObj, i) => {
-                                if (!valueObj) return acc;
-                                let color = componentContext.dcLegend[valueObj.id] || '#000';
-                                return acc + '<li style="color: ' + color + '">' + valueObj.value + "</li>";
-                            }, xValue + ': <ul>');
-                            htmlCoodrs += "</ul>";
-
-                            chart.select('.chart-hover-info').html(htmlCoodrs);
-                        });
-
-                        referencedContainer.on('mouseout', function() {
-                            xHoverLine.style.display = "none";
-                            chart.select('.chart-hover-info').style('display', null);
-                        });
-                    }
-                });
+                .group(runGroup);
 
             multipleLineChart.margins().right = chartOptions.margin.right;
             multipleLineChart.margins().bottom += 5;
 
             multipleLineChart.render();
+        },
+
+        afterMultipleLineChartInit(chart) {
+            let componentContext = this;
+            let chartOptions = this.options;
+            let referencedContainer = chart.svg();
+
+            if (referencedContainer[0][0]) {
+                let xHoverLine = 
+                    referencedContainer[0][0].getElementsByClassName('x-hover-line')[0] ||
+                    referencedContainer[0][0].firstChild.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'line'));
+
+                xHoverLine.setAttribute('class', 'x-hover-line');
+                xHoverLine.setAttribute('y1', 5);
+                xHoverLine.setAttribute('y2', chartOptions.height - 42);
+                xHoverLine.setAttribute('style', "stroke:rgb(255,0,0);stroke-width:1");
+                xHoverLine.style.display = "none";
+
+                referencedContainer.on('mousemove', function(d) {
+                    let mouseCoords = d3.mouse(this);
+                    mouseCoords.map(Math.floor);
+
+                    let chartAreaWidth = chartOptions.width - chartOptions.margin.right - chartOptions.yAxisLeftOffset;
+                    let xAxisMax = componentContext.comparingResults.info.maxDatasetLength;
+                    let xCoord = mouseCoords[0] - chartOptions.yAxisLeftOffset;
+                    let xValue = Math.round(xAxisMax * xCoord / chartAreaWidth);
+
+                    if (xValue < 0 || xValue > xAxisMax) {
+                        chart.select('.chart-hover-info').style('display', null);
+                        xHoverLine.style.display = "none";
+                        return;
+                    }
+
+                    let xHoverLinePos = chartOptions.yAxisLeftOffset + Math.round(xValue * chartAreaWidth / xAxisMax);
+
+                    xHoverLine.setAttribute('x1', xHoverLinePos);
+                    xHoverLine.setAttribute('x2', xHoverLinePos);
+                    xHoverLine.style.display = null;
+
+                    chart.select('.chart-hover-info').style('top', mouseCoords[1] + 20 + 'px');
+                    chart.select('.chart-hover-info').style('left', mouseCoords[0] + 20 + 'px');
+                    chart.select('.chart-hover-info').style('display', 'block');
+
+                    let yValue = componentContext.comparingResults.chart.dataSets.map(dataset => (dataset.data[xValue]) ? {id: dataset.itemId, value: dataset.data[xValue]} : null);
+
+                    let htmlCoodrs = yValue.reverse().reduce((acc, valueObj, i) => {
+                        if (!valueObj) return acc;
+                        let color = componentContext.dcLegend[valueObj.id] || '#000';
+                        return acc + '<li style="color: ' + color + '">' + valueObj.value + "</li>";
+                    }, xValue + ': <ul>');
+                    htmlCoodrs += "</ul>";
+
+                    chart.select('.chart-hover-info').html(htmlCoodrs);
+                });
+
+                referencedContainer.on('mouseleave', function() {
+                    xHoverLine.style.display = "none";
+                    chart.select('.chart-hover-info').style('display', null);
+                });
+            }
         },
 
         resolveDatasetColors() {

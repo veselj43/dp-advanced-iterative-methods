@@ -14,6 +14,7 @@ function GeneratedDataSet(historyRecord) {
 
 function updateComparingResultsComputedValues(comparingResults) {
     comparingResults.info.activeCount = comparingResults.chart.dataSets.length;
+    comparingResults.info.maxDatasetLength = Math.max(...comparingResults.chart.dataSets.map(dataset => dataset.data.length)) - 1;
     storage.set(storageUtils.getSelectedIndexesByTypeKey(), JSON.stringify(comparingResults.info.selectedIndexes));
 }
 
@@ -26,6 +27,7 @@ const state = {
         },
         info: {
             activeCount: 0,
+            maxDatasetLength: 0,
             items: {},
             selectedIndexes: []
         }

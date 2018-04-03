@@ -1,27 +1,20 @@
 <template>
     <div class="results" id="chartBaseContainer">
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Results <small v-if="computingIsProcessingResults">{{computingStatus.text}}</small></h3>
-                <img v-show="computingIsProcessingResults" src="@/assets/loading_01.svg" alt="Processing results">
-            </div>
-            <div class="col-md-6 problem-info text-right">
-                <h3>
-                    <i v-if="selectedProblem.info.goal === 'min'" 
-                        class="material-icons bg-primary"
-                        v-tooltip.left="'Minimalization problem'">
-                        trending_down
-                    </i>
-                    <i v-if="selectedProblem.info.goal === 'max'" 
-                        class="material-icons bg-primary"
-                        v-tooltip.left="'Maximalization problem'">
-                        trending_up
-                    </i>
-                    {{selectedProblem.text}} 
-                    <small>{{selectedProblem.info.description}}</small>
-                </h3>
-            </div>
-        </div>
+        <h3>
+            <i v-if="selectedProblem.info.goal === 'min'" 
+                class="material-icons bg-primary"
+                v-tooltip.left="'Minimalization problem'">
+                trending_down
+            </i>
+            <i v-if="selectedProblem.info.goal === 'max'" 
+                class="material-icons bg-primary"
+                v-tooltip.left="'Maximalization problem'">
+                trending_up
+            </i>
+            {{selectedProblem.text}} 
+            <small>{{selectedProblem.info.description}}</small>
+        </h3>
+        <img v-show="computingIsProcessingResults" src="@/assets/loading_01.svg" alt="Processing results">
 
         <div v-show="methodResultActiveSection">
 
@@ -104,6 +97,7 @@ export default {
 
     h3 {
         margin-top: 0;
+        margin-right: .5em;
     }
 
     h3, img {
