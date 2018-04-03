@@ -1,20 +1,20 @@
 <template>
     <div id='example-3'>
-        <!--<ul>-->
-            <!--<li v-for="valueType in Object.keys(this.comparingResults.chart.dataSets[0].data[0])">-->
-                <!--<input type="checkbox" :value="valueType" :id="valueType" v-model="checkedTypes">-->
-                <!--<label :for="valueType">{{valueType}}</label>-->
-            <!--</li>-->
-        <!--</ul>-->
+        <ul id="horizontal-list">
+            <li v-for="valueType in valueTypes">
+                <input type="checkbox" :value="valueType" :id="valueType" v-model="checkedTypes">
+                <label :for="valueType">{{valueType}}</label>
+            </li>
+        </ul>
         <!--TODO udelat dynamicky-->
-        <input type="checkbox" id="average" value="average" v-model="checkedTypes">
-        <label for="average">average</label>
-        <input type="checkbox" id="best" value="best" v-model="checkedTypes">
-        <label for="best">best</label>
-        <input type="checkbox" id="mean" value="mean" v-model="checkedTypes">
-        <label for="mean">mean</label>
-        <input type="checkbox" id="worst" value="worst" v-model="checkedTypes">
-        <label for="worst">worst</label>
+        <!--<input type="checkbox" id="average" value="average" v-model="checkedTypes">-->
+        <!--<label for="average">average</label>-->
+        <!--<input type="checkbox" id="best" value="best" v-model="checkedTypes">-->
+        <!--<label for="best">best</label>-->
+        <!--<input type="checkbox" id="mean" value="mean" v-model="checkedTypes">-->
+        <!--<label for="mean">mean</label>-->
+        <!--<input type="checkbox" id="worst" value="worst" v-model="checkedTypes">-->
+        <!--<label for="worst">worst</label>-->
         <div id="comparisonChart"></div>
     </div>
 </template>
@@ -40,6 +40,7 @@ export default {
         return {
             $storeUnsubscribe: null,
             comparingResults: this.$store.state.outputData.comparingResults,
+            valueTypes: [],
             checkedTypes: [],
             lastActiveCount: 0,
             labels: {},
@@ -101,6 +102,11 @@ export default {
 
             var data = dataSets[i].data;
             var id = dataSets[i].itemId;
+
+            //init valueTypes
+            if (this.valueTypes.length === 0) {
+                this.valueTypes = Object.keys(data[0]).sort();
+            }
 
             if (checkDuplicates && this.labels[id]) {
                 return [];
@@ -229,6 +235,14 @@ export default {
 </script>
 
 <style scoped>
+    ul#horizontal-list {
+        list-style: none;
+    }
+    ul#horizontal-list li {
+        /*display: inline;*/
+        float: left;
+        margin-right: 1.5em;
+    }
     #comparisonChart {
         width: 100%;
     }
