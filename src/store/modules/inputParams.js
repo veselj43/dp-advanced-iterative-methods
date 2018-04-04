@@ -10,9 +10,9 @@ const initState = {
         problem: enums.problems[storage.get(storageKeys.problem) || 0],
         methodParams: {
             annealing: {
-                start_temp: 100,
+                start_temp: 10,
                 cool_coef: 0.995,
-                min_temp: 10,
+                min_temp: 1,
                 innerCycle: 50
             },
             genetic: {

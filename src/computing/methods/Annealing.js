@@ -71,7 +71,7 @@ export class AnnealingSolver{
       var temperature = 100;
 
       // filling array with random transitions, more precisly with energies of those transitions (max and min fitness)
-      while(10*size !== arrayOfEnergyStates.length)
+      while(50*size !== arrayOfEnergyStates.length)
       {
           conf = problem.getFitness(currentConfiguration);
           neigh = problem.getFitness(currentNeighbour);

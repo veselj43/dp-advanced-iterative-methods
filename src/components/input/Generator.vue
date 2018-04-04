@@ -198,25 +198,25 @@ export default {
             generatorParams: {
                 instanceName: "instance",
                 0: {
-                    noVariables: 4,
-                    noClausules: 7
+                    noVariables: 20,
+                    noClausules: 50
                 },
                 1: {
-                    noNodes: 5,
-                    noEdges: 6,
-                    noNodesToVisit: 2,
+                    noNodes: 20,
+                    noEdges: 30,
+                    noNodesToVisit: 20,
                     maxPrice: 10
                 },
                 2: {
-                    capacity: 100,
-                    noItems: 5,
-                    sumOfWeights: 200,
-                    maxValue: 200,
-                    granularity: 1
+                    capacity: 200,
+                    noItems: 20,
+                    sumOfWeights: 500,
+                    maxValue: 100,
+                    granularity: 0
                 },
                 3: {
-                    size : 10,
-                    noEdges : 10
+                    size : 20,
+                    noEdges : 20
                 }
             }
         }
@@ -263,7 +263,7 @@ export default {
             else {
                 this.addGeneratedInstances([{
                     file: {
-                        name: this.generatorParams.instanceName, 
+                        name: this.generatorParams.instanceName,
                         content: result
                     },
                     params: this.generatorParams[this.selectedProblemId]
