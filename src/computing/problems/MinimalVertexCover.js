@@ -65,9 +65,7 @@ export class MinimalVertexCover extends Problem {
      * @return {int}  the returned value
      */
     getProblemCost(bitArrayConfig){
-      var toReturn = this.getFitness(bitArrayConfig);
-      if(toReturn > 0) return this._size - toReturn;
-      else return toReturn;
+      return this._size - this.getFitness(bitArrayConfig);
     }
 
     /**

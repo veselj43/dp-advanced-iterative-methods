@@ -111,7 +111,6 @@ export class AnnealingSolver{
           if(currentPropability === 1) return 1;
 
           temperature = temperature * (-Math.log(currentPropability) / -Math.log(wantedPropability));
-          console.log(temperature);
       }
 
       return Math.ceil(temperature);
@@ -123,6 +122,6 @@ export class AnnealingSolver{
    * @return {[type]}         [description]
    */
   computeInnerCycle(problem){
-    return problem.getConfiguration().getSize();
+    return 2*problem.getConfiguration().getSize();
   }
 }
