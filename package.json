@@ -15,7 +15,6 @@
   "dependencies": {
     "bootstrap": "3.3.7",
     "dc": "2.1.9",
-    "idb": "^2.0.4",
     "lodash": "^4.17.5",
     "sweet-modal-vue": "^2.0.0",
     "uiv": "^0.21.3",

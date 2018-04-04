@@ -128,7 +128,11 @@ const actions = {
             params: fileObj.params
         }));
 
-        return dbm.insert(DBSchema.dbTables.instances, toInsert).then(function() {
+        dispatch('insertInstances', toInsert)
+    },
+
+    insertInstances ({ getters, dispatch }, dbObjecstArray) {
+        return dbm.insert(DBSchema.dbTables.instances, dbObjecstArray).then(function() {
             return dispatch('loadInstances');
         });
     },

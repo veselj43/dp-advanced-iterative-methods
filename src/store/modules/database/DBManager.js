@@ -1,4 +1,3 @@
-import idb from 'idb';
 import zango from 'zangodb';
 
 export default class DBManager {

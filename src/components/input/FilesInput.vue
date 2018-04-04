@@ -19,7 +19,7 @@
         <div class="fileList-wrapper">
             <ul v-if="files.length > 0">
                 <li v-for="(instance, index) in files" :key="instance._id" v-bind:class="{ active: index === selectedFile }">
-                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeFile(instance._id, instance.file.name)"></span>
+                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeInstance(instance)"></span>
                     <span class="download glyphicon glyphicon-download-alt" v-on:click="downloadInstance(index)"></span>
                     <span v-if="instance.params" class="params glyphicon glyphicon-info-sign" :id="'instance-info-popover-'+index"></span>
                     <span class="select" v-on:click="selectInstance({index, id: instance._id})" v-bind:title="instance.file.name">{{instance.file.name}}</span>
@@ -63,7 +63,7 @@ import { getDbFileContent } from "@/services/fileReader";
 import { downloadFile } from '@/services/download';
 import Generator from './Generator';
 
-function ConfirmAction(bodyText, name, payload) {
+function FutureAction(bodyText, name, payload) {
     this.bodyText = bodyText;
     this.actionName = name;
     this.payload = payload;
@@ -77,7 +77,7 @@ export default {
 
     data() {
         return {
-            confirmAction: new ConfirmAction()
+            confirmAction: new FutureAction(),
         }
     },
 
@@ -98,6 +98,16 @@ export default {
     },
 
     methods: {
+        ...mapMutations([
+            'selectInstance'
+        ]),
+
+        ...mapActions([
+            'loadInstances',
+            'addInstances',
+            'insertInstances'
+        ]),
+
         downloadInstance: function(index) {
             var fileDbObj = this.files[index];
 
@@ -121,32 +131,28 @@ export default {
             this.addInstances(event.dataTransfer.files);
         },
 
-        removeFile(id, name) {
-            this.$refs.removeConfirm.open();
-            this.confirmAction = new ConfirmAction('Do you want to remove instance \"' + name + '\"?', 'removeInstance', id);
+        removeInstance(instance) {
+            this.$store.dispatch('removeInstance', instance._id);
+            this.$notifier.put(
+                'undo', 
+                `Instance "${instance.file.name}" removed.`, 
+                'undo', 
+                [this.$notifier.createAction('UNDO', this.insertInstances, [instance])]
+            );
         },
 
         removeAllFiles() {
             this.$refs.removeConfirm.open();
-            this.confirmAction = new ConfirmAction('Do you want to remove all instances?', 'clearInstances');
+            this.confirmAction = new FutureAction('Do you want to remove all instances?', 'clearInstances');
         },
 
         confirm() {
             if (this.confirmAction.actionName) {
                 this.$store.dispatch(this.confirmAction.actionName, this.confirmAction.payload);
-                this.confirmAction = new ConfirmAction();
+                this.confirmAction = new FutureAction();
             }
             this.$refs.removeConfirm.close();
         },
-
-        ...mapMutations([
-            'selectInstance'
-        ]),
-
-        ...mapActions([
-            'loadInstances',
-            'addInstances'
-        ])
     }
 }
 </script>

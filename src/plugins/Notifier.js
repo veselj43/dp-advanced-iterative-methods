@@ -4,12 +4,12 @@ var toastedOptions = {
     position: "top-center",
     theme: "primary",
     duration: 5000,
-    action : {
-        text : 'CLOSE',
-        onClick : (e, toastObject) => {
+    action: [{
+        text: 'CLOSE',
+        onClick: (e, toastObject) => {
             toastObject.goAway(0);
         }
-    }
+    }]
 };
 
 var options = {
@@ -34,9 +34,26 @@ var options = {
                 name: 'error_outline'
             }
         },
+        undo: {
+            baseType: 'show',
+            duration: 8000,
+            icon: {
+                name: 'undo'
+            }
+        },
         default: {}
     }
 };
+
+function mergeToastedOptions(opt1, opt2, ...opts) {
+    if (opt2) {
+        return mergeToastedOptions(Object.assign({}, opt1, opt2), ...opts);
+    }
+    if (opt1.action && opt1.action.push) {
+        opt1.action.push(toastedOptions.action[0]);
+    }
+    return Object.assign({}, toastedOptions, opt1);
+}
 
 export default {
     install(Vue, customOptions) {
@@ -53,27 +70,37 @@ export default {
         };
 
         Vue.prototype.$notifier = {
-            push: function(message, type = 'show') {
-                if (typeof toastedMethods[type] === "function") {
-                    var msgOptions = (options.bindedMsgOptions[type]) ? options.bindedMsgOptions[type] : options.bindedMsgOptions.default;
-                    toastedMethods[type](message, msgOptions);
+            push(message, type = 'show', action) {
+                let toastedMethod = toastedMethods[type] || toastedMethods[options.bindedMsgOptions[type].baseType] || null;
+                let msgOptions = options.bindedMsgOptions[type] || options.bindedMsgOptions.default;
+
+                if (typeof toastedMethod === "function") {
+                    action = (action) ? {action} : action;
+                    return toastedMethod(message, mergeToastedOptions(msgOptions, action));
                 }
                 else {
                     console.warn("Invalid message type: \"" + type + "\"");
+                    return null;
                 }
             },
-            put: function(id, message, type = 'show') {
+            put(id, message, type = 'show', action) {
                 if (messagesId[id] && !messagesId[id].disposed()) {
                     messagesId[id].goAway(0);
                 }
-                if (typeof toastedMethods[type] === "function") {
-                    var msgOptions = (options.bindedMsgOptions[type]) ? options.bindedMsgOptions[type] : options.bindedMsgOptions.default;
-                    messagesId[id] = toastedMethods[type](message, msgOptions);
+                if (!(messagesId[id] = this.push(message, type, action))) {
+                    delete messagesId[id];
                 }
-                else {
-                    console.warn("Invalid message type: \"" + type + "\"");
+            },
+
+            createAction(text, func, payload) {
+                return {
+                    text,
+                    onClick(e, toastObject) {
+                        func(payload);
+                        toastObject.goAway(0);
+                    }
                 }
-            }
+            },
         }
     }
 };
