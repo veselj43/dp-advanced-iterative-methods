@@ -92,7 +92,8 @@
         <div id="mutation">
             <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-mutation-rate')}">
                 <label class="" for="mutation-rate">Mutation rate</label>
-                <span class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each bit inverted'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span v-if="problemType === ProblemTypeEnum.BINARY" class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each bit inverted'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <span v-if="problemType === ProblemTypeEnum.PERMUTATION" class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each value swapped with another'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <input class="form-control" type="number" min="0" max="1" step="0.01"
                        id="mutation-rate" name="genetic-mutation-rate" v-model="params.mutationRate"
                        data-vv-as="mutation rate" v-validate.initial="{ required: true, min_value: 0, max_value: 1, regex: /^([0-9]*[.])?[0-9]+$/ }"

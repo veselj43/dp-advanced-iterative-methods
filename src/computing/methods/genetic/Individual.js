@@ -1,3 +1,5 @@
+import { getRandomInt } from './Random'
+
 export class Individual {
     constructor() {
         this._fitness = null;
@@ -73,13 +75,19 @@ export class PermutationIndividual extends Individual {
     }
 
     mutate(mutationProb) {
-        // for (var i = 0; i < this._bitArray.length; i++) {
-        //     if (Math.random() < mutationProb) {
-        //         this._fitness = null;
-        //         //bit flip
-        //         this._bitArray[i] = !this._bitArray[i];
-        //     }
-        // }
+        for (var i = 0; i < this._permutation.length; i++) {
+            if (Math.random() < mutationProb) {
+                this._fitness = null;
+                //swap values but not with itself
+                var position = getRandomInt(0, this._permutation.length-1);
+                if (position >= i) {
+                    position++;
+                }
+                var temp = this._permutation[i];
+                this._permutation[i] = this._permutation[position];
+                this._permutation[position] = temp;
+            }
+        }
     }
 
     getGenotype() {
