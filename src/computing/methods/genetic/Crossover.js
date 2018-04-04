@@ -34,8 +34,8 @@ export class UniformCrossover {
 export class TwoPointCrossover {
     crossover(parent1, parent2) {
         var size = parent1.getSize();
-        var first = getRandomInt(0, size);
-        var second = getRandomInt(0, size);
+        var first = getRandomInt(0, size+1);
+        var second = getRandomInt(0, size+1);
         if (first > second) {
             var temp = first;
             first = second;
@@ -46,7 +46,7 @@ export class TwoPointCrossover {
         const parSeq1 = parent1.getBitArray();
         const parSeq2 = parent2.getBitArray();
         for (var i = 0; i < size; i++) {
-            if (i < first || i > second) {
+            if (i < first || i >= second) {
                 offSeq1.push(parSeq1[i]);
                 offSeq2.push(parSeq2[i]);
             } else {
@@ -61,7 +61,7 @@ export class TwoPointCrossover {
 export class OnePointCrossover {
     crossover(parent1, parent2) {
         var size = parent1.getSize();
-        var point = getRandomInt(0, size);
+        var point = getRandomInt(0, size+1);
         var offSeq1 = [];
         var offSeq2 = [];
         const parSeq1 = parent1.getBitArray();
@@ -83,7 +83,7 @@ export class OnePointCrossover {
 export class OrderCrossover {
     crossover(parent1, parent2) {
         var size = parent1.getSize();
-        var point = getRandomInt(0, size);
+        var point = getRandomInt(0, size+1);
 
         var offSeq1 = [];
         var offSeq2 = [];
@@ -124,8 +124,8 @@ export class OrderCrossover {
 export class PartiallyMatchedCrossover {
     crossover(parent1, parent2) {
         var size = parent1.getSize();
-        var first = getRandomInt(0, size);
-        var second = getRandomInt(0, size);
+        var first = getRandomInt(0, size+1);
+        var second = getRandomInt(0, size+1);
         if (first > second) {
             var temp = first;
             first = second;
@@ -138,7 +138,7 @@ export class PartiallyMatchedCrossover {
 
         //create mapping
         var permMap = new Map();
-        for (var i = first; i <= second; i++) {
+        for (var i = first; i < second; i++) {
             //skip if key is already there
             if (!permMap.has(parSeq1[i]) && !permMap.has(parSeq2[i])) {
                 permMap.set(parSeq1[i], parSeq2[i]);
