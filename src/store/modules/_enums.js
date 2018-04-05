@@ -44,6 +44,13 @@ export const problems = [
     }
 ];
 
+export const problemExampleInstances = {
+    0: 'uf20-01.cnf',
+    1: 'ts20-30',
+    2: 'knap200-20',
+    3: 'mvc20-20',
+};
+
 export const methodParamsTitles = {
     annealing: {
         start_temp: "Starting temperature",

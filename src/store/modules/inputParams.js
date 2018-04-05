@@ -28,9 +28,9 @@ const initState = {
                 elitism: 1
             },
             tabu: {
-                iterationLimit: 200,
-                tabuSize: 5,
-                tabuSizeShort: 2
+                iterationLimit: 300,
+                tabuSize: 75,
+                tabuSizeShort: 3
             }
         },
         isValid: {

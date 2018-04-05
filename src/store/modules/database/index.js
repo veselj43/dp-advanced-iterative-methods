@@ -3,12 +3,12 @@ import { storage, storageKeys, storageUtils } from '@/services/localStorage';
 import resource from '@/services/resource';
 import { readFile } from "@/services/fileReader";
 import { getProblemClassFromId } from "@/services/classResolver";
-import { methods } from '../_enums';
+import { methods, problemExampleInstances } from '../_enums';
 import * as DBSchema from './DBSchema';
 import DBManager from './DBManager';
 
 var dbm = new DBManager(DBSchema.dbName, DBSchema.dbStructure, DBSchema.dbVersion);
-var exampleInstanceAdded = false;
+var exampleInstanceAdded = {};
 
 var getTableNameByMethod = function (inputData) {
     var table = (inputData.method || inputData) + 'ComputingHistory';
@@ -82,18 +82,18 @@ const actions = {
         var resolveInstanceParams = getProblemClassFromId(getters.selectedProblemId).prototype.resolveInstanceParams;
 
         return dbm.getAll(DBSchema.dbTables.instances, { problem: params.problem }).then(function(instances) {
-            if (instances.length > 0 || exampleInstanceAdded) {
-                exampleInstanceAdded = true;
+            if (instances.length > 0 || exampleInstanceAdded[params.problem]) {
+                exampleInstanceAdded[params.problem] = true;
                 commit('updateInstances', instances);
                 return true;
             }
             else {
-                exampleInstanceAdded = true;
-                return resource.getExampleInstance().then(function(data) {
+                exampleInstanceAdded[params.problem] = true;
+                return resource.getExampleInstance(problemExampleInstances[params.problem]).then(function(data) {
                     var instanceDbObj = {
-                        problem: 0,
+                        problem: params.problem,
                         file: {
-                            name: 'Example.cnf',
+                            name: 'Example',
                             content: data.bodyText
                         },
                         params: resolveInstanceParams(data.bodyText)
