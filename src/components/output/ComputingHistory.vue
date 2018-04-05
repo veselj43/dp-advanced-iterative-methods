@@ -66,7 +66,7 @@ export default {
     },
     methods: {
         confirm() {
-            this.clearSelectedMethodComputingHistory();
+            this.clearComputingHistoryByMethod();
             this.$refs.clearComputingHistoryConfirm.close();
         },
 
@@ -75,7 +75,7 @@ export default {
         ]),
 
         ...mapActions([
-            'clearSelectedMethodComputingHistory'
+            'clearComputingHistoryByMethod'
         ])
     }
 }

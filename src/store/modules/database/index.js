@@ -3,16 +3,17 @@ import { storage, storageKeys, storageUtils } from '@/services/localStorage';
 import resource from '@/services/resource';
 import { readFile } from "@/services/fileReader";
 import { getProblemClassFromId } from "@/services/classResolver";
+import { methods } from '../_enums';
 import * as DBSchema from './DBSchema';
 import DBManager from './DBManager';
 
 var dbm = new DBManager(DBSchema.dbName, DBSchema.dbStructure, DBSchema.dbVersion);
 var exampleInstanceAdded = false;
 
-function getTableNameByMethod(inputData) {
-    var table = inputData.method + 'ComputingHistory';
+var getTableNameByMethod = function (inputData) {
+    var table = (inputData.method || inputData) + 'ComputingHistory';
     return DBSchema.dbTables[table];
-}
+};
 
 // initial state
 const state = {}
@@ -59,10 +60,19 @@ const actions = {
         });
     },
 
-    clearSelectedMethodComputingHistory ({ getters, dispatch }) {
+    clearComputingHistoryByMethod ({ getters, dispatch }) {
         var params = getters.getInputData;
         var table = getTableNameByMethod(params);
         return dbm.remove(table, { problem: params.problem }).then(function(data) {
+            return dispatch('loadComputingHistory');
+        });
+    },
+
+    clearAllComputingHistories ({ getters, dispatch }) {
+        Promise.all(methods.map(function(method) {
+            let table = getTableNameByMethod(method.id);
+            return dbm.remove(table);
+        })).then(function(data) {
             return dispatch('loadComputingHistory');
         });
     },
@@ -143,9 +153,16 @@ const actions = {
         });
     },
 
-    clearInstances ({ getters, dispatch }) {
+    clearInstancesByProblem ({ getters, dispatch }) {
         var params = getters.getInputData;
         return dbm.remove(DBSchema.dbTables.instances, { problem: params.problem }).then(function() {
+            return dispatch('loadInstances');
+        });
+    },
+
+    clearAllInstances ({ getters, dispatch }) {
+        var params = getters.getInputData;
+        return dbm.remove(DBSchema.dbTables.instances).then(function() {
             return dispatch('loadInstances');
         });
     },

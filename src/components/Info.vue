@@ -18,15 +18,14 @@
 
         <!-- SETTINGS -->
         <sweet-modal ref="settings" title="Settings" overlay-theme="dark">
-            <button class="btn btn-default btn-block" v-on:click="clearHistory">
+            <button class="btn btn-danger btn-block" v-on:click="clearHistories">
                 Clear history for all sections
-                <!-- (TODO, its this method atm) -->
             </button>
-            <button class="btn btn-default btn-block" v-on:click="clearAllInstances">
+            <button class="btn btn-danger btn-block" v-on:click="clearInstances">
                 Clear input instances for all problems
             </button>
-            <button class="btn btn-default btn-block" v-on:click="deleteDatabase">
-                Delete database (history, instances)
+            <button class="btn btn-danger btn-block" v-on:click="deleteDatabase">
+                Delete whole database (history, instances)
             </button>
         </sweet-modal>
 
@@ -98,16 +97,16 @@ export default {
             this.$notifier.push('Action: "' + this.confirmation.message + '" was succesful', 'success');
         },
 
-        clearHistory() {
+        clearHistories() {
             this.requiresConfirmation(
-                this.clearSelectedMethodComputingHistory, 
-                "Clear history"
+                this.clearAllComputingHistories, 
+                "Clear computation history"
             );
         },
 
-        clearAllInstances() {
+        clearInstances() {
             this.requiresConfirmation(
-                this.clearInstances, 
+                this.clearAllInstances, 
                 "Clear all instances"
             );
         },
@@ -120,8 +119,8 @@ export default {
         },
 
         ...mapActions([
-            'clearSelectedMethodComputingHistory',
-            'clearInstances',
+            'clearAllComputingHistories',
+            'clearAllInstances',
             'deleteDB'
         ])
     }

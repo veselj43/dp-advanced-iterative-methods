@@ -143,7 +143,7 @@ export default {
 
         removeAllFiles() {
             this.$refs.removeConfirm.open();
-            this.confirmAction = new FutureAction('Do you want to remove all instances?', 'clearInstances');
+            this.confirmAction = new FutureAction('Do you want to remove all instances?', 'clearInstancesByProblem');
         },
 
         confirm() {
