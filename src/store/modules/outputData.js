@@ -2,14 +2,18 @@ import Vue from 'vue';
 import { storage, storageKeys, storageUtils } from '@/services/localStorage';
 import { pk } from './database/DBSchema';
 
-function GeneratedInfo(index, params) {
-    this.index = index;
-    this.params = params;
+class GeneratedInfo {
+    constructor(index, params) {
+        this.index = index;
+        this.params = params;
+    }
 }
 
-function GeneratedDataSet(historyRecord) {
-    this.itemId = historyRecord[pk];
-    this.data = historyRecord.data.dataSet;
+class GeneratedDataSet {
+    constructor(historyRecord) {
+        this.itemId = historyRecord[pk];
+        this.data = historyRecord.data.dataSet;
+    }
 }
 
 function updateComparingResultsComputedValues(comparingResults) {
@@ -128,6 +132,16 @@ const mutations = {
             });
         }
 
+        updateComparingResultsComputedValues(state.comparingResults);
+    },
+
+    adjustIndexesAfterRemove(state, index) {
+        state.comparingResults.info.selectedIndexes = state.comparingResults.info.selectedIndexes.map(i => (index < i) ? --i : i);
+        updateComparingResultsComputedValues(state.comparingResults);
+    },
+
+    adjustIndexesAfterRemoveUndo(state, index) {
+        state.comparingResults.info.selectedIndexes = state.comparingResults.info.selectedIndexes.map(i => (index <= i) ? ++i : i);
         updateComparingResultsComputedValues(state.comparingResults);
     },
 

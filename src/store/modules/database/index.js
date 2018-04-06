@@ -46,21 +46,39 @@ const actions = {
     },
 
     pushComputingHistory ({ getters, dispatch }, result) {
-        var objForDB = getters.getInputData;
-        __extend(objForDB, {
+        var dbObject = getters.getInputData;
+        __extend(dbObject, {
             instance: getters.getComputingFile.name,
             data: {
                 result: result,
                 dataSet: getters.getChartValues
-            }
+            },
+            $pushComputed: true
         });
-        var table = getTableNameByMethod(objForDB);
-        return dbm.insert(table, objForDB).then(function(data) {
-            return dispatch('loadComputingHistory', true);
+
+        return dispatch('insertComputingHistory', dbObject);
+    },
+
+    insertComputingHistory({ dispatch }, dbObject) {
+        var table = getTableNameByMethod(dbObject);
+
+        var pushComputed = dbObject.$pushComputed;
+        if (pushComputed) delete dbObject.$pushComputed;
+        
+        return dbm.insert(table, dbObject).then(function(data) {
+            return dispatch('loadComputingHistory', pushComputed);
         });
     },
 
-    clearComputingHistoryByMethod ({ getters, dispatch }) {
+    clearComputingHistoryItemInMethodById ({ getters, dispatch }, id) {
+        var params = getters.getInputData;
+        var table = getTableNameByMethod(params);
+        return dbm.remove(table, { _id: id }).then(function(data) {
+            return dispatch('loadComputingHistory');
+        });
+    },
+
+    clearComputingHistoryByMethodAndProblem ({ getters, dispatch }) {
         var params = getters.getInputData;
         var table = getTableNameByMethod(params);
         return dbm.remove(table, { problem: params.problem }).then(function(data) {
@@ -141,7 +159,7 @@ const actions = {
         return dispatch('insertInstances', toInsert);
     },
 
-    insertInstances ({ getters, dispatch }, dbObjecstArray) {
+    insertInstances ({ dispatch }, dbObjecstArray) {
         if (!dbObjecstArray.length) {
             return null;
         }

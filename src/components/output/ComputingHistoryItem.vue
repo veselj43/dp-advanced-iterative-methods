@@ -1,13 +1,14 @@
 <template>
     <div class="history-list-item">
         <div class="history-list-item-heading">
-            <label>
-                <div class="history-list-item-label">
-                    <input type="checkbox" v-model="checked">
-                    <div class="collapse-header">{{item.instance}}</div>
-                </div>
+            <label class="history-list-item-label">
+                <input type="checkbox" v-model="checked">
+                <div class="history-list-item-collapse-header">{{item.instance}}</div>
             </label>
-            <span class="collapse-switch" v-on:click="toggle">
+            <div class="history-list-item-remove" v-on:click="removeHistoryItem(item)">
+                <span class="text-danger glyphicon glyphicon-trash"></span>
+            </div>
+            <span class="history-list-item-collapse-switch" v-on:click="toggle">
                 <span v-if="isOpen" class="glyphicon glyphicon-triangle-bottom"></span>
                 <span v-else class="glyphicon glyphicon-triangle-left"></span>
             </span>
@@ -26,8 +27,13 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 import { SelectionEnum } from '@/computing/methods/genetic/Selection';
+
+let removeHistoryItemUndo = (context) => (item) => {
+    context.$store.commit('adjustIndexesAfterRemoveUndo', context.index);
+    context.$store.dispatch('insertComputingHistory', item);
+}
 
 export default {
     props: ['item', 'index'],
@@ -49,7 +55,7 @@ export default {
 
         itemParams() {
             if (this.selectedMethodId === 'genetic') {
-                var params = {...this.item.params}; // one way to copy an object
+                let params = {...this.item.params}; // one way to copy an object
                 if (params.selectionType !== SelectionEnum.TOURNAMENT) {
                     delete params.tournamentSize;
                 }
@@ -70,13 +76,27 @@ export default {
     },
 
     methods: {
+        ...mapMutations([
+            'toggleIndexInComparingResults'
+        ]),
+
         toggle() {
             this.isOpen = !this.isOpen;
         },
 
-        ...mapMutations([
-            'toggleIndexInComparingResults'
-        ])
+        removeHistoryItem(item) {
+            if (this.checked) {
+                this.toggleIndexInComparingResults(this.index);
+            }
+            this.$store.commit('adjustIndexesAfterRemove', this.index);
+            this.$store.dispatch('clearComputingHistoryItemInMethodById', item._id);
+            this.$notifier.put(
+                'undo', 
+                `Computing history record "${item.instance}" removed.`, 
+                'undo', 
+                [this.$notifier.createAction('UNDO', removeHistoryItemUndo(this), item)]
+            );
+        },
     }
 }
 </script>
@@ -91,20 +111,21 @@ export default {
 
     .history-list-item {
         padding: 0;
-    }
 
-    .history-list-item-heading {
-        position: relative;
-        display: block;
-        margin: 0;
-        padding: 0;
-        background-color: #fff;
-        border-bottom: #ddd 1px solid;
+        &-heading {
+            position: relative;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            border-bottom: #ddd 1px solid;
+        }
 
-        label {
+        &-label {
+            display: block;
             width: 100%;
             margin: 0;
-            padding: 5px;
+            padding-left: 25px !important;
             font-weight: 400;
             cursor: pointer;
 
@@ -112,49 +133,44 @@ export default {
                 position: absolute;
                 margin-left: -20px;
             }
-
-            .history-list-item-label {
-                margin: 0;
-                margin-right: 25px;
-                padding-left: 20px;
-            }
         }
 
-        .collapse-header {
+        &-collapse-header {
             display: inline-block;
             font-size: 110%;
         }
 
-        .collapse-switch {
-            position: absolute;
-            display: block;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            padding: 7px;
-            font-size: 90%;
+        &-label,
+        &-remove,
+        &-collapse-switch {
+            padding: 5px;
             cursor: pointer;
         }
-    }
 
-    .history-list-item-text {
-        .table {
-            margin: 0;
+        &-collapse-switch {
+            font-size: 90%;
+            line-height: 21px;
         }
 
-        &.collapsable {
-            max-height: 500px;
-            padding: 5px;
-            padding-left: 20px;
-            overflow: hidden;
-            background-color: #ddd;
-            -webkit-transition: max-height $duration-primary, padding-top $duration-secondary, padding-bottom $duration-secondary;
-            transition: max-height $duration-primary, padding-top $duration-secondary, padding-bottom $duration-secondary;
+        &-text {
+            .table {
+                margin: 0;
+            }
 
-            &.collapsed {
-                max-height: 0;
-                padding-top: 0;
-                padding-bottom: 0;
+            &.collapsable {
+                max-height: 500px;
+                padding: 5px;
+                padding-left: 20px;
+                overflow: hidden;
+                background-color: #ddd;
+                -webkit-transition: max-height $duration-primary, padding-top $duration-secondary, padding-bottom $duration-secondary;
+                transition: max-height $duration-primary, padding-top $duration-secondary, padding-bottom $duration-secondary;
+
+                &.collapsed {
+                    max-height: 0;
+                    padding-top: 0;
+                    padding-bottom: 0;
+                }
             }
         }
     }

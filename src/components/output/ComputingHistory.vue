@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import { SweetModal } from 'sweet-modal-vue';
 import ComputingHistoryItem from './ComputingHistoryItem';
 
@@ -66,17 +66,13 @@ export default {
     },
     methods: {
         confirm() {
-            this.clearComputingHistoryByMethod();
+            this.$store.dispatch('clearComputingHistoryByMethodAndProblem');
             this.$refs.clearComputingHistoryConfirm.close();
         },
 
         ...mapMutations([
             'toggleAllComparingResults'
         ]),
-
-        ...mapActions([
-            'clearComputingHistoryByMethod'
-        ])
     }
 }
 </script>
