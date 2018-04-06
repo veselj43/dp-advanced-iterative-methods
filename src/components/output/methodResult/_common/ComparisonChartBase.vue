@@ -150,7 +150,7 @@ It should contain definition of following seriesChart methods:
                 .yAxisLabel(chartOptions.yAxisLabel)
                 .elasticX(true)
                 .elasticY(true)
-                .yAxisPadding(10)
+                .yAxisPadding('10%')
                 .brushOn(false)
                 // .mouseZoomable(true)
                 .renderHorizontalGridLines(true)
@@ -244,6 +244,17 @@ It should contain definition of following seriesChart methods:
             });
             this.updateDatasetColors(this.dcLegend);
         },
+
+        utilMakeChartNonZero(parentChart, childChart) {
+            dc.override(childChart, 'yAxisMin', function () {
+                var min = d3.min(childChart.data(), function (layer) {
+                    return d3.min(layer.values, function (p) {
+                        return p.y + p.y0;
+                    });
+                });
+                return dc.utils.subtract(min, parentChart.yAxisPadding());
+            });
+        }
     },
 
     watch: {

@@ -2,9 +2,6 @@
 import dc from 'dc';
 import ComparisonChartBase from '../_common/ComparisonChartBase';
 
-var d3 = dc.d3;
-var crossfilter = dc.crossfilter;
-
 export default {
     extends: ComparisonChartBase,
 
@@ -34,13 +31,17 @@ export default {
         beforeInitRender(chart) {
             let runDimension = this.ndx.dimension(d => [+d.dataset, +d.index]);
             let runGroup = runDimension.group().reduceSum(d => +d.value);
+
+            let makeChartNonZero = this.utilMakeChartNonZero;
             
             chart
                 .seriesAccessor(this.seriesAccessor(this))
                 .keyAccessor(d => +d.key[1])
                 .valueAccessor(d => +d.value)
                 .chart(function(c) {
-                    return dc.lineChart(c).xyTipsOn(false);
+                    let serie = dc.lineChart(c).xyTipsOn(false);
+                    makeChartNonZero(c, serie);
+                    return serie;
                 })
                 .dimension(runDimension)
                 .group(runGroup);

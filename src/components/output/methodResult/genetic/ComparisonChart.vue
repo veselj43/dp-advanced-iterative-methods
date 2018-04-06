@@ -29,9 +29,6 @@
 import dc from 'dc';
 import ComparisonChartBase from '../_common/ComparisonChartBase';
 
-var d3 = dc.d3;
-var crossfilter = dc.crossfilter;
-
 function typeIsChecked(typeArray, targetType) {
     return (typeArray && typeArray.length > 0) ? typeArray.filter(type => type === targetType).length > 0 : true;
 }
@@ -99,17 +96,21 @@ export default {
         beforeInitRender(chart) {
             var runDimension = this.ndx.dimension(d => [+d.dataset, +d.index, d.type]);
             this.runGroup = runDimension.group().reduceSum(d => +d.value);
+
+            let makeChartNonZero = this.utilMakeChartNonZero;
             
             chart
                 .seriesAccessor(this.seriesAccessor(this))
                 .keyAccessor(d => +d.key[1])
                 .valueAccessor(d => +d.value)
-                .chart(function(c, xxx, series) {
-                    return dc.lineChart(c)
+                .chart(function(c) {
+                    let serie = dc.lineChart(c)
                         .colorAccessor(function (d, i) {
                             return (d) ? d[0].data.key[0] : 0;
                         })
                         .xyTipsOn(false);
+                    makeChartNonZero(c, serie);
+                    return serie;
                 })
                 .dimension(runDimension)
                 .group(this.runGroup);
