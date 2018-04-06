@@ -1,9 +1,12 @@
 <template>
     <div id='example-3'>
         <ul id="horizontal-list">
-            <li v-for="valueType in valueTypes">
-                <input type="checkbox" :value="valueType" :id="valueType" v-model="checkedTypes">
-                <label :for="valueType">{{valueType}}</label>
+            <li v-for="(valueType, key) in valueTypes" :key="key">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" :value="valueType" v-model="checkedTypes"> {{valueType}}
+                    </label>
+                </div>
             </li>
         </ul>
         <!--TODO udelat dynamicky-->
@@ -15,110 +18,63 @@
         <!--<label for="mean">mean</label>-->
         <!--<input type="checkbox" id="worst" value="worst" v-model="checkedTypes">-->
         <!--<label for="worst">worst</label>-->
-        <div id="comparisonChart"></div>
+        
+        <div id="comparisonChart">
+            <div class="chart-hover-info"></div>
+        </div>
     </div>
 </template>
 
 <script>
 import dc from 'dc';
+import ComparisonChartBase from '../_common/ComparisonChartBase';
 
 var d3 = dc.d3;
 var crossfilter = dc.crossfilter;
 
-function filterType(sourceGroup, typeArray) { // funkce vracejici fake_group (objekt)
+function typeIsChecked(typeArray, targetType) {
+    return (typeArray && typeArray.length > 0) ? typeArray.filter(type => type === targetType).length > 0 : true;
+}
+
+function filterType(sourceGroup, typeArray, typeIsCheckedFn = typeIsChecked) { // funkce vracejici fake_group (objekt)
     return {
         all: function() {
             return sourceGroup.all().filter(function(d) {
-                return (typeArray && typeArray.length > 0) ? typeArray.filter(type => type === d.key[2]).length > 0 : true;
+                return typeIsCheckedFn(typeArray, d.key[2]);
             });
         }
     };
 }
 
 export default {
+    extends: ComparisonChartBase,
+
     data() {
         return {
-            $storeUnsubscribe: null,
-            comparingResults: this.$store.state.outputData.comparingResults,
+            xAxisLabel: "Generation",
+            yAxisLabel: "Fitness",
             valueTypes: [],
             checkedTypes: [],
-            lastActiveCount: 0,
-            labels: {},
-            options: {
-                minWidth: 200,
-                width: 800,
-                height: 300,
-                margin: {
-                    right: 200,
-                },
-                maxYAxeValueMarginMultiplier: 1.1
-            },
             runGroup: null
         }
     },
 
-    mounted() {
-        window.addEventListener("resize", this.windowResize);
-
-        this.multipleLineChart = dc.seriesChart('#comparisonChart');
-
-        this.initMultipleLineChart();
-
-        this.$storeUnsubscribe = this.$store.subscribe((mutation) => {
-            if (mutation.type === 'selectProblem') {
-                this.ndx.remove();
-                this.labels = {};
-            }
-        });
-    },
-
-    destroyed() {
-        if (this.$storeUnsubscribe) this.$storeUnsubscribe();
-    },
-
     methods: {
-        updateElementWidth() {
-            // it has to be an already rendered container to resize properly
-            var actualWidth = document.getElementById('chartBaseContainer').offsetWidth;
-            if (actualWidth > 0) {
-                this.options.width = Math.max(this.options.minWidth + this.options.margin.right, actualWidth);
-            }
-        },
-
-        windowResize() {
-            this.updateElementWidth();
-            var options = this.options;
-
-            this.multipleLineChart
-                .width(options.width)
-                .legend(dc.legend().x(options.width - options.margin.right + 15).y(5).itemHeight(13).gap(5));
-            this.multipleLineChart.redraw();
-        },
-
-        processData(i, checkDuplicates) {
-            var dataSets = this.comparingResults.chart.dataSets;
-
-            if (dataSets.length === 0) return [];
-
-            var data = dataSets[i].data;
-            var id = dataSets[i].itemId;
-
-            //init valueTypes
+        // methods that needs to be implemented for ComparisonChartBase
+        processDataMapping(data, datasetId) {
+            // TODO check if it works - pouzito pred kontrolou duplicit, nyni je az po
+            // init valueTypes
             if (this.valueTypes.length === 0) {
                 this.valueTypes = Object.keys(data[0]).sort();
             }
 
-            if (checkDuplicates && this.labels[id]) {
-                return [];
-            }
-
-            var filterData = [];
+            let filterData = [];
 
             data.forEach((d, j) => {
                 filterData.push(
                     ...Object.keys(d).map(key => {
                         return {
-                            dataset: id,
+                            dataset: datasetId,
                             index: j,
                             type: key,
                             value: +d[key]
@@ -127,37 +83,23 @@ export default {
                 )
             });
 
-
             return filterData;
         },
 
-        initMultipleLineChart() {
-            this.updateElementWidth();
-            var multipleLineChart = this.multipleLineChart;
-            var chartOptions = this.options;
+        seriesAccessor(context) {
+            return (d) => context.labels[d.key[0]] + " (" + d.key[0] + ") " + " (" + d.key[2] + ")";
+        },
 
-            this.ndx = crossfilter([]);
+        idFromSeriesLegend(legend) {
+            return +legend.split('(')[1].split(')')[0];
+        },
 
+        beforeInitRender(chart) {
             var runDimension = this.ndx.dimension(d => [+d.dataset, +d.index, d.type]);
             this.runGroup = runDimension.group().reduceSum(d => +d.value);
-
-            var componentContext = this;
-
-            multipleLineChart
-                .width(chartOptions.width).height(chartOptions.height)
-                .x(d3.scale.linear().domain([0, 10]))
-                .y(d3.scale.linear().domain([0, 10]))
-                .xAxisLabel("Generation")
-                .yAxisLabel("Fitness")
-                .elasticX(true)
-                .elasticY(true)
-                .brushOn(false)
-                // .mouseZoomable(true)
-                .renderHorizontalGridLines(true)
-                .transitionDuration(0)
-                // .ordinalColors(['red', 'blue'])
-                .legend(dc.legend().x(chartOptions.width - chartOptions.margin.right + 15).y(5).itemHeight(13).gap(5))
-                .seriesAccessor(function(d) {return componentContext.labels[d.key[0]] + " (" + d.key[0] + ") " + " (" + d.key[2] + ")";})
+            
+            chart
+                .seriesAccessor(this.seriesAccessor(this))
                 .keyAccessor(d => +d.key[1])
                 .valueAccessor(d => +d.value)
                 .chart(function(c, xxx, series) {
@@ -169,12 +111,20 @@ export default {
                 })
                 .dimension(runDimension)
                 .group(this.runGroup);
-
-            multipleLineChart.margins().right = chartOptions.margin.right;
-            multipleLineChart.margins().bottom += 5;
-
-            multipleLineChart.render();
         },
+
+        // methods that overrides ComparisonChartBase methods
+        htmlCoordsBuildItem(color, valueObj) {
+            return Object.keys(valueObj.value).map(key => {
+                if (!typeIsChecked(this.checkedTypes, key)) return;
+                return `<tr style="color: ${color}">
+                    <td>${key}</td>
+                    <td class="text-right">${valueObj.value[key]}</td>
+                </tr>`;
+            }).join('');
+        },
+
+        // component specific methods
         filterValueTypes() {
             this.multipleLineChart.group(filterType(this.runGroup, this.checkedTypes));
             this.multipleLineChart.redraw();
@@ -182,51 +132,6 @@ export default {
     },
 
     watch: {
-        'comparingResults.info.items'(newValue, oldValue) {
-            var newActiveCount = this.comparingResults.info.activeCount;
-
-            // dataset(s) removed - needs to be cleared
-            var remove = (this.lastActiveCount && this.lastActiveCount > newActiveCount);
-
-            // dataset replaced with just computed files and the length is the same
-            remove = remove || (
-                (this.lastActiveCount === 1 && newActiveCount === 1) &&
-                (Object.keys(newValue)[0] !== Object.keys(oldValue)[0])
-            );
-
-            if (remove) {
-                this.ndx.remove();
-            }
-            for (var i = 0; i < newActiveCount; i++) {
-                this.ndx.add(this.processData(i, !remove));
-            }
-
-            this.labels = {};
-            for (var key in newValue) {
-                this.labels[key] = newValue[key].instance;
-            }
-
-            this.lastActiveCount = newActiveCount;
-
-            // var maxYAxeValue = Math.max(...Object.keys(newValue).map(key => newValue[key].result.cost));
-            // var minYAxeValue = Math.min(...Object.keys(newValue).map(key => newValue[key].result.cost));
-            // // if (maxYAxeValue >= 0) {
-            //    this.multipleLineChart
-            //         .elasticY(false)
-            //         .y(d3.scale.linear().domain([minYAxeValue * this.options.maxYAxeValueMarginMultiplier, maxYAxeValue * this.options.maxYAxeValueMarginMultiplier]));
-            // // }
-            // // else {
-            // //     this.multipleLineChart
-            // //         .elasticY(true);
-            // // }
-
-            this.multipleLineChart.redraw();
-
-            // first load of the component
-            if (newActiveCount === 1) {
-                this.windowResize();
-            }
-        },
         'checkedTypes'() {
             this.filterValueTypes();
         }
@@ -242,9 +147,6 @@ export default {
         /*display: inline;*/
         float: left;
         margin-right: 1.5em;
-    }
-    #comparisonChart {
-        width: 100%;
     }
 </style>
 
