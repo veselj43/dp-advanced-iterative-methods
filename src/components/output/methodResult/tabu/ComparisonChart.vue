@@ -10,8 +10,10 @@ export default {
 
     data() {
         return {
-            xAxisLabel: "States checked",
-            yAxisLabel: "Value",
+            options:{
+                xAxisLabel: "States checked",
+                yAxisLabel: "Value",
+            }
         }
     },
 

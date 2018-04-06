@@ -51,8 +51,10 @@ export default {
 
     data() {
         return {
-            xAxisLabel: "Generation",
-            yAxisLabel: "Fitness",
+            options:{
+                xAxisLabel: "Generation",
+                yAxisLabel: "Fitness",
+            },
             valueTypes: [],
             checkedTypes: [],
             runGroup: null
