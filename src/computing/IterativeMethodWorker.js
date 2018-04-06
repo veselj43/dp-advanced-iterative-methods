@@ -27,8 +27,8 @@ class Job {
     constructor(inputData, params) {
         let problemClass = getProblemClassFromId(params.problem.id);
         let methodClass = getMethodClassFromId(params.method.id);
-        this.problem = new problemClass(inputData);
-        this.method = new methodClass(workerInterface);
+        this.problem = (problemClass) ? new problemClass(inputData) : null;
+        this.method = (methodClass) ? new methodClass(workerInterface) : null;
     }
 
     run(methodParams) {

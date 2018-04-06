@@ -24,15 +24,15 @@ export class TabuSolver {
     }
 
     _containsSearch(set, configuration) {
-        return set[configuration.toString()] === true;
+        return set[configuration.toString()];
     }
 
     _process(iterationLimit, tabuSize, tabuSizeShort) {
         var state = this.problem.getConfiguration();    // initial state
         var sBest = state;                              // initial best found state
         var tabuStates = [];            // Queue
-        var tabuStatesSearch = [];      // HashSet
-        var tabuChanges = [];           // List
+        var tabuStatesSearch = {};      // HashSet
+        var tabuChanges = [];           // Queue
 
         // tabu iterations
         for (var n = 0; n < iterationLimit; n++) {
@@ -73,10 +73,11 @@ export class TabuSolver {
                 // there are non even tabu candidates, we have nowhere to go
                 if (tabuBestCandidateIndex === -1) {
                     console.log("-- no candidates --");
-                    break;
                 }
-                state = tabuBestCandidate;
-                bestCandidateIndex = tabuBestCandidateIndex;
+                else {
+                    state = tabuBestCandidate;
+                    bestCandidateIndex = tabuBestCandidateIndex;
+                }
             }
             // normal situation, not tabu state
             else {

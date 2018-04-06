@@ -138,10 +138,14 @@ const actions = {
             params: fileObj.params
         }));
 
-        dispatch('insertInstances', toInsert)
+        return dispatch('insertInstances', toInsert);
     },
 
     insertInstances ({ getters, dispatch }, dbObjecstArray) {
+        if (!dbObjecstArray.length) {
+            return null;
+        }
+
         return dbm.insert(DBSchema.dbTables.instances, dbObjecstArray).then(function() {
             return dispatch('loadInstances');
         });

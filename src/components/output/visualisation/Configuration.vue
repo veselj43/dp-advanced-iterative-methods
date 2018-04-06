@@ -41,6 +41,7 @@ export default {
                 border: #333 1px solid;
 
                 &.instanceName {
+                    text-align: left;
                     white-space: nowrap;
                 }
             }
