@@ -27,7 +27,10 @@
 
 <script>
 import dc from 'dc';
+import { storage } from '@/services/localStorage';
 import ComparisonChartBase from '../_common/ComparisonChartBase';
+
+let storageKeycheckedTypes = 'ga-comparison-checked-types';
 
 function typeIsChecked(typeArray, targetType) {
     return (typeArray && typeArray.length > 0) ? typeArray.filter(type => type === targetType).length > 0 : true;
@@ -56,6 +59,10 @@ export default {
             checkedTypes: [],
             runGroup: null
         }
+    },
+
+    mounted() {
+        this.checkedTypes = JSON.parse(storage.get(storageKeycheckedTypes)) || [];
     },
 
     methods: {
@@ -131,6 +138,7 @@ export default {
         filterValueTypes() {
             this.multipleLineChart.group(filterType(this.runGroup, this.checkedTypes));
             this.multipleLineChart.redraw();
+            storage.set(storageKeycheckedTypes, JSON.stringify(this.checkedTypes));
         },
     },
 
