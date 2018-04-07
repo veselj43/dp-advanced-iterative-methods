@@ -157,6 +157,8 @@ It should contain definition of following seriesChart methods:
                 .transitionDuration(0)
                 .legend(dc.legend().x(chartOptions.width - chartOptions.margin.right + 15).y(5).itemHeight(13).gap(5));
 
+            chart.yAxis().tickFormat(d3.format('s'));
+
             chart.margins().right = chartOptions.margin.right;
             chart.margins().bottom += 5;
 
