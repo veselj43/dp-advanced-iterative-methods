@@ -1,10 +1,9 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Main from '@/components/Main'
-import Help from '@/components/_help/Help'
-import TestBlbosti from '@/test/TestBlbosti'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Main from '@/components/Main';
+import Help from '@/components/_help/Help';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [
@@ -16,10 +15,6 @@ export default new Router({
             path: '/help',
             name: 'Help',
             component: Help
-        }, {
-            path: '/test-blbosti',
-            name: 'TestBlbosti',
-            component: TestBlbosti
         }
     ],
     scrollBehavior: (to, from, savedPosition) => (
@@ -27,4 +22,4 @@ export default new Router({
             selector: `a[href='${to.hash}']`
         }
     )
-})
+});

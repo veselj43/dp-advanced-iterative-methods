@@ -2,16 +2,16 @@
     <div class="fileManager" v-on:drop.stop.prevent="handleDrop" v-on:dragenter="dragEnter" v-on:dragover="dragEnter">
         <div class="header">
             <div class="controlButtons">
+                <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
                 <label v-tooltip.top="'Upload instance file'" class="fileLoad btn btn-primary" for="filesToLoad">
                     <span class="glyphicon glyphicon-open"></span>
                 </label>
-                <span v-tooltip.top="'Generate instance'" class="fileLoad btn btn-primary" for="filesToLoad" v-on:click="$refs.generatorModal.open()">
+                <button v-tooltip.top="'Generate instance'" class="fileLoad btn btn-primary" v-on:click="$refs.generatorModal.open()">
                     <span class="glyphicon glyphicon-plus"></span>
-                </span>
+                </button>
                 <button v-tooltip.top="'Remove uploaded instances'" class="fileRemove btn btn-danger" v-on:click="removeAllFiles" v-bind:class="{'disabled': (files.length === 0)}">
                     <span class="glyphicon glyphicon-trash"></span>
                 </button>
-                <input id="filesToLoad" style="display: none;" type="file" multiple v-on:change="handleFileSelect">
             </div>
             <div class="header-text header-instances">Input instances</div>
         </div>

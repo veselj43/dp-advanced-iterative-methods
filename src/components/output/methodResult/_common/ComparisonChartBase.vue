@@ -210,7 +210,7 @@ It should contain definition of following seriesChart methods:
                     chart.select('.chart-hover-info').style('left', mouseCoords[0] + 20 + 'px');
                     chart.select('.chart-hover-info').style('display', 'block');
 
-                    let yValues = context.comparingResults.chart.dataSets.map(dataset => (dataset.data[xValue]) ? {id: dataset.itemId, value: dataset.data[xValue]} : null);
+                    let yValues = context.comparingResults.chart.dataSets.map(dataset => (dataset.data[xValue] || dataset.data[xValue] === 0) ? {id: dataset.itemId, value: dataset.data[xValue]} : null);
 
                     chart.select('.chart-hover-info').html(context.htmlCoordsBuildList.call(context, xValue, yValues));
                 });
@@ -224,7 +224,7 @@ It should contain definition of following seriesChart methods:
 
         htmlCoordsBuildList(xValue, yValues) {
             let htmlCoords = yValues.reverse().reduce((acc, valueObj, i) => {
-                if (!valueObj) return acc;
+                if (valueObj === null) return acc;
                 let color = this.dcLegend[valueObj.id] || '#000';
                 return acc + this.htmlCoordsBuildItem(color, valueObj);
             }, `<table class="table table-condensed"><thead><th class="text-center" colspan="2">${xValue}</th></thead><tbody>`);

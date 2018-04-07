@@ -10,18 +10,14 @@ import router from './router';
 import ToastedWrapper from './plugins/Notifier';
 import filters from './services/filters';
 
-// window.$eventBus = new Vue();
-
 Vue.config.productionTip = process.env.NODE_ENV === 'demo';
 
 Vue.use(VeeValidate);
 Vue.use(uiv);
-Vue.use(Tooltip, {
-    delay: 0
-});
+Vue.use(Tooltip, { delay: 0 });
 Vue.use(ToastedWrapper);
 
-for (var filterKey in filters) {
+for (let filterKey in filters) {
     Vue.filter(filterKey, filters[filterKey]);
 }
 
@@ -32,12 +28,12 @@ new Vue({
     template: '<App/>',
     components: { App },
     created: function() {
-        var vm = this;
+        let context = this;
         window.addEventListener('keydown', function(event) {
             if (event.keyCode == 112) {
                 event.preventDefault();
                 event.stopPropagation();
-                vm.$router.push('help');
+                context.$router.push('help');
             }
         });
     }
