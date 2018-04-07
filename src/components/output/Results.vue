@@ -25,7 +25,7 @@
                 </component>
             <!-- </keep-alive> -->
 
-            <conf-visual></conf-visual>
+            <conf-visual v-show="methodResultActiveSection === 'comparison'"></conf-visual>
 
         </div>
 

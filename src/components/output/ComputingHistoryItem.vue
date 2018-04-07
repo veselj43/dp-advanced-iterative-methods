@@ -6,7 +6,7 @@
                 <div class="history-list-item-collapse-header">{{item.instance}}</div>
             </label>
             <div class="history-list-item-remove" v-on:click="removeHistoryItem(item)">
-                <span class="text-danger glyphicon glyphicon-trash"></span>
+                <span class="icon-danger glyphicon glyphicon-trash"></span>
             </div>
             <span class="history-list-item-collapse-switch" v-on:click="toggle">
                 <span v-if="isOpen" class="glyphicon glyphicon-triangle-bottom"></span>
@@ -147,9 +147,13 @@ export default {
             cursor: pointer;
         }
 
-        &-collapse-switch {
+        &-remove > span {
+            line-height: 1.4;
+        }
+
+        &-collapse-switch > span {
             font-size: 90%;
-            line-height: 21px;
+            line-height: 1.4;
         }
 
         &-text {

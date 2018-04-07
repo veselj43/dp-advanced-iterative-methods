@@ -31,5 +31,15 @@ new Vue({
     store,
     router,
     template: '<App/>',
-    components: { App }
+    components: { App },
+    created: function() {
+        var vm = this;
+        window.addEventListener('keydown', function(event) {
+            if (event.keyCode == 112) {
+                event.preventDefault();
+                event.stopPropagation();
+                vm.$router.push('help');
+            }
+        });
+    }
 });

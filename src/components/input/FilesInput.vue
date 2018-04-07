@@ -1,9 +1,9 @@
 <template>
-    <div class="fileManager" v-on:drop="handleDrop" v-on:dragenter="dragEnter" v-on:dragover="dragEnter">
+    <div class="fileManager" v-on:drop.stop.prevent="handleDrop" v-on:dragenter="dragEnter" v-on:dragover="dragEnter">
         <div class="header">
             <div class="controlButtons">
                 <label v-tooltip.top="'Upload instance file'" class="fileLoad btn btn-primary" for="filesToLoad">
-                    <i class="material-icons">file_upload</i>
+                    <span class="glyphicon glyphicon-open"></span>
                 </label>
                 <span v-tooltip.top="'Generate instance'" class="fileLoad btn btn-primary" for="filesToLoad" v-on:click="$refs.generatorModal.open()">
                     <span class="glyphicon glyphicon-plus"></span>
@@ -18,24 +18,26 @@
 
         <div class="fileList-wrapper">
             <ul v-if="files.length > 0">
-                <li v-for="(instance, index) in files" :key="instance._id" v-bind:class="{ active: index === selectedFile }">
-                    <span class="remove glyphicon glyphicon-trash" v-on:click="removeInstance(instance)"></span>
-                    <span class="download glyphicon glyphicon-download-alt" v-on:click="downloadInstance(index)"></span>
-                    <span v-if="instance.params" class="params glyphicon glyphicon-info-sign" :id="'instance-info-popover-'+index"></span>
+                <li v-for="(instance, index) in files" :key="instance._id" v-bind:class="{ 'active': index === selectedFile }">
                     <span class="select" v-on:click="selectInstance({index, id: instance._id})" v-bind:title="instance.file.name">{{instance.file.name}}</span>
+                    <span v-if="instance.params" class="icon-info glyphicon glyphicon-info-sign" :id="'instance-info-popover-'+index"></span>
+                    <span class="icon-primary glyphicon glyphicon-save" v-on:click="downloadInstance(index)"></span>
+                    <span class="icon-danger glyphicon glyphicon-trash" v-on:click="removeInstance(instance)"></span>
 
-                    <popover v-if="instance.params" :target="'#instance-info-popover-'+index" trigger="hover" placement="right">
-                        <template slot="popover">
-                            <table class="table table-condensed table-params">
-                                <tbody>
-                                    <tr v-for="(param, key) in instance.params" :key="key">
-                                        <td>{{problemParamsTitles[selectedProblemId][key]}}</td>
-                                        <td class="text-right"><strong>{{param}}</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </template>
-                    </popover>
+                    <span class="popover-wrapper">
+                        <popover v-if="instance.params" :target="'#instance-info-popover-'+index" trigger="hover" placement="right">
+                            <template slot="popover">
+                                <table class="table table-condensed table-params">
+                                    <tbody>
+                                        <tr v-for="(param, key) in instance.params" :key="key">
+                                            <td>{{problemParamsTitles[selectedProblemId][key]}}</td>
+                                            <td class="text-right"><strong>{{param}}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </template>
+                        </popover>
+                    </span>
                 </li>
             </ul>
             <p v-if="files.length === 0" class="help-block">No instances uploaded or generated.</p>
@@ -126,8 +128,6 @@ export default {
         },
 
         handleDrop: function(event) {
-            event.stopPropagation();
-            event.preventDefault();
             this.addInstances(event.dataTransfer.files);
         },
 
@@ -188,7 +188,7 @@ export default {
 
             li {
                 position: relative;
-                display: block;
+                display: flex;
                 border-bottom: 1px #fff solid;
 
                 &.active {
@@ -203,23 +203,11 @@ export default {
                 }
 
                 .select {
-                    width: auto;
-                    overflow: hidden;
-                    cursor: pointer;
+                    flex-grow: 1;
                 }
 
-                .params,
-                .download,
-                .remove {
-                    float: right;
-                }
-
-                .download {
-                    color: #03f;
-                }
-
-                .remove {
-                    color: #f30;
+                .popover-wrapper {
+                    display: none;
                 }
             }
         }
