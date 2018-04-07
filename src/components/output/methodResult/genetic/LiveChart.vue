@@ -42,9 +42,10 @@ export default {
         this.liveSeriesChart
             .width(options.width).height(options.height)
             .x(d3.scale.linear().domain([0, 100]))
-            .elasticY(true)
             .xAxisLabel("Generation")
             .yAxisLabel("Fitness")
+            .elasticY(true)
+            .yAxisPadding('10%')
             .brushOn(false)
             // .xyTipsOn(false)
             .renderHorizontalGridLines(true)

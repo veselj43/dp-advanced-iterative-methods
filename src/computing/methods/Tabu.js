@@ -24,6 +24,10 @@ export class TabuSolver {
     }
 
     _containsSearch(set, configuration) {
+        if (set[configuration.toString()]) {
+            // console.log(this.counter);
+            this.tabuCounter++;
+        }
         return set[configuration.toString()];
     }
 
@@ -110,6 +114,7 @@ export class TabuSolver {
     solve(problem, params) {
         this.problem = problem;
         this.counter = 0;
+        this.tabuCounter = 0;
 
         var iterationLimit = params.iterationLimit;
         var tabuSize = params.tabuSize;
@@ -119,6 +124,8 @@ export class TabuSolver {
         this._workerInterface.reply('init', { numberOfIterations: iterationLimit });
 
         var best = this._process(iterationLimit, tabuSize, tabuSizeShort);
+
+        console.log('tabu checks:', this.tabuCounter);
 
         // return Result class managing data format
         return new Result(problem.getResult(best), this.problem.getProblemCost(best), this.counter);
