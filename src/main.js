@@ -10,7 +10,6 @@ import router from './router';
 import ToastedWrapper from './plugins/Notifier';
 import filters from './services/filters';
 
-window._ = require('lodash');
 // window.$eventBus = new Vue();
 
 Vue.config.productionTip = process.env.NODE_ENV === 'demo';

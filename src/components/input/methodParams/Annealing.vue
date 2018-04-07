@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash/cloneDeep';
 import { mapGetters } from 'vuex';
 import { WorkerManager } from '@/computing/WorkerManager.js';
 import IterativeMethodWorker from '@/computing/IterativeMethodWorker.js';
@@ -68,7 +69,7 @@ import * as Knapsack from '@/computing/problems/Knapsack';
 export default {
     data () {
         return {
-            params: _.cloneDeep(this.$store.state.inputParams.params.methodParams.annealing)
+            params: cloneDeep(this.$store.state.inputParams.params.methodParams.annealing)
         };
     },
     computed: {

@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import range from 'lodash/range';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -35,7 +36,7 @@ export default {
 
         varCount() {
             var itemIds = Object.keys(this.comparingResultsItems);
-            return _.range(Math.max(0, ...itemIds.map(id => this.comparingResultsItems[id].result.config.length)));
+            return range(Math.max(0, ...itemIds.map(id => this.comparingResultsItems[id].result.config.length)));
         }
     }
 }

@@ -40,10 +40,12 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash/cloneDeep';
+
 export default {
     data () {
         return {
-            params: _.cloneDeep(this.$store.state.inputParams.params.methodParams.tabu)
+            params: cloneDeep(this.$store.state.inputParams.params.methodParams.tabu)
         };
     },
     watch: {

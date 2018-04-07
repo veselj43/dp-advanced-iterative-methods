@@ -118,6 +118,7 @@
 </template>
 
 <script>
+    import cloneDeep from 'lodash/cloneDeep';
     import { getProblemClassFromId } from '@/services/classResolver';
     import { mapGetters, mapMutations } from 'vuex';
     import { SelectionEnum } from '@/computing/methods/genetic/Selection';
@@ -133,7 +134,7 @@
                 ProblemTypeEnum: ProblemTypeEnum,
                 $storeUnsubscribe: null,
                 problemType: "" ,// drzi aktualni typ problemu
-                params: _.cloneDeep(this.$store.state.inputParams.params.methodParams.genetic)
+                params: cloneDeep(this.$store.state.inputParams.params.methodParams.genetic)
             }
         },
 
