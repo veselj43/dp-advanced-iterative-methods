@@ -70,7 +70,7 @@ export class SAT extends Problem {
         };
     }
 
-    check(bitArray) {
+    _check(bitArray) {
         var satisfied = 0;
         this._clausules.forEach(clausule => {
             if (clausule.check(bitArray)) satisfied++;
@@ -83,7 +83,7 @@ export class SAT extends Problem {
 
         const bitArray = bitArrayConfig.getBitArray();
 
-        var trueClauses = this.check(bitArray);
+        var trueClauses = this._check(bitArray);
         if (trueClauses < this.params.numberOfClausules) return trueClauses;
         return this.params.numberOfClausules;// + getWeight(configuration);
     }

@@ -12,7 +12,7 @@ Vue.use(Vuex);
 const debug = process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'demo';
 
 export default new Vuex.Store({
-    // strict: true,
+    strict: true,
     state: {
         debugMode: debug,
         requiredDependencies: {

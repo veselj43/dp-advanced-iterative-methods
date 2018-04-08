@@ -48,10 +48,6 @@
                     </tr>
                 </tbody>
             </table>
-            
-            <template slot="button">
-                <button class="btn btn-info" v-on:click="$refs.deps.close()">OK</button>
-            </template>
         </sweet-modal>
 
         <!-- CONFIRMATION -->

@@ -73,8 +73,7 @@ export class Permutation {
             indexOne = Math.round(Math.random() * (this._Array.length - 1));
             indexTwo = Math.round(Math.random() * (this._Array.length - 1));
 
-            while(indexOne === indexTwo)
-            {
+            while(indexOne === indexTwo) {
                 indexTwo = Math.round(Math.random() * (this._Array.length - 1));
             }
         }
