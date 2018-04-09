@@ -44,7 +44,6 @@ export default class VertexCoverGenerator {
             }
         }
 
-        console.log(noEdges);
 
         for(var i = 0; i < this.params.size; i ++)
         {

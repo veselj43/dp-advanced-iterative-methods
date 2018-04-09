@@ -21,10 +21,9 @@ export default class TravellingSalesmanGenerator {
      */
     generate() {
         var generatedGraph = new Array(this.params.noNodes);
-        var toConnect = new Array(this.params.noNodes).fill(0);
+        var toConnect = [];
         var toVisit = [];
 
-        var noOfNotConnected = 0;
         var numberToConnect = 0;
         var lastConnected = Math.round(Math.random() * (this.params.noNodes - 1));
 
@@ -44,27 +43,23 @@ export default class TravellingSalesmanGenerator {
             }
         }
 
+        for(var i = 0; i < this.params.noNodes; i++){
+          toConnect.push(i);
+        }
+
         //making the graph connected. choosing nodes to visit
-        toConnect[lastConnected] = 1;
+        toConnect.splice(toConnect.indexOf(lastConnected), 1);
         for(i = 0; i < this.params.noNodes - 1; i++)
         {
-            numberToConnect = Math.round(Math.random() * (this.params.noNodes - i - 2)) + 1;
-            noOfNotConnected = 0;
-            for(var j = 0; j < this.params.noNodes; j++)
-            {
-                if(toConnect[j] === 0) noOfNotConnected++;
-                if(noOfNotConnected === numberToConnect) {
-                    //adding nodes to visit randomly
-                    if(toVisit.length < this.params.noNodesToVisit) {
-                        toVisit.push(lastConnected);
-                    }
-                    toConnect[j] = 1;
-                    generatedGraph[lastConnected][j] = Math.round(Math.random() * (this.params.maxPrice - 1)) + 1;
-                    generatedGraph[j][lastConnected] = generatedGraph[lastConnected][j];
-                    lastConnected = j;
-                    break;
-                }
+            numberToConnect = Math.round(Math.random() * (this.params.noNodes - i - 2));
+            //adding nodes to visit randomly
+            if(toVisit.length < this.params.noNodesToVisit) {
+                toVisit.push(lastConnected);
             }
+            generatedGraph[lastConnected][toConnect[numberToConnect]] = Math.round(Math.random() * (this.params.maxPrice - 1)) + 1;
+            generatedGraph[toConnect[numberToConnect]][lastConnected] = generatedGraph[lastConnected][toConnect[numberToConnect]];
+            lastConnected = toConnect[numberToConnect];
+            toConnect.splice(numberToConnect, 1);
         }
 
         // generating the desired amount of edges
@@ -78,6 +73,7 @@ export default class TravellingSalesmanGenerator {
                         generatedGraph[i][j] = Math.round(Math.random() * this.params.maxPrice - 1) + 1;
                         generatedGraph[j][i] = generatedGraph[i][j];
                         numberOfCreatedEdges++;
+                        break;
                     }
                 }
             }

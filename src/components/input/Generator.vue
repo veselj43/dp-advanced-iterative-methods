@@ -69,7 +69,7 @@
                     <span class="form-tooltip" v-tooltip.right="'Maximum price of each edge'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].maxPrice" placeholder=""
                     name="maximumEdgePrice"
-                    data-vv-as="maximum price of an edge"
+                    data-vv-as="maximum weight of an edge"
                     v-validate.initial="{ required: true, min_value: 1, max_value: 1000, regex: /^[0-9]+$/ }"
                     >
                     <span v-show="errors.has('maximumEdgePrice')" class="help-block">{{ errors.first('maximumEdgePrice') }}</span>
@@ -78,17 +78,6 @@
             </div>
 
             <div v-if="selectedProblemId === 2">
-
-                <div class="form-group" v-bind:class="{'has-error': errors.has('Capacity')}">
-                    <label for="KnapgenParam1">Capacity</label>
-                    <span class="form-tooltip" v-tooltip.right="'Capacity of the knapsack, should be lower than sum of weights'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[2].capacity" placeholder=""
-                    name="Capacity"
-                    data-vv-as="capacity"
-                    v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
-                    >
-                    <span v-show="errors.has('Capacity')" class="help-block">{{ errors.first('Capacity') }}</span>
-                </div>
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('noItems')}">
                     <label for="KnapgenParam2">Number of items</label>
@@ -99,6 +88,17 @@
                     v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
                     >
                     <span v-show="errors.has('noItems')" class="help-block">{{ errors.first('noItems') }}</span>
+                </div>
+
+                <div class="form-group" v-bind:class="{'has-error': errors.has('Capacity')}">
+                    <label for="KnapgenParam1">Capacity</label>
+                    <span class="form-tooltip" v-tooltip.right="'Capacity of the knapsack, should be lower than sum of weights'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[2].capacity" placeholder=""
+                    name="Capacity"
+                    data-vv-as="capacity"
+                    v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
+                    >
+                    <span v-show="errors.has('Capacity')" class="help-block">{{ errors.first('Capacity') }}</span>
                 </div>
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('sumOfWeights')}">
@@ -165,7 +165,7 @@
             <div class="form-group">
                 <label for="instanceName">Instance name</label>
                 <span class="form-tooltip" v-tooltip.right="'Name that will be shown in instance list'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                <input type="text" class="form-control" id="instanceName" v-model="generatorParams.instanceName" placeholder="">
+                <input type="text" class="form-control" id="instanceName" v-model="instanceName" placeholder="">
             </div>
 
             <div class="form-group">
@@ -195,8 +195,8 @@ export default {
         return {
             geterateNext: false,
             isGenerating: false,
+            instanceName: null,
             generatorParams: {
-                instanceName: "instance",
                 0: {
                     noVariables: 20,
                     noClausules: 50
@@ -228,11 +228,29 @@ export default {
         ])
     },
 
+    watch: {
+        generatorParams: {
+          handler(newValue, oldValue) {
+              this.setInstanceName();
+          },
+        deep: true
+      },
+
+      selectedProblemId: {
+        handler(newValue, oldValue) {
+            this.setInstanceName();
+        },
+      deep: true
+      }
+    },
+
+
     mounted () {
         this.workerManager = new WorkerManager(this, GeneratorWorker);
         this.workerManager
             .setHandler('message', this.$notifier.push)
             .setHandler('result', this.result);
+        this.setInstanceName();
     },
 
     methods: {
@@ -263,7 +281,7 @@ export default {
             else {
                 this.addGeneratedInstances([{
                     file: {
-                        name: this.generatorParams.instanceName,
+                        name: this.instanceName,
                         content: result
                     },
                     params: this.generatorParams[this.selectedProblemId]
@@ -273,6 +291,24 @@ export default {
                     this.$emit('closeGeneratorModal');
                 }
             }
+        },
+
+        setInstanceName: function() {
+          if(this.selectedProblemId === 0) {
+            this.instanceName =  "SAT" + this.generatorParams[0].noVariables + "_" + this.generatorParams[0].noClausules;
+          }
+
+          else if (this.selectedProblemId === 1) {
+            this.instanceName = "TSP" + this.generatorParams[1].noNodes + "_" + this.generatorParams[1].noEdges + "_" + this.generatorParams[1].noNodesToVisit + "_" + this.generatorParams[1].maxPrice;
+          }
+
+          else if (this.selectedProblemId === 2) {
+            this.instanceName = "KNAP" + this.generatorParams[2].noItems + "_" + this.generatorParams[2].capacity + "_" + this.generatorParams[2].sumOfWeights + "_" +this.generatorParams[2].maxValue + "_" + this.generatorParams[2].granularity;
+          }
+
+          else if (this.selectedProblemId === 3) {
+            this.instanceName = "MVC" + this.generatorParams[3].size + "_" + this.generatorParams[3].noEdges;
+          }
         },
 
         ...mapActions([
