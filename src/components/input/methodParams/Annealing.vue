@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import cloneDeep from 'lodash/cloneDeep';
 import { mapGetters } from 'vuex';
 import { WorkerManager } from '@/computing/WorkerManager.js';
 import IterativeMethodWorker from '@/computing/IterativeMethodWorker.js';
@@ -66,10 +65,12 @@ import * as Salesman from '@/computing/problems/TravellingSalesman';
 import * as SAT from '@/computing/problems/SAT';
 import * as Knapsack from '@/computing/problems/Knapsack';
 
+const methodId = 'annealing';
+
 export default {
     data () {
         return {
-            params: cloneDeep(this.$store.state.inputParams.params.methodParams.annealing)
+            params: this.$store.getters.getMethodParams(methodId)
         };
     },
     computed: {
@@ -137,13 +138,13 @@ export default {
     watch: {
         params: {
             handler: function (params) {
-                this.$store.commit('updateParams', {id: 'annealing', data: params});
+                this.$store.commit('updateParams', {id: methodId, data: params});
             },
             deep: true
         },
         errors: {
             handler: function (errors) {
-                this.$store.commit('updateParamsValidation', {data: errors.items.length === 0});
+                this.$store.commit('updateParamsValidation', {id: methodId, data: errors.items.length === 0});
             },
             deep: true
         }

@@ -40,24 +40,27 @@
 </template>
 
 <script>
-import cloneDeep from 'lodash/cloneDeep';
+import { mapState } from 'vuex';
+
+const methodId = 'tabu';
 
 export default {
     data () {
         return {
-            params: cloneDeep(this.$store.state.inputParams.params.methodParams.tabu)
+            params: this.$store.getters.getMethodParams(methodId)
         };
     },
+
     watch: {
         params: {
             handler: function (params) {
-                this.$store.commit('updateParams', {id: 'tabu', data: params});
+                this.$store.commit('updateParams', {id: methodId, data: params});
             },
             deep: true
         },
         errors: {
             handler: function (errors) {
-                this.$store.commit('updateParamsValidation', {data: errors.items.length === 0});
+                this.$store.commit('updateParamsValidation', {id: methodId, data: errors.items.length === 0});
             },
             deep: true
         }

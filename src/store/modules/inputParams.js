@@ -56,45 +56,48 @@ const getters = {
     selectedProblemId(state) {
         return state.params.problem.id;
     },
-    getIsValidParams (state) {
+    getIsValidParams(state) {
         return state.params.isValid[state.params.method.id];
     },
-    getInputData (state) {
+    getInputData(state) {
         return {
             method: state.params.method.id,
             problem: state.params.problem.id,
             params: state.params.methodParams[state.params.method.id]
         };
     },
-    getSelectedFile (state) {
+    getSelectedFile(state) {
         if (state.files.instances.length === 0) {
             return {};
         }
         return state.files.instances[state.files.selected.index];
+    },
+    getMethodParams: (state) => (methodId) => {
+        return {...state.params.methodParams[methodId]};
     }
 }
 
 // mutations
 const mutations = {
-    selectMethod (state, index) {
+    selectMethod(state, index) {
         if (enums.methods[index]) {
             state.params.method = enums.methods[index];
             storage.set(storageKeys.method, index);
         }
     },
-    selectProblem (state, index) {
+    selectProblem(state, index) {
         if (enums.problems[index]) {
             state.params.problem = enums.problems[index];
             storage.set(storageKeys.problem, index);
         }
     },
-    updateParams (state, payload) {
-        state.params.methodParams[payload.id] = payload.data;
+    updateParams(state, payload) {
+        state.params.methodParams[payload.id] = {...payload.data};
     },
-    updateParamsValidation (state, payload) {
-        state.params.isValid[state.params.method.id] = payload.data;
+    updateParamsValidation(state, payload) {
+        state.params.isValid[payload.id] = {...payload.data};
     },
-    selectInstance (state, selected) {
+    selectInstance(state, selected) {
         state.files.selected.id = selected.id;
         state.files.selected.index = selected.index;
     },
