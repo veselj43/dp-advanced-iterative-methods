@@ -1,4 +1,14 @@
+/**
+ * Class that is used to control workers
+ */
 export class WorkerManager {
+    /**
+     * Class constructor
+     * @param {object} context  context in which it was created
+     * @param {class} workerThread  worker to control
+     * @param {method} defaultHandler default handler
+     * @param {method} onError what to do on error
+     */
     constructor(context, workerThread, defaultHandler, onError) {
         this._workerThread = workerThread;
         this._context = context;
@@ -8,7 +18,9 @@ export class WorkerManager {
         this.inProgress = false;
         this.terminated = true;
     }
-
+    /**
+     * Creates worker
+     */
     _createWorker() {
         this._worker = new this._workerThread();
         this.inProgress = false;
@@ -39,17 +51,29 @@ export class WorkerManager {
             }
         }
     }
-
+    /**
+     * Set a new handler
+     * @param {string} name  handler name
+     * @param {method} handlerFunction method to call when the handler is called
+     */
     setHandler(name, handlerFunction) {
         this._handlers[name] = handlerFunction;
         return this;
     }
 
+    /**
+     * Removed handler
+     * @param  {string} name name of the handler to remove
+     * @return {object}  returns this
+     */
     removeHandler(name) {
         delete this._handlers[name];
         return this;
     }
-
+    /**
+     * Send work to the created worker
+     * @return {object} returns this
+     */
     sendWork() {
         if (arguments.length < 1) {
             throw new TypeError('sendMessage: not enough arguments');
@@ -66,7 +90,10 @@ export class WorkerManager {
 
         return this;
     }
-
+    /**
+     * Terminate the running worker
+     * @return {object} this
+     */
     terminate() {
         if (!this.terminated) {
             this._worker.terminate();

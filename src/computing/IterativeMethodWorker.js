@@ -22,7 +22,9 @@ var methods = {
 
 var workerInterface = new WorkerInterface(this, methods);
 
-// Job organization
+/**
+ * Worker class for computing
+ */
 class Job {
     constructor(inputData, params) {
         let problemClass = getProblemClassFromId(params.problem.id);
@@ -30,7 +32,11 @@ class Job {
         this.problem = (problemClass) ? new problemClass(inputData) : null;
         this.method = (methodClass) ? new methodClass(workerInterface) : null;
     }
-
+    /**
+     * Run the calculation based on selected method, problem, and method parameters
+     * @param  {object} methodParams method parameters as object
+     * @return {Result} result as a result class
+     */
     run(methodParams) {
         if (this.problem === null) {
             workerInterface.reply('error', "Unknown problem selected");

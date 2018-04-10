@@ -180,7 +180,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 import { WorkerManager } from '@/computing/WorkerManager.js';
 import GeneratorWorker from "@/computing/GeneratorWorker.js";
 
@@ -254,6 +254,7 @@ export default {
     },
 
     methods: {
+
         generate: function() {
             if (this.workerManager.inProgress) {
                 this.$notifier.put("worker-info", "Work is in progress.", "info");
@@ -279,9 +280,23 @@ export default {
                 this.$notifier.push((errorMessage) ? errorMessage : "Error while generating instance.", "error");
             }
             else {
+                //if file with the same name exists add (number) behind it
+                this.instances = this.$store.state.inputParams.files.instances;
+                var count = 0;
+                this.instances.forEach(function(value) {
+                  if(value.file.name[value.file.name.length-1] === ")") {
+                    if(value.file.name.substring(0, value.file.name.length - 3) === this.instanceName) count++;
+                  }
+                  else {
+                    if(value.file.name === this.instanceName) count++;
+                  }
+                }.bind(this));
+                var updatedName = this.instanceName;
+                if(count) updatedName += "(" + count + ")";
+
                 this.addGeneratedInstances([{
                     file: {
-                        name: this.instanceName,
+                        name: updatedName,
                         content: result
                     },
                     params: this.generatorParams[this.selectedProblemId]

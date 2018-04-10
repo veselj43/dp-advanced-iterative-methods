@@ -78,6 +78,11 @@ export class SAT extends Problem {
         return satisfied;
     }
 
+    /**
+     * Returns fitness of selected configuration(BitArray)
+     * @param  {class} bitArrayConfig BitArray of which fitness we want
+     * @return {int}  calculated fitness of the configuration
+     */
     getFitness(bitArrayConfig) {
         if (bitArrayConfig === null) return -1;
 
@@ -88,6 +93,11 @@ export class SAT extends Problem {
         return this.params.numberOfClausules;// + getWeight(configuration);
     }
 
+    /**
+     * Returns random, or all 0, configuration of SAT problem(BitArray configuration)
+     * @param  {bool} random random or all 0
+     * @return {class}  new BitArray class
+     */
     getConfiguration(random) {
         return new BitArray({
             size: this.params.numberOfVariables,

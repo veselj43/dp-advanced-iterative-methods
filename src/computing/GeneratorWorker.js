@@ -20,12 +20,18 @@ var methods = {
 
 var workerInterface = new WorkerInterface(this, methods);
 
+/**
+ * Worker class used to generate problems
+ */
 class Job {
     constructor(params, problemKey) {
         this.params = params;
         this.problemKey = problemKey;
     }
-
+    /**
+     * Generate instance based on selected problem and input parameters
+     * @return {string} returns the generated instance coded as string
+     */
     run() {
         let Generator = null;
         let generatorParams = this.params[this.problemKey];

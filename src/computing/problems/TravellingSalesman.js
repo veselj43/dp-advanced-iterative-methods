@@ -155,10 +155,19 @@ export class TravellingSalesman extends Problem {
         return this.rebuildPath(permutationConfig.getArray());
     }
 
+    /**
+     * Returns what type of configuration is this problem using
+     * @return {enum} type of the problem(configuration type)
+     */
     getType() {
         return ProblemTypeEnum.PERMUTATION;
     }
 
+    /**
+     * Returns parameters of the instance
+     * @param  {string} instanceContent content of the instance
+     * @return {object} instance parameters
+     */
     resolveInstanceParams(instanceContent) {
         instanceContent = instanceContent.split(/\s+/);
 

@@ -134,9 +134,9 @@ export default {
         removeInstance(instance) {
             this.$store.dispatch('removeInstance', instance._id);
             this.$notifier.put(
-                'undo', 
-                `Instance "${instance.file.name}" removed.`, 
-                'undo', 
+                'undo',
+                `Instance "${instance.file.name}" removed.`,
+                'undo',
                 [this.$notifier.createAction('UNDO', this.insertInstances, [instance])]
             );
         },

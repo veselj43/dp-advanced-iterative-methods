@@ -1,17 +1,17 @@
 <template>
     <div class="results" id="chartBaseContainer">
         <h3>
-            <i v-if="selectedProblem.info.goal === 'min'" 
+            <i v-if="selectedProblem.info.goal === 'min'"
                 class="material-icons bg-primary"
                 v-tooltip.left="'Minimalization problem'">
                 trending_down
             </i>
-            <i v-if="selectedProblem.info.goal === 'max'" 
+            <i v-if="selectedProblem.info.goal === 'max'"
                 class="material-icons bg-primary"
                 v-tooltip.left="'Maximalization problem'">
                 trending_up
             </i>
-            {{selectedProblem.text}} 
+            {{selectedProblem.text}}
             <small>{{selectedProblem.info.description}}</small>
         </h3>
         <img v-show="computingIsProcessingResults" src="@/assets/loading_01.svg" alt="Processing results">
@@ -41,12 +41,13 @@ import { mapsState, mapGetters, mapState } from 'vuex';
 import ConfVisual from './visualisation/Configuration';
 import Tabu from './methodResult/tabu/Tabu';
 import Genetic from './methodResult/genetic/Genetic';
+import Annealing from './methodResult/annealing/Annealing';
 // TODO import and add to components other methods
 
 export default {
     components: {
         ConfVisual,
-        Annealing: Tabu, // change here (delete Tabu)
+        Annealing, // change here (delete Tabu)
         Genetic,
         Tabu,
     },

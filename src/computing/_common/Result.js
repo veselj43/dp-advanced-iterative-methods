@@ -1,3 +1,6 @@
+/**
+ * Class for storing the result of calculation
+ */
 export default class Result {
     constructor(config, cost, counter) {
         this.config = config;

@@ -3,12 +3,20 @@
  * @type {class}
  */
 export default class SATGenerator {
+  /**
+   * Class constructor
+   * @param {object} params parameters of the generated instance
+   */
   constructor (params) {
     this.params = params;
     this.params.noVariables = +this.params.noVariables;
     this.params.noClausules = +this.params.noClausules;
   }
 
+  /**
+   * Generate instance based on parameters
+   * @return {String} instance of SAT problem coded as String
+   */
   generate () {
     var generatedInstance = "p cnf " +  this.params.noVariables + " " + this.params.noClausules + '\n';
     var sign;
