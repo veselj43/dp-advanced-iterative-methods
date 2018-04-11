@@ -98,6 +98,15 @@ export class MinimalVertexCover extends Problem {
     }
 
     /**
+     * Returns instance invalidity
+     * @param  {string} instanceContent content of the instance
+     * @return {boolean} is instance invalid
+     */
+    isInvalidInstance(instanceContent) {
+        return false; // valid instance
+    }
+
+    /**
      * Returns parameters of the instance
      * @param  {string} instanceContent content of the instance
      * @return {object} instance parameters

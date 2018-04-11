@@ -6,7 +6,7 @@
                 <div class="history-list-item-collapse-header">{{item.instance}}</div>
             </label>
             <div class="history-list-item-remove" v-on:click="removeHistoryItem(item)">
-                <span class="icon-danger glyphicon glyphicon-trash"></span>
+                <i class="icon-danger fas fa-trash-alt"></i>
             </div>
             <span class="history-list-item-collapse-switch" v-on:click="toggle">
                 <span v-if="isOpen" class="glyphicon glyphicon-triangle-bottom"></span>
