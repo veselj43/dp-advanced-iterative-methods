@@ -97,7 +97,7 @@ export default {
         },
 
         idFromSeriesLegend(legend) {
-            return +legend.split('(')[1].split(')')[0];
+            return +legend.match(/\([0-9]+\)/g).reverse()[0].slice(1, -1);
         },
 
         beforeInitRender(chart) {

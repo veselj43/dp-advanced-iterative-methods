@@ -1,12 +1,12 @@
 <template>
     <div class="history-list-item">
         <div class="history-list-item-heading">
-            <label class="history-list-item-label">
+            <label class="history-list-item-label" :title="item.instance">
                 <input type="checkbox" v-model="checked">
                 <div class="history-list-item-collapse-header">{{item.instance}}</div>
             </label>
             <div class="history-list-item-remove" v-on:click="removeHistoryItem(item)">
-                <span class="icon-danger glyphicon glyphicon-trash"></span>
+                <i class="icon-danger fas fa-trash-alt"></i>
             </div>
             <span class="history-list-item-collapse-switch" v-on:click="toggle">
                 <span v-if="isOpen" class="glyphicon glyphicon-triangle-bottom"></span>
@@ -105,15 +105,10 @@ export default {
     $duration-primary: 200ms;
     $duration-secondary: 300ms;
 
-    .historyList {
-        margin-top: 1em;
-    }
-
     .history-list-item {
         padding: 0;
 
         &-heading {
-            position: relative;
             display: flex;
             margin: 0;
             padding: 0;
@@ -122,8 +117,8 @@ export default {
         }
 
         &-label {
-            display: block;
-            width: 100%;
+            flex-grow: 1;
+            min-width: 0;
             margin: 0;
             padding-left: 25px !important;
             font-weight: 400;
@@ -136,7 +131,9 @@ export default {
         }
 
         &-collapse-header {
-            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-size: 110%;
         }
 

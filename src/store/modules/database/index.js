@@ -7,11 +7,11 @@ import { methods, problemExampleInstances } from '../_enums';
 import * as DBSchema from './DBSchema';
 import DBManager from './DBManager';
 
-var dbm = new DBManager(DBSchema.dbName, DBSchema.dbStructure, DBSchema.dbVersion);
-var exampleInstanceAdded = {};
+let dbm = new DBManager(DBSchema.dbName, DBSchema.dbStructure, DBSchema.dbVersion);
+let exampleInstanceAdded = {};
 
-var getTableNameByMethod = function (inputData) {
-    var table = (inputData.method || inputData) + 'ComputingHistory';
+let getTableNameByMethod = function (inputData) {
+    let table = (inputData.method || inputData) + 'ComputingHistory';
     return DBSchema.dbTables[table];
 };
 
@@ -32,9 +32,9 @@ const actions = {
     },
 
     loadComputingHistory({ getters, commit }, pushOnly) {
-        var params = getters.getInputData;
-        var table = getTableNameByMethod(params);
-        var selectedIndexes = JSON.parse(storage.get(storageUtils.getSelectedIndexesByTypeKey())) || [0];
+        let params = getters.getInputData;
+        let table = getTableNameByMethod(params);
+        let selectedIndexes = JSON.parse(storage.get(storageUtils.getSelectedIndexesByTypeKey())) || [0];
         if (pushOnly) selectedIndexes = [0]; // show just computed result
         return dbm.getAll(table, { problem: params.problem }).then(function(data) {
             commit('updateComputingHistory', data);
@@ -46,7 +46,7 @@ const actions = {
     },
 
     pushComputingHistory ({ getters, dispatch }, result) {
-        var dbObject = getters.getInputData;
+        let dbObject = getters.getInputData;
         __extend(dbObject, {
             instance: getters.getComputingFile.name,
             data: {
@@ -60,9 +60,9 @@ const actions = {
     },
 
     insertComputingHistory({ dispatch }, dbObject) {
-        var table = getTableNameByMethod(dbObject);
+        let table = getTableNameByMethod(dbObject);
 
-        var pushComputed = dbObject.$pushComputed;
+        let pushComputed = dbObject.$pushComputed;
         if (pushComputed) delete dbObject.$pushComputed;
         
         return dbm.insert(table, dbObject).then(function(data) {
@@ -71,16 +71,16 @@ const actions = {
     },
 
     clearComputingHistoryItemInMethodById ({ getters, dispatch }, id) {
-        var params = getters.getInputData;
-        var table = getTableNameByMethod(params);
+        let params = getters.getInputData;
+        let table = getTableNameByMethod(params);
         return dbm.remove(table, { _id: id }).then(function(data) {
             return dispatch('loadComputingHistory');
         });
     },
 
     clearComputingHistoryByMethodAndProblem ({ getters, dispatch }) {
-        var params = getters.getInputData;
-        var table = getTableNameByMethod(params);
+        let params = getters.getInputData;
+        let table = getTableNameByMethod(params);
         return dbm.remove(table, { problem: params.problem }).then(function(data) {
             return dispatch('loadComputingHistory');
         });
@@ -95,9 +95,9 @@ const actions = {
         });
     },
 
-    loadInstances ({ getters, commit }, firstLoad) { // todo rework exampleInstanceAdded to firstLoad
-        var params = getters.getInputData;
-        var resolveInstanceParams = getProblemClassFromId(getters.selectedProblemId).prototype.resolveInstanceParams;
+    loadInstances ({ getters, commit }, firstLoad) {
+        let params = getters.getInputData;
+        let resolveInstanceParams = getProblemClassFromId(getters.selectedProblemId).prototype.resolveInstanceParams;
 
         return dbm.getAll(DBSchema.dbTables.instances, { problem: params.problem }).then(function(instances) {
             if (instances.length > 0 || exampleInstanceAdded[params.problem]) {
@@ -108,7 +108,7 @@ const actions = {
             else {
                 exampleInstanceAdded[params.problem] = true;
                 return resource.getExampleInstance(problemExampleInstances[params.problem]).then(function(data) {
-                    var instanceDbObj = {
+                    let instanceDbObj = {
                         problem: params.problem,
                         file: {
                             name: 'Example',
@@ -126,18 +126,25 @@ const actions = {
     },
 
     addInstances ({ getters, dispatch }, filesArray) {
-        var stringFilesArray = [];
-        var promiseArray = [];
+        let stringFilesArray = [];
+        let promiseArray = [];
 
-        var resolveInstanceParams = getProblemClassFromId(getters.selectedProblemId).prototype.resolveInstanceParams;
+        let problemClassPrototype = getProblemClassFromId(getters.selectedProblemId).prototype;
+        let isInvalidInstance = problemClassPrototype.isInvalidInstance;
+        let resolveInstanceParams = problemClassPrototype.resolveInstanceParams;
 
-        for (var i = 0, fileDbObj; fileDbObj = filesArray[i]; i++) {
+        for (let i = 0, fileDbObj; fileDbObj = filesArray[i]; i++) {
             promiseArray.push(
                 readFile(fileDbObj).then((file) => {
-                    stringFilesArray.push({
+                    let fileDbObj = {
                         file, 
                         params: resolveInstanceParams(file.content)
-                    });
+                    };
+                    let invalidData = isInvalidInstance(file.content);
+                    if (invalidData) {
+                        fileDbObj.isInvalid = invalidData;
+                    }
+                    stringFilesArray.push(fileDbObj);
                 })
             );
         }
@@ -149,11 +156,10 @@ const actions = {
     },
 
     addGeneratedInstances ({ getters, dispatch }, filesArray) {
-        var inputParams = getters.getInputData;
-        var toInsert = filesArray.map(fileObj => ({
+        let inputParams = getters.getInputData;
+        let toInsert = filesArray.map(fileObj => ({
             problem: inputParams.problem,
-            file: fileObj.file,
-            params: fileObj.params
+            ...fileObj
         }));
 
         return dispatch('insertInstances', toInsert);
@@ -161,7 +167,7 @@ const actions = {
 
     insertInstances ({ dispatch }, dbObjecstArray) {
         if (!dbObjecstArray.length) {
-            return null;
+            return false;
         }
 
         return dbm.insert(DBSchema.dbTables.instances, dbObjecstArray).then(function() {
@@ -176,14 +182,14 @@ const actions = {
     },
 
     clearInstancesByProblem ({ getters, dispatch }) {
-        var params = getters.getInputData;
+        let params = getters.getInputData;
         return dbm.remove(DBSchema.dbTables.instances, { problem: params.problem }).then(function() {
             return dispatch('loadInstances');
         });
     },
 
     clearAllInstances ({ getters, dispatch }) {
-        var params = getters.getInputData;
+        let params = getters.getInputData;
         return dbm.remove(DBSchema.dbTables.instances).then(function() {
             return dispatch('loadInstances');
         });

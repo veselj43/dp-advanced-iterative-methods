@@ -2,8 +2,12 @@
     <div class="controls __above-disable-layer">
         <span class="status">Status: <b>{{status.text}}</b></span>
         <span class="control-buttons">
-            <button v-if="!computingIsRunning" class="btn btn-success" :disabled="!getIsValidParams" v-on:click="start">Start</button>
-            <button v-else class="btn btn-danger" v-on:click="stop">Stop</button>
+            <button v-show="!computingIsRunning" class="btn btn-success" :disabled="!getIsValidParams" v-on:click="start">
+                <i class="fas fa-play"></i> Start
+            </button>
+            <button v-show="computingIsRunning" class="btn btn-danger" v-on:click="stop">
+                <i class="fas fa-stop"></i> Stop
+            </button>
         </span>
     </div>
 </template>
