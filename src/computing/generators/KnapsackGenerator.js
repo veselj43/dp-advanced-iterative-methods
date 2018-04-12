@@ -30,7 +30,6 @@ export default class KnapsackGenerator {
       generatedInstance += randomArray[j] + " " + Math.round(Math.random() * this.params.maxValue) + " ";
     }
 
-    console.log(generatedInstance);
     return generatedInstance;
   }
 
@@ -47,7 +46,7 @@ export default class KnapsackGenerator {
 
     while(myArray.length !== this.params.noItems)
     {
-        generatedWeight = Math.round(Math.random() * this.params.sumOfWeights);
+        generatedWeight = Math.round(Math.random() * (this.params.sumOfWeights - 1)) + 1;
         // granularity checking, 0 = random, +x = more bigger things, -x more smaller things
         if(this.params.granularity === 0 ||
         (this.params.granularity > 0 && Math.random() < 1/Math.pow(this.params.sumOfWeights - generatedWeight, this.params.granularity)) ||
@@ -64,8 +63,6 @@ export default class KnapsackGenerator {
     }
     //fixing the final difference caused by rounding
     myArray[Math.round(Math.random() * this.params.noItems)] += this.params.sumOfWeights - newWeight;
-
-    myArray.push(this.params.sumOfWeights - newWeight);
 
     return myArray;
   }

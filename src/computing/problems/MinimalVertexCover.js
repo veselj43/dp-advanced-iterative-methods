@@ -24,7 +24,7 @@ export class MinimalVertexCover extends Problem {
         {
             for(var j = 0; j < this._size; j++)
             {
-                this._array[i][j] = +data[1 + i * this._size + j];
+                this._array[i][j] = +data[2 + i * this._size + j];
             }
         }
     }

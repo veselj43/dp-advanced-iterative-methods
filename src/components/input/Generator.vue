@@ -18,11 +18,11 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfClausules')}">
                     <label for="SATgenParam2">Number of clausules</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of clausules in the generated instance'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of clausules in the generated instance. WARNING!!! - generating clausules is random, so choosing number of clauseles close to maxim number of clausule will take a lot of time.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam1" v-model="generatorParams[0].noClausules" placeholder=""
                     name="numberOfClausules"
                     data-vv-as="number of clausules"
-                    v-validate.initial="{ required: true, min_value: 1, max_value: Math.pow(2, +generatorParams[0].noVariables), regex: /^[0-9]+$/ }"
+                    v-validate.initial="{ required: true, min_value: 1, max_value: Math.pow(3, +generatorParams[0].noVariables) - 1, regex: /^[0-9]+$/ }"
                     >
                     <span v-show="errors.has('numberOfClausules')" class="help-block">{{ errors.first('numberOfClausules') }}</span>
                 </div>
@@ -107,7 +107,7 @@
                     <input type="number" class="form-control" id="genParam3" v-model="generatorParams[2].sumOfWeights" placeholder=""
                     name="sumOfWeights"
                     data-vv-as="sum of item weights"
-                    v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
+                    v-validate.initial="{ required: true, min_value: +generatorParams[2].noItems, regex: /^[0-9]+$/ }"
                     >
                     <span v-show="errors.has('sumOfWeights')" class="help-block">{{ errors.first('sumOfWeights') }}</span>
                 </div>
@@ -125,7 +125,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('granularity')}">
                     <label for="KnapgenParam5">Granularity</label>
-                    <span class="form-tooltip" v-tooltip.right="'For number > 0 the instance will contain more heavier things, for < 0 more lighter things. Each item has 1/(maxWeight - weight)^granularity chance to be in the instance for heavier things and 1/weight^(-granularity) for lighter things. WARNING!!! for realy high numbers(or really low for lighter things) the generation take a lot of time because most things will be thrown away. So for best result use number between <-1, 1>. For 0 the generating is random.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'For number > 0 the instance will contain more heavier things, for < 0 more lighter things. Each item has 1/(maxWeight - weight)^granularity chance to be in the instance for heavier things and 1/weight^(-granularity) for lighter things, where maxWeight = sum of weights. WARNING!!! for realy high numbers(or really low for lighter things) the generation take a lot of time because most things will be thrown away. So for best result use number between <-1, 1>. For 0 the generating is random.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam5" v-model="generatorParams[2].granularity" placeholder=""
                     name="granularity"
                     data-vv-as="granularity"

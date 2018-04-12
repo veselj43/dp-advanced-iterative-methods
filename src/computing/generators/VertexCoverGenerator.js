@@ -18,7 +18,7 @@ export default class VertexCoverGenerator {
      * @return {String} instance of minimal vertex cover problem coded as String
      */
     generate() {
-        var generatedInstance = this.params.size + "\n";
+        var generatedInstance = this.params.size + "\n" + this.params.noEdges + "\n";
         var noEdges = 0;
 
         var array = new Array(this.params.size);

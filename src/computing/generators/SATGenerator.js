@@ -24,6 +24,8 @@ export default class SATGenerator {
     var numberOfClausules = 0;
     var newClausule;
 
+    var addedClausules = [];
+
     while (numberOfClausules !== this.params.noClausules)
     {
       newClausule = "";
@@ -44,14 +46,13 @@ export default class SATGenerator {
       }
       if(!empty) {
         newClausule += "0" + '\n';
-        console.log(newClausule);
-        if(!generatedInstance.includes(newClausule)){
+        if(!addedClausules[newClausule]){
           numberOfClausules++;
           generatedInstance += newClausule;
+          addedClausules[newClausule] = 1;
         }
       }
     }
-
     return generatedInstance;
   }
 }
