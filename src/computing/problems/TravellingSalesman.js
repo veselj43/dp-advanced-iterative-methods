@@ -11,15 +11,22 @@ export class TravellingSalesman extends Problem {
         super();
         data = data.split(/\s+/);
 
-        this._noNodes = +data[0];
-        this._noEdges = +data[1];
-        this._noNodesToVisit = +data[2];
-        this._maxPrice = +data[3];
+        this._type = data[0];
+        this._noNodes = +data[1];
+        this._noEdges = +data[2];
+        this._noNodesToVisit = +data[3];
+        this._maxPrice = +data[4];
         this._nodesToVisit = [];
 
-        for(var i = 0; i < this._noNodesToVisit; i++)
-        {
-            this._nodesToVisit.push(+data[4 + i]);
+        data.splice(0, 4);
+
+        if(this._type === "Shortest") {
+          for(var i = 0; i < this._noNodesToVisit; i++)
+          {
+              this._nodesToVisit.push(+data[i]);
+          }
+
+          data.splice(0, this._noNodesToVisit);
         }
 
         this._distanceArray = new Array(this._noNodes);
@@ -30,13 +37,14 @@ export class TravellingSalesman extends Problem {
             this._distanceArray[i] = new Array(this._noNodes);
             this._pathArray[i] = new Array(this._noNodes);
         }
-        // initializing arrays, distance array to -inf if no edge, and path array to null if no edge
+
+        // initializing arrays, distance array to inf if no edge, and path array to null if no edge
         for(var i = 0; i < this._noNodes; i++)
         {
             for(var j = 0; j < this._noNodes; j++)
             {
-                if(+data[4 + this._noNodesToVisit + i * this._noNodes + j] !== 0 || i === j) {
-                    this._distanceArray[i][j] = +data[4 + this._noNodesToVisit + i * this._noNodes + j];
+                if(+data[i * this._noNodes + j] !== 0 || i === j) {
+                    this._distanceArray[i][j] = +data[i * this._noNodes + j];
                     this._pathArray[i][j] = j;
                 }
                 else {
@@ -45,8 +53,10 @@ export class TravellingSalesman extends Problem {
                 }
             }
         }
-
-        this._floydWarshall();
+        // if shortest calculate shortest path using floyd warshall
+        if(this._type === "Shortest") {
+          this._floydWarshall();
+        }
     }
 
     /**
@@ -91,6 +101,7 @@ export class TravellingSalesman extends Problem {
      */
     rebuildPath(permutationConfig) {
         var permutation = this._bindToNodes(permutationConfig);
+
         var path = [permutation[0]];
 
         for(var i = 1; i < permutation.length; i++)
@@ -113,7 +124,9 @@ export class TravellingSalesman extends Problem {
      */
     getFitness(permutationConfig) {
         var price = 0;
-        var permutation = this._bindToNodes(permutationConfig.getArray());
+        var permutation = permutationConfig.getArray();
+
+        if(this._type === "Shortest") permutation = this._bindToNodes(permutation);
 
         for(var i = 0; i < permutation.length - 1; i++)
         {
@@ -152,6 +165,8 @@ export class TravellingSalesman extends Problem {
      * @return {String} the actual path as string
      */
     getResult(permutationConfig) {
+        if(this._type === "Hamiltonian") return permutationConfig.getArray();
+
         return this.rebuildPath(permutationConfig.getArray());
     }
 

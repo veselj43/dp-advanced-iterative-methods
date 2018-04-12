@@ -116,23 +116,26 @@ export default {
         },
 
         /**
-         * Set value for inner cycle, function for calculation in Annealing.js
-         * @return {[type]} [description]
+         * Set value for inner cycle based on selected instance size
          */
         calcInnerCycle() {
-          getDbFileContent(this.getSelectedFile).then((content) => {
-              var method = new Annealing.AnnealingSolver();
-              this.problem = null;
+          var params = this.getSelectedFile.params;
 
-              if (this.selectedProblemId === 0) this.problem = new SAT.SAT(content);
-              else if (this.selectedProblemId === 1) this.problem = new Salesman.TravellingSalesman(content);
-              else if (this.selectedProblemId === 2) this.problem = new Knapsack.Knapsack(content);
-              else if (this.selectedProblemId === 3) this.problem = new Vertex.MinimalVertexCover(content);
+          if(this.selectedProblemId === 0) {
+              this.params.innerCycle = params.noVariables * 2;
+          }
 
-              this.params.innerCycle = method.computeInnerCycle(this.problem);
-          }, (errorMsg) => {
-              this.$notifier.put("inFile", errorMsg);
-          });
+          else if(this.selectedProblemId === 1) {
+              this.params.innerCycle = params.noNodesToVisit * 2;
+          }
+
+          else if(this.selectedProblemId === 2) {
+              this.params.innerCycle = params.noItems * 2;
+          }
+
+          else if(this.selectedProblemId === 3) {
+              this.params.innerCycle = params.size * 2;
+          }
         }
     },
     watch: {

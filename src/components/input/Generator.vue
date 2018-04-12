@@ -31,6 +31,15 @@
 
             <div v-if="selectedProblemId === 1">
 
+                <div class="form-group">
+                    <label for="problem-type">Problem type</label>
+                    <span class="form-tooltip" v-tooltip.right="'Hamiltonian path is typical Travelling Salesman problem. \n Shortest path allows to go to nodes multiple times and calculates real shortest path. Also this version allows to visit just some of the nodes and choose number of edges.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <select class="form-control" id="problem-type" v-model="generatorParams[1].type">
+                        <option value="Hamiltonian">Hamiltonian path</option>
+                        <option value="Shortest">Shortest path</option>
+                    </select>
+                </div>
+
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfNodes')}">
                     <label for="SalegenParam1">Number of nodes</label>
                     <span class="form-tooltip" v-tooltip.right="'Number of vertexes(nodes) in the generated problem'"><span class="glyphicon glyphicon-question-sign"></span></span>
@@ -42,7 +51,18 @@
                     <span v-show="errors.has('numberOfNodes')" class="help-block">{{ errors.first('numberOfNodes') }}</span>
                 </div>
 
-                <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfEdges')}">
+                <div class="form-group" v-bind:class="{'has-error': errors.has('maximumEdgePrice')}">
+                    <label for="SalegenParam4">Maximum weight of an edge</label>
+                    <span class="form-tooltip" v-tooltip.right="'Maximum price of each edge'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].maxPrice" placeholder=""
+                    name="maximumEdgePrice"
+                    data-vv-as="maximum weight of an edge"
+                    v-validate.initial="{ required: true, min_value: 1, max_value: 1000, regex: /^[0-9]+$/ }"
+                    >
+                    <span v-show="errors.has('maximumEdgePrice')" class="help-block">{{ errors.first('maximumEdgePrice') }}</span>
+                </div>
+
+                <div v-if="generatorParams[1].type === 'Shortest'" class="form-group" v-bind:class="{'has-error': errors.has('numberOfEdges')}">
                     <label for="SalegenParam2">Number of edges</label>
                     <span class="form-tooltip" v-tooltip.right="'Number of edges, the actual number is 2 times this value, because the edges are not oriented'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].noEdges" placeholder=""
@@ -53,26 +73,15 @@
                     <span v-show="errors.has('numberOfEdges')" class="help-block">{{ errors.first('numberOfEdges') }}</span>
                 </div>
 
-                <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfNodesToVisit')}">
+                <div v-if="generatorParams[1].type === 'Shortest'" class="form-group" v-bind:class="{'has-error': errors.has('numberOfNodesToVisit')}">
                     <label for="SalegenParam3">Number of nodes to visit</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of the nodes, that the salesman has to visit. If its equal to Number of nodes, its typical travelling salesman problem'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of the nodes, that the salesman has to visit.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].noNodesToVisit" placeholder=""
                     name="numberOfNodesToVisit"
                     data-vv-as="number of nodes to visit"
                     v-validate.initial="{ required: true, min_value: 2, max_value: +generatorParams[1].noNodes, regex: /^[0-9]+$/ }"
                     >
                     <span v-show="errors.has('numberOfNodesToVisit')" class="help-block">{{ errors.first('numberOfNodesToVisit') }}</span>
-                </div>
-
-                <div class="form-group" v-bind:class="{'has-error': errors.has('maximumEdgePrice')}">
-                    <label for="SalegenParam4">Maximum weight of an edge</label>
-                    <span class="form-tooltip" v-tooltip.right="'Maximum price of each edge'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].maxPrice" placeholder=""
-                    name="maximumEdgePrice"
-                    data-vv-as="maximum weight of an edge"
-                    v-validate.initial="{ required: true, min_value: 1, max_value: 1000, regex: /^[0-9]+$/ }"
-                    >
-                    <span v-show="errors.has('maximumEdgePrice')" class="help-block">{{ errors.first('maximumEdgePrice') }}</span>
                 </div>
 
             </div>
@@ -202,6 +211,7 @@ export default {
                     noClausules: 50
                 },
                 1: {
+                    type: "Hamiltonian",
                     noNodes: 20,
                     noEdges: 30,
                     noNodesToVisit: 20,
@@ -314,7 +324,8 @@ export default {
           }
 
           else if (this.selectedProblemId === 1) {
-            this.instanceName = "TSP" + this.generatorParams[1].noNodes + "_" + this.generatorParams[1].noEdges + "_" + this.generatorParams[1].noNodesToVisit + "_" + this.generatorParams[1].maxPrice;
+            this.instanceName = this.generatorParams[1].type + "TSP" + this.generatorParams[1].noNodes + "_" + this.generatorParams[1].maxPrice;
+            if(this.generatorParams[1].type === "Shortest")  this.instanceName += "_" + this.generatorParams[1].noEdges + "_" + this.generatorParams[1].noNodesToVisit
           }
 
           else if (this.selectedProblemId === 2) {

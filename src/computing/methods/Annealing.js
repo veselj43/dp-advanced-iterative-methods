@@ -115,13 +115,4 @@ export class AnnealingSolver{
 
       return Math.ceil(temperature);
   }
-
-  /**
-   * Compute the size of inner cycle, its constant * size of the problem
-   * @param  {[type]} problem [description]
-   * @return {[type]}         [description]
-   */
-  computeInnerCycle(problem){
-    return 2*problem.getConfiguration().getSize();
-  }
 }
