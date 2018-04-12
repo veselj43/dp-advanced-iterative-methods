@@ -18,7 +18,7 @@ export class TravellingSalesman extends Problem {
         this._maxPrice = +data[4];
         this._nodesToVisit = [];
 
-        data.splice(0, 4);
+        data.splice(0, 5);
 
         if(this._type === "Shortest") {
           for(var i = 0; i < this._noNodesToVisit; i++)
@@ -53,6 +53,8 @@ export class TravellingSalesman extends Problem {
                 }
             }
         }
+
+        for(var i = 0; i < this._noNodes; i++) console.log(this._distanceArray[i].toString());
         // if shortest calculate shortest path using floyd warshall
         if(this._type === "Shortest") {
           this._floydWarshall();
