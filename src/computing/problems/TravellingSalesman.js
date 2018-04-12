@@ -196,10 +196,11 @@ export class TravellingSalesman extends Problem {
         instanceContent = instanceContent.split(/\s+/);
 
         return {
-            noNodes: +instanceContent[0],
-            noEdges: +instanceContent[1],
-            noNodesToVisit: +instanceContent[2],
-            maxPrice: +instanceContent[3]
+            type: +instanceContent[0],
+            noNodes: +instanceContent[1],
+            noEdges: +instanceContent[2],
+            noNodesToVisit: +instanceContent[3],
+            maxPrice: +instanceContent[4]
         }
     }
 }

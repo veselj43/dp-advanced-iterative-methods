@@ -83,6 +83,7 @@ export const problemParamsTitles = {
         noClausules: "Clausules"
     },
     1: {
+        type: "Type",
         noNodes: "Nodes",
         noEdges: "Edges",
         noNodesToVisit: "Nodes to visit",
