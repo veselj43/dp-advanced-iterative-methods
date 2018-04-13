@@ -133,6 +133,42 @@ export class SAT extends Problem {
      * @return {boolean} is instance invalid
      */
     isInvalidInstance(instanceContent) {
+        instanceContent = instanceContent.split(/\s+/);
+
+        if((instanceContent.length - 1) < 6) return { text: "Invalid number of parameters"};
+
+        var noVariables = +instanceContent[2];
+        var noClausules = +instanceContent[3];
+
+        if(noVariables < 0) return { text: "Number of variables cant be negative"};
+        if(noClausules < 0) return { text: "Number of clausules cant be negative"};
+
+        if(noClausules > Math.pow(3, noVariables) - 1) return { text: "Number of clausules is at max: " + Math.pow(3, noVariables) - 1};
+
+        var clausules = [];
+        var clausule = "";
+        var clausulesCounter = 0;
+
+        instanceContent.splice(0, 4);
+
+        for(var i = 0; i < instanceContent.length; i++){
+          if(isNaN(instanceContent[i])) return { text: "Most contain only numbers, except for \"p cnf\""};
+        }
+
+        for(var i = 0; i < instanceContent.length; i++)
+        {
+          if(noVariables < +instanceContent[i] || -noVariables > +instanceContent[i]) return { text: "Invalid variable in clasule: \"" +instanceContent[i] + "\""};
+          if(+instanceContent[i] !== 0) clausule += instanceContent[i] + " ";
+          else {
+            clausulesCounter++;
+            if(clausules[clausule]) return { text: "Multiple same clausules: \"" + clausule + "0" + "\""};
+            clausules[clausule] = 1;
+            clausule = "";
+          }
+        }
+
+        if(clausulesCounter - 1 !== noClausules) return { text: "Number of clausules doesnt match the actual number of clausules"};
+
         return false; // valid instance
     }
 

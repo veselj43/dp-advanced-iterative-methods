@@ -103,6 +103,21 @@ export class MinimalVertexCover extends Problem {
      * @return {boolean} is instance invalid
      */
     isInvalidInstance(instanceContent) {
+        instanceContent = instanceContent.split(/\s+/);
+
+        if((instanceContent.length - 1) < 2) return { text: "Invalid number of parameters"};
+
+        var size = instanceContent[0];
+
+        for(var i = 0; i < instanceContent.length; i++){
+          if(isNaN(instanceContent[i])) return { text: "Most contain only numbers"};
+          if(instanceContent[i] < 0) return { text: "Can not contain negative numbers"};
+        }
+
+        instanceContent.splice(0, 2);
+
+        if((instanceContent.length - 1) !== size * size) return { text: "Invalid array"};
+
         return false; // valid instance
     }
 
@@ -115,7 +130,8 @@ export class MinimalVertexCover extends Problem {
         instanceContent = instanceContent.split(/\s+/);
 
         return {
-            size: +instanceContent[0]
+            size: +instanceContent[0],
+            noEdges: +instanceContent[1]
         }
     }
 }

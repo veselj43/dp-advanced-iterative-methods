@@ -70,17 +70,13 @@ export class AnnealingSolver{
 
       var temperature = 100;
 
-      // filling array with random transitions, more precisly with energies of those transitions (max and min fitness)
-      while(50*size !== arrayOfEnergyStates.length)
+      // filling array with random transitions, more precisly with energies of those transitions (max and min price function)
+      while(200 !== arrayOfEnergyStates.length)
       {
-          conf = problem.getFitness(currentConfiguration);
-          neigh = problem.getFitness(currentNeighbour);
-          if(Math.sign(conf) === Math.sign(neigh))
+          conf = problem.getProblemCost(currentConfiguration);
+          neigh = problem.getProblemCost(currentNeighbour);
+          if(Math.sign(conf) === Math.sign(neigh) && Math.sign(conf) === 1)
           {
-            if(Math.sign(conf) === -1) {
-              conf = -conf;
-              neigh = -neigh;
-            }
             newEnergyState = {
                 max: Math.max(conf, neigh),
                 min: Math.min(conf, neigh)
@@ -106,7 +102,7 @@ export class AnnealingSolver{
               maxSum += Math.exp(-arrayOfEnergyStates[i].max / temperature);
               minSum += Math.exp(-arrayOfEnergyStates[i].min / temperature);
           }
-          if(maxSum === 0 && minSum === 0) break;
+          if(maxSum === 0 || minSum === 0) break;
           currentPropability = maxSum / minSum;
           if(currentPropability === 1) return 1;
 

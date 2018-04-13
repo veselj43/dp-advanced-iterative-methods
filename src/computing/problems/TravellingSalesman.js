@@ -54,7 +54,6 @@ export class TravellingSalesman extends Problem {
             }
         }
 
-        for(var i = 0; i < this._noNodes; i++) console.log(this._distanceArray[i].toString());
         // if shortest calculate shortest path using floyd warshall
         if(this._type === "Shortest") {
           this._floydWarshall();
@@ -186,8 +185,115 @@ export class TravellingSalesman extends Problem {
      * @return {boolean} is instance invalid
      */
     isInvalidInstance(instanceContent) {
+        instanceContent = instanceContent.split(/\s+/);
+
+        var type = instanceContent[0];
+
+        if(type !== "Hamiltonian" && type !== "Shortest")
+        return { text: "TSP type not specified"};
+
+        var noNodes = +instanceContent[1];
+        var noEdges = +instanceContent[2];
+        var noNodesToVisit = +instanceContent[3];
+        var maxValue = +instanceContent[4];
+
+        instanceContent.splice(0, 1);
+
+        for(var i = 0; i < instanceContent.length; i++){
+          if(isNaN(instanceContent[i])) return { text: "Most contain only numbers"};
+          if(+instanceContent[i] < 0) return { text: "Can not contain negative numbers"};
+        }
+
+        if(noNodesToVisit > noNodes) return { text: "Number of nodes to visit cant be higher than number of nodes"};
+        if(noEdges > (noNodes * (noNodes - 1)) / 2) return { text: "Number of edges cant be higher than (number of nodes * (number of nodes - 1)) / 2 becasue graph is not oriented."}
+        instanceContent.splice(0, 4);
+
+        if(type === "Hamiltonian") {
+          if((instanceContent.length - 1) !== noNodes * noNodes) return { text: "Invalid array"};
+          if(noNodes !== noNodesToVisit) return { text: "Number of nodes must be equal to number of nodes to visit for Hamiltonian type"};
+          if(noEdges !== (noNodes * (noNodes - 1)) / 2) return { text: "Number of edges must be equal to (number of nodes * (number of nodes - 1)) / 2"};
+
+          for(var i = 0; i < noNodes * noNodes; i++)
+          {
+              if(i % (noNodes + 1) !== 0 && +instanceContent[i] === 0) return { text: "Graph must be complete"};
+          }
+        }
+        else {
+          var array = new Array(noNodes);
+          var numberOfEdges = 0;
+
+          if(noEdges < noNodes - 1) return { text: "Number of edges must be atleast number of nodes - 1"};
+
+          for(var i = 0; i < noNodesToVisit; i++)
+          {
+            if(+instanceContent[i] > (noNodes - 1)) return { text: "Node you want to visit doesnt exist: \"" +instanceContent[i] + "\". Must be lower than number of nodes - 1"};
+          }
+
+          for(var i = 1; i < noNodesToVisit; i++)
+          {
+            if(+instanceContent[i-1] > +instanceContent[i]) return { text: "Nodes to visit must be sorted in ascending order"};
+            if(+instanceContent[i-1] === +instanceContent[i]) return { text: "Nodes to visit cant contaion duplicates"};
+          }
+
+          if((instanceContent.length - 1) !== (noNodes * noNodes) + noNodesToVisit) return { text: "Invalid array size, or nodes to visit size"};
+
+          instanceContent.splice(0, noNodesToVisit);
+
+          for(var i = 0; i < noNodes; i++)
+          {
+              array[i] = new Array(noNodes);
+          }
+
+          for(var i = 0; i < noNodes; i++)
+          {
+            for(var j = 0; j < noNodes; j++)
+            {
+              array[i][j] = +instanceContent[i * noNodes + j];
+              if(array[i][j]) numberOfEdges++;
+            }
+          }
+          if(numberOfEdges / 2 !== noEdges) return { text: "Number of edges is not correct"};
+          if(!TravellingSalesman._isGraphStronglyConnected(array)) return { text: "Graph must be strongly connected"};
+        }
+
+        for(var i = 0; i < noNodes * noNodes; i++)
+        {
+            if(+instanceContent[i] > maxValue) return { text: "Edge weight cant exceed maximum edge weight"};
+            if(i % (noNodes + 1) === 0 && +instanceContent[i] !== 0) return { text: "Diagonal must contain only 0"};
+        }
+
         return false; // valid instance
     }
+
+    /**
+     * Check if graph is connected
+     * @param  {Array}  array graph as an 2D array
+     * @return {Boolean}  true if connected, false if not
+     */
+    static _isGraphStronglyConnected(array){
+      var connected = [];
+      var opened = [];
+
+      connected.push(0);
+      opened.push(0);
+      //while there are open vertices to check
+      while(opened.length > 0)
+      {
+          for(var k = 0; k < array.length; k++){
+            //if theres an edge, and the vertice wasnt visited yet
+            if(array[opened[0]][k] && !connected.includes(k)) {
+              connected.push(k);
+              opened.push(k);
+              if(array[opened[0]][k] !== array[k][opened[0]]) return false;
+            }
+          }
+          // if all vertices are visited the graph is connected
+          if(connected.length === array.length) return true;
+          //remove last visited vertice
+          opened.shift();
+        }
+          return false;
+      }
 
     /**
      * Returns parameters of the instance
@@ -198,7 +304,7 @@ export class TravellingSalesman extends Problem {
         instanceContent = instanceContent.split(/\s+/);
 
         return {
-            type: +instanceContent[0],
+            type: instanceContent[0],
             noNodes: +instanceContent[1],
             noEdges: +instanceContent[2],
             noNodesToVisit: +instanceContent[3],

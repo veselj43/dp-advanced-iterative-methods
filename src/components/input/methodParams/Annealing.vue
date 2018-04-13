@@ -33,7 +33,7 @@
                 <input class="form-control" type="number" id="param3" v-model="params.min_temp" placeholder=""
                 name="minTemp"
                 data-vv-as="minimal temperature"
-                v-validate.initial="{ required: true, min_value: 0, max_value: +params.start_temp, regex: /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/ }"
+                v-validate.initial="{ required: true, min_value: 0.0001, max_value: +params.start_temp, regex: /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/ }"
                 >
                 <span v-show="errors.has('minTemp')" class="help-block">{{ errors.first('minTemp') }}</span>
             </div>
@@ -126,7 +126,8 @@ export default {
           }
 
           else if(this.selectedProblemId === 1) {
-              this.params.innerCycle = params.noNodesToVisit * 2;
+              if(params.type === "Shortest") this.params.innerCycle = params.noNodesToVisit * 2;
+              else this.params.innerCycle = params.noNodes * 2
           }
 
           else if(this.selectedProblemId === 2) {

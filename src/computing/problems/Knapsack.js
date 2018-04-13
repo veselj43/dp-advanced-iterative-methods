@@ -94,6 +94,22 @@ export class Knapsack extends Problem {
      * @return {boolean} is instance invalid
      */
     isInvalidInstance(instanceContent) {
+        instanceContent = instanceContent.split(/\s+/);
+
+        if((instanceContent.length - 1) < 4) return { text: "Invalid number of parameters"};
+
+        for(var i = 0; i < instanceContent.length; i++){
+          if(isNaN(instanceContent[i])) return { text: "Most contain only numbers"};
+          if(instanceContent[i] < 0) return { text: "Can not contain negative numbers"};
+        }
+
+        var noItems = +instanceContent[0];
+        var capacity = +instanceContent[1];
+
+        instanceContent.splice(0, 2);
+
+        if((instanceContent.length - 1) !== noItems * 2) return { text: "Invalid number of items"};
+
         return false; // valid instance
     }
 
