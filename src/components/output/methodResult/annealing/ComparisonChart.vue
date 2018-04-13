@@ -1,5 +1,7 @@
 <script>
+import { mapGetters } from 'vuex';
 import dc from 'dc';
+import _round from 'lodash/round';
 import ComparisonChartBase from '../_common/ComparisonChartBase';
 
 export default {
@@ -12,6 +14,12 @@ export default {
                 yAxisLabel: "Value",
             }
         }
+    },
+
+    computed: {
+        ...mapGetters([
+            'comparingResultsItems'
+        ]),
     },
 
     methods: {
@@ -46,6 +54,24 @@ export default {
                 .dimension(runDimension)
                 .group(runGroup);
         },
+
+        // methods that overrides ComparisonChartBase methods
+        htmlCoordsBuildItem(color, valueObj, xValue) {
+            return `<tr style="color: ${color}">
+                <td>value</td>
+                <td class="text-right">${valueObj.value}</td>
+            </tr>
+            <tr style="color: ${color}">
+                <td>temperature</td>
+                <td class="text-right">${this.computeTemperature(valueObj.id, xValue)}</td>
+            </tr>`;
+        },
+
+        // component specific methods
+        computeTemperature(datasetId, xValue) {
+            let params = this.comparingResultsItems[datasetId].params;
+            return _round(params.start_temp * Math.pow(params.cool_coef, xValue), 1);
+        }
     }
 }
 </script>

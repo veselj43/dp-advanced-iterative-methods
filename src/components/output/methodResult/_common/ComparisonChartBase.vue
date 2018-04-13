@@ -226,7 +226,7 @@ It should contain definition of following seriesChart methods:
             let htmlCoords = yValues.reverse().reduce((acc, valueObj, i) => {
                 if (valueObj === null) return acc;
                 let color = this.dcLegend[valueObj.id] || '#000';
-                return acc + this.htmlCoordsBuildItem(color, valueObj);
+                return acc + this.htmlCoordsBuildItem(color, valueObj, xValue);
             }, `<table class="table table-condensed"><thead><th class="text-center" colspan="2">${xValue}</th></thead><tbody>`);
             htmlCoords += "</tbody></table>";
             return htmlCoords;
