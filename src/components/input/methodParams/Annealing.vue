@@ -137,6 +137,10 @@ export default {
           else if(this.selectedProblemId === 3) {
               this.params.innerCycle = params.size * 2;
           }
+
+          else if(this.selectedProblemId === 4) {
+              this.params.innerCycle = params.noCities * 2;
+          }
         }
     },
     watch: {

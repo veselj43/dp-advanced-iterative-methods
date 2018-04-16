@@ -8,7 +8,7 @@
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfVariables')}">
                     <label for="SATgenParam1">Number of variables</label>
                     <span class="form-tooltip" v-tooltip.right="'Number of variables in the generated instance'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[0].noVariables" placeholder=""
+                    <input type="number" class="form-control" id="SATgenParam1" v-model="generatorParams[0].noVariables" placeholder=""
                     name="numberOfVariables"
                     data-vv-as="number of variable"
                     v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
@@ -19,7 +19,7 @@
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfClausules')}">
                     <label for="SATgenParam2">Number of clausules</label>
                     <span class="form-tooltip" v-tooltip.right="'Number of clausules in the generated instance. WARNING!!! - generating clausules is random, so choosing number of clauseles close to maxim number of clausule will take a lot of time.'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[0].noClausules" placeholder=""
+                    <input type="number" class="form-control" id="SATgenParam2" v-model="generatorParams[0].noClausules" placeholder=""
                     name="numberOfClausules"
                     data-vv-as="number of clausules"
                     v-validate.initial="{ required: true, min_value: 1, max_value: Math.pow(3, +generatorParams[0].noVariables) - 1, regex: /^[0-9]+$/ }"
@@ -43,7 +43,7 @@
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfNodes')}">
                     <label for="SalegenParam1">Number of nodes</label>
                     <span class="form-tooltip" v-tooltip.right="'Number of vertexes(nodes) in the generated problem'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[1].noNodes" placeholder=""
+                    <input type="number" class="form-control" id="SalegenParam1" v-model="generatorParams[1].noNodes" placeholder=""
                     name="numberOfNodes"
                     data-vv-as="number of nodes"
                     v-validate.initial="{ required: true, min_value: 2, regex: /^[0-9]+$/ }"
@@ -52,9 +52,9 @@
                 </div>
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('maximumEdgePrice')}">
-                    <label for="SalegenParam4">Maximum weight of an edge</label>
+                    <label for="SalegenParam2">Maximum weight of an edge</label>
                     <span class="form-tooltip" v-tooltip.right="'Maximum price of each edge'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].maxPrice" placeholder=""
+                    <input type="number" class="form-control" id="SalegenParam2" v-model="generatorParams[1].maxPrice" placeholder=""
                     name="maximumEdgePrice"
                     data-vv-as="maximum weight of an edge"
                     v-validate.initial="{ required: true, min_value: 1, max_value: 1000, regex: /^[0-9]+$/ }"
@@ -63,9 +63,9 @@
                 </div>
 
                 <div v-if="generatorParams[1].type === 'Shortest'" class="form-group" v-bind:class="{'has-error': errors.has('numberOfEdges')}">
-                    <label for="SalegenParam2">Number of edges</label>
+                    <label for="SalegenParam3">Number of edges</label>
                     <span class="form-tooltip" v-tooltip.right="'Number of edges, the actual number is 2 times this value, because the edges are not oriented'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].noEdges" placeholder=""
+                    <input type="number" class="form-control" id="SalegenParam3" v-model="generatorParams[1].noEdges" placeholder=""
                     name="numberOfEdges"
                     data-vv-as="number of edges"
                     v-validate.initial="{ required: true, min_value: +generatorParams[1].noNodes - 1, max_value: (+generatorParams[1].noNodes * (+generatorParams[1].noNodes - 1))/2, regex: /^[0-9]+$/ }"
@@ -74,9 +74,9 @@
                 </div>
 
                 <div v-if="generatorParams[1].type === 'Shortest'" class="form-group" v-bind:class="{'has-error': errors.has('numberOfNodesToVisit')}">
-                    <label for="SalegenParam3">Number of nodes to visit</label>
+                    <label for="SalegenParam4">Number of nodes to visit</label>
                     <span class="form-tooltip" v-tooltip.right="'Number of the nodes, that the salesman has to visit.'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[1].noNodesToVisit" placeholder=""
+                    <input type="number" class="form-control" id="SalegenParam4" v-model="generatorParams[1].noNodesToVisit" placeholder=""
                     name="numberOfNodesToVisit"
                     data-vv-as="number of nodes to visit"
                     v-validate.initial="{ required: true, min_value: 2, max_value: +generatorParams[1].noNodes, regex: /^[0-9]+$/ }"
@@ -89,9 +89,9 @@
             <div v-if="selectedProblemId === 2">
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('noItems')}">
-                    <label for="KnapgenParam2">Number of items</label>
+                    <label for="KnapgenParam1">Number of items</label>
                     <span class="form-tooltip" v-tooltip.right="'Number of items in the instance'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[2].noItems" placeholder=""
+                    <input type="number" class="form-control" id="KnapgenParam1" v-model="generatorParams[2].noItems" placeholder=""
                     name="noItems"
                     data-vv-as="number of items"
                     v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
@@ -100,9 +100,9 @@
                 </div>
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('Capacity')}">
-                    <label for="KnapgenParam1">Capacity</label>
+                    <label for="KnapgenParam2">Capacity</label>
                     <span class="form-tooltip" v-tooltip.right="'Capacity of the knapsack, should be lower than sum of weights'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[2].capacity" placeholder=""
+                    <input type="number" class="form-control" id="KnapgenParam2" v-model="generatorParams[2].capacity" placeholder=""
                     name="Capacity"
                     data-vv-as="capacity"
                     v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
@@ -113,7 +113,7 @@
                 <div class="form-group" v-bind:class="{'has-error': errors.has('sumOfWeights')}">
                     <label for="KnapgenParam3">Sum of items weights</label>
                     <span class="form-tooltip" v-tooltip.right="'Sum of the weights of all items'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam3" v-model="generatorParams[2].sumOfWeights" placeholder=""
+                    <input type="number" class="form-control" id="KnapgenParam3" v-model="generatorParams[2].sumOfWeights" placeholder=""
                     name="sumOfWeights"
                     data-vv-as="sum of item weights"
                     v-validate.initial="{ required: true, min_value: +generatorParams[2].noItems, regex: /^[0-9]+$/ }"
@@ -124,7 +124,7 @@
                 <div class="form-group" v-bind:class="{'has-error': errors.has('maxValue')}">
                     <label for="KnapgenParam4">Max value</label>
                     <span class="form-tooltip" v-tooltip.right="'Maximum value of each item'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam4" v-model="generatorParams[2].maxValue" placeholder=""
+                    <input type="number" class="form-control" id="KnapgenParam4" v-model="generatorParams[2].maxValue" placeholder=""
                     name="maxValue"
                     data-vv-as="max value"
                     v-validate.initial="{ required: true, min_value: 1, max_value: 1000, regex: /^[0-9]+$/ }"
@@ -135,7 +135,7 @@
                 <div class="form-group" v-bind:class="{'has-error': errors.has('granularity')}">
                     <label for="KnapgenParam5">Granularity</label>
                     <span class="form-tooltip" v-tooltip.right="'For number > 0 the instance will contain more heavier things, for < 0 more lighter things. Each item has 1/(maxWeight - weight)^granularity chance to be in the instance for heavier things and 1/weight^(-granularity) for lighter things, where maxWeight = sum of weights. WARNING!!! for realy high numbers(or really low for lighter things) the generation take a lot of time because most things will be thrown away. So for best result use number between <-1, 1>. For 0 the generating is random.'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="genParam5" v-model="generatorParams[2].granularity" placeholder=""
+                    <input type="number" class="form-control" id="KnapgenParam5" v-model="generatorParams[2].granularity" placeholder=""
                     name="granularity"
                     data-vv-as="granularity"
                     v-validate.initial="{ required: true, min_value: -10, max_value: 10, regex: /^-?\d+\.?\d*$/ }"

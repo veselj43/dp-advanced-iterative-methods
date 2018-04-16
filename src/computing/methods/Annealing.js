@@ -46,10 +46,9 @@ export class AnnealingSolver{
               counter++;
           }
           currentTemp *= +params.cool_coef;
-          this._bufferedReply.addMessageWithAutoFlush( problem.transformMaximizationToRealCost(currentCost) );
+          this._bufferedReply.addMessage( problem.transformMaximizationToRealCost(currentCost) );
       }
-      //TODO neni tato zprava navic? ADAM
-      this._bufferedReply.addMessage( problem.transformMaximizationToRealCost(currentCost) ).flush();
+      this._bufferedReply.flush();
       return new Result(problem.getResult(currentConfiguration), problem.transformMaximizationToRealCost(currentCost), counter);
   }
   /**
@@ -78,9 +77,8 @@ export class AnnealingSolver{
       // filling array with random transitions, more precisly with energies of those transitions (max and min price function)
       while(200 !== arrayOfEnergyStates.length)
       {
-          //TODO mel jsi tu problem.getProblemCost(currentConfiguration); nemelo tam byt spis get fitness?
-          conf = problem.evaluateMaximizationCost(currentConfiguration);
-          neigh = problem.evaluateMaximizationCost(currentNeighbour);
+          conf = problem.transformMaximizationToRealCost(problem.evaluateMaximizationCost(currentConfiguration));
+          neigh = problem.transformMaximizationToRealCost(problem.evaluateMaximizationCost(currentNeighbour));
           if(Math.sign(conf) === Math.sign(neigh) && Math.sign(conf) === 1)
           {
             newEnergyState = {
