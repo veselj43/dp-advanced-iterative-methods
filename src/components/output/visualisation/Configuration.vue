@@ -1,6 +1,6 @@
 <template>
     <div class="visualizeConfiguration">
-        <permutation v-if="selectedProblemId === 1"></permutation>
+        <permutation v-if="problemType === ProblemTypeEnum.PERMUTATION"></permutation>
         <bit-array v-else></bit-array>
     </div>
 </template>
@@ -9,8 +9,17 @@
 import { mapGetters } from 'vuex';
 import BitArray from './configType/BitArray';
 import Permutation from './configType/Permutation';
+import { ProblemTypeEnum } from '@/computing/problems/Problem';
+import { getProblemClassFromId } from '@/services/classResolver';
 
 export default {
+    data () {
+        return {
+            ProblemTypeEnum: ProblemTypeEnum,
+            problemType: "",
+        }
+    },
+
     components: {
         BitArray,
         Permutation
@@ -19,6 +28,9 @@ export default {
         ...mapGetters([
             'selectedProblemId'
         ])
+    },
+    mounted() {
+        this.problemType = getProblemClassFromId(this.selectedProblemId).prototype.getType();
     }
 }
 </script>
@@ -26,7 +38,7 @@ export default {
 <style lang="scss">
     .visualizeConfiguration {
         display: inline-block;
-        
+
         table {
             margin: 0;
             padding: 0;

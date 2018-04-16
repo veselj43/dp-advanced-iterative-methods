@@ -41,6 +41,14 @@ export const problems = [
             goal: "min",
             description: "Minimize number of vertices"
         }
+    },
+    {
+        id: 4,
+        text: "Euclidean TSP",
+        info: {
+            goal: "min",
+            description: "Minimize path cost"
+        }
     }
 ];
 
@@ -49,6 +57,7 @@ export const problemExampleInstances = {
     1: 'ts20-30',
     2: 'knap200-20',
     3: 'mvc20-20',
+    4: 'eucTSP10',
 };
 
 export const methodParamsTitles = {
@@ -99,6 +108,9 @@ export const problemParamsTitles = {
     3: {
         size : "Size",
         noEdges : "Edges"
+    },
+    4: {
+        noCities : "Number of cities"
     }
 }
 

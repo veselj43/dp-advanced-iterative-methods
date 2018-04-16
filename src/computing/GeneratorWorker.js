@@ -4,6 +4,7 @@ import KnapGen from './generators/KnapsackGenerator';
 import SalesmanGen from './generators/TravellingSalesmanGenerator';
 import SATGen from './generators/SATGenerator';
 import CoverGen from './generators/VertexCoverGenerator';
+import ETSPGen from './generators/ETSPGenerator';
 
 var methods = {
     work: function(data, problemKey) {
@@ -47,6 +48,9 @@ class Job {
         }
         else if (this.problemKey === 3) {
             Generator = CoverGen;
+        }
+        else if (this.problemKey === 4) {
+            Generator = ETSPGen;
         }
 
         if (Generator && generatorParams) {

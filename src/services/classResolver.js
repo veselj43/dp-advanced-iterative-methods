@@ -6,12 +6,14 @@ import { TravellingSalesman } from '../computing/problems/TravellingSalesman';
 import { TabuSolver } from '../computing/methods/Tabu';
 import { GeneticSolver } from '../computing/methods/genetic/Genetic';
 import { AnnealingSolver } from '../computing/methods/Annealing';
+import {EuclideanTSP} from "../computing/problems/EuclideanTSP";
 
 export function getProblemClassFromId(id) {
     if (id === 0) return SAT;
     else if (id === 1) return TravellingSalesman;
     else if (id === 2) return Knapsack;
     else if (id === 3) return MinimalVertexCover;
+    else if (id === 4) return EuclideanTSP;
 
     return null;
 }

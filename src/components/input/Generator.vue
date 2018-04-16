@@ -170,6 +170,41 @@
                 </div>
 
             </div>
+            <div v-if="selectedProblemId === 4">
+
+                <div class="form-group" v-bind:class="{'has-error': errors.has('cities')}">
+                    <label for="tsp-cities">Number of cities</label>
+                    <span class="form-tooltip" v-tooltip.right="'Number of cities on the map.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="tsp-cities" v-model="generatorParams[4].noCities"
+                           name="cities"
+                           data-vv-as="number of cities"
+                           v-validate.initial="{ required: true, min_value: 4, regex: /^[0-9]+$/ }"
+                    >
+                    <span v-show="errors.has('cities')" class="help-block">{{ errors.first('cities') }}</span>
+                </div>
+
+                <div class="form-group" v-bind:class="{'has-error': errors.has('x')}">
+                    <label for="tsp-x">Map x range</label>
+                    <span class="form-tooltip" v-tooltip.right="'Map size from east to west.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="tsp-x" v-model="generatorParams[4].x"
+                           name="x"
+                           data-vv-as="x range"
+                           v-validate.initial="{ required: true, min_value: 0, regex: /^[0-9]+$/ }"
+                    >
+                    <span v-show="errors.has('x')" class="help-block">{{ errors.first('x') }}</span>
+                </div>
+
+                <div class="form-group" v-bind:class="{'has-error': errors.has('y')}">
+                    <label for="tsp-y">Number of cities</label>
+                    <span class="form-tooltip" v-tooltip.right="'Map size from north to south.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="tsp-y" v-model="generatorParams[4].y"
+                           name="y"
+                           data-vv-as="y range"
+                           v-validate.initial="{ required: true, min_value: 0, regex: /^[0-9]+$/ }"
+                    >
+                    <span v-show="errors.has('y')" class="help-block">{{ errors.first('y') }}</span>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label for="instanceName">Instance name</label>
@@ -227,6 +262,11 @@ export default {
                 3: {
                     size : 20,
                     noEdges : 20
+                },
+                4: {
+                    noCities: 20,
+                    x: 100,
+                    y: 100,
                 }
             }
         }
@@ -334,6 +374,10 @@ export default {
 
           else if (this.selectedProblemId === 3) {
             this.instanceName = "MVC" + this.generatorParams[3].size + "_" + this.generatorParams[3].noEdges;
+          }
+
+          else if (this.selectedProblemId === 4) {
+              this.instanceName = "eTSP" + this.generatorParams[4].noCities + "_" + this.generatorParams[4].x  + "x" + this.generatorParams[4].y;
           }
         },
 
