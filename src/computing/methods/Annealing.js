@@ -46,7 +46,7 @@ export class AnnealingSolver{
               counter++;
           }
           currentTemp *= +params.cool_coef;
-          this._bufferedReply.addMessage( problem.transformMaximizationToRealCost(currentCost) );
+          this._bufferedReply.addMessageWithAutoFlush( problem.transformMaximizationToRealCost(currentCost) );
       }
       this._bufferedReply.flush();
       return new Result(problem.getResult(currentConfiguration), problem.transformMaximizationToRealCost(currentCost), counter);
