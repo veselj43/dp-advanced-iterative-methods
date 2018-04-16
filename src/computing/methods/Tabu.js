@@ -33,8 +33,9 @@ export class TabuSolver {
 
     _process(iterationLimit, tabuSize, tabuSizeShort) {
         var state = this.problem.getConfiguration();    // initial state
-        var stateCost = this.problem.evaluateMaximizationCost(state);//state cost
+        var stateCost = this._getCost(state);           // initial state cost
         var sBest = state;                              // initial best found state
+        var sBestCost = stateCost;                      // initial best found state cost
         var tabuStates = [];            // Queue
         var tabuStatesSearch = {};      // HashSet
         var tabuChanges = [];           // Queue
@@ -45,8 +46,10 @@ export class TabuSolver {
 
             // init for this loop
             var bestCandidate = null;
-            var tabuBestCandidate = null;
+            var bestCandidateCost = this._getCost(bestCandidate);
             var bestCandidateIndex = -1;
+            var tabuBestCandidate = null;
+            var tabuBestCandidateCost = this._getCost(tabuBestCandidate);
             var tabuBestCandidateIndex = -1;
 
             // checking neighbours
@@ -54,20 +57,23 @@ export class TabuSolver {
                 this.counter++;
 
                 var sCandidate = state.getNeighbour(i);
+                var sCandidateCost = this._getCost(sCandidate);
 
                 // check change for tabu and if it is tabu, check if we dont miss the best found state
-                if (tabuChanges.indexOf(i) !== -1 && this._getCost(sCandidate) < this._getCost(sBest)) continue;
+                if (tabuChanges.indexOf(i) !== -1 && sCandidateCost < sBestCost) continue;
 
                 // is current candidate better than best candidate in this step?
-                if (this._getCost(sCandidate) >= this._getCost(bestCandidate)) {
+                if (sCandidateCost >= bestCandidateCost) {
                     // is current candidate tabu?
                     if (!this._containsSearch(tabuStatesSearch, sCandidate)) {
                         bestCandidate = sCandidate;
+                        bestCandidateCost = sCandidateCost;
                         bestCandidateIndex = i;
                     }
                     // if it is, remember the least tabu candidate
                     else if (this._compareIndexesOf(tabuStates, sCandidate, tabuBestCandidate) > 0) {
                         tabuBestCandidate = sCandidate;
+                        tabuBestCandidateCost = sCandidateCost;
                         tabuBestCandidateIndex = i;
                     }
                 }
@@ -81,18 +87,20 @@ export class TabuSolver {
                 }
                 else {
                     state = tabuBestCandidate;
-                    stateCost = this.problem.evaluateMaximizationCost(state);
+                    stateCost = tabuBestCandidateCost;
                     bestCandidateIndex = tabuBestCandidateIndex;
                 }
             }
-            // normal situation, not tabu state
             else {
+                // normal situation, not tabu state
                 state = bestCandidate;
-                stateCost = this.problem.evaluateMaximizationCost(state);
+                stateCost = bestCandidateCost;
             }
+
             // keep best state found up to date
-            if (this._getCost(state) > this._getCost(sBest)) {
+            if (stateCost > sBestCost) {
                 sBest = state;
+                sBestCost = stateCost;
             }
 
             // update tabu lists
@@ -131,6 +139,10 @@ export class TabuSolver {
         console.log('tabu checks:', this.tabuCounter);
 
         // return Result class managing data format
-        return new Result(problem.getResult(best), this.problem.transformMaximizationToRealCost(this.problem.evaluateMaximizationCost(best)), this.counter);
+        return new Result(
+            problem.getResult(best), 
+            this.problem.transformMaximizationToRealCost(this.problem.evaluateMaximizationCost(best)), 
+            this.counter
+        );
     }
 }
