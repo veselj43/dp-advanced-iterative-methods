@@ -34,7 +34,7 @@ export class MinimalVertexCover extends Problem {
      * @param  {class} bitArrayConfig BitArray of which fitness we want
      * @return {int}  calculated fitness of the configuration
      */
-    getFitness(bitArrayConfig) {
+    evaluateMaximizationCost(bitArrayConfig) {
         if (bitArrayConfig === null) return -1;
 
         var coveredArray = new Array(bitArrayConfig.getSize()).fill(0);
@@ -59,14 +59,18 @@ export class MinimalVertexCover extends Problem {
         return ((this._size - numberOfCovered) === 0 ? this._size - currentPrice :  numberOfCovered - this._size);
     }
 
-    /**
-     * Return price function value that will be displayed in graph
-     * @param  {class} bitArrayConfig config for which we want the value for the graph
-     * @return {int}  the returned value
-     */
-    getProblemCost(bitArrayConfig){
-      return this._size - this.getFitness(bitArrayConfig);
+    transformMaximizationToRealCost(maxCost) {
+        return this._size - maxCost;
     }
+
+    // /**
+    //  * Return price function value that will be displayed in graph
+    //  * @param  {class} bitArrayConfig config for which we want the value for the graph
+    //  * @return {int}  the returned value
+    //  */
+    // getProblemCost(bitArrayConfig){
+    //   return this._size - this.getFitness(bitArrayConfig);
+    // }
 
     /**
      * Returns random, or all 0, configuration of knapsack problem(BitArray configuration)

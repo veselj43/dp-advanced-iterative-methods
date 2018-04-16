@@ -82,7 +82,7 @@ export class GeneticSolver {
         // make sure all messages in buffer are sent (if there are some in buffer, it will send them)
         this._bufferedReply.flush();
 
-        return new Result(this.result, this.bestCost, this.counter);
+        return new Result(problem.getResult(this.result), this.bestCost, this.counter);
     }
 
     _initGeneration(populationSize) {
@@ -98,24 +98,24 @@ export class GeneticSolver {
         var average = 0;
         for (var i = 0; i < generation.length; i++) {
             this.problem.evaluateIndividual(generation[i]);
-            average += this.problem.getProblemCost(generation[i]);
+            average += this.problem.transformMaximizationToRealCost(generation[i].getFitness());
         }
         average = average/generation.length;
         generation.sort(function(a, b){return a.getFitness() - b.getFitness()});
 
-        var bestCost = this.problem.getProblemCost(generation[generation.length-1]);
+        var bestCost = this.problem.transformMaximizationToRealCost(generation[generation.length-1].getFitness());
 
         this._bufferedReply.addMessageWithAutoFlush({
-            worst: this.problem.getProblemCost(generation[0]),
+            worst: this.problem.transformMaximizationToRealCost(generation[0].getFitness()),
             average: average,
-            mean: this.problem.getProblemCost(generation[Math.floor(generation.length/2)]),
+            mean: this.problem.transformMaximizationToRealCost(generation[Math.floor(generation.length/2)].getFitness()),
             best: bestCost
         });
         //update best solution
         if (this.bestFitness < generation[generation.length-1].getFitness()) {
             this.bestFitness = generation[generation.length-1].getFitness();
             this.bestCost = bestCost;
-            this.result = generation[generation.length-1].getGenotype();
+            this.result = generation[generation.length-1];
         }
     }
 

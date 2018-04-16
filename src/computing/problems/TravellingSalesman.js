@@ -123,7 +123,7 @@ export class TravellingSalesman extends Problem {
      * @param  {class} permutationConfig Permutation of which fitness we want
      * @return {int}  calculated fitness of the configuration
      */
-    getFitness(permutationConfig) {
+    evaluateMaximizationCost(permutationConfig) {
         var price = 0;
         var permutation = permutationConfig.getArray();
 
@@ -139,14 +139,18 @@ export class TravellingSalesman extends Problem {
         return price;
     }
 
-    /**
-     * Return price function value that will be displayed in graph
-     * @param  {class} bitArrayConfig config for which we want the value for the graph
-     * @return {int}  the returned value
-     */
-    getProblemCost(bitArrayConfig){
-      return -this.getFitness(bitArrayConfig);
+    transformMaximizationToRealCost(maxCost) {
+        return -maxCost;
     }
+
+    // /**
+    //  * Return price function value that will be displayed in graph
+    //  * @param  {class} bitArrayConfig config for which we want the value for the graph
+    //  * @return {int}  the returned value
+    //  */
+    // getProblemCost(bitArrayConfig){
+    //   return -this.getFitness(bitArrayConfig);
+    // }
 
     /**
      * Returns random, or sorted starting from 0, configuration of traveling salesman problem(Permutation configuration)

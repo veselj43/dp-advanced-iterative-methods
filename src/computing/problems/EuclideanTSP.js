@@ -24,7 +24,6 @@ export class EuclideanTSP extends Problem {
                 this._distanceCache[i][j] = null;
             }
         }
-        //console.log(this._distanceCache);
     }
 
     /**
@@ -32,7 +31,7 @@ export class EuclideanTSP extends Problem {
      * @param  {class} permutationConfig Permutation of which fitness we want
      * @return {int}  calculated fitness of the configuration
      */
-    getFitness(permutationConfig) {
+    evaluateMaximizationCost(permutationConfig) {
         var price = 0;
 
         var permutation = permutationConfig.getArray();
@@ -59,13 +58,8 @@ export class EuclideanTSP extends Problem {
         return Math.sqrt(Math.pow((coord1.x - coord2.x), 2) + Math.pow((coord1.y - coord2.y), 2));
     }
 
-    /**
-     * Return price function value that will be displayed in graph
-     * @param  {class} permutationConfig config for which we want the value for the graph
-     * @return {int}  the returned value
-     */
-    getProblemCost(permutationConfig){
-        return -this.getFitness(permutationConfig);
+    transformMaximizationToRealCost(maxCost) {
+        return -maxCost;
     }
 
     /**

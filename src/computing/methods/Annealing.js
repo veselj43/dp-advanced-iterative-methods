@@ -21,6 +21,7 @@ export class AnnealingSolver{
   solve(problem, params){
       var currentTemp = +params.start_temp;
       var currentConfiguration = problem.getConfiguration();
+      var currentCost = problem.evaluateMaximizationCost(currentConfiguration);
       var currentNeighbour = currentConfiguration.getNeighbour();
       var counter = 0;
 
@@ -30,22 +31,26 @@ export class AnnealingSolver{
       while (currentTemp > +params.min_temp) {
           //inner cycle
           for(var i = 0; i < +params.innerCycle; i++){
+              var neighbourCost = problem.evaluateMaximizationCost(currentNeighbour)
               //next is better
-              if(problem.getFitness(currentConfiguration) < problem.getFitness(currentNeighbour)){
+              if(currentCost < neighbourCost){
                   currentConfiguration = currentNeighbour;
+                  currentCost = neighbourCost;
               }
               // next is worse
-              else if(Math.random() < Math.exp((problem.getFitness(currentNeighbour) - problem.getFitness(currentConfiguration)) / currentTemp)){
+              else if(Math.random() < Math.exp((neighbourCost - currentCost) / currentTemp)){
                       currentConfiguration = currentNeighbour;
+                      currentCost = neighbourCost;
               }
               currentNeighbour = currentConfiguration.getNeighbour();
               counter++;
           }
           currentTemp *= +params.cool_coef;
-          this._bufferedReply.addMessageWithAutoFlush( problem.getProblemCost(currentConfiguration) );
+          this._bufferedReply.addMessageWithAutoFlush( problem.transformMaximizationToRealCost(currentCost) );
       }
-      this._bufferedReply.addMessage( problem.getProblemCost(currentConfiguration) ).flush();
-      return new Result(problem.getResult(currentConfiguration), problem.getProblemCost(currentConfiguration), counter);
+      //TODO neni tato zprava navic? ADAM
+      this._bufferedReply.addMessage( problem.transformMaximizationToRealCost(currentCost) ).flush();
+      return new Result(problem.getResult(currentConfiguration), problem.transformMaximizationToRealCost(currentCost), counter);
   }
   /**
    * Function to compute starting temperature
@@ -73,8 +78,9 @@ export class AnnealingSolver{
       // filling array with random transitions, more precisly with energies of those transitions (max and min price function)
       while(200 !== arrayOfEnergyStates.length)
       {
-          conf = problem.getProblemCost(currentConfiguration);
-          neigh = problem.getProblemCost(currentNeighbour);
+          //TODO mel jsi tu problem.getProblemCost(currentConfiguration); nemelo tam byt spis get fitness?
+          conf = problem.evaluateMaximizationCost(currentConfiguration);
+          neigh = problem.evaluateMaximizationCost(currentNeighbour);
           if(Math.sign(conf) === Math.sign(neigh) && Math.sign(conf) === 1)
           {
             newEnergyState = {

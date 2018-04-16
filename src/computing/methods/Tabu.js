@@ -12,7 +12,7 @@ export class TabuSolver {
 
     _getCost(state) {
         if (state === null) return -Infinity;
-        return this.problem.getFitness(state);
+        return this.problem.evaluateMaximizationCost(state);
     }
 
     _compareIndexesOf(queue, c1, c2) {
@@ -33,6 +33,7 @@ export class TabuSolver {
 
     _process(iterationLimit, tabuSize, tabuSizeShort) {
         var state = this.problem.getConfiguration();    // initial state
+        var stateCost = this.problem.evaluateMaximizationCost(state);//state cost
         var sBest = state;                              // initial best found state
         var tabuStates = [];            // Queue
         var tabuStatesSearch = {};      // HashSet
@@ -40,7 +41,7 @@ export class TabuSolver {
 
         // tabu iterations
         for (var n = 0; n < iterationLimit; n++) {
-            this._bufferedReply.addMessageWithAutoFlush(this.problem.getProblemCost(state));
+            this._bufferedReply.addMessageWithAutoFlush(this.problem.transformMaximizationToRealCost(stateCost));
 
             // init for this loop
             var bestCandidate = null;
@@ -80,12 +81,14 @@ export class TabuSolver {
                 }
                 else {
                     state = tabuBestCandidate;
+                    stateCost = this.problem.evaluateMaximizationCost(state);
                     bestCandidateIndex = tabuBestCandidateIndex;
                 }
             }
             // normal situation, not tabu state
             else {
                 state = bestCandidate;
+                stateCost = this.problem.evaluateMaximizationCost(state);
             }
             // keep best state found up to date
             if (this._getCost(state) > this._getCost(sBest)) {
@@ -106,7 +109,7 @@ export class TabuSolver {
             }
         }
         // added flush to send remaining progress data before terminating
-        this._bufferedReply.addMessage(this.problem.getProblemCost(state)).flush();
+        this._bufferedReply.addMessage(this.problem.transformMaximizationToRealCost(stateCost)).flush();
 
         return sBest;
     }
@@ -128,6 +131,6 @@ export class TabuSolver {
         console.log('tabu checks:', this.tabuCounter);
 
         // return Result class managing data format
-        return new Result(problem.getResult(best), this.problem.getProblemCost(best), this.counter);
+        return new Result(problem.getResult(best), this.problem.transformMaximizationToRealCost(this.problem.evaluateMaximizationCost(best)), this.counter);
     }
 }

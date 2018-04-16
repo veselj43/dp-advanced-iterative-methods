@@ -83,7 +83,7 @@ export class SAT extends Problem {
      * @param  {class} bitArrayConfig BitArray of which fitness we want
      * @return {int}  calculated fitness of the configuration
      */
-    getFitness(bitArrayConfig) {
+    evaluateMaximizationCost(bitArrayConfig) {
         if (bitArrayConfig === null) return -1;
 
         const bitArray = bitArrayConfig.getBitArray();
@@ -91,6 +91,10 @@ export class SAT extends Problem {
         var trueClauses = this._check(bitArray);
         if (trueClauses < this.params.numberOfClausules) return trueClauses;
         return this.params.numberOfClausules;// + getWeight(configuration);
+    }
+
+    transformMaximizationToRealCost(maxCost) {
+        return maxCost;
     }
 
     /**
@@ -105,14 +109,14 @@ export class SAT extends Problem {
         });
     }
 
-    /**
-     * Return price function value that will be displayed in graph
-     * @param  {class} bitArrayConfig config for which we want the value for the graph
-     * @return {int}  the returned value
-     */
-    getProblemCost(bitArrayConfig){
-      return this.getFitness(bitArrayConfig);
-    }
+    // /**
+    //  * Return price function value that will be displayed in graph
+    //  * @param  {class} bitArrayConfig config for which we want the value for the graph
+    //  * @return {int}  the returned value
+    //  */
+    // getProblemCost(bitArrayConfig){
+    //   return this.getFitness(bitArrayConfig);
+    // }
 
     /**
      * Returns the result of the config, in this case the config array

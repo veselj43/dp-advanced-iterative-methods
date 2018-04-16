@@ -32,7 +32,7 @@ export class Knapsack extends Problem {
      * @param  {class} bitArrayConfig BitArray of which fitness we want
      * @return {int}  calculated fitness of the configuration
      */
-    getFitness(bitArrayConfig) {
+    evaluateMaximizationCost(bitArrayConfig) {
         if (bitArrayConfig === null) return -1;
 
         const bitArray = bitArrayConfig.getBitArray();
@@ -50,14 +50,18 @@ export class Knapsack extends Problem {
         return (sumWeight > this._capacity) ? this._capacity - sumWeight : sumValue;
     }
 
-    /**
-     * Return price function value that will be displayed in graph
-     * @param  {class} bitArrayConfig config for which we want the value for the graph
-     * @return {int}  the returned value
-     */
-    getProblemCost(bitArrayConfig){
-      return this.getFitness(bitArrayConfig);
+    transformMaximizationToRealCost(maxCost) {
+        return maxCost;
     }
+
+    // /**
+    //  * Return price function value that will be displayed in graph
+    //  * @param  {class} bitArrayConfig config for which we want the value for the graph
+    //  * @return {int}  the returned value
+    //  */
+    // getProblemCost(bitArrayConfig){
+    //   return this.getFitness(bitArrayConfig);
+    // }
 
     /**
      * Returns random, or all 0, configuration of knapsack problem(BitArray configuration)

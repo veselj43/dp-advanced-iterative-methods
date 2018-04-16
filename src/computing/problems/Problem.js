@@ -26,8 +26,16 @@ export class Problem {
 
     evaluateIndividual(individual) {
         if (individual.getFitness() === null) {
-            individual.setFitness(this.getFitness(individual));
+            individual.setFitness(this.evaluateMaximizationCost(individual));
         }
+    }
+
+    evaluateMaximizationCost(config) {
+        // abstract
+    }
+
+    transformMaximizationToRealCost(maxCost) {
+        //abstract
     }
 
     getType() {
@@ -36,14 +44,6 @@ export class Problem {
 
     getConfiguration(random) {
         // abstract
-    }
-
-    getFitness() {
-        // abstract
-    }
-
-    getProblemCost() {
-        //abstract
     }
 
     getResult() {
