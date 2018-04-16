@@ -7,31 +7,32 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { getProblemClassFromId } from '@/services/classResolver';
+import { ProblemTypeEnum } from '@/computing/problems/Problem';
 import BitArray from './configType/BitArray';
 import Permutation from './configType/Permutation';
-import { ProblemTypeEnum } from '@/computing/problems/Problem';
-import { getProblemClassFromId } from '@/services/classResolver';
 
 export default {
-    data () {
-        return {
-            ProblemTypeEnum: ProblemTypeEnum,
-            problemType: "",
-        }
-    },
-
     components: {
         BitArray,
         Permutation
     },
+
+    data () {
+        return {
+            ProblemTypeEnum,
+        }
+    },
+
     computed: {
         ...mapGetters([
             'selectedProblemId'
-        ])
+        ]),
+
+        problemType() {
+            return getProblemClassFromId(this.selectedProblemId).prototype.getType();
+        }
     },
-    mounted() {
-        this.problemType = getProblemClassFromId(this.selectedProblemId).prototype.getType();
-    }
 }
 </script>
 
