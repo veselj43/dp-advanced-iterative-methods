@@ -113,6 +113,7 @@ export default {
         onResult(result) {
             this.workerManager.terminate();
             this.params.start_temp = result;
+            this.params.min_temp = result / 10;
         },
 
         /**
