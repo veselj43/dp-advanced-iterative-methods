@@ -110,7 +110,9 @@ export const problemParamsTitles = {
         noEdges : "Edges"
     },
     4: {
-        noCities : "Number of cities"
+        noCities: "Number of cities",
+        x: "X range",
+        y: "Y range"
     }
 }
 

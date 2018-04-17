@@ -94,4 +94,24 @@ export class EuclideanTSP extends Problem {
             noCities: +instanceContent[0],
         }
     }
+
+    /**
+     * Returns instance invalidity
+     * @param  {string} instanceContent content of the instance
+     * @return {boolean} is instance invalid
+     */
+    isInvalidInstance(instanceContent) {
+        var dataSet = instanceContent.split('\n');
+        if(isNaN(dataSet[0].split(/\s+/)[0])) return { text: "First parameter must be a number."};
+        var noCities = + dataSet[0].split(/\s+/)[0];
+
+        if((instanceContent.length - 1) < noCities) return { text: "Invalid number of lines."};
+
+        for (var i = 0; i < noCities; i++) {
+            var coords = dataSet[1+i].split(/\s+/);
+            if((coords.length) < 2) return { text: "Invalid number of coordinates on line."};
+            if(isNaN(coords[0]) || isNaN(coords[1])) return { text: "Coordinate must be a number."};
+        }
+        return false; // valid instance
+    }
 }

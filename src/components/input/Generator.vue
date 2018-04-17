@@ -195,7 +195,7 @@
                 </div>
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('y')}">
-                    <label for="tsp-y">Number of cities</label>
+                    <label for="tsp-y">Map y range</label>
                     <span class="form-tooltip" v-tooltip.right="'Map size from north to south.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="tsp-y" v-model="generatorParams[4].y"
                            name="y"
