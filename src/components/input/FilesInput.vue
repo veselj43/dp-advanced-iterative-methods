@@ -216,7 +216,11 @@ export default {
                 }
 
                 .select {
+                    min-width: 0;
                     flex-grow: 1;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 .popover-wrapper {

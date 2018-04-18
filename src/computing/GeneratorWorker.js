@@ -58,7 +58,6 @@ class Job {
         }
         else {
             return null;
-            // return "c Priklad CNF\nc 4 promenne a 6 klauzuli\nc kazda klauzule konci nulou (ne novym radkem)\np cnf 4 6\n1 -3 4 0\n-1 2 -3 0\n3 4 0\n1 2 -3 -4 0\n-2 3 0\n-3 -4 0\n";
         }
     }
 }

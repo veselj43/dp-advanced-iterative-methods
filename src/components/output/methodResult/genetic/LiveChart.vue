@@ -61,6 +61,8 @@ export default {
             .dimension(dim)
             .group(grp);
 
+        this.liveSeriesChart.yAxis().tickFormat(d3.format('s'));
+
         this.liveSeriesChart.margins().right = options.margin.right;
         this.liveSeriesChart.margins().bottom += 5;
 

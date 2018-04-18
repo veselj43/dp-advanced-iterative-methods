@@ -1,6 +1,6 @@
 import __mapValues from 'lodash/mapValues';
 
-export const dbName = "MyTestDatabase";
+export const dbName = "AIMD-base";
 export const dbVersion = 1;
 
 export const problemIndex = ["problem"]

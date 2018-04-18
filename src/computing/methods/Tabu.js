@@ -83,7 +83,7 @@ export class TabuSolver {
             if (bestCandidateIndex === -1) {
                 // there are non even tabu candidates, we have nowhere to go
                 if (tabuBestCandidateIndex === -1) {
-                    console.log("-- no candidates --");
+                    // console.log("-- no candidates --");
                 }
                 else {
                     state = tabuBestCandidate;
@@ -136,7 +136,7 @@ export class TabuSolver {
 
         var best = this._process(iterationLimit, tabuSize, tabuSizeShort);
 
-        console.log('tabu checks:', this.tabuCounter);
+        // console.log('tabu checks:', this.tabuCounter);
 
         // return Result class managing data format
         return new Result(

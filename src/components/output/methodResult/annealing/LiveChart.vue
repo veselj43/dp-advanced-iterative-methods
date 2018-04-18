@@ -54,6 +54,8 @@ export default {
             .dimension(dim)
             .group(grp);
 
+        this.liveLineChart.yAxis().tickFormat(d3.format('s'));
+
         this.liveLineChart.margins().right = options.margin.right;
         this.liveLineChart.margins().bottom += 5;
 
