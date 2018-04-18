@@ -53,10 +53,11 @@ export class TravellingSalesman extends Problem {
                 }
             }
         }
-
+        var start, end;
         // if shortest calculate shortest path using floyd warshall
         if(this._type === "Shortest") {
-          this._floydWarshall();
+          if(this._noNodes !== this._noNodesToVisit) this._dijkstra();
+          else this._floydWarshall();
         }
     }
 
@@ -78,6 +79,72 @@ export class TravellingSalesman extends Problem {
                 }
             }
         }
+    }
+
+    /**
+     * Dijkstra algorithm to caculate path from nodes to visit to all other nodes
+     * @return {[type]} [description]
+     */
+    _dijkstra() {
+      var distanceArray = [];
+      var pathArray = [];
+      var nodes = [];
+      var shortest;
+      var chosenNode;
+
+      const distances = this._distanceArray;
+      // for all nodes
+      for(var i = 0; i < this._noNodesToVisit; i++)
+      {
+        //initialization
+        for(var j = 0; j < this._noNodes; j++)
+        {
+          distanceArray[j] = Number.MAX_SAFE_INTEGER;
+          pathArray[j] = null;
+          nodes.push(j);
+        }
+
+        distanceArray[this._nodesToVisit[i]] = 0;
+        //while there are unvisited nodes
+        while(nodes.length > 0)
+        {
+          shortest = Number.MAX_SAFE_INTEGER;
+          for(var j = 0; j < nodes.length; j++)
+          {
+            if(distanceArray[nodes[j]] < shortest) {
+              shortest = distanceArray[nodes[j]];
+              chosenNode = nodes[j];
+            }
+          }
+          //remove node with shortest path
+          nodes.splice(nodes.indexOf(chosenNode), 1);
+          // update shortest path and array for path rebuilding
+          for(var j = 0; j < this._noNodes; j++)
+          {
+            if(shortest + distances[chosenNode][j] < distanceArray[j]) {
+              distanceArray[j] = shortest + distances[chosenNode][j];
+              pathArray[j] = chosenNode;
+            }
+          }
+        }
+        pathArray[this._nodesToVisit[i]] = this._nodesToVisit[i];
+
+        // rebuild all paths and update _pathArray and _distanceArray arrays
+        var currentNode;
+        for(var k = 0; k < pathArray.length; k++)
+        {
+          currentNode = k;
+          while(pathArray[currentNode] !== this._nodesToVisit[i])
+          {
+            this._pathArray[pathArray[currentNode]][k] = currentNode;
+            currentNode = pathArray[currentNode];
+          }
+          this._pathArray[this._nodesToVisit[i]][k] = currentNode;
+          this._distanceArray[this._nodesToVisit[i]][k] = distanceArray[k];
+        }
+
+      }
+
     }
 
     /**

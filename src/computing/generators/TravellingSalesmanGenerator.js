@@ -122,7 +122,7 @@ export default class TravellingSalesmanGenerator {
       }
 
       toVisit.sort(function(a, b) {
-          return +a > +b;
+          return a - b;
       });
 
       var toReturn = "";
