@@ -1,4 +1,4 @@
-import {getRandomInt} from "./Random";
+import {getRandomFloat, getRandomInt} from "./Random";
 
 export const SelectionEnum = {
     TOURNAMENT: "Tournament",
@@ -53,7 +53,7 @@ export class RouletteSelection {
     }
 
     selectIndividuals(generation, number) {
-        var rankSum
+        var rankSum;
         switch (this.scale) {
             case SelectionEnum.ROULETTE_RANK:
                 rankSum = this._rankIndividuals(generation);
@@ -72,7 +72,8 @@ export class RouletteSelection {
     }
 
     _rouletteSelect(generation, rankSum) {
-        var roulette = getRandomInt(0, rankSum);
+        var roulette = getRandomFloat(0, rankSum);
+
         //generation is sorted by fitness best individual is the last one
         var i = generation.length;
         do {
@@ -96,10 +97,17 @@ export class RouletteSelection {
         var fitMax = generation[generation.length-1].getFitness();
         var fitMin = generation[0].getFitness();
         var rankSum = 0;
-        for (var i = 0; i < generation.length; i++) {
-            var scaledRank = this.min + (generation[i].getFitness() - fitMin)*((this.max - this.min)/(fitMax - fitMin));
-            generation[i].setRank(scaledRank);
-            rankSum += scaledRank;
+        if (fitMin >= fitMax) {
+            for (var i = 0; i < generation.length; i++) {
+                generation[i].setRank(1);
+                rankSum += 1;
+            }
+        } else {
+            for (var i = 0; i < generation.length; i++) {
+                var scaledRank = this.min + (generation[i].getFitness() - fitMin) * ((this.max - this.min) / (fitMax - fitMin));
+                generation[i].setRank(scaledRank);
+                rankSum += scaledRank;
+            }
         }
         return rankSum;
     }

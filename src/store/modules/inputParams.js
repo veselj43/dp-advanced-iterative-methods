@@ -16,15 +16,15 @@ const initState = {
                 innerCycle: 50
             },
             genetic: {
-                populationSize: 20,
+                populationSize: 50,
                 noGenerations: 100,
                 selectionType: SelectionEnum.ROULETTE_LINEAR,
-                tournamentSize: 2.5,
-                scaleMin: 1,
+                tournamentSize: 1.5,
+                scaleMin: 2,
                 scaleMax: 3,
-                crossoverProb: 0.8,
+                crossoverProb: 0.9,
                 crossoverType: CrossoverEnum.ONE_POINT,
-                mutationRate: 0.08,
+                mutationRate: 0.09,
                 elitism: 1
             },
             tabu: {

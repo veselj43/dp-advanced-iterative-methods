@@ -19,22 +19,22 @@ export class GeneticSolver {
         //set params
         this.problem = problem;
 
-        const populationSize = params.populationSize;
-        const noGenerations = params.noGenerations;
+        const populationSize = +params.populationSize;
+        const noGenerations = +params.noGenerations;
         switch (params.selectionType) {
             case SelectionEnum.ROULETTE_RANK:
-                this.selection = new RouletteSelection(SelectionEnum.ROULETTE_RANK, params.scaleMin, params.scaleMax);
+                this.selection = new RouletteSelection(SelectionEnum.ROULETTE_RANK, +params.scaleMin, +params.scaleMax);
                 break;
             case SelectionEnum.ROULETTE_LINEAR:
-                this.selection = new RouletteSelection(SelectionEnum.ROULETTE_LINEAR, params.scaleMin, params.scaleMax);
+                this.selection = new RouletteSelection(SelectionEnum.ROULETTE_LINEAR, +params.scaleMin, +params.scaleMax);
                 break;
             case SelectionEnum.TOURNAMENT:
-                this.selection = new TournamentSelection(params.tournamentSize);
+                this.selection = new TournamentSelection(+params.tournamentSize);
                 break;
             default:
                 throw new Error("Selection type " + params.selectionType + " is not supported.");
         }
-        const crossoverProb = params.crossoverProb;
+        const crossoverProb = +params.crossoverProb;
         switch (params.crossoverType) {
             case CrossoverEnum.ONE_POINT:
                 this.crossover = new OnePointCrossover();
@@ -58,7 +58,7 @@ export class GeneticSolver {
                 throw new Error("Crossover type " + params.selectionType + " is not supported.");
 
         }
-        const elitism = params.elitism;
+        const elitism = +params.elitism;
 
 
         this.result = [];
@@ -66,7 +66,7 @@ export class GeneticSolver {
         this.bestCost = 0;
         this.counter = 0;
 
-        this._workerInterface.reply('init', { numberOfIterations: params.noGenerations/*, maxFitness: this.problemInput.params.numberOfClausules*/ });
+        this._workerInterface.reply('init', { numberOfIterations: noGenerations/*, maxFitness: this.problemInput.params.numberOfClausules*/ });
 
         //init generation
         var generation = this._initGeneration(populationSize);

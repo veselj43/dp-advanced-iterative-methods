@@ -30,7 +30,7 @@ export class Problem {
         }
     }
 
-    evaluateMaximizationCost(config) {
+    evaluateMaximizationCost(configuration) {
         // abstract
     }
 
@@ -46,15 +46,15 @@ export class Problem {
         // abstract
     }
 
-    getResult() {
+    getResult(configuration) {
         // abstract
     }
 
-    isInvalidInstance() {
+    isInvalidInstance(instanceContent) {
         // abstract static
     }
 
-    resolveInstanceParams() {
+    resolveInstanceParams(instanceContent) {
         // abstract static
     }
 }
