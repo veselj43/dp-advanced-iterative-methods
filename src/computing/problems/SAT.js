@@ -137,7 +137,8 @@ export class SAT extends Problem {
      * @return {boolean} is instance invalid
      */
     isInvalidInstance(instanceContent) {
-        instanceContent = instanceContent.split(/\s+/);
+        instanceContent = instanceContent.split('\n').filter(row => row.trim()[0] !== 'c');
+        instanceContent = instanceContent.join(" ").split(/\s+/);
 
         if((instanceContent.length - 1) < 6) return { text: "Invalid number of parameters"};
 
@@ -156,7 +157,7 @@ export class SAT extends Problem {
         instanceContent.splice(0, 4);
 
         for(var i = 0; i < instanceContent.length; i++){
-          if(isNaN(instanceContent[i])) return { text: "Most contain only numbers, except for \"p cnf\""};
+          if(isNaN(instanceContent[i])) return { text: "Most contain only numbers, except for \"p cnf\" and comments"};
         }
 
         for(var i = 0; i < instanceContent.length; i++)
