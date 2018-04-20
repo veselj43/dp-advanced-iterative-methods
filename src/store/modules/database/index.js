@@ -97,7 +97,7 @@ const actions = {
 
     loadInstances ({ getters, commit }, firstLoad) {
         let params = getters.getInputData;
-        let resolveInstanceParams = getProblemClassFromId(getters.selectedProblemId).prototype.resolveInstanceParams;
+        let resolveInstanceParams = getProblemClassFromId(getters.selectedProblemId).resolveInstanceParams;
 
         return dbm.getAll(DBSchema.dbTables.instances, { problem: params.problem }).then(function(instances) {
             if (instances.length > 0 || exampleInstanceAdded[params.problem]) {
@@ -129,7 +129,7 @@ const actions = {
         let stringFilesArray = [];
         let promiseArray = [];
 
-        let problemClassPrototype = getProblemClassFromId(getters.selectedProblemId).prototype;
+        let problemClassPrototype = getProblemClassFromId(getters.selectedProblemId);
         let isInvalidInstance = problemClassPrototype.isInvalidInstance;
         let resolveInstanceParams = problemClassPrototype.resolveInstanceParams;
 

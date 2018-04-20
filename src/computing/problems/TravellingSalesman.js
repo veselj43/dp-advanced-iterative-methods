@@ -255,7 +255,7 @@ export class TravellingSalesman extends Problem {
      * @param  {string} instanceContent content of the instance
      * @return {boolean} is instance invalid
      */
-    isInvalidInstance(instanceContent) {
+    static isInvalidInstance(instanceContent) {
         instanceContent = instanceContent.split(/\s+/);
 
         var type = instanceContent[0];
@@ -371,7 +371,7 @@ export class TravellingSalesman extends Problem {
      * @param  {string} instanceContent content of the instance
      * @return {object} instance parameters
      */
-    resolveInstanceParams(instanceContent) {
+    static resolveInstanceParams(instanceContent) {
         instanceContent = instanceContent.split(/\s+/);
 
         return {

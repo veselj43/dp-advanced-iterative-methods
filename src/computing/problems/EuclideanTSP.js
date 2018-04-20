@@ -87,7 +87,7 @@ export class EuclideanTSP extends Problem {
         return ProblemTypeEnum.PERMUTATION;
     }
 
-    resolveInstanceParams(instanceContent) {
+    static resolveInstanceParams(instanceContent) {
         instanceContent = instanceContent.split(/\s+/);
 
         return {
@@ -100,7 +100,7 @@ export class EuclideanTSP extends Problem {
      * @param  {string} instanceContent content of the instance
      * @return {boolean} is instance invalid
      */
-    isInvalidInstance(instanceContent) {
+    static isInvalidInstance(instanceContent) {
         var dataSet = instanceContent.split('\n');
         if(isNaN(dataSet[0].split(/\s+/)[0])) return { text: "First parameter must be a number."};
         var noCities = + dataSet[0].split(/\s+/)[0];

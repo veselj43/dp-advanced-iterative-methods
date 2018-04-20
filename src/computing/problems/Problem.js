@@ -50,11 +50,11 @@ export class Problem {
         // abstract
     }
 
-    isInvalidInstance(instanceContent) {
+    static isInvalidInstance(instanceContent) {
         // abstract static
     }
 
-    resolveInstanceParams(instanceContent) {
+    static resolveInstanceParams(instanceContent) {
         // abstract static
     }
 }
