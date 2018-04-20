@@ -1,9 +1,9 @@
 <template>
     <div class="history-list-item">
         <div class="history-list-item-heading">
-            <label class="history-list-item-label" :title="item.instance">
+            <label class="history-list-item-label" :title="itemTitle">
                 <input type="checkbox" v-model="checked">
-                <div class="history-list-item-collapse-header">{{item.instance}}</div>
+                <div class="history-list-item-collapse-header">{{itemTitle}}</div>
             </label>
             <div class="history-list-item-remove" v-on:click="removeHistoryItem(item)">
                 <i class="icon-danger fas fa-trash-alt"></i>
@@ -67,6 +67,10 @@ export default {
                 return params;
             }
             return this.item.params;
+        },
+
+        itemTitle() {
+            return `${this.item.instance} (${this.item._id})`;
         },
 
         ...mapGetters([
