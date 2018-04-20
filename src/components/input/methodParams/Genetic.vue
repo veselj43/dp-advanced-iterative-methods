@@ -86,9 +86,9 @@
                     </template>
                     <!--permutation-->
                     <template v-if="problemType === ProblemTypeEnum.PERMUTATION">
-                        <option v-if="problemType === ProblemTypeEnum.PERMUTATION" :value="CrossoverEnum.ORDER">Order</option>
-                        <option v-if="problemType === ProblemTypeEnum.PERMUTATION" :value="CrossoverEnum.PMX">Partially matched</option>
-                        <option v-if="problemType === ProblemTypeEnum.PERMUTATION" :value="CrossoverEnum.CYCLE">Cycle</option>
+                        <option :value="CrossoverEnum.ORDER">Order</option>
+                        <option :value="CrossoverEnum.PMX">Partially matched</option>
+                        <option :value="CrossoverEnum.CYCLE">Cycle</option>
                     </template>
                 </select>
             </div>
