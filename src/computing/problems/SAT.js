@@ -152,10 +152,17 @@ export class SAT extends Problem {
 
         if(noClausules > Math.pow(3, noVariables) - 1) return { text: "Number of clausules is at max: " + Math.pow(3, noVariables) - 1 };
 
-        var clausulesEndIndex = rows.findIndex(row => row.indexOf("%") !== -1);
-        instanceContent = rows.slice(1, clausulesEndIndex).join('\n').split(/\s+/);
+        rows = rows.slice(1).filter(row => !!row.trim());
 
-        if (noClausules !== clausulesEndIndex - 1) return { text: "Number of clausules doesnt match the actual number of clausules" };
+        var clausulesEndIndex = rows.findIndex(row => row.indexOf("%") !== -1);
+        if (clausulesEndIndex === -1) clausulesEndIndex = rows.length;
+
+        instanceContent = rows
+            .slice(0, clausulesEndIndex)
+            .join('\n')
+            .split(/\s+/);
+
+        if (noClausules !== clausulesEndIndex) return { text: "Number of clausules doesnt match the actual number of clausules" };
 
         var clausules = [];
         var clausule = "";
