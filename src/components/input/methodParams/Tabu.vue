@@ -12,6 +12,21 @@
             >
             <span v-show="errors.has('tabuIterationLimit')" class="help-block">{{ errors.first('tabuIterationLimit') }}</span>
         </div>
+        <div class="form-group" v-bind:class="{'has-error': errors.has('tabuNeighborsToCheck')}">
+            <label class="" for="neighborsToCheck">Neighbor states to check</label>
+            <span class="form-tooltip" v-tooltip.right="'How many possible moves to check for next state candidate'">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </span>
+            <div class="input-group">
+                <input type="number" min="1" max="100"
+                    class="form-control" id="neighborsToCheck" name="tabuNeighborsToCheck"
+                    v-model="params.neighborsToCheck"
+                    data-vv-as="iteration limit" v-validate.initial="{ required: true, min_value: 1, max_value: 100, regex: /^[0-9]+$/ }"
+                >
+                <div class="input-group-addon">%</div>
+            </div>
+            <span v-show="errors.has('tabuNeighborsToCheck')" class="help-block">{{ errors.first('tabuNeighborsToCheck') }}</span>
+        </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuSize')}">
             <label class="" for="tabuSize">State tabu size</label>
             <span class="form-tooltip" v-tooltip.right="'Number of states in tabu queue'">
@@ -34,6 +49,17 @@
                 v-model="params.tabuSizeShort"
                 data-vv-as="changes tabu size" v-validate.initial="{ required: true, min_value: 0, max_value: 10000, regex: /^[0-9]+$/ }"
             >
+            <span v-show="errors.has('tabuSizeShort')" class="help-block">{{ errors.first('tabuSizeShort') }}</span>
+        </div>
+        <div class="form-group" v-bind:class="{'has-error': errors.has('tabuSizeShort')}">
+            <label class="" for="tabuSizeShort">Starting state</label>
+            <span class="form-tooltip" v-tooltip.right="'Random or default (ex.: all false or path by node indexes)'">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </span>
+            <select class="form-control" id="crossover-type" v-model="params.randomStart">
+                <option :value="false">Default</option>
+                <option :value="true">Random</option>
+            </select>
             <span v-show="errors.has('tabuSizeShort')" class="help-block">{{ errors.first('tabuSizeShort') }}</span>
         </div>
     </div>

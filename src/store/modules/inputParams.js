@@ -29,8 +29,10 @@ const initState = {
             },
             tabu: {
                 iterationLimit: 300,
+                neighborsToCheck: 100,
                 tabuSize: 75,
-                tabuSizeShort: 3
+                tabuSizeShort: 3,
+                randomStart: false
             }
         },
         isValid: {

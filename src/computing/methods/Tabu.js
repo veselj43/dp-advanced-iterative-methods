@@ -15,6 +15,19 @@ export class TabuSolver {
         return this.problem.evaluateMaximizationCost(state);
     }
 
+    _generateNeighborhood(size, neighborsToCheckRatio) {
+        var nbhSize = Math.round(size * neighborsToCheckRatio);
+        var nbh = [];
+        for (var i = 0; i < size; i++) {
+            nbh.push(i);
+        }
+        while (nbh.length > nbhSize) {
+            var randonIndex = Math.round(Math.random() * (nbh.length - 1));
+            nbh.splice(randonIndex, 1);
+        }
+        return nbh;
+    }
+
     _compareIndexesOf(queue, c1, c2) {
         for (var i in queue) {
             if (queue[i].equals(c1)) return 1;
@@ -31,11 +44,11 @@ export class TabuSolver {
         return set[configuration.toString()];
     }
 
-    _process(iterationLimit, tabuSize, tabuSizeShort) {
-        var state = this.problem.getConfiguration();    // initial state
-        var stateCost = this._getCost(state);           // initial state cost
-        var sBest = state;                              // initial best found state
-        var sBestCost = stateCost;                      // initial best found state cost
+    _process(iterationLimit, neighborsToCheckRatio, tabuSize, tabuSizeShort, randomStart) {
+        var state = this.problem.getConfiguration(randomStart);     // initial state
+        var stateCost = this._getCost(state);                       // initial state cost
+        var sBest = state;                                          // initial best found state
+        var sBestCost = stateCost;                                  // initial best found state cost
         var tabuStates = [];            // Queue
         var tabuStatesSearch = {};      // HashSet
         var tabuChanges = [];           // Queue
@@ -52,11 +65,13 @@ export class TabuSolver {
             var tabuBestCandidateCost = this._getCost(tabuBestCandidate);
             var tabuBestCandidateIndex = -1;
 
+            var neighborhood = this._generateNeighborhood(state.getSize(), neighborsToCheckRatio);
+
             // checking neighbours
-            for (var i = 0; i < state.getSize(); i++) {
+            for (var i = 0; i < neighborhood.length; i++) {
                 this.counter++;
 
-                var sCandidate = state.getNeighbour(i);
+                var sCandidate = state.getNeighbour(neighborhood.length[i]);
                 var sCandidateCost = this._getCost(sCandidate);
 
                 // check change for tabu and if it is tabu, check if we dont miss the best found state
@@ -122,19 +137,15 @@ export class TabuSolver {
         return sBest;
     }
 
-    solve(problem, params) {
+    solve(problem, {iterationLimit, neighborsToCheck, tabuSize, tabuSizeShort, randomStart}) {
         this.problem = problem;
         this.counter = 0;
         this.tabuCounter = 0;
 
-        var iterationLimit = params.iterationLimit;
-        var tabuSize = params.tabuSize;
-        var tabuSizeShort = params.tabuSizeShort;
-
         // initial message to set up the interface for the computation
         this._workerInterface.reply('init', { numberOfIterations: iterationLimit });
 
-        var best = this._process(iterationLimit, tabuSize, tabuSizeShort);
+        var best = this._process(iterationLimit, neighborsToCheck / 100, tabuSize, tabuSizeShort, randomStart);
 
         // console.log('tabu checks:', this.tabuCounter);
 
