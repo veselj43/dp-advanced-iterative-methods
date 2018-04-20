@@ -79,13 +79,17 @@
                 <span v-if="problemType === ProblemTypeEnum.PERMUTATION" class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOrder - Individual is copied to random point then \n     it starts copying values from second parent if \n     possible to preserve permutation\nPartially matched - Two random points designates\n     section where values on corresponding\n     positions are swapped\nCycle - Cycle starts at random point in first parent.\n     Next position of cycle is where gene has same\n     value as value at corresponding position in\n     other parent. Continue until the cycle is closed.\n     Leave the cycle how it is and swap all other\n     values between 2 parents.', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <select class="form-control" id="crossover-type" v-model="params.crossoverType">
                     <!--binary-->
-                    <option v-if="problemType === ProblemTypeEnum.BINARY" :value="CrossoverEnum.ONE_POINT">One-point</option>
-                    <option v-if="problemType === ProblemTypeEnum.BINARY" :value="CrossoverEnum.TWO_POINT">Two-point</option>
-                    <option v-if="problemType === ProblemTypeEnum.BINARY" :value="CrossoverEnum.UNIFORM">Uniform</option>
+                    <template v-if="problemType === ProblemTypeEnum.BINARY">
+                        <option :value="CrossoverEnum.ONE_POINT">One-point</option>
+                        <option :value="CrossoverEnum.TWO_POINT">Two-point</option>
+                        <option :value="CrossoverEnum.UNIFORM">Uniform</option>
+                    </template>
                     <!--permutation-->
-                    <option v-if="problemType === ProblemTypeEnum.PERMUTATION" :value="CrossoverEnum.ORDER">Order</option>
-                    <option v-if="problemType === ProblemTypeEnum.PERMUTATION" :value="CrossoverEnum.PMX">Partially matched</option>
-                    <option v-if="problemType === ProblemTypeEnum.PERMUTATION" :value="CrossoverEnum.CYCLE">Cycle</option>
+                    <template v-if="problemType === ProblemTypeEnum.PERMUTATION">
+                        <option v-if="problemType === ProblemTypeEnum.PERMUTATION" :value="CrossoverEnum.ORDER">Order</option>
+                        <option v-if="problemType === ProblemTypeEnum.PERMUTATION" :value="CrossoverEnum.PMX">Partially matched</option>
+                        <option v-if="problemType === ProblemTypeEnum.PERMUTATION" :value="CrossoverEnum.CYCLE">Cycle</option>
+                    </template>
                 </select>
             </div>
         </div>
