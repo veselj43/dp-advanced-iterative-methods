@@ -95,7 +95,7 @@ const mutations = {
         state.params.methodParams[payload.id] = {...payload.data};
     },
     updateParamsValidation(state, payload) {
-        state.params.isValid[payload.id] = {...payload.data};
+        state.params.isValid[payload.id] = payload.data;
     },
     selectInstance(state, selected) {
         state.files.selected.id = selected.id;
