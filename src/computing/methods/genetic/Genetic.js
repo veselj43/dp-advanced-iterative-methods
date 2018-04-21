@@ -59,7 +59,6 @@ export class GeneticSolver {
 
         }
         this.mutationRate = +params.mutationRate;
-        console.log(this.mutationRate);
         const elitism = +params.elitism;
 
 
@@ -108,10 +107,10 @@ export class GeneticSolver {
         var bestCost = this.problem.transformMaximizationToRealCost(generation[generation.length-1].getFitness());
 
         this._bufferedReply.addMessageWithAutoFlush({
-            worst: this.problem.transformMaximizationToRealCost(generation[0].getFitness()),
+            best: bestCost,
             average: average,
             mean: this.problem.transformMaximizationToRealCost(generation[Math.floor(generation.length/2)].getFitness()),
-            best: bestCost
+            worst: this.problem.transformMaximizationToRealCost(generation[0].getFitness()),
         });
         //update best solution
         if (this.bestFitness < generation[generation.length-1].getFitness()) {
