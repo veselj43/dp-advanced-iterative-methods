@@ -81,8 +81,10 @@ export const methodParamsTitles = {
     },
     tabu: {
         iterationLimit: "Iteration limit",
+        neighborsToCheck: "Checked neighborhood (%)",
         tabuSize: "State tabu size",
-        tabuSizeShort: "Changes tabu size"
+        tabuSizeShort: "Changes tabu size",
+        randomStart: "Random start"
     }
 }
 
