@@ -34,7 +34,7 @@ export class GeneticSolver {
             default:
                 throw new Error("Selection type " + params.selectionType + " is not supported.");
         }
-        const crossoverProb = +params.crossoverProb;
+        this.crossoverProb = +params.crossoverProb;
         switch (params.crossoverType) {
             case CrossoverEnum.ONE_POINT:
                 this.crossover = new OnePointCrossover();
@@ -58,6 +58,8 @@ export class GeneticSolver {
                 throw new Error("Crossover type " + params.selectionType + " is not supported.");
 
         }
+        this.mutationRate = +params.mutationRate;
+        console.log(this.mutationRate);
         const elitism = +params.elitism;
 
 
@@ -74,7 +76,7 @@ export class GeneticSolver {
         //evolve solution
         for (var g = 0; g < noGenerations; g++) {
             var potentialParents = this.selection.selectIndividuals(generation, populationSize-elitism);
-            generation = this._doNewGeneration(potentialParents, crossoverProb).concat(generation.slice(populationSize-elitism, populationSize));
+            generation = this._doNewGeneration(potentialParents).concat(generation.slice(populationSize-elitism, populationSize));
             this._evaluateGeneration(generation);
             this.counter++;
         }
@@ -119,11 +121,11 @@ export class GeneticSolver {
         }
     }
 
-    _doNewGeneration(potentialParents, crossoverProb) {
+    _doNewGeneration(potentialParents) {
         var newGeneration = [];
         var mate = null;
         for (var i = 0; i < potentialParents.length; i++) {
-            if (Math.random() < crossoverProb) {
+            if (Math.random() < this.crossoverProb) {
                 if (mate === null) {
                     mate = potentialParents[i];
                 } else {
@@ -141,8 +143,9 @@ export class GeneticSolver {
             newGeneration.push(mate.copy())
         }
         //mutate all new individuals
+        const mutationRate = this.mutationRate;
         newGeneration.forEach(function(individual){
-            individual.mutate();
+            individual.mutate(mutationRate);
         });
         return newGeneration;
     }

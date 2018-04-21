@@ -41,9 +41,9 @@ export class BinaryIndividual extends Individual {
 
     }
 
-    mutate(mutationProb) {
+    mutate(mutationRate) {
         for (var i = 0; i < this._bitArray.length; i++) {
-            if (Math.random() < mutationProb) {
+            if (Math.random() < mutationRate) {
                 this._fitness = null;
                 //bit flip
                 this._bitArray[i] = !this._bitArray[i];
@@ -74,9 +74,9 @@ export class PermutationIndividual extends Individual {
 
     }
 
-    mutate(mutationProb) {
+    mutate(mutationRate) {
         for (var i = 0; i < this._permutation.length; i++) {
-            if (Math.random() < mutationProb) {
+            if (Math.random() < mutationRate) {
                 this._fitness = null;
                 //swap values but not with itself
                 var position = getRandomInt(0, this._permutation.length-1);

@@ -55,7 +55,7 @@
             <div class="form-group" id="tournament" v-if="params.selectionType === SelectionEnum.TOURNAMENT" v-bind:class="{'has-error': errors.has('genetic-tournament-size')}">
                 <label class="" for="tournament-size">Tournament size</label>
                 <span class="form-tooltip" v-tooltip.right="'Defines how many individuals compete in single tournament. If number isn\'t integer sizes of tournaments varies based on decimal part.'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                <input class="form-control" type="number" min="1" step="0.5"
+                <input class="form-control" type="number" min="1" step="0.25"
                        id="tournament-size" name="genetic-tournament-size" v-model="params.tournamentSize"
                        data-vv-as="number of generations" v-validate.initial="{ required: true, min_value: 1, max_value: params.populationSize, regex: /^([0-9]*[.])?[0-9]+$/ }"
                 >
@@ -98,7 +98,7 @@
                 <label class="" for="mutation-rate">Mutation rate</label>
                 <span v-if="problemType === ProblemTypeEnum.BINARY" class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each bit inverted'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <span v-if="problemType === ProblemTypeEnum.PERMUTATION" class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each value swapped with another'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                <input class="form-control" type="number" min="0" max="1" step="0.01"
+                <input class="form-control" type="number" min="0" max="1" step="0.001"
                        id="mutation-rate" name="genetic-mutation-rate" v-model="params.mutationRate"
                        data-vv-as="mutation rate" v-validate.initial="{ required: true, min_value: 0, max_value: 1, regex: /^([0-9]*[.])?[0-9]+$/ }"
                 >

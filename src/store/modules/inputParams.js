@@ -24,7 +24,7 @@ const initState = {
                 scaleMax: 3,
                 crossoverProb: 0.9,
                 crossoverType: CrossoverEnum.ONE_POINT,
-                mutationRate: 0.09,
+                mutationRate: 0.01,
                 elitism: 1
             },
             tabu: {
