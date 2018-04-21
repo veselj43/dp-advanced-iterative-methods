@@ -1,10 +1,10 @@
 <template>
     <div class="paramsSelection">
-        
-        <keep-alive>
-            <component :is="selectedMethodId"></component>
-        </keep-alive>
-            
+        <form novalidate>
+            <keep-alive>
+                <component :is="selectedMethodId"></component>
+            </keep-alive>
+        </form>
     </div>
 </template>
 
