@@ -18,6 +18,8 @@ export class UniformCrossover {
         var offSeq2 = [];
         const parSeq1 = parent1.getBitArray();
         const parSeq2 = parent2.getBitArray();
+        // console.log("par", parSeq1);
+        // console.log("par", parSeq2);
         for (var i = 0; i < size; i++) {
             if (getRandomBoolean()) {
                 offSeq1.push(parSeq1[i]);
@@ -27,6 +29,8 @@ export class UniformCrossover {
                 offSeq2.push(parSeq1[i]);
             }
         }
+        // console.log("off", offSeq1);
+        // console.log("off", offSeq2);
         return [new BinaryIndividual(offSeq1), new BinaryIndividual(offSeq2)];
     }
 }
@@ -45,6 +49,10 @@ export class TwoPointCrossover {
         var offSeq2 = [];
         const parSeq1 = parent1.getBitArray();
         const parSeq2 = parent2.getBitArray();
+        // console.log("par", parSeq1);
+        // console.log("par", parSeq2);
+        // console.log("point", first, second);
+
         for (var i = 0; i < size; i++) {
             if (i < first || i >= second) {
                 offSeq1.push(parSeq1[i]);
@@ -54,6 +62,8 @@ export class TwoPointCrossover {
                 offSeq2.push(parSeq1[i]);
             }
         }
+        // console.log("off", offSeq1);
+        // console.log("off", offSeq2);
         return [new BinaryIndividual(offSeq1), new BinaryIndividual(offSeq2)];
     }
 }
@@ -66,6 +76,10 @@ export class OnePointCrossover {
         var offSeq2 = [];
         const parSeq1 = parent1.getBitArray();
         const parSeq2 = parent2.getBitArray();
+        // console.log("par", parSeq1);
+        // console.log("par", parSeq2);
+        // console.log("point", point);
+
         for (var i = 0; i < size; i++) {
             if (i < point) {
                 offSeq1.push(parSeq1[i]);
@@ -75,6 +89,8 @@ export class OnePointCrossover {
                 offSeq2.push(parSeq1[i]);
             }
         }
+        // console.log("off", offSeq1);
+        // console.log("off", offSeq2);
         return [new BinaryIndividual(offSeq1), new BinaryIndividual(offSeq2)];
     }
 }
@@ -89,6 +105,9 @@ export class OrderCrossover {
         var offSeq2 = [];
         const parSeq1 = parent1.getGenotype();
         const parSeq2 = parent2.getGenotype();
+        // console.log("par", parSeq1);
+        // console.log("par", parSeq2);
+        // console.log("point", point);
 
         var off1Used = new Array(size).fill(false);
         var off2Used = new Array(size).fill(false);
@@ -116,6 +135,8 @@ export class OrderCrossover {
             }
             i++;
         }
+        // console.log("off", offSeq1);
+        // console.log("off", offSeq2);
         return [new PermutationIndividual(offSeq1), new PermutationIndividual(offSeq2)];
     }
 }
@@ -135,6 +156,9 @@ export class PartiallyMatchedCrossover {
         var offSeq2 = [];
         const parSeq1 = parent1.getGenotype();
         const parSeq2 = parent2.getGenotype();
+        // console.log("par", parSeq1);
+        // console.log("par", parSeq2);
+        // console.log("point", first, second);
 
         //create mapping
         var permMap = new Map();
@@ -158,6 +182,8 @@ export class PartiallyMatchedCrossover {
                 offSeq2.push(parSeq2[i]);
             }
         }
+        // console.log("off", offSeq1);
+        // console.log("off", offSeq2);
         return [new PermutationIndividual(offSeq1), new PermutationIndividual(offSeq2)];
     }
 }
@@ -171,6 +197,10 @@ export class CycleCrossover {
         var offSeq2 = [];
         const parSeq1 = parent1.getGenotype();
         const parSeq2 = parent2.getGenotype();
+
+        // console.log("par", parSeq1);
+        // console.log("par", parSeq2);
+        // console.log("point", point);
 
         var inCycle = new Array(size).fill(false);
         //create cycle
@@ -191,10 +221,12 @@ export class CycleCrossover {
                 offSeq1.push(parSeq1[i]);
                 offSeq2.push(parSeq2[i]);
             } else {
-                offSeq1.push(parSeq1[i]);
-                offSeq2.push(parSeq2[i]);
+                offSeq1.push(parSeq2[i]);
+                offSeq2.push(parSeq1[i]);
             }
         }
+        // console.log("off", offSeq1);
+        // console.log("off", offSeq2);
         return [new PermutationIndividual(offSeq1), new PermutationIndividual(offSeq2)];
     }
 }
