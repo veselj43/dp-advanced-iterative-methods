@@ -4,7 +4,7 @@
             <label class="" for="param1">Starting temperature</label>
             <span class="form-tooltip" v-tooltip.right="'Temperature at the start of calculation'"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="input-group">
-                <input class="form-control" type="number" id="param1" v-model="params.start_temp" placeholder=""
+                <input class="form-control" type="number" min="0" step="1" id="param1" v-model="params.start_temp" placeholder=""
                 name="startTemp"
                 data-vv-as="starting temperature"
                 v-validate.initial="{ required: true, min_value: +params.min_temp, regex: /^[0-9]+$/ }"
@@ -30,7 +30,7 @@
             <label class="" for="param3">Minimal temperature</label>
             <span class="form-tooltip" v-tooltip.right="'When the method reaches this temperatue it stops'"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="">
-                <input class="form-control" type="number" id="param3" v-model="params.min_temp" placeholder=""
+                <input class="form-control" type="number" min="0.0001" step="0.01" id="param3" v-model="params.min_temp" placeholder=""
                 name="minTemp"
                 data-vv-as="minimal temperature"
                 v-validate.initial="{ required: true, min_value: 0.0001, max_value: +params.start_temp, regex: /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/ }"
@@ -42,7 +42,7 @@
             <label class="" for="param4">Inner cycle</label>
             <span class="form-tooltip" v-tooltip.right="'Size of the inner cyrcle, how many configurations the algorithm tries before changing temperature'"><span class="glyphicon glyphicon-question-sign"></span></span>
             <div class="input-group">
-                <input class="form-control" type="number" id="param4" v-model="params.innerCycle" placeholder=""
+                <input class="form-control" type="number" min="1" step="1" id="param4" v-model="params.innerCycle" placeholder=""
                 name="equil"
                 data-vv-as="inner cycle"
                 v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
