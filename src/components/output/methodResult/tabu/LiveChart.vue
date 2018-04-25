@@ -43,7 +43,7 @@ export default {
             .width(options.width).height(options.height)
             .x(d3.scale.linear().domain([0, 100]))
             .xAxisLabel("States checked")
-            .yAxisLabel("Value")
+            .yAxisLabel("Value of optimization criterion")
             .elasticY(true)
             .yAxisPadding('10%')
             .brushOn(false)
@@ -53,12 +53,12 @@ export default {
             .colors('red')
             .dimension(dim)
             .group(grp);
-        
+
         this.liveLineChart.yAxis().tickFormat(d3.format('s'));
-        
+
         this.liveLineChart.margins().right = options.margin.right;
         this.liveLineChart.margins().bottom += 5;
-        
+
         this.liveLineChart.render();
     },
 
@@ -91,7 +91,7 @@ export default {
         updateLiveLineChart() {
             var indexOffset = this.ndx.size();
             var filterData = this.liveValuesBuffer.map((d, i) => ({
-                index: indexOffset + i, 
+                index: indexOffset + i,
                 value: d
             }));
 

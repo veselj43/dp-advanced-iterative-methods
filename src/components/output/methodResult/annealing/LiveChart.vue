@@ -42,8 +42,8 @@ export default {
         this.liveLineChart
             .width(options.width).height(options.height)
             .x(d3.scale.linear().domain([0, 100]))
-            .xAxisLabel("States checked")
-            .yAxisLabel("Value")
+            .xAxisLabel("Step")
+            .yAxisLabel("Value of optimization criterion")
             .elasticY(true)
             .yAxisPadding('10%')
             .brushOn(false)

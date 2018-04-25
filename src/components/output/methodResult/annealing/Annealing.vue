@@ -25,7 +25,7 @@
                     <tr>
                         <th class="toggle-detail"></th>
                         <th>Instance</th>
-                        <th>Best value</th>
+                        <th>Value of optimization criterion</th>
                         <th>States checked</th>
                         <th>Processing time</th>
                     </tr>

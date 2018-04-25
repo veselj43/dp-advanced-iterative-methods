@@ -10,8 +10,8 @@ export default {
     data() {
         return {
             options:{
-                xAxisLabel: "States checked",
-                yAxisLabel: "Value",
+                xAxisLabel: "Step",
+                yAxisLabel: "Value of optimization criterion",
             }
         }
     },
@@ -58,11 +58,11 @@ export default {
         // methods that overrides ComparisonChartBase methods
         htmlCoordsBuildItem(color, valueObj, xValue) {
             return `<tr style="color: ${color}">
-                <td>value</td>
+                <td>Value of optimization criterion</td>
                 <td class="text-right">${valueObj.value}</td>
             </tr>
             <tr style="color: ${color}">
-                <td>temperature</td>
+                <td>Temperature</td>
                 <td class="text-right">${this.computeTemperature(valueObj.id, xValue)}</td>
             </tr>`;
         },

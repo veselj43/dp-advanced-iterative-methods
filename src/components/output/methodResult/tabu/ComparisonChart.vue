@@ -9,7 +9,7 @@ export default {
         return {
             options:{
                 xAxisLabel: "States checked",
-                yAxisLabel: "Value",
+                yAxisLabel: "Value of optimization criterion",
             }
         }
     },
@@ -33,7 +33,7 @@ export default {
             let runGroup = runDimension.group().reduceSum(d => +d.value);
 
             let makeChartNonZero = this.utilMakeChartNonZero;
-            
+
             chart
                 .seriesAccessor(this.seriesAccessor(this))
                 .keyAccessor(d => +d.key[1])
@@ -49,4 +49,3 @@ export default {
     }
 }
 </script>
-
