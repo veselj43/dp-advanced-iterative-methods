@@ -160,11 +160,11 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('noEdges')}">
                     <label for="MingenParam2">Number of edges</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of edges in the generated graph.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of edges in the generated graph. The edges are undirected so the actual number of edges is twice of this.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="genParam2" v-model="generatorParams[3].noEdges" placeholder=""
                     name="noEdges"
                     data-vv-as="number of edges"
-                    v-validate.initial="{ required: true, min_value: 0, max_value: +generatorParams[3].size * (+generatorParams[3].size - 1), regex: /^[0-9]+$/ }"
+                    v-validate.initial="{ required: true, min_value: 0, max_value: (+generatorParams[3].size * (+generatorParams[3].size - 1)) / 2, regex: /^[0-9]+$/ }"
                     >
                     <span v-show="errors.has('noEdges')" class="help-block">{{ errors.first('noEdges') }}</span>
                 </div>
@@ -261,7 +261,7 @@ export default {
                 },
                 3: {
                     size : 20,
-                    noEdges : 20
+                    noEdges : 10
                 },
                 4: {
                     noCities: 20,

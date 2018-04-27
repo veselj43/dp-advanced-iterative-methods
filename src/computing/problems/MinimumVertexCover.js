@@ -3,7 +3,7 @@ import { Problem, ProblemTypeEnum } from './Problem'
 /**
  * Minimal vertex cover problem class, used for minimal vertex cover problem solving, works with BitArray configuration
  */
-export class MinimalVertexCover extends Problem {
+export class MinimumVertexCover extends Problem {
     /**
      * Constructor, construct the class from the data file selected
      * @param {string} data instance of a problem coded as string
@@ -13,6 +13,7 @@ export class MinimalVertexCover extends Problem {
         data = data.split(/\s+/);
 
         this._size = +data[0];
+        this._noEdges = +data[1];
         this._array = new Array(this._size);
 
         for(var i = 0; i < this._size; i++)
@@ -37,10 +38,10 @@ export class MinimalVertexCover extends Problem {
     evaluateMaximizationCost(bitArrayConfig) {
         if (bitArrayConfig === null) return -1;
 
-        var coveredArray = new Array(bitArrayConfig.getSize()).fill(0);
         const bitArray = bitArrayConfig.getBitArray();
         var numberOfCovered = 0;
         var currentPrice = 0;
+        var edgeArray = this._array.map(x => x.slice());
 
         for(var i = 0; i < bitArray.length; i++)
         {
@@ -48,15 +49,17 @@ export class MinimalVertexCover extends Problem {
                 currentPrice++;
                 for(var j = 0; j < this._size; j++)
                 {
-                    if(this._array[i][j] && coveredArray[j] !== 1) {
-                        coveredArray[j] = 1;
+                    if(edgeArray[i][j] === 1) {
                         numberOfCovered++;
+                        // edge covered
+                        edgeArray[i][j] = 2;
+                        edgeArray[j][i] = 2;
                     }
                 }
             }
         }
 
-        return ((this._size - numberOfCovered) === 0 ? this._size - currentPrice :  numberOfCovered - this._size);
+        return ((this._noEdges - numberOfCovered) === 0 ? this._size - currentPrice :  numberOfCovered - this._noEdges);
     }
 
     transformMaximizationToRealCost(maxCost) {

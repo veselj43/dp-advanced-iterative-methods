@@ -46,7 +46,7 @@ export default class BufferedReply {
     }
 
     /**
-     * Add new message and calls flush function
+     * Add new message and calls flush function if its time to flush
      * @param {object} content content of the added message
      */
     addMessageWithAutoFlush(content) {

@@ -1,6 +1,6 @@
 import { SAT } from '../computing/problems/SAT';
 import { Knapsack } from '../computing/problems/Knapsack';
-import { MinimalVertexCover } from '../computing/problems/MinimalVertexCover';
+import { MinimumVertexCover } from '../computing/problems/MinimumVertexCover';
 import { TravellingSalesman } from '../computing/problems/TravellingSalesman';
 
 import { TabuSolver } from '../computing/methods/Tabu';
@@ -12,7 +12,7 @@ export function getProblemClassFromId(id) {
     if (id === 0) return SAT;
     else if (id === 1) return TravellingSalesman;
     else if (id === 2) return Knapsack;
-    else if (id === 3) return MinimalVertexCover;
+    else if (id === 3) return MinimumVertexCover;
     else if (id === 4) return EuclideanTSP;
 
     return null;

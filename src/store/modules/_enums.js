@@ -36,7 +36,7 @@ export const problems = [
         }
     }, {
         id: 3,
-        text: "Minimal vertex cover",
+        text: "Minimum vertex cover",
         info: {
             goal: "min",
             description: "Minimize number of vertices"

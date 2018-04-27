@@ -60,7 +60,7 @@ import { WorkerManager } from '@/computing/WorkerManager.js';
 import IterativeMethodWorker from '@/computing/IterativeMethodWorker.js';
 import { getDbFileContent } from "@/services/fileReader";
 import * as Annealing from '@/computing/methods/Annealing';
-import * as Vertex from '@/computing/problems/MinimalVertexCover';
+import * as Vertex from '@/computing/problems/MinimumVertexCover';
 import * as Salesman from '@/computing/problems/TravellingSalesman';
 import * as SAT from '@/computing/problems/SAT';
 import * as Knapsack from '@/computing/problems/Knapsack';

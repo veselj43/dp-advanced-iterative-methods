@@ -25,20 +25,19 @@ export default class VertexCoverGenerator {
         for(var i = 0; i < this.params.size; i++)
         {
             array[i] = new Array(this.params.size).fill(0);
-            array[i][i] = 1;
+            array[i][i] = 0;
         }
 
         while(noEdges !== this.params.noEdges)
         {
             for(var i = 0; i < this.params.size; i ++)
             {
-                for(var j = 0; j < this.params.size; j++)
+                for(var j = i + 1; j < this.params.size; j++)
                 {
-                    if(Math.round(Math.random()) && noEdges !== this.params.noEdges && !array[i][j]){
+                    if(Math.random() < (2/this.params.size) && noEdges !== this.params.noEdges && !array[i][j]){
                       array[i][j] = 1;
+                      array[j][i] = 1;
                       noEdges++;
-                      //for more variety
-                      break;
                     }
                 }
             }
