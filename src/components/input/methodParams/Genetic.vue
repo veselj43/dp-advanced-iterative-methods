@@ -57,7 +57,7 @@
                 <span class="form-tooltip" v-tooltip.right="'Defines how many individuals compete in single tournament. If number isn\'t integer sizes of tournaments varies based on decimal part.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                 <input class="form-control" type="number" min="1" step="0.25"
                        id="tournament-size" name="genetic-tournament-size" v-model="params.tournamentSize"
-                       data-vv-as="number of generations" v-validate.initial="{ required: true, min_value: 1, max_value: params.populationSize, regex: /^([0-9]*[.])?[0-9]+$/ }"
+                       data-vv-as="tournament size" v-validate.initial="{ required: true, min_value: 1, max_value: params.populationSize, regex: /^([0-9]*[.])?[0-9]+$/ }"
                 >
                 <span v-show="errors.has('genetic-tournament-size')" class="help-block">{{ errors.first('genetic-tournament-size') }}</span>
             </div>
