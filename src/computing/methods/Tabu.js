@@ -22,8 +22,8 @@ export class TabuSolver {
             nbh.push(i);
         }
         while (nbh.length > nbhSize) {
-            var randonIndex = Math.round(Math.random() * (nbh.length - 1));
-            nbh.splice(randonIndex, 1);
+            var randomIndex = Math.round(Math.random() * (nbh.length - 1));
+            nbh.splice(randomIndex, 1);
         }
         return nbh;
     }
@@ -71,7 +71,7 @@ export class TabuSolver {
             for (var i = 0; i < neighborhood.length; i++) {
                 this.counter++;
 
-                var sCandidate = state.getNeighbour(neighborhood.length[i]);
+                var sCandidate = state.getNeighbour(neighborhood[i]);
                 var sCandidateCost = this._getCost(sCandidate);
 
                 // check change for tabu and if it is tabu, check if we dont miss the best found state

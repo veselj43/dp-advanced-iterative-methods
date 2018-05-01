@@ -67,7 +67,7 @@ export class GeneticSolver {
         this.bestCost = 0;
         this.counter = 0;
 
-        this._workerInterface.reply('init', { numberOfIterations: noGenerations/*, maxFitness: this.problemInput.params.numberOfClausules*/ });
+        this._workerInterface.reply('init', { numberOfIterations: noGenerations/*, maxFitness: this.problemInput.params.numberOfClauses*/ });
 
         //init generation
         var generation = this._initGeneration(populationSize);

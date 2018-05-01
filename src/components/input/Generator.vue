@@ -16,15 +16,15 @@
                     <span v-show="errors.has('numberOfVariables')" class="help-block">{{ errors.first('numberOfVariables') }}</span>
                 </div>
 
-                <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfClausules')}">
-                    <label for="SATgenParam2">Number of clausules</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of clausules in the generated instance. WARNING!!! - generating clausules is random, so choosing number of clauseles close to maxim number of clausule will take a lot of time.'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                    <input type="number" class="form-control" id="SATgenParam2" v-model="generatorParams[0].noClausules" placeholder=""
-                    name="numberOfClausules"
-                    data-vv-as="number of clausules"
+                <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfClauses')}">
+                    <label for="SATgenParam2">Number of clauses</label>
+                    <span class="form-tooltip" v-tooltip.right="'Number of clauses in the generated instance. WARNING!!! - generating clauses is random, so choosing number of clauseles close to maxim number of clause will take a lot of time.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="SATgenParam2" v-model="generatorParams[0].noClauses" placeholder=""
+                    name="numberOfClauses"
+                    data-vv-as="number of clauses"
                     v-validate.initial="{ required: true, min_value: 1, max_value: Math.pow(3, +generatorParams[0].noVariables) - 1, regex: /^[0-9]+$/ }"
                     >
-                    <span v-show="errors.has('numberOfClausules')" class="help-block">{{ errors.first('numberOfClausules') }}</span>
+                    <span v-show="errors.has('numberOfClauses')" class="help-block">{{ errors.first('numberOfClauses') }}</span>
                 </div>
 
             </div>
@@ -243,7 +243,7 @@ export default {
             generatorParams: {
                 0: {
                     noVariables: 20,
-                    noClausules: 50
+                    noClauses: 50
                 },
                 1: {
                     type: "Hamiltonian",
@@ -360,7 +360,7 @@ export default {
 
         setInstanceName: function() {
           if(this.selectedProblemId === 0) {
-            this.instanceName =  "SAT" + this.generatorParams[0].noVariables + "_" + this.generatorParams[0].noClausules;
+            this.instanceName =  "SAT" + this.generatorParams[0].noVariables + "_" + this.generatorParams[0].noClauses;
           }
 
           else if (this.selectedProblemId === 1) {

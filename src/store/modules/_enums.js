@@ -91,7 +91,7 @@ export const methodParamsTitles = {
 export const problemParamsTitles = {
     0: {
         noVariables: "Variables",
-        noClausules: "Clausules"
+        noClauses: "Clauses"
     },
     1: {
         type: "Type",

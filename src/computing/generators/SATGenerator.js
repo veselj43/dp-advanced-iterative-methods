@@ -10,7 +10,7 @@ export default class SATGenerator {
   constructor (params) {
     this.params = params;
     this.params.noVariables = +this.params.noVariables;
-    this.params.noClausules = +this.params.noClausules;
+    this.params.noClauses = +this.params.noClauses;
   }
 
   /**
@@ -18,38 +18,38 @@ export default class SATGenerator {
    * @return {String} instance of SAT problem coded as String
    */
   generate () {
-    var generatedInstance = "p cnf " +  this.params.noVariables + " " + this.params.noClausules + '\n';
+    var generatedInstance = "p cnf " +  this.params.noVariables + " " + this.params.noClauses + '\n';
     var sign;
     var empty;
-    var numberOfClausules = 0;
-    var newClausule;
+    var numberOfClauses = 0;
+    var newClause;
 
-    var addedClausules = [];
+    var addedClauses = [];
 
-    while (numberOfClausules !== this.params.noClausules)
+    while (numberOfClauses !== this.params.noClauses)
     {
-      newClausule = "";
+      newClause = "";
       empty = true;
       for (var i = 0; i < this.params.noVariables; i++)
       {
         if(Math.random() < 1/(this.params.noVariables / 10)) {
           sign = Math.round(Math.random() * 2 - 1);
           if(sign < 0) {
-            newClausule += "-" + (i+1) + " ";
+            newClause += "-" + (i+1) + " ";
             empty = false;
           }
           else if(sign > 0) {
-            newClausule += (i+1) + " ";
+            newClause += (i+1) + " ";
             empty = false;
           }
         }
       }
       if(!empty) {
-        newClausule += "0" + '\n';
-        if(!addedClausules[newClausule]){
-          numberOfClausules++;
-          generatedInstance += newClausule;
-          addedClausules[newClausule] = 1;
+        newClause += "0" + '\n';
+        if(!addedClauses[newClause]){
+          numberOfClauses++;
+          generatedInstance += newClause;
+          addedClauses[newClause] = 1;
         }
       }
     }

@@ -1,33 +1,28 @@
 import { BitArray } from "./configurationTypes/BitArray";
-import { Problem, ProblemTypeEnum } from './Problem'
+import { Problem, ProblemTypeEnum } from './Problem';
 
 // common SAT input
-export class Literal {
+class Literal {
     constructor(name, i) {
         this.id = name; // int
-        this.inv = i;   // boolean "inversed"
+        this.inv = i;   // boolean "inverted"
     }
 }
 
-export class Clausule {
+class Clause {
     constructor(literalArray) {
         this.literals = literalArray.map(literal => {
-            var id = parseInt(literal);
+            let inv = (literal < 0);
+            let id = inv ? -literal : +literal;
 
-            var inv = false;
-            if (id < 0) {
-                id *= -1;
-                inv = true;
-            }
-
-            return new Literal(id-1, inv);
+            return new Literal(id - 1, inv);
         });
     }
 
     check(bitArray) {
-        for (var literal in this.literals) {
-            if (bitArray[this.literals[literal].id] && !this.literals[literal].inv) return true;
-            if (!bitArray[this.literals[literal].id] && this.literals[literal].inv) return true;
+        for (let literal of this.literals) {
+            if (bitArray[literal.id] && !literal.inv) return true;
+            if (!bitArray[literal.id] && literal.inv) return true;
         }
         return false;
     }
@@ -36,12 +31,12 @@ export class Clausule {
 export class SAT extends Problem {
     constructor(data) {
         super();
-        this._clausules = [];
-        var dataSet = data
+        this._clauses = [];
+        let dataSet = data
             .split('\n')
             .filter(row => row.trim()[0] !== 'c');
 
-        var params = dataSet[0]
+        let params = dataSet[0]
             .split(/(\s+)/)
             .filter(x => x.trim().length > 0)
             .splice(2, 2)
@@ -49,7 +44,7 @@ export class SAT extends Problem {
 
         this.params = {
             numberOfVariables: params[0],
-            numberOfClausules: params[1]
+            numberOfClauses: params[1]
         }
 
         dataSet = dataSet
@@ -65,17 +60,15 @@ export class SAT extends Problem {
                 return row;
             });
 
-        for (var row in dataSet) {
-            this._clausules.push(new Clausule(dataSet[row]));
+        for (let row in dataSet) {
+            this._clauses.push(new Clause(dataSet[row]));
         };
     }
 
     _check(bitArray) {
-        var satisfied = 0;
-        this._clausules.forEach(clausule => {
-            if (clausule.check(bitArray)) satisfied++;
-        });
-        return satisfied;
+        return this._clauses.reduce((sum, clause) => {
+            return (clause.check(bitArray)) ? sum + 1 : sum;
+        }, 0);
     }
 
     /**
@@ -87,10 +80,7 @@ export class SAT extends Problem {
         if (bitArrayConfig === null) return -1;
 
         const bitArray = bitArrayConfig.getBitArray();
-
-        var trueClauses = this._check(bitArray);
-        if (trueClauses < this.params.numberOfClausules) return trueClauses;
-        return this.params.numberOfClausules;// + getWeight(configuration);
+        return this._check(bitArray);
     }
 
     transformMaximizationToRealCost(maxCost) {
@@ -108,15 +98,6 @@ export class SAT extends Problem {
             random: random
         });
     }
-
-    // /**
-    //  * Return price function value that will be displayed in graph
-    //  * @param  {class} bitArrayConfig config for which we want the value for the graph
-    //  * @return {int}  the returned value
-    //  */
-    // getProblemCost(bitArrayConfig){
-    //   return this.getFitness(bitArrayConfig);
-    // }
 
     /**
      * Returns the result of the config, in this case the config array
@@ -137,48 +118,48 @@ export class SAT extends Problem {
      * @return {boolean} is instance invalid
      */
     static isInvalidInstance(instanceContent) {
-        var rows = instanceContent.split('\n').filter(row => row.trim()[0] !== 'c');
+        let rows = instanceContent.split('\n').filter(row => row.trim()[0] !== 'c');
 
-        var [noVariables, noClausules] = rows[0]
+        let [noVariables, noClauses] = rows[0]
             .split(/(\s+)/)
             .filter(x => x.trim().length > 0)
             .splice(2, 2)
             .map(param => +param);
 
-        if (isNaN(noVariables) || isNaN(noClausules)) return { text: "Invalid number of parameters" };
+        if (isNaN(noVariables) || isNaN(noClauses)) return { text: "Invalid number of parameters" };
 
         if(noVariables < 0) return { text: "Number of variables cant be negative" };
-        if(noClausules < 0) return { text: "Number of clausules cant be negative" };
+        if(noClauses < 0) return { text: "Number of clauses cant be negative" };
 
-        if(noClausules > Math.pow(3, noVariables) - 1) return { text: "Number of clausules is at max: " + Math.pow(3, noVariables) - 1 };
+        if(noClauses > Math.pow(3, noVariables) - 1) return { text: "Number of clauses is at max: " + Math.pow(3, noVariables) - 1 };
 
         rows = rows.slice(1).filter(row => !!row.trim());
 
-        var clausulesEndIndex = rows.findIndex(row => row.indexOf("%") !== -1);
-        if (clausulesEndIndex === -1) clausulesEndIndex = rows.length;
+        let clausesEndIndex = rows.findIndex(row => row.indexOf("%") !== -1);
+        if (clausesEndIndex === -1) clausesEndIndex = rows.length;
 
         instanceContent = rows
-            .slice(0, clausulesEndIndex)
+            .slice(0, clausesEndIndex)
             .join('\n')
             .split(/\s+/);
 
-        if (noClausules !== clausulesEndIndex) return { text: "Number of clausules doesnt match the actual number of clausules" };
+        if (noClauses !== clausesEndIndex) return { text: "Number of clauses doesn't match the actual number of clauses" };
 
-        var clausules = [];
-        var clausule = "";
+        let clauses = [];
+        let clause = "";
 
         if (instanceContent.some(isNaN)) {
             // if some elements returns true when isNaN function applied on it
             return { text: `Must contain only numbers, except for "p cnf" statement and comments` };
         }
 
-        for(var i = 0; i < instanceContent.length; i++) {
-            if(noVariables < +instanceContent[i] || -noVariables > +instanceContent[i]) return { text: `Invalid variable in clasule:  "${+instanceContent[i]}"` };
-            if(+instanceContent[i] !== 0) clausule += instanceContent[i] + " ";
+        for(let i = 0; i < instanceContent.length; i++) {
+            if(noVariables < +instanceContent[i] || -noVariables > +instanceContent[i]) return { text: `Invalid variable in clause:  "${+instanceContent[i]}"` };
+            if(+instanceContent[i] !== 0) clause += instanceContent[i] + " ";
             else {
-                if(clausules[clausule]) return { text: `Multiple same clausules: "${clausule} 0"`};
-                clausules[clausule] = 1;
-                clausule = "";
+                if(clauses[clause]) return { text: `Multiple same clauses: "${clause} 0"`};
+                clauses[clause] = 1;
+                clause = "";
             }
         }
 
@@ -191,19 +172,19 @@ export class SAT extends Problem {
      * @return {object} instance parameters
      */
     static resolveInstanceParams(instanceContent) {
-        var dataSet = instanceContent
+        let dataSet = instanceContent
             .split('\n')
             .filter(row => row.trim()[0] !== 'c');
 
-        var params = dataSet[0]
+        let params = dataSet[0]
             .split(/(\s+)/)
             .filter(x => x.trim().length > 0)
             .splice(2, 2)
-            .map(param => parseInt(param));
+            .map(param => +param);
 
         return {
             noVariables: params[0],
-            noClausules: params[1]
+            noClauses: params[1]
         }
     }
 }
