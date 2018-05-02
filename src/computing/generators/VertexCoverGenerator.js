@@ -34,7 +34,7 @@ export default class VertexCoverGenerator {
             {
                 for(var j = i + 1; j < this.params.size; j++)
                 {
-                    if(Math.random() < (2/this.params.size) && noEdges !== this.params.noEdges && !array[i][j]){
+                    if(Math.random() < (1/this.params.size) && noEdges !== this.params.noEdges && !array[i][j]){
                       array[i][j] = 1;
                       array[j][i] = 1;
                       noEdges++;
