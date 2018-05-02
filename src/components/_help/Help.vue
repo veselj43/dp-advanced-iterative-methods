@@ -133,7 +133,7 @@
 
             <a href="#Tabu"></a>
             <h2>Tabu</h2>
-            
+
 
               <a href="#Problems"></a>
               <h2>Problems</h2>
@@ -156,14 +156,14 @@
                   <p>Instance format is the same as in MI-PAA. Just remove the instance index because our application is solving one instance a time, so the index is not needed.</p>
                 <a href="#SAT"></a>
                 <h3>SAT</h3>
-                <p>Sat problem is basically finding an interpretation of variables that satisfies Boolean formula. In our interpretation its about finding interpretation that satisfies as much clausules as possible. The given boolean formula is inputed in CNF format.</p>
+                <p>Sat problem is basically finding an interpretation of variables that satisfies Boolean formula. In our interpretation its about finding interpretation that satisfies as much clauses as possible. The given boolean formula is inputed in CNF format.</p>
                   <h4>Price function</h4>
-                  <p>Price function is the number of satisfied clausules for the given configuration</p>
+                  <p>Price function is the number of satisfied clauses for the given configuration</p>
 
                   <h4>Generator</h4>
                   <p>The generator for SAT is pretty simple to use without any tricky parameters.</p>
-                  <p>Only problem is generating number of clausules which is close to maximum number of clausules that is |n^3| - 1. Because the generating is random so the algorithm has to "hit" the last missing clausules.</p>
-                  <p>We are not generating 3SAT so every clausules can consist of random number of literals/variables. But being completely random would cause the instances to be too easy, so the number of literals is 5 on average. So if the problem has low number of variables it can still be pretty easy so take that in mind when generating instances.</p>
+                  <p>Only problem is generating number of clauses which is close to maximum number of clauses that is |n^3| - 1. Because the generating is random so the algorithm has to "hit" the last missing clauses.</p>
+                  <p>We are not generating 3SAT so every clauses can consist of random number of literals/variables. But being completely random would cause the instances to be too easy, so the number of literals is 5 on average. So if the problem has low number of variables it can still be pretty easy so take that in mind when generating instances.</p>
                   <h4>Instance format</h4>
                   <p>Format used for the instances is the same as in MI-PAA, which is DIMACS CNF, so you should have no problem solving instances from MI-PAA.</p>
                 <a href="#TSP"></a>
