@@ -6,7 +6,7 @@
             </td>
             <td>
                 <span v-if="item.color" :style="'background-color: ' + item.color" class="chart-color-preview">&nbsp;</span>
-                <span>{{item.instance}}</span>
+                <span>{{itemTitle}}</span>
             </td>
             <td class="text-right">{{item.result.cost}}</td>
             <td class="text-right">{{item.result.counter | numberToFormatedString}}</td>
@@ -33,7 +33,7 @@ import { mapGetters } from 'vuex';
 import {SelectionEnum} from "../../../../computing/methods/genetic/Selection";
 
 export default {
-    props: ['item'],
+    props: ['id', 'item'],
 
     data() {
         return {
@@ -46,6 +46,11 @@ export default {
             'selectedMethodId',
             'methodParamsTitles'
         ]),
+
+        itemTitle() {
+            return `[${this.id}] ${this.item.instance}`;
+        },
+
         itemParams() {
             if (this.selectedMethodId === 'genetic') {
                 let params = {...this.item.params}; // one way to copy an object

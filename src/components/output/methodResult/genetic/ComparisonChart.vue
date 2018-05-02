@@ -93,11 +93,11 @@ export default {
         },
 
         seriesAccessor(context) {
-            return (d) => context.labels[d.key[0]] + " (" + d.key[0] + ") " + " (" + d.key[2] + ")";
+            return (d) => `[${d.key[0]}] ${context.labels[d.key[0]]} (${d.key[2]})`;
         },
 
         idFromSeriesLegend(legend) {
-            return +legend.match(/\([0-9]+\)/g).reverse()[0].slice(1, -1);
+            return +legend.match(/^\[[0-9]+\]/)[0].slice(1, -1);
         },
 
         beforeInitRender(chart) {
@@ -152,11 +152,11 @@ export default {
 
 <style scoped>
     ul#horizontal-list {
+        margin-bottom: 0;
         list-style: none;
     }
     ul#horizontal-list li {
-        /*display: inline;*/
-        float: left;
+        display: inline-block;
         margin-right: 1.5em;
     }
 </style>

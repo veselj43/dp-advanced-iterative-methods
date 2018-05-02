@@ -70,7 +70,7 @@ export default {
         },
 
         itemTitle() {
-            return `${this.item.instance} (${this.item._id})`;
+            return `[${this.item._id}] ${this.item.instance}`;
         },
 
         ...mapGetters([

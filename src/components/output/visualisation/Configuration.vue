@@ -50,8 +50,8 @@ export default {
                 margin: 0;
                 padding: .1em .4em;
                 text-align: center;
-                font-weight: bold;
-                border: #333 1px solid;
+                // font-weight: bold;
+                border: #ccc 1px solid;
 
                 &.instanceName {
                     text-align: left;

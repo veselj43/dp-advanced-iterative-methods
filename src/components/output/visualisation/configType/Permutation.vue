@@ -1,5 +1,6 @@
 <template>
     <div class="config-permutation">
+        <h4>Result configuration <small>Path</small></h4>
         <table v-if="comparingResultsItems" class="table-hover">
             <thead>
                 <tr>
@@ -13,7 +14,7 @@
                 <tr v-for="(item, itemIndex) in comparingResultsItems" :key="itemIndex">
                     <td class="instanceName">
                         <span v-if="item.color" :style="'background-color: ' + item.color" class="chart-color-preview">&nbsp;</span>
-                        <span>{{item.instance}}</span>
+                        <span>[{{itemIndex}}] {{item.instance}}</span>
                     </td>
                     <td v-for="(value, configIndex) in item.result.config" :class="{true: value, false: !value}" :key="configIndex">
                         {{value}}

@@ -20,6 +20,7 @@
 
             <comparison-chart></comparison-chart>
 
+            <h4>End results</h4>
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -33,6 +34,7 @@
                     <comparison-table-item
                         v-for="(item, index) in comparingResultsInfo.items"
                         :key="index"
+                        :id="index"
                         :item="item">
                     </comparison-table-item>
             </table>

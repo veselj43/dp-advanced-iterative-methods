@@ -21,11 +21,11 @@ export default {
         },
 
         seriesAccessor(context) {
-            return (d) => context.labels[d.key[0]] + " (" + d.key[0] + ")";
+            return (d) => `[${d.key[0]}] ${context.labels[d.key[0]]}`;
         },
 
         idFromSeriesLegend(legend) {
-            return +legend.match(/\([0-9]+\)$/)[0].slice(1, -1);
+            return +legend.match(/^\[[0-9]+\]/)[0].slice(1, -1);
         },
 
         beforeInitRender(chart) {

@@ -3,40 +3,41 @@
         <div class="help-panel-left">
             <ul class="nav nav-pills nav-stacked">
                 <li>
-                    <router-link to="/">
+                    <router-link to="/" active-class="active">
                         <span class="glyphicon glyphicon-chevron-left"></span>
                         Back to application
                     </router-link>
                 </li>
                 <li>&nbsp;</li>
-                <li>
-                    <router-link to="#SA">SA</router-link>
-                </li>
-                <li>
-                    <router-link to="#GA">GA</router-link>
-                </li>
-                <li>
-                    <router-link to="#Tabu">Tabu</router-link>
-                </li>
-                <li>
-                    <router-link to="#Problems">Problems
-                      <li>
-                          <router-link to="#Knapsack">Knapsack</router-link>
-                      </li>
-                      <li>
-                          <router-link to="#SAT">SAT</router-link>
-                      </li>
-                      <li>
-                          <router-link to="#TSP">Travelling salesman</router-link>
-                      </li>
-                        <li>
-                        <router-link to="#ETSP">Euclidean travelling salesman</router-link>
-                        </li>
-                      <li>
-                          <router-link to="#MVC">Minimal vertex cover</router-link>
-                      </li>
+                <router-link tag="li" to="#SA" active-class="active">
+                    <a>Simulated Annealing</a>
                 </router-link>
-                </li>
+                <router-link tag="li" to="#GA" active-class="active">
+                    <a>Genetic Algorithm</a>
+                </router-link>
+                <router-link tag="li" to="#Tabu" active-class="active">
+                    <a>Tabu Search</a>
+                </router-link>
+                <router-link tag="li" to="#Problems" active-class="active">
+                    <a>Problems</a>
+                    <ul>
+                        <router-link tag="li" to="#Knapsack" active-class="active">
+                            <a>Knapsack</a>
+                        </router-link>
+                        <router-link tag="li" to="#SAT" active-class="active">
+                            <a>SAT</a>
+                        </router-link>
+                        <router-link tag="li" to="#TSP" active-class="active">
+                            <a>Travelling salesman</a>
+                        </router-link>
+                        <router-link tag="li" to="#ETSP" active-class="active">
+                            <a>Euclidean travelling salesman</a>
+                        </router-link>
+                        <router-link tag="li" to="#MVC" active-class="active">
+                            <a>Minimal vertex cover</a>
+                        </router-link>
+                    </ul>
+                </router-link>
             </ul>
 
         </div>
@@ -132,13 +133,7 @@
 
             <a href="#Tabu"></a>
             <h2>Tabu</h2>
-                <p>Nullam rhoncus aliquam metus. Etiam neque. Fusce aliquam vestibulum ipsum. Nam quis nulla. Duis viverra diam non justo. Pellentesque sapien. Morbi imperdiet, mauris ac auctor dictum, nisl ligula egestas nulla, et sollicitudin sem purus in lacus. Nulla est. In laoreet, magna id viverra tincidunt, sem odio bibendum justo, vel imperdiet sapien wisi sed libero. Nunc tincidunt ante vitae massa. Nullam sit amet magna in magna gravida vehicula. Mauris elementum mauris vitae tortor. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Fusce nibh. Pellentesque arcu.</p>
-
-                <p>Mauris elementum mauris vitae tortor. Nullam sapien sem, ornare ac, nonummy non, lobortis a enim. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Donec iaculis gravida nulla. Et harum quidem rerum facilis est et expedita distinctio. Proin in tellus sit amet nibh dignissim sagittis. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Vivamus luctus egestas leo. Morbi imperdiet, mauris ac auctor dictum, nisl ligula egestas nulla, et sollicitudin sem purus in lacus. Aenean fermentum risus id tortor. Donec ipsum massa, ullamcorper in, auctor et, scelerisque sed, est. Fusce consectetuer risus a nunc.</p>
-
-                <p>Nullam dapibus fermentum ipsum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Cras pede libero, dapibus nec, pretium sit amet, tempor quis. Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Proin in tellus sit amet nibh dignissim sagittis. Etiam egestas wisi a erat. Integer lacinia. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Fusce suscipit libero eget elit. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. Maecenas libero. Nullam eget nisl. Aliquam erat volutpat. Donec iaculis gravida nulla. Duis pulvinar.</p>
-
-                <p>Nunc tincidunt ante vitae massa. Mauris tincidunt sem sed arcu. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Fusce aliquam vestibulum ipsum. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Nullam at arcu a est sollicitudin euismod. Phasellus et lorem id felis nonummy placerat. Sed vel lectus. Donec odio tempus molestie, porttitor ut, iaculis quis, sem. Cras elementum. Etiam neque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam at arcu a est sollicitudin euismod.</p>
+            
 
               <a href="#Problems"></a>
               <h2>Problems</h2>
@@ -232,8 +227,10 @@
 <style lang="scss" scoped>
     $left-panel-width: 250px;
 
-    .nav-pills>li>a {
-        border-radius: unset;
+    .nav-pills {
+        &>li>a {
+            border-radius: unset;
+        }
     }
 
     .help-panel-left {
