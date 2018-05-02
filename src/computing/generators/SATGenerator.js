@@ -11,6 +11,7 @@ export default class SATGenerator {
     this.params = params;
     this.params.noVariables = +this.params.noVariables;
     this.params.noClauses = +this.params.noClauses;
+    this.params.noLiterals = +this.params.noLiterals;
   }
 
   /**
@@ -32,14 +33,14 @@ export default class SATGenerator {
       empty = true;
       for (var i = 0; i < this.params.noVariables; i++)
       {
-        if(Math.random() < 1/(this.params.noVariables / 10)) {
-          sign = Math.round(Math.random() * 2 - 1);
-          if(sign < 0) {
-            newClause += "-" + (i+1) + " ";
+        if(Math.random() < 1/(this.params.noVariables / this.params.noLiterals)) {
+          sign = Math.round(Math.random());
+          if(sign) {
+            newClause += (i+1) + " ";
             empty = false;
           }
-          else if(sign > 0) {
-            newClause += (i+1) + " ";
+          else {
+            newClause += "-" + (i+1) + " ";
             empty = false;
           }
         }

@@ -91,7 +91,8 @@ export const methodParamsTitles = {
 export const problemParamsTitles = {
     0: {
         noVariables: "Variables",
-        noClauses: "Clauses"
+        noClauses: "Clauses",
+        noLiterals: "Average number of literals in clauses"
     },
     1: {
         type: "Type",
