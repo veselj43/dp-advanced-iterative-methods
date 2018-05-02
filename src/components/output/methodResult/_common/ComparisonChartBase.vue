@@ -84,7 +84,7 @@ It should contain definition of following seriesChart methods:
         }
 
         window.addEventListener("resize", this.windowResize);
-        
+
         this.multipleLineChart = dc.seriesChart(this.options.selector);
 
         this.updateElementWidth();
@@ -137,7 +137,7 @@ It should contain definition of following seriesChart methods:
 
             return this.processDataMapping(data, id);
         },
-        
+
         initMultipleLineChart(chart) {
             let chartOptions = this.options;
             this.ndx = crossfilter([]);
@@ -173,7 +173,7 @@ It should contain definition of following seriesChart methods:
             let referencedContainer = chart.svg();
 
             if (referencedContainer[0][0]) {
-                let xHoverLine = 
+                let xHoverLine =
                     referencedContainer[0][0].getElementsByClassName(context.xHoverLineOptions.class)[0] ||
                     referencedContainer[0][0].firstChild.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'line'));
 
@@ -234,6 +234,7 @@ It should contain definition of following seriesChart methods:
 
         htmlCoordsBuildItem(color, valueObj) {
             return `<tr style="color: ${color}">
+                <td>Value of optimization criterion</td>
                 <td class="text-right">${valueObj.value}</td>
             </tr>`;
         },
@@ -270,7 +271,7 @@ It should contain definition of following seriesChart methods:
 
             // dataset replaced with just computed files and the length is the same
             remove = remove || (
-                (this.lastActiveCount === 1 && newActiveCount === 1) && 
+                (this.lastActiveCount === 1 && newActiveCount === 1) &&
                 (Object.keys(newValue)[0] !== Object.keys(oldValue)[0])
             );
 

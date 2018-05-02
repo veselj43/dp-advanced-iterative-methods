@@ -213,6 +213,8 @@
                   <h4>Price function</h4>
                   <p>Price function is the number of vertices in the selected set. If not all edges are covered the function instead returns -number of not covered edges.</p>
 
+                  <p>So at the start the algorithm tries to minimize the amount of not covered edges, and then minimize the amount of selected vertices.</p>
+
                   <h4>Generator</h4>
                   <p>The generator is pretty simple. Allowing to choose number of vertices and edges</p>
                   <h4>Instance format</h4>
