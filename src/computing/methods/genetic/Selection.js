@@ -2,8 +2,8 @@ import {getRandomFloat, getRandomInt} from "./Random";
 
 export const SelectionEnum = {
     TOURNAMENT: "Tournament",
-    ROULETTE_RANK: "Roulette-rank",
-    ROULETTE_LINEAR: "Roulette-linear"
+    ROULETTE_RANK: "Roulette with ranking",
+    ROULETTE_LINEAR: "Roulette with linear scaling"
 }
 
 

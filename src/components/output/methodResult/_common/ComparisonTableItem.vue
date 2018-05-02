@@ -17,7 +17,7 @@
             <td colspan="4">
                 <table class="table-condensed">
                     <tbody>
-                        <tr v-for="(param, key) in item.params" :key="key">
+                        <tr v-for="(param, key) in itemParams" :key="key">
                             <td>{{methodParamsTitles[selectedMethodId][key]}}</td>
                             <td class="text-right"><strong>{{param}}</strong></td>
                         </tr>
@@ -30,6 +30,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import {SelectionEnum} from "../../../../computing/methods/genetic/Selection";
 
 export default {
     props: ['item'],
@@ -44,7 +45,22 @@ export default {
         ...mapGetters([
             'selectedMethodId',
             'methodParamsTitles'
-        ])
+        ]),
+        itemParams() {
+            if (this.selectedMethodId === 'genetic') {
+                let params = {...this.item.params}; // one way to copy an object
+                if (params.selectionType !== SelectionEnum.TOURNAMENT) {
+                    delete params.tournamentSize;
+                }
+                if (params.selectionType !== SelectionEnum.ROULETTE_LINEAR && params.selectionType !== SelectionEnum.ROULETTE_RANK) {
+                    delete params.scaleMin;
+                    delete params.scaleMax;
+                }
+
+                return params;
+            }
+            return this.item.params;
+        },
     },
 
     methods: {
