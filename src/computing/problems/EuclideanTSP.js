@@ -88,10 +88,32 @@ export class EuclideanTSP extends Problem {
     }
 
     static resolveInstanceParams(instanceContent) {
-        instanceContent = instanceContent.split(/\s+/);
+        var dataSet = instanceContent.split('\n');
+        var noCities = + dataSet[0].split(/\s+/)[0];
+        var xMin = null;
+        var xMax = null;
+        var yMin = null;
+        var yMax = null;
 
+        for (var i = 0; i < noCities; i++) {
+            var coords = dataSet[1+i].split(/\s+/);
+            if (xMin === null || xMin > +coords[0]) {
+                xMin = +coords[0];
+            }
+            if (xMax === null || xMax < +coords[0]) {
+                xMax = +coords[0];
+            }
+            if (yMin === null || yMin > +coords[1]) {
+                yMin = +coords[1];
+            }
+            if (yMax === null || yMax < +coords[1]) {
+                yMax = +coords[1];
+            }
+        }
         return {
-            noCities: +instanceContent[0],
+            noCities: noCities,
+            x: xMax-xMin,
+            y: yMax-yMin
         }
     }
 
