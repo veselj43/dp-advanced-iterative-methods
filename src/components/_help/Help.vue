@@ -65,14 +65,69 @@
 
                 <p>More about the exact method can be found in work Computing the Initial Temperature of Simulated Annealing by Ben Ameur</p>
             <a href="#GA"></a>
-            <h2>GA</h2>
-                <p>Suspendisse sagittis ultrices augue. Maecenas sollicitudin. Nulla non arcu lacinia neque faucibus fringilla. Aliquam id dolor. Fusce tellus odio, dapibus id fermentum quis, suscipit id erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Nullam eget nisl. Donec iaculis gravida nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. In enim a arcu imperdiet malesuada. Proin mattis lacinia justo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nulla turpis magna, cursus sit amet, suscipit a, interdum id, felis. Integer malesuada. Praesent dapibus.</p>
+            <h2>Genetic algorithm</h2>
+                <p>The genetic algorithm is a method for solving both constrained and unconstrained optimization problems that is based on natural selection, the process that drives biological evolution. The genetic algorithm repeatedly modifies a population of individual solutions. At each step, the genetic algorithm selects individuals at random from the current population to be parents and uses them to produce the children for the next generation. Over successive generations, the population "evolves" toward an optimal solution. You can apply the genetic algorithm to solve a variety of optimization problems that are not well suited for standard optimization algorithms, including problems in which the objective function is discontinuous, nondifferentiable, stochastic, or highly nonlinear.</p>
+            <p>This GA starts with <b>population</b> of given <b>size</b>. Then computes given <b>number of generations</b> and stops and returns best found solution.</p>
+                <ol>
+                    <li>In selection phase potential parents are selected by desired <b>selection type</b>. Number of potential parents is same as population size without elite individuals.</li>
+                    <li>Each potential parent decides if he goes into crossover based on <b>crossover probability</b>.</li>
+                    <li>Then parent waits for its mate. If mate is found two parents produce two offspring based on <b>crossover type</b>.</li>
+                    <li>If no mate is found or individual didn't go into crossover individual is just copied to new generation.</li>
+                    <li>All individuals in new generation goes into mutation where <b>mutation rate</b> defines how much are they going to be changed.</li>
+                    <li><b>Elite individuals</b> from old generation are added to new generation without mutation. So the new generation is of same size as the old one.</li>
+                </ol>
+            <h3>Selection</h3>
+            <h4>Tournament</h4>
+            <ul>
+                <li>Randomly choose several (<em>k</em>) individuals and take the best one.</li>
+                <li>Repeat, until the whole new population is generated.</li>
+                <li>The selection pressure can be freely adjusted by setting <em>k</em>. If <em>k</em> is high, weak individuals have a smaller chance to be selected for reproduction.</li>
+            </ul>
+            <h4>Roulette wheel</h4>
+            <ul>
+                <li>The better the individuals are, the higher chance to be selected they have.</li>
+                <li>Roulette wheel – all individuals in the population are placed on the wheel.</li>
+                <li>The size of the sections in the roulette wheel is proportional to values of the fitness function of every individual - the bigger the value is, the larger the section is.</li>
+            </ul>
+            <h4>Ranking</h4>
+            GA uses rank instead of fitness. Individuals are sorted by fitness. Each individual gets rank according to this order. Best individual gets highest rank. This implementation uses ranking in combination with linear scaling.
 
-                <p>Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Maecenas fermentum, sem in pharetra pellentesque, velit turpis volutpat ante, in pharetra metus odio a lectus. Maecenas libero. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Nulla pulvinar eleifend sem. Suspendisse sagittis ultrices augue. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Nullam eget nisl. Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Nullam sit amet magna in magna gravida vehicula. Suspendisse sagittis ultrices augue.</p>
+            <h4>Linear scaling</h4>
+            <p>
+            Linear scaling fits the fitness values into a defined range using this formula: <em>f' = scale_min + (f - f_min) &times; ((scale_max - scale_min) &divide; (f_max - f_min))</em>.
+            Where <em>f</em> is old value, <em>f'</em> is new value, <em>f_min</em> is minimal fitness, <em>f_max</em> is maximal fitness, <em>scale_min</em> is desired minimum and <em>scale_max</em> is desired maximum.
+            New fitness is linearly proportional to the original one.
+            </p>
+            <h3>Crossover</h3>
+            <h4>Binary crossover</h4>
+            <h5>One-point</h5>
+            <p>Individuals are split at one point and recombined.</p>
+            <img src="static/images/cross_one_before.png" alt="One-point crossover before" width="40%">
+            <img src="static/images/cross_one_after.png" alt="One-point crossover after" width="40%">
+            <h5>Two-point</h5>
+            <p>Individuals are split at two points and recombined.</p>
+            <img src="static/images/cross_two_before.png" alt="Two-point crossover before" width="40%">
+            <img src="static/images/cross_two_after.png" alt="Two-point crossover after" width="40%">
+            <h5>Uniform-point</h5>
+            <p>Each bit of parent goes into first or second offspring with equal probability. We use random binary vector to indicate which genes are going to be swapped (1 in vector).</p>
+            <img src="static/images/cross_uniform_before.png" alt="Uniform crossover before" width="40%">
+            <img src="static/images/cross_uniform_after.png" alt="Uniform crossover after" width="40%">
 
-                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. In enim a arcu imperdiet malesuada. Cras elementum. Suspendisse sagittis ultrices augue. Donec iaculis gravida nulla. Vestibulum erat nulla, ullamcorper nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Curabitur sagittis hendrerit ante. Aenean fermentum risus id tortor. Nulla accumsan, elit sit amet varius semper, nulla mauris mollis quam, tempor suscipit diam nulla vel leo. Praesent vitae arcu tempor neque lacinia pretium.</p>
-
-                <p>Vestibulum fermentum tortor id mi. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? Curabitur ligula sapien, pulvinar a vestibulum quis, facilisis vel sapien. Praesent vitae arcu tempor neque lacinia pretium. Cras elementum. Donec iaculis gravida nulla. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Integer in sapien. Maecenas aliquet accumsan leo. Fusce tellus odio, dapibus id fermentum quis, suscipit id erat. Sed vel lectus. Donec odio tempus molestie, porttitor ut, iaculis quis, sem. Nullam rhoncus aliquam metus. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Aliquam erat volutpat.</p>
+            <h4>Permutation crossover</h4>
+            <h5>Order</h5>
+            <p>Individual is copied to random point then it starts copying values from second parent if possible to preserve permutation.</p>
+            <img src="static/images/cross_order_before.png" alt="Order crossover before" width="40%">
+            <img src="static/images/cross_order_after.png" alt="Order crossover after" width="40%">
+            <h5>Partially matched</h5>
+            <p>Two random points designates section where values on corresponding positions are swapped.</p>
+            <img src="static/images/cross_pmx_before.png" alt="Partially matched crossover before" width="40%">
+            <img src="static/images/cross_pmx_map.png" alt="Partially matched crossover map" width="15%">
+            <img src="static/images/cross_pmx_after0.png" alt="Partially matched crossover after" width="40%">
+            <h5>Cycle</h5>
+            <p>Cycle starts at random point in first parent. Next position of cycle is where gene has same value as value at corresponding position in other parent.
+                Continue until the cycle is closed. Leave the cycle how it is and swap all other values between 2 parents.</p>
+            <img src="static/images/cross_cycle_before.png" alt="Cycle crossover before" width="40%">
+            <img src="static/images/cross_cycle_after.png" alt="Cycle crossover after" width="40%">
 
             <a href="#Tabu"></a>
             <h2>Tabu</h2>
