@@ -116,8 +116,9 @@
             <h4>Permutation crossover</h4>
             <h5>Order</h5>
             <p>Individual is copied to random point then it starts copying values from second parent if possible to preserve permutation.</p>
-            <img src="static/images/cross_order_before.png" alt="Order crossover before" width="40%">
-            <img src="static/images/cross_order_after.png" alt="Order crossover after" width="40%">
+            <img src="static/images/cross_order_before.png" alt="Order crossover before" width="30%">
+            <img src="static/images/cross_order_inter.png" alt="Order crossover in progress" width="35%">
+            <img src="static/images/cross_order_after.png" alt="Order crossover after" width="30%">
             <h5>Partially matched</h5>
             <p>Two random points designates section where values on corresponding positions are swapped.</p>
             <img src="static/images/cross_pmx_before.png" alt="Partially matched crossover before" width="40%">
