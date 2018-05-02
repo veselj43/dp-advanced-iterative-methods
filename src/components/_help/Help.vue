@@ -58,6 +58,12 @@
 
                 <p>Simulated annealing is typically used in discrete, but very large, configuration spaces, such as the set of possible orders of cities in the Traveling Salesman problem and in VLSI routing. It has a broad range of application that is still being explored. </p>
 
+                <h3>Calculating starting temperature</h3>
+                <p>Starting temperature is calculated from random set of transfers in the state space. The temperature is set so that the amount of accepted states is equal to 50 %.</p>
+
+                <p>Because the set of transfers is random, the temperature may differ for each calculation.</p>
+
+                <p>More about the exact method can be found in work Computing the Initial Temperature of Simulated Annealing by Ben Ameur</p>
             <a href="#GA"></a>
             <h2>GA</h2>
                 <p>Suspendisse sagittis ultrices augue. Maecenas sollicitudin. Nulla non arcu lacinia neque faucibus fringilla. Aliquam id dolor. Fusce tellus odio, dapibus id fermentum quis, suscipit id erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Nullam eget nisl. Donec iaculis gravida nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. In enim a arcu imperdiet malesuada. Proin mattis lacinia justo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nulla turpis magna, cursus sit amet, suscipit a, interdum id, felis. Integer malesuada. Praesent dapibus.</p>
