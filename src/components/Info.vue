@@ -3,16 +3,16 @@
         <!-- CONTROL PANEL -->
         <div class="info text-right">
             <div v-on:click="$refs.settings.open()">
-                <i class="material-icons">settings</i>
+                <i class="material-icons" v-tooltip.top="'Settings'">settings</i>
             </div>
             <div>
                 <router-link to="/help">
-                    <i class="material-icons">help</i>
+                    <i class="material-icons" v-tooltip.top="'Help'">help</i>
                 </router-link>
             </div>
             <div v-on:click="$refs.deps.open()">
-                <i v-if="requiredDependencies.missingFeatures > 0" class="material-icons text-danger">warning</i>
-                <i v-if="requiredDependencies.metFeatures > 0" class="material-icons text-success">check_circle</i>
+                <i v-if="requiredDependencies.missingFeatures > 0" class="material-icons text-danger" v-tooltip.left="'Dependencies not met'">warning</i>
+                <i v-if="requiredDependencies.metFeatures > 0" class="material-icons text-success" v-tooltip.left="'Dependencies met'">check_circle</i>
             </div>
         </div>
 
@@ -95,21 +95,21 @@ export default {
 
         clearHistories() {
             this.requiresConfirmation(
-                this.clearAllComputingHistories, 
+                this.clearAllComputingHistories,
                 "Clear computation history"
             );
         },
 
         clearInstances() {
             this.requiresConfirmation(
-                this.clearAllInstances, 
+                this.clearAllInstances,
                 "Clear all instances"
             );
         },
 
         deleteDatabase() {
             this.requiresConfirmation(
-                this.deleteDB, 
+                this.deleteDB,
                 "Delete database"
             );
         },
