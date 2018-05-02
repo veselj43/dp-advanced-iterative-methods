@@ -140,7 +140,7 @@ for (var i = 0; i < DOMIterables.length; i++) {
 /* harmony export (immutable) */ __webpack_exports__["b"] = getMethodClassFromId;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__computing_problems_SAT__ = __webpack_require__("JXTG");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__computing_problems_Knapsack__ = __webpack_require__("SLya");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__computing_problems_MinimalVertexCover__ = __webpack_require__("T2O7");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__computing_problems_MinimumVertexCover__ = __webpack_require__("6hl3");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__computing_problems_TravellingSalesman__ = __webpack_require__("Zfzn");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__computing_methods_Tabu__ = __webpack_require__("cA7k");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__computing_methods_genetic_Genetic__ = __webpack_require__("T3DB");
@@ -157,7 +157,7 @@ for (var i = 0; i < DOMIterables.length; i++) {
 
 
 function getProblemClassFromId(id) {
-    if (id === 0) return __WEBPACK_IMPORTED_MODULE_0__computing_problems_SAT__["a" /* SAT */];else if (id === 1) return __WEBPACK_IMPORTED_MODULE_3__computing_problems_TravellingSalesman__["a" /* TravellingSalesman */];else if (id === 2) return __WEBPACK_IMPORTED_MODULE_1__computing_problems_Knapsack__["a" /* Knapsack */];else if (id === 3) return __WEBPACK_IMPORTED_MODULE_2__computing_problems_MinimalVertexCover__["a" /* MinimalVertexCover */];else if (id === 4) return __WEBPACK_IMPORTED_MODULE_7__computing_problems_EuclideanTSP__["a" /* EuclideanTSP */];
+    if (id === 0) return __WEBPACK_IMPORTED_MODULE_0__computing_problems_SAT__["a" /* SAT */];else if (id === 1) return __WEBPACK_IMPORTED_MODULE_3__computing_problems_TravellingSalesman__["a" /* TravellingSalesman */];else if (id === 2) return __WEBPACK_IMPORTED_MODULE_1__computing_problems_Knapsack__["a" /* Knapsack */];else if (id === 3) return __WEBPACK_IMPORTED_MODULE_2__computing_problems_MinimumVertexCover__["a" /* MinimumVertexCover */];else if (id === 4) return __WEBPACK_IMPORTED_MODULE_7__computing_problems_EuclideanTSP__["a" /* EuclideanTSP */];
 
     return null;
 }
@@ -689,10 +689,32 @@ var EuclideanTSP = function (_Problem) {
     }], [{
         key: 'resolveInstanceParams',
         value: function resolveInstanceParams(instanceContent) {
-            instanceContent = instanceContent.split(/\s+/);
+            var dataSet = instanceContent.split('\n');
+            var noCities = +dataSet[0].split(/\s+/)[0];
+            var xMin = null;
+            var xMax = null;
+            var yMin = null;
+            var yMax = null;
 
+            for (var i = 0; i < noCities; i++) {
+                var coords = dataSet[1 + i].split(/\s+/);
+                if (xMin === null || xMin > +coords[0]) {
+                    xMin = +coords[0];
+                }
+                if (xMax === null || xMax < +coords[0]) {
+                    xMax = +coords[0];
+                }
+                if (yMin === null || yMin > +coords[1]) {
+                    yMin = +coords[1];
+                }
+                if (yMax === null || yMax < +coords[1]) {
+                    yMax = +coords[1];
+                }
+            }
             return {
-                noCities: +instanceContent[0]
+                noCities: noCities,
+                x: xMax - xMin,
+                y: yMax - yMin
             };
         }
 
@@ -1222,6 +1244,201 @@ __webpack_require__("zQR9");
 __webpack_require__("qyJz");
 module.exports = __webpack_require__("FeBl").Array.from;
 
+
+/***/ }),
+
+/***/ "6hl3":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MinimumVertexCover; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of__ = __webpack_require__("Zx67");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__("Zrlr");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__ = __webpack_require__("wxAW");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__("zwoO");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits__ = __webpack_require__("Pf15");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__configurationTypes_BitArray__ = __webpack_require__("4pxw");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Problem__ = __webpack_require__("i4sz");
+
+
+
+
+
+
+
+/**
+ * Minimal vertex cover problem class, used for minimal vertex cover problem solving, works with BitArray configuration
+ */
+var MinimumVertexCover = function (_Problem) {
+    __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(MinimumVertexCover, _Problem);
+
+    /**
+     * Constructor, construct the class from the data file selected
+     * @param {string} data instance of a problem coded as string
+     */
+    function MinimumVertexCover(data) {
+        __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, MinimumVertexCover);
+
+        var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (MinimumVertexCover.__proto__ || __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default()(MinimumVertexCover)).call(this));
+
+        data = data.split(/\s+/);
+
+        _this._size = +data[0];
+        _this._noEdges = +data[1];
+        _this._array = new Array(_this._size);
+
+        for (var i = 0; i < _this._size; i++) {
+            _this._array[i] = new Array(_this._size);
+        }
+
+        for (var i = 0; i < _this._size; i++) {
+            for (var j = 0; j < _this._size; j++) {
+                _this._array[i][j] = +data[2 + i * _this._size + j];
+            }
+        }
+        return _this;
+    }
+
+    /**
+     * Returns fitness of selected configuration(BitArray)
+     * @param  {class} bitArrayConfig BitArray of which fitness we want
+     * @return {int}  calculated fitness of the configuration
+     */
+
+
+    __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(MinimumVertexCover, [{
+        key: "evaluateMaximizationCost",
+        value: function evaluateMaximizationCost(bitArrayConfig) {
+            if (bitArrayConfig === null) return -1;
+
+            var bitArray = bitArrayConfig.getBitArray();
+            var numberOfCovered = 0;
+            var currentPrice = 0;
+            var edgeArray = this._array.map(function (x) {
+                return x.slice();
+            });
+
+            for (var i = 0; i < bitArray.length; i++) {
+                if (bitArray[i]) {
+                    currentPrice++;
+                    for (var j = 0; j < this._size; j++) {
+                        if (edgeArray[i][j] === 1) {
+                            numberOfCovered++;
+                            // edge covered
+                            edgeArray[i][j] = 2;
+                            edgeArray[j][i] = 2;
+                        }
+                    }
+                }
+            }
+
+            return this._noEdges - numberOfCovered === 0 ? this._size - currentPrice : numberOfCovered - this._noEdges;
+        }
+    }, {
+        key: "transformMaximizationToRealCost",
+        value: function transformMaximizationToRealCost(maxCost) {
+            return this._size - maxCost;
+        }
+
+        // /**
+        //  * Return price function value that will be displayed in graph
+        //  * @param  {class} bitArrayConfig config for which we want the value for the graph
+        //  * @return {int}  the returned value
+        //  */
+        // getProblemCost(bitArrayConfig){
+        //   return this._size - this.getFitness(bitArrayConfig);
+        // }
+
+        /**
+         * Returns random, or all 0, configuration of knapsack problem(BitArray configuration)
+         * @param  {bool} random random or all 0
+         * @return {class}  new BitArray class
+         */
+
+    }, {
+        key: "getConfiguration",
+        value: function getConfiguration(random) {
+            return new __WEBPACK_IMPORTED_MODULE_5__configurationTypes_BitArray__["a" /* BitArray */]({
+                size: this._size,
+                random: random
+            });
+        }
+
+        /**
+         * Returns the result of the config, in this case the config array
+         * @param  {class} bitArrayConfig the configuration of which result we want
+         * @return {Array} the bit array of the configuration
+         */
+
+    }, {
+        key: "getResult",
+        value: function getResult(bitArrayConfig) {
+            return bitArrayConfig.getBitArray();
+        }
+
+        /**
+         * Returns what type of configuration is this problem using
+         * @return {enum} type of the problem(configuration type)
+         */
+
+    }, {
+        key: "getType",
+        value: function getType() {
+            return __WEBPACK_IMPORTED_MODULE_6__Problem__["a" /* ProblemTypeEnum */].BINARY;
+        }
+
+        /**
+         * Returns instance invalidity
+         * @param  {string} instanceContent content of the instance
+         * @return {boolean} is instance invalid
+         */
+
+    }], [{
+        key: "isInvalidInstance",
+        value: function isInvalidInstance(instanceContent) {
+            instanceContent = instanceContent.split(/\s+/);
+
+            if (instanceContent.length - 1 < 2) return { text: "Invalid number of parameters" };
+
+            var size = instanceContent[0];
+
+            for (var i = 0; i < instanceContent.length; i++) {
+                if (isNaN(instanceContent[i])) return { text: "Most contain only numbers" };
+                if (instanceContent[i] < 0) return { text: "Can not contain negative numbers" };
+            }
+
+            instanceContent.splice(0, 2);
+
+            if (instanceContent.length - 1 !== size * size) return { text: "Invalid array" };
+
+            return false; // valid instance
+        }
+
+        /**
+         * Returns parameters of the instance
+         * @param  {string} instanceContent content of the instance
+         * @return {object} instance parameters
+         */
+
+    }, {
+        key: "resolveInstanceParams",
+        value: function resolveInstanceParams(instanceContent) {
+            instanceContent = instanceContent.split(/\s+/);
+
+            return {
+                size: +instanceContent[0],
+                noEdges: +instanceContent[1]
+            };
+        }
+    }]);
+
+    return MinimumVertexCover;
+}(__WEBPACK_IMPORTED_MODULE_6__Problem__["b" /* Problem */]);
 
 /***/ }),
 
@@ -1908,8 +2125,6 @@ module.exports = function (object, names) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export Literal */
-/* unused harmony export Clausule */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SAT; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray__ = __webpack_require__("d7EF");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray__);
@@ -1919,12 +2134,15 @@ module.exports = function (object, names) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits__ = __webpack_require__("Pf15");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass__ = __webpack_require__("wxAW");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_classCallCheck__ = __webpack_require__("Zrlr");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_classCallCheck__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__configurationTypes_BitArray__ = __webpack_require__("4pxw");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Problem__ = __webpack_require__("i4sz");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_core_js_get_iterator__ = __webpack_require__("BO1k");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_core_js_get_iterator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_babel_runtime_core_js_get_iterator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_createClass__ = __webpack_require__("wxAW");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_createClass__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_classCallCheck__ = __webpack_require__("Zrlr");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_classCallCheck__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__configurationTypes_BitArray__ = __webpack_require__("4pxw");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Problem__ = __webpack_require__("i4sz");
+
 
 
 
@@ -1935,53 +2153,71 @@ module.exports = function (object, names) {
 
 
 // common SAT input
+
 var Literal = function Literal(name, i) {
-    __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_classCallCheck___default()(this, Literal);
+    __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_classCallCheck___default()(this, Literal);
 
     this.id = name; // int
-    this.inv = i; // boolean "inversed"
+    this.inv = i; // boolean "inverted"
 };
 
-var Clausule = function () {
-    function Clausule(literalArray) {
-        __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_classCallCheck___default()(this, Clausule);
+var Clause = function () {
+    function Clause(literalArray) {
+        __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_classCallCheck___default()(this, Clause);
 
         this.literals = literalArray.map(function (literal) {
-            var id = parseInt(literal);
-
-            var inv = false;
-            if (id < 0) {
-                id *= -1;
-                inv = true;
-            }
+            var inv = literal < 0;
+            var id = inv ? -literal : +literal;
 
             return new Literal(id - 1, inv);
         });
     }
 
-    __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass___default()(Clausule, [{
+    __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_createClass___default()(Clause, [{
         key: 'check',
         value: function check(bitArray) {
-            for (var literal in this.literals) {
-                if (bitArray[this.literals[literal].id] && !this.literals[literal].inv) return true;
-                if (!bitArray[this.literals[literal].id] && this.literals[literal].inv) return true;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = __WEBPACK_IMPORTED_MODULE_4_babel_runtime_core_js_get_iterator___default()(this.literals), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var literal = _step.value;
+
+                    if (bitArray[literal.id] && !literal.inv) return true;
+                    if (!bitArray[literal.id] && literal.inv) return true;
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
             }
+
             return false;
         }
     }]);
 
-    return Clausule;
+    return Clause;
 }();
 
 var SAT = function (_Problem) {
     __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default()(SAT, _Problem);
 
     function SAT(data) {
-        __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_classCallCheck___default()(this, SAT);
+        __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_classCallCheck___default()(this, SAT);
 
         var _this = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (SAT.__proto__ || __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_object_get_prototype_of___default()(SAT)).call(this));
 
-        _this._clausules = [];
+        _this._clauses = [];
         var dataSet = data.split('\n').filter(function (row) {
             return row.trim()[0] !== 'c';
         });
@@ -1994,7 +2230,7 @@ var SAT = function (_Problem) {
 
         _this.params = {
             numberOfVariables: params[0],
-            numberOfClausules: params[1]
+            numberOfClauses: params[1]
         };
 
         dataSet = dataSet.splice(1, params[1]).map(function (row) {
@@ -2007,19 +2243,17 @@ var SAT = function (_Problem) {
         });
 
         for (var row in dataSet) {
-            _this._clausules.push(new Clausule(dataSet[row]));
+            _this._clauses.push(new Clause(dataSet[row]));
         };
         return _this;
     }
 
-    __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass___default()(SAT, [{
+    __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_createClass___default()(SAT, [{
         key: '_check',
         value: function _check(bitArray) {
-            var satisfied = 0;
-            this._clausules.forEach(function (clausule) {
-                if (clausule.check(bitArray)) satisfied++;
-            });
-            return satisfied;
+            return this._clauses.reduce(function (sum, clause) {
+                return clause.check(bitArray) ? sum + 1 : sum;
+            }, 0);
         }
 
         /**
@@ -2034,10 +2268,7 @@ var SAT = function (_Problem) {
             if (bitArrayConfig === null) return -1;
 
             var bitArray = bitArrayConfig.getBitArray();
-
-            var trueClauses = this._check(bitArray);
-            if (trueClauses < this.params.numberOfClausules) return trueClauses;
-            return this.params.numberOfClausules; // + getWeight(configuration);
+            return this._check(bitArray);
         }
     }, {
         key: 'transformMaximizationToRealCost',
@@ -2054,20 +2285,11 @@ var SAT = function (_Problem) {
     }, {
         key: 'getConfiguration',
         value: function getConfiguration(random) {
-            return new __WEBPACK_IMPORTED_MODULE_6__configurationTypes_BitArray__["a" /* BitArray */]({
+            return new __WEBPACK_IMPORTED_MODULE_7__configurationTypes_BitArray__["a" /* BitArray */]({
                 size: this.params.numberOfVariables,
                 random: random
             });
         }
-
-        // /**
-        //  * Return price function value that will be displayed in graph
-        //  * @param  {class} bitArrayConfig config for which we want the value for the graph
-        //  * @return {int}  the returned value
-        //  */
-        // getProblemCost(bitArrayConfig){
-        //   return this.getFitness(bitArrayConfig);
-        // }
 
         /**
          * Returns the result of the config, in this case the config array
@@ -2083,7 +2305,7 @@ var SAT = function (_Problem) {
     }, {
         key: 'getType',
         value: function getType() {
-            return __WEBPACK_IMPORTED_MODULE_7__Problem__["a" /* ProblemTypeEnum */].BINARY;
+            return __WEBPACK_IMPORTED_MODULE_8__Problem__["a" /* ProblemTypeEnum */].BINARY;
         }
 
         /**
@@ -2106,30 +2328,30 @@ var SAT = function (_Problem) {
             }),
                 _rows$0$split$filter$2 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_rows$0$split$filter$, 2),
                 noVariables = _rows$0$split$filter$2[0],
-                noClausules = _rows$0$split$filter$2[1];
+                noClauses = _rows$0$split$filter$2[1];
 
-            if (isNaN(noVariables) || isNaN(noClausules)) return { text: "Invalid number of parameters" };
+            if (isNaN(noVariables) || isNaN(noClauses)) return { text: "Invalid number of parameters" };
 
             if (noVariables < 0) return { text: "Number of variables cant be negative" };
-            if (noClausules < 0) return { text: "Number of clausules cant be negative" };
+            if (noClauses < 0) return { text: "Number of clauses cant be negative" };
 
-            if (noClausules > Math.pow(3, noVariables) - 1) return { text: "Number of clausules is at max: " + Math.pow(3, noVariables) - 1 };
+            if (noClauses > Math.pow(3, noVariables) - 1) return { text: "Number of clauses is at max: " + Math.pow(3, noVariables) - 1 };
 
             rows = rows.slice(1).filter(function (row) {
                 return !!row.trim();
             });
 
-            var clausulesEndIndex = rows.findIndex(function (row) {
+            var clausesEndIndex = rows.findIndex(function (row) {
                 return row.indexOf("%") !== -1;
             });
-            if (clausulesEndIndex === -1) clausulesEndIndex = rows.length;
+            if (clausesEndIndex === -1) clausesEndIndex = rows.length;
 
-            instanceContent = rows.slice(0, clausulesEndIndex).join('\n').split(/\s+/);
+            instanceContent = rows.slice(0, clausesEndIndex).join('\n').split(/\s+/);
 
-            if (noClausules !== clausulesEndIndex) return { text: "Number of clausules doesnt match the actual number of clausules" };
+            if (noClauses !== clausesEndIndex) return { text: "Number of clauses doesn't match the actual number of clauses" };
 
-            var clausules = [];
-            var clausule = "";
+            var clauses = [];
+            var clause = "";
 
             if (instanceContent.some(isNaN)) {
                 // if some elements returns true when isNaN function applied on it
@@ -2137,11 +2359,11 @@ var SAT = function (_Problem) {
             }
 
             for (var i = 0; i < instanceContent.length; i++) {
-                if (noVariables < +instanceContent[i] || -noVariables > +instanceContent[i]) return { text: 'Invalid variable in clasule:  "' + +instanceContent[i] + '"' };
-                if (+instanceContent[i] !== 0) clausule += instanceContent[i] + " ";else {
-                    if (clausules[clausule]) return { text: 'Multiple same clausules: "' + clausule + ' 0"' };
-                    clausules[clausule] = 1;
-                    clausule = "";
+                if (noVariables < +instanceContent[i] || -noVariables > +instanceContent[i]) return { text: 'Invalid variable in clause:  "' + +instanceContent[i] + '"' };
+                if (+instanceContent[i] !== 0) clause += instanceContent[i] + " ";else {
+                    if (clauses[clause]) return { text: 'Multiple same clauses: "' + clause + ' 0"' };
+                    clauses[clause] = 1;
+                    clause = "";
                 }
             }
 
@@ -2164,18 +2386,18 @@ var SAT = function (_Problem) {
             var params = dataSet[0].split(/(\s+)/).filter(function (x) {
                 return x.trim().length > 0;
             }).splice(2, 2).map(function (param) {
-                return parseInt(param);
+                return +param;
             });
 
             return {
                 noVariables: params[0],
-                noClausules: params[1]
+                noClauses: params[1]
             };
         }
     }]);
 
     return SAT;
-}(__WEBPACK_IMPORTED_MODULE_7__Problem__["b" /* Problem */]);
+}(__WEBPACK_IMPORTED_MODULE_8__Problem__["b" /* Problem */]);
 
 /***/ }),
 
@@ -2436,8 +2658,8 @@ var Result = function () {
 
 var SelectionEnum = {
     TOURNAMENT: "Tournament",
-    ROULETTE_RANK: "Roulette-rank",
-    ROULETTE_LINEAR: "Roulette-linear"
+    ROULETTE_RANK: "Roulette with ranking",
+    ROULETTE_LINEAR: "Roulette with linear scaling"
 };
 
 var TournamentSelection = function () {
@@ -3136,196 +3358,6 @@ module.exports = !__webpack_require__("+E39") && !__webpack_require__("S82l")(fu
 
 /***/ }),
 
-/***/ "T2O7":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MinimalVertexCover; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of__ = __webpack_require__("Zx67");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__("Zrlr");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__ = __webpack_require__("wxAW");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__("zwoO");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits__ = __webpack_require__("Pf15");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__configurationTypes_BitArray__ = __webpack_require__("4pxw");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Problem__ = __webpack_require__("i4sz");
-
-
-
-
-
-
-
-/**
- * Minimal vertex cover problem class, used for minimal vertex cover problem solving, works with BitArray configuration
- */
-var MinimalVertexCover = function (_Problem) {
-    __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(MinimalVertexCover, _Problem);
-
-    /**
-     * Constructor, construct the class from the data file selected
-     * @param {string} data instance of a problem coded as string
-     */
-    function MinimalVertexCover(data) {
-        __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, MinimalVertexCover);
-
-        var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (MinimalVertexCover.__proto__ || __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default()(MinimalVertexCover)).call(this));
-
-        data = data.split(/\s+/);
-
-        _this._size = +data[0];
-        _this._array = new Array(_this._size);
-
-        for (var i = 0; i < _this._size; i++) {
-            _this._array[i] = new Array(_this._size);
-        }
-
-        for (var i = 0; i < _this._size; i++) {
-            for (var j = 0; j < _this._size; j++) {
-                _this._array[i][j] = +data[2 + i * _this._size + j];
-            }
-        }
-        return _this;
-    }
-
-    /**
-     * Returns fitness of selected configuration(BitArray)
-     * @param  {class} bitArrayConfig BitArray of which fitness we want
-     * @return {int}  calculated fitness of the configuration
-     */
-
-
-    __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(MinimalVertexCover, [{
-        key: "evaluateMaximizationCost",
-        value: function evaluateMaximizationCost(bitArrayConfig) {
-            if (bitArrayConfig === null) return -1;
-
-            var coveredArray = new Array(bitArrayConfig.getSize()).fill(0);
-            var bitArray = bitArrayConfig.getBitArray();
-            var numberOfCovered = 0;
-            var currentPrice = 0;
-
-            for (var i = 0; i < bitArray.length; i++) {
-                if (bitArray[i]) {
-                    currentPrice++;
-                    for (var j = 0; j < this._size; j++) {
-                        if (this._array[i][j] && coveredArray[j] !== 1) {
-                            coveredArray[j] = 1;
-                            numberOfCovered++;
-                        }
-                    }
-                }
-            }
-
-            return this._size - numberOfCovered === 0 ? this._size - currentPrice : numberOfCovered - this._size;
-        }
-    }, {
-        key: "transformMaximizationToRealCost",
-        value: function transformMaximizationToRealCost(maxCost) {
-            return this._size - maxCost;
-        }
-
-        // /**
-        //  * Return price function value that will be displayed in graph
-        //  * @param  {class} bitArrayConfig config for which we want the value for the graph
-        //  * @return {int}  the returned value
-        //  */
-        // getProblemCost(bitArrayConfig){
-        //   return this._size - this.getFitness(bitArrayConfig);
-        // }
-
-        /**
-         * Returns random, or all 0, configuration of knapsack problem(BitArray configuration)
-         * @param  {bool} random random or all 0
-         * @return {class}  new BitArray class
-         */
-
-    }, {
-        key: "getConfiguration",
-        value: function getConfiguration(random) {
-            return new __WEBPACK_IMPORTED_MODULE_5__configurationTypes_BitArray__["a" /* BitArray */]({
-                size: this._size,
-                random: random
-            });
-        }
-
-        /**
-         * Returns the result of the config, in this case the config array
-         * @param  {class} bitArrayConfig the configuration of which result we want
-         * @return {Array} the bit array of the configuration
-         */
-
-    }, {
-        key: "getResult",
-        value: function getResult(bitArrayConfig) {
-            return bitArrayConfig.getBitArray();
-        }
-
-        /**
-         * Returns what type of configuration is this problem using
-         * @return {enum} type of the problem(configuration type)
-         */
-
-    }, {
-        key: "getType",
-        value: function getType() {
-            return __WEBPACK_IMPORTED_MODULE_6__Problem__["a" /* ProblemTypeEnum */].BINARY;
-        }
-
-        /**
-         * Returns instance invalidity
-         * @param  {string} instanceContent content of the instance
-         * @return {boolean} is instance invalid
-         */
-
-    }], [{
-        key: "isInvalidInstance",
-        value: function isInvalidInstance(instanceContent) {
-            instanceContent = instanceContent.split(/\s+/);
-
-            if (instanceContent.length - 1 < 2) return { text: "Invalid number of parameters" };
-
-            var size = instanceContent[0];
-
-            for (var i = 0; i < instanceContent.length; i++) {
-                if (isNaN(instanceContent[i])) return { text: "Most contain only numbers" };
-                if (instanceContent[i] < 0) return { text: "Can not contain negative numbers" };
-            }
-
-            instanceContent.splice(0, 2);
-
-            if (instanceContent.length - 1 !== size * size) return { text: "Invalid array" };
-
-            return false; // valid instance
-        }
-
-        /**
-         * Returns parameters of the instance
-         * @param  {string} instanceContent content of the instance
-         * @return {object} instance parameters
-         */
-
-    }, {
-        key: "resolveInstanceParams",
-        value: function resolveInstanceParams(instanceContent) {
-            instanceContent = instanceContent.split(/\s+/);
-
-            return {
-                size: +instanceContent[0],
-                noEdges: +instanceContent[1]
-            };
-        }
-    }]);
-
-    return MinimalVertexCover;
-}(__WEBPACK_IMPORTED_MODULE_6__Problem__["b" /* Problem */]);
-
-/***/ }),
-
 /***/ "T3DB":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3411,7 +3443,7 @@ var GeneticSolver = function () {
             this.bestCost = 0;
             this.counter = 0;
 
-            this._workerInterface.reply('init', { numberOfIterations: noGenerations /*, maxFitness: this.problemInput.params.numberOfClausules*/ });
+            this._workerInterface.reply('init', { numberOfIterations: noGenerations /*, maxFitness: this.problemInput.params.numberOfClauses*/ });
 
             //init generation
             var generation = this._initGeneration(populationSize);
@@ -4259,8 +4291,8 @@ var TabuSolver = function () {
                 nbh.push(i);
             }
             while (nbh.length > nbhSize) {
-                var randonIndex = Math.round(Math.random() * (nbh.length - 1));
-                nbh.splice(randonIndex, 1);
+                var randomIndex = Math.round(Math.random() * (nbh.length - 1));
+                nbh.splice(randomIndex, 1);
             }
             return nbh;
         }
@@ -4311,7 +4343,7 @@ var TabuSolver = function () {
                 for (var i = 0; i < neighborhood.length; i++) {
                     this.counter++;
 
-                    var sCandidate = state.getNeighbour(neighborhood.length[i]);
+                    var sCandidate = state.getNeighbour(neighborhood[i]);
                     var sCandidateCost = this._getCost(sCandidate);
 
                     // check change for tabu and if it is tabu, check if we dont miss the best found state
@@ -4632,7 +4664,7 @@ var BufferedReply = function () {
         }
 
         /**
-         * Add new message and calls flush function
+         * Add new message and calls flush function if its time to flush
          * @param {object} content content of the added message
          */
 
@@ -5900,4 +5932,4 @@ exports.default = function (self, call) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=e82007b443338b96e640.worker.js.map
+//# sourceMappingURL=e576663be36a5a0e4794.worker.js.map

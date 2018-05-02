@@ -12955,7 +12955,8 @@ var SATGenerator = function () {
 
     this.params = params;
     this.params.noVariables = +this.params.noVariables;
-    this.params.noClausules = +this.params.noClausules;
+    this.params.noClauses = +this.params.noClauses;
+    this.params.noLiterals = +this.params.noLiterals;
   }
 
   /**
@@ -12967,35 +12968,35 @@ var SATGenerator = function () {
   __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(SATGenerator, [{
     key: "generate",
     value: function generate() {
-      var generatedInstance = "p cnf " + this.params.noVariables + " " + this.params.noClausules + '\n';
+      var generatedInstance = "p cnf " + this.params.noVariables + " " + this.params.noClauses + '\n';
       var sign;
       var empty;
-      var numberOfClausules = 0;
-      var newClausule;
+      var numberOfClauses = 0;
+      var newClause;
 
-      var addedClausules = [];
+      var addedClauses = [];
 
-      while (numberOfClausules !== this.params.noClausules) {
-        newClausule = "";
+      while (numberOfClauses !== this.params.noClauses) {
+        newClause = "";
         empty = true;
         for (var i = 0; i < this.params.noVariables; i++) {
-          if (Math.random() < 1 / (this.params.noVariables / 10)) {
-            sign = Math.round(Math.random() * 2 - 1);
-            if (sign < 0) {
-              newClausule += "-" + (i + 1) + " ";
+          if (Math.random() < 1 / (this.params.noVariables / this.params.noLiterals)) {
+            sign = Math.round(Math.random());
+            if (sign) {
+              newClause += i + 1 + " ";
               empty = false;
-            } else if (sign > 0) {
-              newClausule += i + 1 + " ";
+            } else {
+              newClause += "-" + (i + 1) + " ";
               empty = false;
             }
           }
         }
         if (!empty) {
-          newClausule += "0" + '\n';
-          if (!addedClausules[newClausule]) {
-            numberOfClausules++;
-            generatedInstance += newClausule;
-            addedClausules[newClausule] = 1;
+          newClause += "0" + '\n';
+          if (!addedClauses[newClause]) {
+            numberOfClauses++;
+            generatedInstance += newClause;
+            addedClauses[newClause] = 1;
           }
         }
       }
@@ -13091,17 +13092,16 @@ var VertexCoverGenerator = function () {
             var array = new Array(this.params.size);
             for (var i = 0; i < this.params.size; i++) {
                 array[i] = new Array(this.params.size).fill(0);
-                array[i][i] = 1;
+                array[i][i] = 0;
             }
 
             while (noEdges !== this.params.noEdges) {
                 for (var i = 0; i < this.params.size; i++) {
-                    for (var j = 0; j < this.params.size; j++) {
-                        if (Math.round(Math.random()) && noEdges !== this.params.noEdges && !array[i][j]) {
+                    for (var j = i + 1; j < this.params.size; j++) {
+                        if (Math.random() < 1 / this.params.size && noEdges !== this.params.noEdges && !array[i][j]) {
                             array[i][j] = 1;
+                            array[j][i] = 1;
                             noEdges++;
-                            //for more variety
-                            break;
                         }
                     }
                 }
@@ -13911,4 +13911,4 @@ var WorkerInterface = function () {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=e3604addaa36cd79ab57.worker.js.map
+//# sourceMappingURL=68aa2d4c9ea21d4b193f.worker.js.map
