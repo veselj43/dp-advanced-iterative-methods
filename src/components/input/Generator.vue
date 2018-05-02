@@ -27,6 +27,17 @@
                     <span v-show="errors.has('numberOfClauses')" class="help-block">{{ errors.first('numberOfClauses') }}</span>
                 </div>
 
+                <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfLiteralsInClauses')}">
+                    <label for="SATgenParam3">Average number of literals in clauses</label>
+                    <span class="form-tooltip" v-tooltip.right="'How many literals will be in clauses on average'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <input type="number" class="form-control" id="SATgenParam3" v-model="generatorParams[0].noLiterals" placeholder=""
+                    name="numberOfLiteralsInClauses"
+                    data-vv-as="average number of literals in clauses"
+                    v-validate.initial="{ required: true, min_value: 1, max_value: +generatorParams[0].noVariables, regex: /^[0-9]+$/ }"
+                    >
+                    <span v-show="errors.has('numberOfLiteralsInClauses')" class="help-block">{{ errors.first('numberOfLiteralsInClauses') }}</span>
+                </div>
+
             </div>
 
             <div v-if="selectedProblemId === 1">
@@ -243,7 +254,8 @@ export default {
             generatorParams: {
                 0: {
                     noVariables: 20,
-                    noClauses: 50
+                    noClauses: 50,
+                    noLiterals: 4
                 },
                 1: {
                     type: "Hamiltonian",
@@ -360,7 +372,7 @@ export default {
 
         setInstanceName: function() {
           if(this.selectedProblemId === 0) {
-            this.instanceName =  "SAT" + this.generatorParams[0].noVariables + "_" + this.generatorParams[0].noClauses;
+            this.instanceName =  "SAT" + this.generatorParams[0].noVariables + "_" + this.generatorParams[0].noClauses + "_" + this.generatorParams[0].noLiterals;
           }
 
           else if (this.selectedProblemId === 1) {
