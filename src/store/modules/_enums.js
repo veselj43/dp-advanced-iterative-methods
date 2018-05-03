@@ -53,11 +53,26 @@ export const problems = [
 ];
 
 export const problemExampleInstances = {
-    0: 'uf20-01.cnf',
-    1: 'ts20-30',
-    2: 'knap200-20',
-    3: 'mvc20-20',
-    4: 'eucTSP10',
+    0: {
+        file: 'uf20-01.cnf',
+        name: 'SAT_Example'
+    },
+    1: {
+        file: 'ts20-30',
+        name: 'TSP_Example'
+    },
+    2: {
+        file: 'knap200-20',
+        name: 'KNAP_Example'
+    },
+    3: {
+        file: 'mvc20-20',
+        name: 'MVC_Example'
+    },
+    4: {
+        file: 'eucTSP10',
+        name: 'ETSP_Example'
+    },
 };
 
 export const methodParamsTitles = {

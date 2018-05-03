@@ -107,11 +107,12 @@ const actions = {
             }
             else {
                 exampleInstanceAdded[params.problem] = true;
-                return resource.getExampleInstance(problemExampleInstances[params.problem]).then(function(data) {
+                let exampleFile = problemExampleInstances[params.problem];
+                return resource.getExampleInstance(exampleFile.file).then(function(data) {
                     let instanceDbObj = {
                         problem: params.problem,
                         file: {
-                            name: 'Example',
+                            name: exampleFile.name,
                             content: data.bodyText
                         },
                         params: resolveInstanceParams(data.bodyText)
