@@ -1,4 +1,4 @@
-import { storage, storageKeys } from '@/services/localStorage'
+import { storage, storageKeys, storageUtils } from '@/services/localStorage'
 import * as enums from './_enums'
 import { SelectionEnum } from '@/computing/methods/genetic/Selection';
 import { CrossoverEnum } from '@/computing/methods/genetic/Crossover';
@@ -99,20 +99,41 @@ const mutations = {
     updateParamsValidation(state, payload) {
         state.params.isValid[payload.id] = payload.data;
     },
-    selectInstance(state, selected) {
-        state.files.selected.id = selected.id;
-        state.files.selected.index = selected.index;
+    selectInstance(state, {index}) {
+        state.files.selected.index = index;
+        state.files.selected.id = state.files.instances[index]._id;
+        storage.set(storageUtils.getSelectedFileKeyByProblem(), index);
     },
-    updateInstances (state, data) {
-        state.files.instances = data;
+    updateInstances (state, {instances, problemChange}) {
+        state.files.instances = instances;
+
+        let instanceIndex = +storage.get(storageUtils.getSelectedFileKeyByProblem()) || 0;
+
+        if (problemChange) {
+            if (state.files.instances[instanceIndex]) {
+                state.files.selected.index = instanceIndex;
+                state.files.selected.id = state.files.instances[instanceIndex]._id;
+                return;
+            }
+            else if (state.files.instances.length > 0) {
+                instanceIndex = 0;
+                state.files.selected.index = instanceIndex;
+                state.files.selected.id = state.files.instances[instanceIndex]._id;
+            }
+            else {
+                state.files.selected = initState.files.selected;
+            }
+            return;
+        }
 
         if (state.files.instances.length === 0) {
             state.files.selected = initState.files.selected;
             return;
         }
         if (state.files.selected.id === -1) {
-            state.files.selected.id = state.files.instances[0]._id;
-            state.files.selected.index = 0;
+            instanceIndex = 0;
+            state.files.selected.id = state.files.instances[instanceIndex]._id;
+            state.files.selected.index = instanceIndex;
             return;
         }
         if (state.files.selected.index >= state.files.instances.length || state.files.selected.id < state.files.instances[state.files.selected.index]._id) {
@@ -132,7 +153,7 @@ const actions = {
     },
     selectProblem ({ state, commit, dispatch }, index) {
         commit('selectProblem', index);
-        dispatch('loadInstances');
+        dispatch('loadInstances', {problemChange: true});
         dispatch('loadComputingHistory');
     }
 }

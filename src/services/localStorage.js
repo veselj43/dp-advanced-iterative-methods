@@ -15,8 +15,8 @@ export const storage = {
 export const storageKeys = {
     method: "activeMethod",
     problem: "activeProblem",
-
-    selectedIndexes: "selectedIndexes"
+    selectedIndexes: "selectedIndexes",
+    selectedFile: "selectedFile",
 };
 
 export const storageUtils = {
@@ -24,5 +24,10 @@ export const storageUtils = {
         let methodIndex = storage.get(storageKeys.method);
         let problemIndex = storage.get(storageKeys.problem);
         return storageKeys.selectedIndexes + '-' + methodIndex + '-' + problemIndex
+    },
+
+    getSelectedFileKeyByProblem() {
+        let problemIndex = storage.get(storageKeys.problem);
+        return storageKeys.selectedFile + '-' + problemIndex;
     }
 }

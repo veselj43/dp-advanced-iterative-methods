@@ -95,14 +95,14 @@ const actions = {
         });
     },
 
-    loadInstances ({ getters, commit }, firstLoad) {
+    loadInstances ({ getters, commit }, {problemChange} = {problemChange: false}) {
         let params = getters.getInputData;
         let resolveInstanceParams = getProblemClassFromId(getters.selectedProblemId).resolveInstanceParams;
 
         return dbm.getAll(DBSchema.dbTables.instances, { problem: params.problem }).then(function(instances) {
             if (instances.length > 0 || exampleInstanceAdded[params.problem]) {
                 exampleInstanceAdded[params.problem] = true;
-                commit('updateInstances', instances);
+                commit('updateInstances', {instances, problemChange});
                 return true;
             }
             else {
@@ -117,7 +117,7 @@ const actions = {
                         params: resolveInstanceParams(data.bodyText)
                     };
                     return dbm.insert(DBSchema.dbTables.instances, instanceDbObj).then(function() {
-                        commit('updateInstances', [instanceDbObj, ...instances]);
+                        commit('updateInstances', {instances: [instanceDbObj, ...instances]});
                         return true;
                     });
                 });
@@ -165,12 +165,12 @@ const actions = {
         return dispatch('insertInstances', toInsert);
     },
 
-    insertInstances ({ dispatch }, dbObjecstArray) {
-        if (!dbObjecstArray.length) {
+    insertInstances ({ dispatch }, dbObjectsArray) {
+        if (!dbObjectsArray.length) {
             return false;
         }
 
-        return dbm.insert(DBSchema.dbTables.instances, dbObjecstArray).then(function() {
+        return dbm.insert(DBSchema.dbTables.instances, dbObjectsArray).then(function() {
             return dispatch('loadInstances');
         });
     },

@@ -115,7 +115,7 @@ export default {
                 this.$notifier.put('invalidInstace', `Instance "${instance.file.name}" is invalid.`, 'info');
             }
             else {
-                this.$store.commit('selectInstance', {index, id: instance._id});
+                this.$store.commit('selectInstance', {index});
             }
         },
 
