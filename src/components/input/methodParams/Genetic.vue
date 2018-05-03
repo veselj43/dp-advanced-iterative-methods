@@ -3,18 +3,18 @@
         <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-population-size')}">
             <label class="" for="population-size">Population size</label>
             <span class="form-tooltip" v-tooltip.right="'Number of individuals in each generation.'"><span class="glyphicon glyphicon-question-sign"></span></span>
-            <input class="form-control" type="number" min="1" max="1000"
+            <input class="form-control" type="number" min="1"
                    id="population-size" name="genetic-population-size" v-model="params.populationSize"
-                   data-vv-as="population size" v-validate.initial="{ required: true, min_value: 1, max_value: 1000, regex: /^[0-9]+$/ }"
+                   data-vv-as="population size" v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
             >
             <span v-show="errors.has('genetic-population-size')" class="help-block">{{ errors.first('genetic-population-size') }}</span>
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-generation-count')}">
             <label class="" for="generation-count">Number of generations</label>
             <span class="form-tooltip" v-tooltip.right="'Number of generations/steps in genetic algorithm.'"><span class="glyphicon glyphicon-question-sign"></span></span>
-            <input class="form-control" type="number" min="1" max="10000"
+            <input class="form-control" type="number" min="1"
                    id="generation-count" name="genetic-generation-count" v-model="params.noGenerations"
-                   data-vv-as="number of generations" v-validate.initial="{ required: true, min_value: 1, max_value: 10000, regex: /^[0-9]+$/ }"
+                   data-vv-as="number of generations" v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
             >
             <span v-show="errors.has('genetic-generation-count')" class="help-block">{{ errors.first('genetic-generation-count') }}</span>
         </div>
