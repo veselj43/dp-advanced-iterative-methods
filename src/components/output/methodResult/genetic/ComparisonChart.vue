@@ -117,6 +117,7 @@ export default {
             return Object.keys(valueObj.value).map(key => {
                 if (!typeIsChecked(this.checkedTypes, key)) return;
                 return `<tr style="color: ${color}">
+                    <td>[${valueObj.id}]</td>
                     <td>${key}</td>
                     <td class="text-right">${valueObj.value[key]}</td>
                 </tr>`;

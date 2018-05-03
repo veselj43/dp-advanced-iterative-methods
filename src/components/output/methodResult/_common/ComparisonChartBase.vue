@@ -234,6 +234,7 @@ It should contain definition of following seriesChart methods:
 
         htmlCoordsBuildItem(color, valueObj) {
             return `<tr style="color: ${color}">
+                <td>[${valueObj.id}]</td>
                 <td>Value of optimization criterion</td>
                 <td class="text-right">${valueObj.value}</td>
             </tr>`;

@@ -58,10 +58,12 @@ export default {
         // methods that overrides ComparisonChartBase methods
         htmlCoordsBuildItem(color, valueObj, xValue) {
             return `<tr style="color: ${color}">
+                <td>[${valueObj.id}]</td>
                 <td>Value of optimization criterion</td>
                 <td class="text-right">${valueObj.value}</td>
             </tr>
             <tr style="color: ${color}">
+                <td>[${valueObj.id}]</td>
                 <td>Temperature</td>
                 <td class="text-right">${this.computeTemperature(valueObj.id, xValue)}</td>
             </tr>`;
