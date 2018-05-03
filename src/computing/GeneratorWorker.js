@@ -6,6 +6,9 @@ import SATGen from './generators/SATGenerator';
 import CoverGen from './generators/VertexCoverGenerator';
 import ETSPGen from './generators/ETSPGenerator';
 
+/**
+ * Definition of methods, that can be called from main thread
+ */
 var methods = {
     work: function(data, problemKey) {
         var job = new Job(data, problemKey);
@@ -29,6 +32,7 @@ class Job {
         this.params = params;
         this.problemKey = problemKey;
     }
+
     /**
      * Generate instance based on selected problem and input parameters
      * @return {string} returns the generated instance coded as string
@@ -64,7 +68,7 @@ class Job {
 
 this.postMessage = self.postMessage;
 
-// msg recieved event
+// msg received event
 self.addEventListener('message', (event) => {
     workerInterface.onMessage(event);
 });

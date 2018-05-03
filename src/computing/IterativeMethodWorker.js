@@ -1,6 +1,9 @@
 import { getProblemClassFromId, getMethodClassFromId } from '@/services/classResolver';
 import { WorkerInterface } from './WorkerInterface';
 
+/**
+ * Definition of methods, that can be called from main thread
+ */
 var methods = {
     work: function(data, params) {
         var job = new Job(data, params);
@@ -32,6 +35,7 @@ class Job {
         this.problem = (problemClass) ? new problemClass(inputData) : null;
         this.method = (methodClass) ? new methodClass(workerInterface) : null;
     }
+
     /**
      * Run the calculation based on selected method, problem, and method parameters
      * @param  {object} methodParams method parameters as object
@@ -61,7 +65,7 @@ class Job {
 
 this.postMessage = self.postMessage;
 
-// msg recieved event
+// msg received event
 self.addEventListener('message', (event) => {
     workerInterface.onMessage(event)
 })
