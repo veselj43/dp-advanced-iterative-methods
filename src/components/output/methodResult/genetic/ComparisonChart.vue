@@ -9,16 +9,6 @@
                 </div>
             </li>
         </ul>
-        <!--TODO udelat dynamicky-->
-        <!--<input type="checkbox" id="average" value="average" v-model="checkedTypes">-->
-        <!--<label for="average">average</label>-->
-        <!--<input type="checkbox" id="best" value="best" v-model="checkedTypes">-->
-        <!--<label for="best">best</label>-->
-        <!--<input type="checkbox" id="mean" value="mean" v-model="checkedTypes">-->
-        <!--<label for="mean">mean</label>-->
-        <!--<input type="checkbox" id="worst" value="worst" v-model="checkedTypes">-->
-        <!--<label for="worst">worst</label>-->
-        
         <div id="comparisonChart">
             <div class="chart-hover-info"></div>
         </div>
@@ -62,16 +52,15 @@ export default {
     },
 
     mounted() {
-        this.checkedTypes = JSON.parse(storage.get(storageKeycheckedTypes)) || [];
+        this.checkedTypes = JSON.parse(storage.get(storageKeycheckedTypes)) || ["best", "average", "worst"];
     },
 
     methods: {
         // methods that needs to be implemented for ComparisonChartBase
         processDataMapping(data, datasetId) {
-            // TODO check if it works - pouzito pred kontrolou duplicit, nyni je az po
             // init valueTypes
             if (this.valueTypes.length === 0) {
-                this.valueTypes = Object.keys(data[0]).sort();
+                this.valueTypes = Object.keys(data[0]);
             }
 
             let filterData = [];
@@ -105,19 +94,19 @@ export default {
             this.runGroup = runDimension.group().reduceSum(d => +d.value);
 
             let makeChartNonZero = this.utilMakeChartNonZero;
-            
+
             chart
                 .seriesAccessor(this.seriesAccessor(this))
                 .keyAccessor(d => +d.key[1])
                 .valueAccessor(d => +d.value)
                 .chart(function(c) {
-                    let serie = dc.lineChart(c)
+                    let series = dc.lineChart(c)
                         .colorAccessor(function (d, i) {
                             return (d) ? d[0].data.key[0] : 0;
                         })
                         .xyTipsOn(false);
-                    makeChartNonZero(c, serie);
-                    return serie;
+                    makeChartNonZero(c, series);
+                    return series;
                 })
                 .dimension(runDimension)
                 .group(this.runGroup);
