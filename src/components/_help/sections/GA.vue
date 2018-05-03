@@ -3,14 +3,14 @@
         <h2>Genetic algorithm</h2>
 
         <p>
-            The genetic algorithm is a method for solving both constrained and unconstrained optimization problems that is based on natural selection, the process that drives biological evolution. 
-            The genetic algorithm repeatedly modifies a population of individual solutions. 
-            At each step, the genetic algorithm selects individuals at random from the current population to be parents and uses them to produce the children for the next generation. 
-            Over successive generations, the population "evolves" toward an optimal solution. 
+            The genetic algorithm is a method for solving both constrained and unconstrained optimization problems that is based on natural selection, the process that drives biological evolution.
+            The genetic algorithm repeatedly modifies a population of individual solutions.
+            At each step, the genetic algorithm selects individuals at random from the current population to be parents and uses them to produce the children for the next generation.
+            Over successive generations, the population "evolves" toward an optimal solution.
             You can apply the genetic algorithm to solve a variety of optimization problems that are not well suited for standard optimization algorithms, including problems in which the objective function is discontinuous, nondifferentiable, stochastic, or highly nonlinear.
         </p>
         <p>
-            This GA starts with <b>population</b> of given <b>size</b>. 
+            This GA starts with <b>population</b> of given <b>size</b>.
             Then computes given <b>number of generations</b> and stops and returns best found solution.
         </p>
         <ol>
@@ -37,10 +37,10 @@
         </ul>
         <h4>Ranking</h4>
         <p>
-            GA uses rank instead of fitness. 
-            Individuals are sorted by fitness. 
-            Each individual gets rank according to this order. 
-            Best individual gets highest rank. 
+            GA uses rank instead of fitness.
+            Individuals are sorted by fitness.
+            Each individual gets rank according to this order.
+            Best individual gets highest rank.
             This implementation uses ranking in combination with linear scaling.
         </p>
 
@@ -67,7 +67,7 @@
 
         <h5>Uniform-point</h5>
         <p>
-            Each bit of parent goes into first or second offspring with equal probability. 
+            Each bit of parent goes into first or second offspring with equal probability.
             We use random binary vector to indicate which genes are going to be swapped (1 in vector).
         </p>
         <img src="static/images/cross_uniform_before.png" alt="Uniform crossover before" width="40%">
@@ -92,11 +92,11 @@
 
         <h5>Cycle</h5>
         <p>
-            Cycle starts at random point in first parent. 
+            Cycle starts at random point in first parent.
             Next position of cycle is where gene has same value as value at corresponding position in other parent.
             Continue until the cycle is closed. Leave the cycle how it is and swap all other values between 2 parents.
         </p>
         <img src="static/images/cross_cycle_before.png" alt="Cycle crossover before" width="40%">
-        <img src="static/images/cross_cycle_after.png" alt="Cycle crossover after" width="40%">
+        <img src="static/images/cross_cycle_after0.png" alt="Cycle crossover after" width="40%">
     </div>
 </template>
