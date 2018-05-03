@@ -121,6 +121,7 @@ export default {
         }
 
         &-label {
+            position: relative;
             flex-grow: 1;
             min-width: 0;
             margin: 0;
