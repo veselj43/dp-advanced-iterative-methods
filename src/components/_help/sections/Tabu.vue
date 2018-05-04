@@ -80,7 +80,8 @@
 
         <h4>Starting configuration</h4>
         <p>
-            Again, there are two configuration types:
+            There are two options: Default and Random.
+            And again, there are two configuration types.
         </p>
 
         <div class="panel panel-default">

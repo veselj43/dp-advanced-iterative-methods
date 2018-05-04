@@ -30,7 +30,7 @@
         </div>
 
         <sweet-modal ref="clearComputingHistoryConfirm" overlay-theme="dark">
-            Do you want to clear past runs in this section?
+            Do you want to clear previous runs in this section?
             <template slot="button">
                 <button class="btn btn-info" v-on:click="$refs.clearComputingHistoryConfirm.close()">No</button>
                 <button class="btn btn-danger" v-on:click="confirm">Yes</button>
