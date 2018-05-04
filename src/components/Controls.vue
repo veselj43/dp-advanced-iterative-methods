@@ -3,7 +3,7 @@
         <span class="status">Status: <b>{{status.text}}</b></span>
         <span class="control-buttons">
             <button v-show="!computingIsRunning" class="btn btn-success" :disabled="!getIsValidParams" v-on:click="start">
-                <i class="fas fa-play"></i> Start
+                <i class="fas fa-play"></i> Start run
             </button>
             <button v-show="computingIsRunning" class="btn btn-danger" v-on:click="stop">
                 <i class="fas fa-stop"></i> Stop

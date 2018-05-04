@@ -2,13 +2,14 @@
     <div class="computingHistory">
         <div>
             <input class="btn-checkbox" type="checkbox" v-model="checkedAll">
-            <div class="header">Computation history</div>
+            <div class="header">Past runs</div>
         </div>
-        <div class="header history-controls">
-            <!-- <div class="height-filler"></div> -->
-            <button class="btn btn-danger" v-on:click="$refs.clearComputingHistoryConfirm.open()" :disabled="!computingHistory || computingHistory.length === 0">
-                Clear history
-            </button>
+        <div class="header history-controls row">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-danger" v-on:click="$refs.clearComputingHistoryConfirm.open()" :disabled="!computingHistory || computingHistory.length === 0">
+                    Clear runs
+                </button>
+            </div>
         </div>
         <div class="scroll-area">
             <div class="history-list">
@@ -22,7 +23,7 @@
         </div>
 
         <sweet-modal ref="clearComputingHistoryConfirm" overlay-theme="dark">
-            Do you want to clear computation history?
+            Do you want to clear past runs in this section?
             <template slot="button">
                 <button class="btn btn-info" v-on:click="$refs.clearComputingHistoryConfirm.close()">No</button>
                 <button class="btn btn-danger" v-on:click="confirm">Yes</button>
@@ -96,13 +97,6 @@ export default {
     .history-controls {
         padding-right: 1em;
         padding-bottom: .5em;
-        text-align: right;
-    }
-
-    .height-filler {
-        width: 1px;
-        height: 24px;
-        display: inline-block;
     }
 
     .btn-checkbox {

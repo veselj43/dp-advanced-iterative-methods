@@ -14,19 +14,20 @@
 
         <div v-show="methodResultActiveSection">
 
-            <!-- <keep-alive> -->
-                <component
-                    :is="methodResultComponent"
-                    :activeSection="methodResultActiveSection">
-                </component>
-            <!-- </keep-alive> -->
+            <component
+                :is="methodResultComponent"
+                :activeSection="methodResultActiveSection">
+            </component>
 
             <conf-visual v-show="methodResultActiveSection === 'comparison'"></conf-visual>
 
         </div>
 
         <div v-show="!methodResultActiveSection">
-            <p>Compute an instance or check instances to compare from the right panel.</p>
+            <p class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                Start run or check past runs to compare from the right panel.
+            </p>
         </div>
 
     </div>
@@ -38,7 +39,6 @@ import ConfVisual from './visualisation/Configuration';
 import Tabu from './methodResult/tabu/Tabu';
 import Genetic from './methodResult/genetic/Genetic';
 import Annealing from './methodResult/annealing/Annealing';
-// TODO import and add to components other methods
 
 export default {
     components: {

@@ -4,7 +4,7 @@
         <table v-if="comparingResultsItems">
             <thead>
                 <tr>
-                    <td>Name</td>
+                    <td>Run name</td>
                     <td v-for="(value, index) in varCount" :key="index">
                         {{index}}
                     </td>

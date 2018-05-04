@@ -25,7 +25,7 @@
                 <thead>
                     <tr>
                         <th class="toggle-detail"></th>
-                        <th>Instance</th>
+                        <th>Run name</th>
                         <th>Best value</th>
                         <th>States checked</th>
                         <th>Processing time</th>
