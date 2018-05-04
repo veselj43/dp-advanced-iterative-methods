@@ -34,8 +34,8 @@
         </p>
         <p>
             How exactly does it work? For every generated item the chance of this item being in the knapsack is based on its weight.
-            If you want heavier things, the chance is 1 / (sumOfWeights - n) ^ granularity.
-            For lighter things its 1 / n ^ (-granularity).
+            If you want heavier things, the chance is <code>1 / (sumOfWeights - n) ^ granularity</code>.
+            For lighter things its <code>1 / n ^ (-granularity)</code>.
         </p>
         <p>
             There are few problems with this, if the value is not chosen wisely.
@@ -44,7 +44,10 @@
             So what would happen is that the weights will be the same so not really more lighter or heavier things, beacuse compared to max weight or capacity they are all the same.
         </p>
         <p>
-            So for the best results it is recommended to use numbers between -1 and 1.
+            <div class="alert alert-info">
+  	           <i class="fas fa-info-circle"></i>
+               So for the best results it is recommended to use numbers between -1 and 1.
+            </div>
             Sum of weights is also important because it is the max value for generated weight so take that in account.
             The higher the number the closer to 0 should granularity be.
 

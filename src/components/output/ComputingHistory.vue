@@ -1,7 +1,7 @@
 <template>
     <div class="computingHistory">
         <div>
-            <div class="header">Past runs</div>
+            <div class="header">Previous runs</div>
         </div>
         <div class="header history-controls row">
             <div class="col-md-6">

@@ -28,7 +28,6 @@
         <p>
             The parameter should be self -describing.
             Only thing that may be tricky is that all edges are undirected.
-            That means that the actual number of edges is twice the number.
         </p>
 
         <h4>Instance format</h4>
@@ -42,5 +41,7 @@
 [grapf as an 2D array, space separators, index is vertex, value is the weight of and edge, 0 means no edge]
 * is there only for "Shortest" type
         </pre>
+
+        <p>For "Hamiltonian" type the number of edges is equal to (numberOfNodes * (numberOfNodes - 1)) / 2. And number of nodes to visit is equal to number of nodes.</p>
     </div>
 </template>

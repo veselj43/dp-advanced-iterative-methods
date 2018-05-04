@@ -356,12 +356,21 @@ export default {
                 var updatedName = this.instanceName;
                 if(count) updatedName += "(" + count + ")";
 
+                // deep copy params object
+                var myParams = JSON.parse(JSON.stringify(this.generatorParams[this.selectedProblemId]));
+                // "Hamiltonian" type doesnt have those parameters
+                if(this.selectedProblemId === 1 && this.generatorParams[this.selectedProblemId].type === "Hamiltonian")
+                {
+                  delete myParams.noEdges;
+                  delete myParams.noNodesToVisit;
+                }
+
                 this.addGeneratedInstances([{
                     file: {
                         name: updatedName,
                         content: result
                     },
-                    params: this.generatorParams[this.selectedProblemId]
+                    params: myParams
                 }]);
                 this.$notifier.push("Instance added to list.", "success");
                 if (!this.geterateNext) {

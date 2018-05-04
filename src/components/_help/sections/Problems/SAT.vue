@@ -18,14 +18,15 @@
             The generator for SAT is pretty simple to use without any tricky parameters.
         </p>
         <p>
-            Only problem is generating number of clauses which is close to maximum number of clauses that is |n^3| - 1.
-            Because the generating is random so the algorithm has to "hit" the last missing clauses.
-        </p>
-        <p>
             We are not generating 3SAT so every clauses can consist of random number of literals/variables.
-            But being completely random would cause the instances to be too easy, so the number of literals is 5 on average.
-            So if the problem has low number of variables it can still be pretty easy so take that in mind when generating instances.
+            But being completely random would cause the instances to be too easy, so the average number of literals should be much lower than number of variables.
         </p>
+
+        <div class="alert alert-danger">
+	         <i class="fas fa-info-circle"></i>
+            Problem is generating number of clauses which is close to maximum number of clauses that is |n^3| - 1.
+            Because the generating is random so the algorithm has to "hit" the last missing clauses.
+        </div>
 
         <h4>Instance format</h4>
         <p>

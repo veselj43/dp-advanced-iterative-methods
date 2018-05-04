@@ -6,14 +6,20 @@
             A minimum vertex cover is a vertex cover having the smallest possible number of vertices for a given graph.
         </p>
         <p>
-            Vertex cover is a set fo vertices such that each edge of the graph is incident to at least one vertex of the set.
+            Vertex cover is a set of vertices such that each edge of the graph is incident to at least one vertex of the set.
         </p>
+        <div class="alert alert-info">
+	         <i class="fas fa-info-circle"></i>
+          Edges are undirected.
+        </div>
 
         <h4>Price function</h4>
         <p>
-            Price function is the number of vertices in the selected set. 
-            If not all edges are covered the function instead returns -number of not covered edges.
+            Price function is the number of not selected vertices in the set.
+            If not all edges are covered the function instead returns - the number of not covered edges.
         </p>
+
+        <p>In the graph you see number of selected vertices if it is a vertex cover. If not it shows number of vertices + number of not covered edges.</p>
 
         <p>
             So at the start the algorithm tries to minimize the amount of not covered edges, and then minimize the amount of selected vertices.

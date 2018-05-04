@@ -5,10 +5,14 @@
             In this part you can find basic information about all problems and description of how price function is calculated.
         </p>
         <p>
-            Price function is what the methods are working with. 
-            Price function makes all the problems maximaĺization to make the methods work with all problems. 
-            This value is then transformed to value of optimization criterion displayd in graph.
+            For each problem there is also a description of generator.
         </p>
+        <div class="alert alert-info">
+	         <i class="fas fa-info-circle"></i>
+            <p>Price function is what the methods are working with.</p>
+            <p>Price function makes all the problems maximaĺization to make the methods work with all problems.</p>
+            <p>This value is then transformed to value of optimization criterion displayed in graph.</p>
+        </div>
 
         <KNAP></KNAP>
         <SAT></SAT>
