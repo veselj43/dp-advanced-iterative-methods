@@ -2,17 +2,19 @@
     <div>
         <!-- CONTROL PANEL -->
         <div class="info text-right">
-            <div v-on:click="$refs.settings.open()">
-                <i class="material-icons" v-tooltip.top="'Settings'">settings</i>
+            <div v-on:click="$refs.settings.open()" v-tooltip.top="'Settings'">
+                <i class="fas fa-cog"></i>
             </div>
-            <div>
-                <router-link to="/help">
-                    <i class="material-icons" v-tooltip.top="'Help'">help</i>
-                </router-link>
-            </div>
+            <router-link to="/help" v-tooltip.top="'Help'">
+                <i class="fas fa-question-circle"></i>
+            </router-link>
             <div v-on:click="$refs.deps.open()">
-                <i v-if="requiredDependencies.missingFeatures > 0" class="material-icons text-danger" v-tooltip.left="'Dependencies not met'">warning</i>
-                <i v-if="requiredDependencies.metFeatures > 0" class="material-icons text-success" v-tooltip.left="'Dependencies met'">check_circle</i>
+                <span v-if="requiredDependencies.missingFeatures > 0" v-tooltip.left="'Dependencies not met'">
+                    <i class="text-danger fas fa-times-circle"></i>
+                </span>
+                <span v-if="requiredDependencies.metFeatures > 0" v-tooltip.left="'Dependencies met'">
+                    <i class="text-success fas fa-check-circle"></i>
+                </span>
             </div>
         </div>
 
@@ -124,9 +126,12 @@ export default {
 </script>
 
 <style scoped>
-    .info>div {
+    .info>* {
         display: inline-block;
-        padding: .2em .1em 0 .1em;
+        width: 1.2em;
+        padding: .2em 0 0.1em 0;
+        text-align: center;
         cursor: pointer;
+        font-size: 150%;
     }
 </style>

@@ -211,10 +211,6 @@ export default {
                     cursor: pointer;
                 }
 
-                i.material-icons {
-                    font-size: 20px;
-                }
-
                 .select {
                     min-width: 0;
                     flex-grow: 1;

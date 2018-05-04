@@ -1,16 +1,12 @@
 <template>
     <div class="results" id="chartBaseContainer">
         <h3>
-            <i v-if="selectedProblem.info.goal === 'min'"
-                class="material-icons bg-primary"
-                v-tooltip.left="'Minimalization problem'">
-                trending_down
-            </i>
-            <i v-if="selectedProblem.info.goal === 'max'"
-                class="material-icons bg-primary"
-                v-tooltip.left="'Maximalization problem'">
-                trending_up
-            </i>
+            <span v-show="selectedProblem.info.goal === 'min'" v-tooltip.left="'Minimalization problem'">
+                <i class="square-icon bg-primary fas fa-angle-double-down"></i>
+            </span>
+            <span v-show="selectedProblem.info.goal === 'max'" v-tooltip.left="'Maximalization problem'">
+                <i class="square-icon bg-primary fas fa-angle-double-up"></i>
+            </span>
             {{selectedProblem.text}}
             <small>{{selectedProblem.info.description}}</small>
         </h3>
@@ -94,6 +90,10 @@ export default {
 <style scoped>
     #chartBaseContainer {
         width: 100%;
+    }
+
+    .square-icon {
+        width: 1em;
     }
 
     h3 {

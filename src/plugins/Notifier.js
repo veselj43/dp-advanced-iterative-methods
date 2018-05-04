@@ -1,8 +1,9 @@
 import Toasted from 'vue-toasted';
 
 var toastedOptions = {
-    position: "top-center",
-    theme: "primary",
+    position: 'top-center',
+    theme: 'primary',
+    iconPack : 'fontawesome',
     duration: 5000,
     action: [{
         text: 'CLOSE',
@@ -16,22 +17,22 @@ var options = {
     bindedMsgOptions: {
         show: {
             icon: {
-                name: 'description'
+                name: 'comment'
             }
         },
         success: {
             icon: {
-                name: 'done'
+                name: 'check'
             }
         },
         info: {
             icon: {
-                name: 'info_outline'
+                name: 'info-circle'
             }
         },
         error: {
             icon: {
-                name: 'error_outline'
+                name: 'exclamation-circle'
             }
         },
         undo: {

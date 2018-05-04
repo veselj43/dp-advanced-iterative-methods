@@ -1,20 +1,27 @@
 
-.toasted-container .toasted .action,
-.toasted-container .toasted .action:hover {
-    text-transform: uppercase;
-    font-size: 12px;
-}
+.toasted-container .toasted {
+    .svg-inline--fa {
+        margin-right: .5em;
+    }
 
-.toasted.primary.success {
-    background-color: #4cae4c;
-}
-.toasted.primary.info {
-    background-color: #46b;
-}
-.toasted.primary.error {
-    background-color: #d43f3a;
+    .action {
+        &, &:hover {
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+    }
 
-    a {
-        color: #000;
+    &.primary.success {
+        background-color: #4cae4c;
+    }
+    &.primary.info {
+        background-color: #46b;
+    }
+    &.primary.error {
+        background-color: #d43f3a;
+
+        a {
+            color: #000;
+        }
     }
 }
