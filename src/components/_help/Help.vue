@@ -45,16 +45,27 @@
 
         </div>
 
-        <div class="page-content-wrapper">
-            <div class="page-content">
-                <h1>Help page</h1>
-
+        <div class="help-content-wrapper">
+            <div class="help-content">
                 <router-view></router-view>
             </div>
         </div>
 
     </div>
 </template>
+
+<style lang="scss">
+    .help-content {
+        h3 {
+            margin-top: 2em;
+            border-bottom: #ccc 1px dashed;
+        }
+
+        h4 {
+            margin-top: 1.5em;
+        }
+    }
+</style>
 
 <style lang="scss" scoped>
     $left-panel-width: 250px;
@@ -98,11 +109,11 @@
         border-right: #ddd 1px solid;
     }
 
-    .page-content-wrapper {
+    .help-content-wrapper {
         margin-left: $left-panel-width;
         padding: 50px;
 
-        .page-content {
+        .help-content {
             max-width: 800px;
             margin: 0 auto;
         }

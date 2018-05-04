@@ -14,7 +14,7 @@
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuNeighborsToCheck')}">
             <label class="" for="neighborsToCheck">Neighbor states to check</label>
-            <span class="form-tooltip" v-tooltip.right="'How many possible moves to check for next state candidate'">
+            <span class="form-tooltip" v-tooltip.right="'How many neighbor configurations to check in one iteration'">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </span>
             <div class="input-group">
@@ -52,7 +52,7 @@
             <span v-show="errors.has('tabuSizeShort')" class="help-block">{{ errors.first('tabuSizeShort') }}</span>
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuSizeShort')}">
-            <label class="" for="tabuSizeShort">Starting state</label>
+            <label class="" for="tabuSizeShort">Starting configuration</label>
             <span class="form-tooltip" v-tooltip.right="'Random or default (ex.: all false or path by node indexes)'">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </span>

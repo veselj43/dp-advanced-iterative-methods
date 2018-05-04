@@ -37,10 +37,4 @@ export default {
 </script>
 
 <style lang="scss">
-    .help-problems {
-        h3 {
-            margin-top: 2em;
-            border-bottom: #ccc 1px dashed;
-        }
-    }
 </style>
