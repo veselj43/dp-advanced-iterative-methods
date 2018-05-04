@@ -21,6 +21,30 @@
             Price function is the length of the cycle/sequence.
         </p>
 
+        <h4>Configuration</h4>
+        TSP uses permutation configuration. It represents the order of visiting cities.
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="panel-title">Permutation</span>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>Represented as permutation of element identifiers stored in array</li>
+                    <li>
+                        Implementation of <code>getNeighbor</code> method
+                        <ol>
+                            <li>Method parameter defines two array indexes so that 0 &le; <code>index1</code>, <code>index2</code> &lt; <code>array.length</code></li>
+                            <li>Flip the identifiers on defined array indexes (<code>swap(array[index1], array[index2])</code>)</li>
+                            <li>Return the new configuration</li>
+                        </ol>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        So the neighbour is permutation where the order of two cities was swapped.
+
         <h4>Generator</h4>
         <p>
             The generator is based on the type of travelling salesman problem you choose.
@@ -39,8 +63,8 @@
 [maximum weight of an edge]
 *[list of nodes to visit in ascending order]
 [grapf as an 2D array, space separators, index is vertex, value is the weight of and edge, 0 means no edge]
-* is there only for "Shortest" type
         </pre>
+        <p>* is there only for "Shortest" type.</p>
 
         <p>For "Hamiltonian" type the number of edges is equal to (numberOfNodes * (numberOfNodes - 1)) / 2. And number of nodes to visit is equal to number of nodes.</p>
     </div>

@@ -25,6 +25,30 @@
             So at the start the algorithm tries to minimize the amount of not covered edges, and then minimize the amount of selected vertices.
         </p>
 
+        <h4>Configuration</h4>
+        Minimum vertex cover uses bit array configuration. The config says which vertices are chosen.
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="panel-title">Bit array</span>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>Represented as boolean array</li>
+                    <li>
+                        Implementation of <code>getNeighbor</code> method
+                        <ol>
+                            <li>Method parameter defines array <code>index</code> so that 0 &le; <code>index</code> &lt; <code>array.length</code></li>
+                            <li>Flip the bit on position <code>index</code> (<code>array[index] = !array[index]</code>)</li>
+                            <li>Return the new configuration</li>
+                        </ol>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        So the neighbour is set of vertices with one vertice added or removed from the parent set.
+
         <h4>Generator</h4>
         <p>
             The generator is pretty simple. Allowing to choose number of vertices and edges.

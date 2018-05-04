@@ -22,6 +22,30 @@
             Using this method, overweight knapsack is always worse than the correct one and thats what we want.
         </p>
 
+        <h4>Configuration</h4>
+        Knapsack uses bit array configuration. It says which items are in the knapsack.
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="panel-title">Bit array</span>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>Represented as boolean array</li>
+                    <li>
+                        Implementation of <code>getNeighbor</code> method
+                        <ol>
+                            <li>Method parameter defines array <code>index</code> so that 0 &le; <code>index</code> &lt; <code>array.length</code></li>
+                            <li>Flip the bit on position <code>index</code> (<code>array[index] = !array[index]</code>)</li>
+                            <li>Return the new configuration</li>
+                        </ol>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        So the neighbour is knapsack with one thing removed or added.
+
         <h4>Generator</h4>
         <p>
             Most of the generator parameters should be easy to understand.

@@ -22,7 +22,7 @@
             <p>Prob(accepting uphill move) ~ exp(-deltaE / T)), where T si current temperature.</p>
 
             <p>Used annealing schedule is geometric cooling schedule, also known as exponential multiplicative cooling. Every step the cooling does the following: <code>newTemp = currentTemp * coolingCoefficient</code>.
-            So at step k <code>temperature = startingTemperature * coolingCoefficient ^ k</code>.</p>
+            So at step k: <code>temperature = startingTemperature * coolingCoefficient ^ k</code>.</p>
         </div>
 
         <h3>Calculating starting temperature</h3>
