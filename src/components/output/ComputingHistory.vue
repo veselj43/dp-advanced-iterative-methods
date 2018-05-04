@@ -1,11 +1,18 @@
 <template>
     <div class="computingHistory">
         <div>
-            <input class="btn-checkbox" type="checkbox" v-model="checkedAll">
             <div class="header">Past runs</div>
         </div>
         <div class="header history-controls row">
-            <div class="col-md-12 text-right">
+            <div class="col-md-6">
+                <button v-show="checkedAll" class="btn btn-primary" @click="checkedAll = !checkedAll">
+                    Deselect all
+                </button>
+                <button v-show="!checkedAll" class="btn btn-primary" @click="checkedAll = !checkedAll">
+                    Select all
+                </button>
+            </div>
+            <div class="col-md-6 text-right">
                 <button class="btn btn-danger" v-on:click="$refs.clearComputingHistoryConfirm.open()" :disabled="!computingHistory || computingHistory.length === 0">
                     Clear runs
                 </button>

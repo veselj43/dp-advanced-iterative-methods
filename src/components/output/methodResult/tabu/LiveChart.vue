@@ -62,6 +62,10 @@ export default {
         this.liveLineChart.render();
     },
 
+    destroyed() {
+        window.removeEventListener("resize", this.windowResize);
+    },
+
     methods: {
         updateElementWidth() {
             var activeWidth = document.getElementById('liveChart').offsetWidth;

@@ -100,6 +100,7 @@ It should contain definition of following seriesChart methods:
     },
 
     destroyed() {
+        window.removeEventListener("resize", this.windowResize);
         if (this.$storeUnsubscribe) this.$storeUnsubscribe();
     },
 
