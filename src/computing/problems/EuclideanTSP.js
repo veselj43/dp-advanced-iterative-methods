@@ -1,6 +1,9 @@
 import { Permutation } from "./configurationTypes/Permutation";
 import { Problem, ProblemTypeEnum } from './Problem'
 
+/**
+ * Class representing Euclidean TSP.
+ */
 export class EuclideanTSP extends Problem {
     /**
      * Constructor, construct the class from the data file selected.
@@ -27,7 +30,7 @@ export class EuclideanTSP extends Problem {
     }
 
     /**
-     * Returns fitness of selected configuration(Permutation)
+     * Returns fitness of selected configuration (Permutation)
      * @param  {class} permutationConfig Permutation of which fitness we want
      * @return {int}  calculated fitness of the configuration
      */
@@ -54,10 +57,21 @@ export class EuclideanTSP extends Problem {
         return price;
     }
 
+    /**
+     * Counts Euclidean distance between 2 points
+     * @param coord1 coordinates of first point with x and y field
+     * @param coord2 coordinates of second point with x and y field
+     * @returns {number} Euclidean distance between given points
+     */
     countEuclideanDistance(coord1, coord2){
         return Math.sqrt(Math.pow((coord1.x - coord2.x), 2) + Math.pow((coord1.y - coord2.y), 2));
     }
 
+    /**
+     * Transforms maximization cost to real cost of problem.
+     * @param {number} maxCost maximization cost to transform.
+     * @returns {number} Negative value of maxCost.
+     */
     transformMaximizationToRealCost(maxCost) {
         return -maxCost;
     }
@@ -75,18 +89,27 @@ export class EuclideanTSP extends Problem {
     }
 
     /**
-     *
-     * @param  {class} permutationConfig permutation of which path we want to build
-     * @return {String}
+     * Gets permutation array from configuration.
+     * @param  {class} permutationConfig permutation of which path we want to get
+     * @return {String} path
      */
     getResult(permutationConfig) {
         return permutationConfig.getArray();
     }
 
+    /**
+     * Returns problem type.
+     * @returns {string} permutation
+     */
     getType() {
         return ProblemTypeEnum.PERMUTATION;
     }
 
+    /**
+     * Resolves number od cities range of x and y coordinates.
+     * @param {string} instanceContent content of file with instance
+     * @returns {{noCities: number, x: number, y: number}} object with instance params
+     */
     static resolveInstanceParams(instanceContent) {
         var dataSet = instanceContent.split('\n');
         var noCities = + dataSet[0].split(/\s+/)[0];
@@ -119,7 +142,7 @@ export class EuclideanTSP extends Problem {
 
     /**
      * Returns instance invalidity
-     * @param  {string} instanceContent content of the instance
+     * @param  {string} instanceContent content of file with instance
      * @return {boolean} is instance invalid
      */
     static isInvalidInstance(instanceContent) {
