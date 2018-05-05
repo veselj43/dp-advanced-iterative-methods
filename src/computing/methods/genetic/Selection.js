@@ -8,6 +8,10 @@ export const SelectionEnum = {
 
 
 export class TournamentSelection {
+    /**
+     * Creates tournament selection of given size.
+     * @param {number} tournamentSize size of tournament
+     */
     constructor(tournamentSize) {
         this._tournamentSize = tournamentSize;
         this._smaller = Math.floor(this._tournamentSize);
@@ -15,6 +19,12 @@ export class TournamentSelection {
         this._rest = this._tournamentSize - this._smaller;
     }
 
+    /**
+     * Selects individuals using tournament selection.
+     * @param {Array} generation from which to select
+     * @param {number} number of individuals to select
+     * @returns {Array} selected individuals
+     */
     selectIndividuals(generation, number) {
         var selected = [];
         var smallerRounds = number - Math.round(number*this._rest);
@@ -29,6 +39,13 @@ export class TournamentSelection {
         return selected;
     }
 
+    /**
+     * Find winner of tournament of given size.
+     * @param generation from which to select competing individuals
+     * @param tournamentSize size of tournament
+     * @returns {Individual} winner of tournament
+     * @private
+     */
     _findWinner(generation, tournamentSize) {
         var winner = this._selectRandomIndividual(generation);
         for (var i = 1; i < tournamentSize; i++) {
@@ -40,18 +57,36 @@ export class TournamentSelection {
         return winner;
     }
 
+    /**
+     * Selects random individual from generation
+     * @param generation from which to select
+     * @returns {Individual} selected individual
+     * @private
+     */
     _selectRandomIndividual(generation) {
         return generation[getRandomInt(0, generation.length)];
     }
 }
 
 export class RouletteSelection {
+    /**
+     * Creates roulette selection with given parameters.
+     * @param scale type of scaling linear/ranking
+     * @param min scale
+     * @param max scale
+     */
     constructor(scale, min, max) {
         this.scale = scale;
         this.min = min;
         this.max = max;
     }
 
+    /**
+     * Selects individuals using roulette selection.
+     * @param {Array} generation from which to select
+     * @param {number} number of individuals to select
+     * @returns {Array} selected individuals
+     */
     selectIndividuals(generation, number) {
         var rankSum;
         switch (this.scale) {
@@ -71,6 +106,13 @@ export class RouletteSelection {
         return selected;
     }
 
+    /**
+     * Select individual from generation using roulette
+     * @param {Array} generation from which to select
+     * @param {number} rankSum sum of portions on roulette
+     * @returns {Individual} selected individual
+     * @private
+     */
     _rouletteSelect(generation, rankSum) {
         var roulette = getRandomFloat(0, rankSum);
 
@@ -83,6 +125,12 @@ export class RouletteSelection {
         return generation[i];
     }
 
+    /**
+     * Give individuals portions on roulette wheel based on linearly scaled rank.
+     * @param {Array} generation individuals
+     * @returns {number} sum of portions
+     * @private
+     */
     _rankIndividuals(generation) {
         var rankSum = 0;
         for (var i = 0; i < generation.length; i++) {
@@ -93,6 +141,12 @@ export class RouletteSelection {
         return rankSum;
     }
 
+    /**
+     * Give individuals portions on roulette wheel based on linearly scaled fitness.
+     * @param {Array} generation individuals
+     * @returns {number} sum of portions
+     * @private
+     */
     _scaleIndividuals(generation) {
         var fitMax = generation[generation.length-1].getFitness();
         var fitMin = generation[0].getFitness();
