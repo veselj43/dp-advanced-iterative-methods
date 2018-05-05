@@ -6,7 +6,7 @@
                 <i class="fas fa-play"></i> Start run
             </button>
             <button v-show="computingIsRunning" class="btn btn-danger" v-on:click="stop">
-                <i class="fas fa-stop"></i> Stop
+                <i class="fas fa-stop"></i> Cancel run
             </button>
         </span>
     </div>

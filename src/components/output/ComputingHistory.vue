@@ -18,15 +18,13 @@
                 </button>
             </div>
         </div>
-        <div class="scroll-area">
-            <div class="history-list">
-                <computing-history-item
-                    v-for="(result, index) in computingHistory"
-                    :key="result._id"
-                    :item="result"
-                    :index="index"
-                ></computing-history-item>
-            </div>
+        <div class="history-list">
+            <computing-history-item
+                v-for="(result, index) in computingHistory"
+                :key="result._id"
+                :item="result"
+                :index="index"
+            ></computing-history-item>
         </div>
 
         <sweet-modal ref="clearComputingHistoryConfirm" overlay-theme="dark">
@@ -87,18 +85,17 @@ export default {
 
 <style lang="scss" scoped>
     .computingHistory {
+        min-height: 0;
+
         input, input + .header {
             display: inline-block;
         }
     }
-
-    .scroll-area {
-        overflow-y: auto;
-        border-top: #ccc 1px solid;
-    }
-
+    
     .history-list {
+        overflow-y: auto;
         margin-bottom: .2em;
+        border-top: #ccc 1px solid;
     }
 
     .history-controls {

@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="main-page">
         <div v-if="computingIsRunning || computingIsProcessingResults" class="__disable-layer"></div>
 
         <navbar></navbar>
 
-        <div class="main-page">
+        <div class="main-page-content">
 
             <div class="left-panel">
                 <params-input class="component"></params-input>

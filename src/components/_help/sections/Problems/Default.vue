@@ -7,11 +7,13 @@
         <p>
             For each problem there is also a description of generator.
         </p>
-        <div class="alert alert-info">
-	         <i class="fas fa-info-circle"></i>
-            <p>Price function is what the methods are working with.</p>
-            <p>Price function makes all the problems maximization to make the methods work with all problems.</p>
-            <p>This value is then transformed to value of optimization criterion displayed in graph.</p>
+        <div class="alert alert-info alert-with-icon">
+            <i class="fas fa-info-circle"></i>
+            <div class="alert-content">
+                <p>Price function is what the methods are working with.</p>
+                <p>Price function makes all the problems maximization to make the methods work with all problems.</p>
+                <p>This value is then transformed to value of optimization criterion displayed in graph.</p>
+            </div>
         </div>
 
         <KNAP></KNAP>
