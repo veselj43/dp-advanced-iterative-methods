@@ -1,6 +1,7 @@
 <template>
     <div>
         <h2>Tabu Search algorithm for this application</h2>
+        <a href="#concepts"></a>
         <h3>Concepts</h3>
         <h4>Neighbor and neighborhood</h4>
         <p>
@@ -57,6 +58,7 @@
             If cost of a tabu state is greater than the best cost yet found, consider the state as if it wasn't tabu.
         </p>
 
+        <a href="#input"></a>
         <h3>Input parameters</h3>
         <h4>Iteration limit</h4>
         <p>
