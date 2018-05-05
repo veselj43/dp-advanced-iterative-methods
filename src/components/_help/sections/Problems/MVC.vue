@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        So the neighbour is set of vertices with one vertice added or removed from the parent set.
+        So the neighbour is set of vertices with one vertex added or removed from the parent set.
 
         <h4>Generator</h4>
         <p>

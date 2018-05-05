@@ -53,7 +53,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfNodes')}">
                     <label for="SalegenParam1">Number of nodes</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of vertexes(nodes) in the generated problem'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of vertices(nodes) in the generated problem'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="SalegenParam1" v-model="generatorParams[1].noNodes" placeholder=""
                     name="numberOfNodes"
                     data-vv-as="number of nodes"
@@ -75,7 +75,7 @@
 
                 <div v-if="generatorParams[1].type === 'Shortest'" class="form-group" v-bind:class="{'has-error': errors.has('numberOfEdges')}">
                     <label for="SalegenParam3">Number of edges</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of edges, the actual number is 2 times this value, because the edges are not oriented'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'Number of edges, the actual number is 2 times this value, because the edges are undirected'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="SalegenParam3" v-model="generatorParams[1].noEdges" placeholder=""
                     name="numberOfEdges"
                     data-vv-as="number of edges"
@@ -145,7 +145,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('granularity')}">
                     <label for="KnapgenParam5">Granularity</label>
-                    <span class="form-tooltip" v-tooltip.right="'For number > 0 the instance will contain more heavier things, for < 0 more lighter things. Each item has 1/(maxWeight - weight)^granularity chance to be in the instance for heavier things and 1/weight^(-granularity) for lighter things, where maxWeight = sum of weights. WARNING!!! for realy high numbers(or really low for lighter things) the generation take a lot of time because most things will be thrown away. So for best result use number between <-1, 1>. For 0 the generating is random.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <span class="form-tooltip" v-tooltip.right="'For number > 0 the instance will contain more heavier things, for < 0 more lighter things. For best result use number between <-1, 1>. For 0 the generating is random. More info in help.'"><span class="glyphicon glyphicon-question-sign"></span></span>
                     <input type="number" class="form-control" id="KnapgenParam5" v-model="generatorParams[2].granularity" placeholder=""
                     name="granularity"
                     data-vv-as="granularity"
