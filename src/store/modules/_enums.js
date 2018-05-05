@@ -15,7 +15,7 @@ export const methods = [
 export const problems = [
     {
         id: 0,
-        text: "SAT",
+        text: "MAX-SAT",
         info: {
             goal: "max",
             description: "Maximize number of satisfied clauses"
@@ -55,7 +55,7 @@ export const problems = [
 export const problemExampleInstances = {
     0: {
         file: 'uf20-01.cnf',
-        name: 'SAT_Example'
+        name: 'MAX-SAT_Example'
     },
     1: {
         file: 'ts20-30',

@@ -1,11 +1,11 @@
 <template>
     <div>
         <a href="#SAT"></a>
-        <h3>SAT</h3>
+        <h3>MAX-SAT</h3>
         <p>
             Sat problem is basically finding an interpretation of variables that satisfies Boolean formula.
             In our interpretation its about finding interpretation that satisfies as much clauses as possible.
-            The given boolean formula is inputed in CNF format.
+            The given boolean formula is inputted in CNF format.
         </p>
 
         <h4>Price function</h4>
