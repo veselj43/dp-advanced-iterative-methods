@@ -32,7 +32,7 @@ import { SelectionEnum } from '@/computing/methods/genetic/Selection';
 
 let removeHistoryItemUndo = (context) => (item) => {
     context.$store.commit('adjustIndexesAfterRemoveUndo', context.index);
-    context.$store.dispatch('insertComputingHistory', item);
+    context.$store.dispatch('insertComputingHistory', { dbObject: item });
 }
 
 export default {
