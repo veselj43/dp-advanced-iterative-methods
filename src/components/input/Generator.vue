@@ -7,7 +7,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfVariables')}">
                     <label for="SATgenParam1">Number of variables</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of variables in the generated instance'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#SATgenerator" class="form-tooltip" v-tooltip.right="'Number of variables in the generated instance'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="SATgenParam1" v-model="generatorParams[0].noVariables" placeholder=""
                     name="numberOfVariables"
                     data-vv-as="number of variable"
@@ -18,7 +18,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfClauses')}">
                     <label for="SATgenParam2">Number of clauses</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of clauses in the generated instance. WARNING!!! - generating clauses is random, so choosing number of clauseles close to maxim number of clause will take a lot of time.'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#SATgenerator" class="form-tooltip" v-tooltip.right="'Number of clauses in the generated instance. WARNING!!! - generating clauses is random, so choosing number of clauseles close to maxim number of clause will take a lot of time.'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="SATgenParam2" v-model="generatorParams[0].noClauses" placeholder=""
                     name="numberOfClauses"
                     data-vv-as="number of clauses"
@@ -29,7 +29,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfLiteralsInClauses')}">
                     <label for="SATgenParam3">Average number of literals in clauses</label>
-                    <span class="form-tooltip" v-tooltip.right="'How many literals will be in clauses on average'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#SATgenerator" class="form-tooltip" v-tooltip.right="'How many literals will be in clauses on average'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="SATgenParam3" v-model="generatorParams[0].noLiterals" placeholder=""
                     name="numberOfLiteralsInClauses"
                     data-vv-as="average number of literals in clauses"
@@ -44,7 +44,7 @@
 
                 <div class="form-group">
                     <label for="problem-type">Problem type</label>
-                    <span class="form-tooltip" v-tooltip.right="'Hamiltonian path is typical Travelling Salesman problem. \n Shortest path allows to go to nodes multiple times and calculates real shortest path. Also this version allows to visit just some of the nodes and choose number of edges.'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#TSPgenerator" class="form-tooltip" v-tooltip.right="'Hamiltonian path is typical Travelling Salesman problem. \n Shortest path allows to go to nodes multiple times and calculates real shortest path. Also this version allows to visit just some of the nodes and choose number of edges.'"><i class="fas fa-question-circle"></i></router-link>
                     <select class="form-control" id="problem-type" v-model="generatorParams[1].type">
                         <option value="Hamiltonian">Hamiltonian path</option>
                         <option value="Shortest">Shortest path</option>
@@ -53,7 +53,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('numberOfNodes')}">
                     <label for="SalegenParam1">Number of nodes</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of vertexes(nodes) in the generated problem'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#TSPgenerator"  class="form-tooltip" v-tooltip.right="'Number of vertexes(nodes) in the generated problem'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="SalegenParam1" v-model="generatorParams[1].noNodes" placeholder=""
                     name="numberOfNodes"
                     data-vv-as="number of nodes"
@@ -64,7 +64,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('maximumEdgePrice')}">
                     <label for="SalegenParam2">Maximum weight of an edge</label>
-                    <span class="form-tooltip" v-tooltip.right="'Maximum price of each edge'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#TSPgenerator"  class="form-tooltip" v-tooltip.right="'Maximum price of each edge'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="SalegenParam2" v-model="generatorParams[1].maxPrice" placeholder=""
                     name="maximumEdgePrice"
                     data-vv-as="maximum weight of an edge"
@@ -75,7 +75,7 @@
 
                 <div v-if="generatorParams[1].type === 'Shortest'" class="form-group" v-bind:class="{'has-error': errors.has('numberOfEdges')}">
                     <label for="SalegenParam3">Number of edges</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of edges, the actual number is 2 times this value, because the edges are not oriented'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#TSPgenerator" class="form-tooltip" v-tooltip.right="'Number of edges, the actual number is 2 times this value, because the edges are not oriented'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="SalegenParam3" v-model="generatorParams[1].noEdges" placeholder=""
                     name="numberOfEdges"
                     data-vv-as="number of edges"
@@ -86,7 +86,7 @@
 
                 <div v-if="generatorParams[1].type === 'Shortest'" class="form-group" v-bind:class="{'has-error': errors.has('numberOfNodesToVisit')}">
                     <label for="SalegenParam4">Number of nodes to visit</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of the nodes, that the salesman has to visit.'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#TSPgenerator"  class="form-tooltip" v-tooltip.right="'Number of the nodes, that the salesman has to visit.'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="SalegenParam4" v-model="generatorParams[1].noNodesToVisit" placeholder=""
                     name="numberOfNodesToVisit"
                     data-vv-as="number of nodes to visit"
@@ -101,7 +101,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('noItems')}">
                     <label for="KnapgenParam1">Number of items</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of items in the instance'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#KNAPgenerator"  class="form-tooltip" v-tooltip.right="'Number of items in the instance'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="KnapgenParam1" v-model="generatorParams[2].noItems" placeholder=""
                     name="noItems"
                     data-vv-as="number of items"
@@ -112,7 +112,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('Capacity')}">
                     <label for="KnapgenParam2">Capacity</label>
-                    <span class="form-tooltip" v-tooltip.right="'Capacity of the knapsack, should be lower than sum of weights'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#KNAPgenerator" class="form-tooltip" v-tooltip.right="'Capacity of the knapsack, should be lower than sum of weights'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="KnapgenParam2" v-model="generatorParams[2].capacity" placeholder=""
                     name="Capacity"
                     data-vv-as="capacity"
@@ -123,7 +123,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('sumOfWeights')}">
                     <label for="KnapgenParam3">Sum of items weights</label>
-                    <span class="form-tooltip" v-tooltip.right="'Sum of the weights of all items'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#KNAPgenerator" class="form-tooltip" v-tooltip.right="'Sum of the weights of all items'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="KnapgenParam3" v-model="generatorParams[2].sumOfWeights" placeholder=""
                     name="sumOfWeights"
                     data-vv-as="sum of item weights"
@@ -134,7 +134,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('maxValue')}">
                     <label for="KnapgenParam4">Max value</label>
-                    <span class="form-tooltip" v-tooltip.right="'Maximum value of each item'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#KNAPgenerator" class="form-tooltip" v-tooltip.right="'Maximum value of each item'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="KnapgenParam4" v-model="generatorParams[2].maxValue" placeholder=""
                     name="maxValue"
                     data-vv-as="max value"
@@ -145,7 +145,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('granularity')}">
                     <label for="KnapgenParam5">Granularity</label>
-                    <span class="form-tooltip" v-tooltip.right="'For number > 0 the instance will contain more heavier things, for < 0 more lighter things. Each item has 1/(maxWeight - weight)^granularity chance to be in the instance for heavier things and 1/weight^(-granularity) for lighter things, where maxWeight = sum of weights. WARNING!!! for realy high numbers(or really low for lighter things) the generation take a lot of time because most things will be thrown away. So for best result use number between <-1, 1>. For 0 the generating is random.'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#KNAPgenerator" class="form-tooltip" v-tooltip.right="'For number > 0 the instance will contain more heavier things, for < 0 more lighter things. Each item has 1/(maxWeight - weight)^granularity chance to be in the instance for heavier things and 1/weight^(-granularity) for lighter things, where maxWeight = sum of weights. WARNING!!! for realy high numbers(or really low for lighter things) the generation take a lot of time because most things will be thrown away. So for best result use number between <-1, 1>. For 0 the generating is random.'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="KnapgenParam5" v-model="generatorParams[2].granularity" placeholder=""
                     name="granularity"
                     data-vv-as="granularity"
@@ -160,8 +160,8 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('size')}">
                     <label for="MingenParam1">Number of nodes</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of nodes in the generated graph.'"><i class="fas fa-question-circle"></i></span>
-                    <input type="number" class="form-control" id="genParam1" v-model="generatorParams[3].size" placeholder=""
+                    <router-link to="/help/Problems#MVCgenerator" class="form-tooltip" v-tooltip.right="'Number of nodes in the generated graph.'"><i class="fas fa-question-circle"></i></router-link>
+                    <input type="number" class="form-control" id="MingenParam1" v-model="generatorParams[3].size" placeholder=""
                     name="size"
                     data-vv-as="number of nodes"
                     v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
@@ -171,8 +171,8 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('noEdges')}">
                     <label for="MingenParam2">Number of edges</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of edges in the generated graph. The edges are undirected so the actual number of edges is twice of this.'"><i class="fas fa-question-circle"></i></span>
-                    <input type="number" class="form-control" id="genParam2" v-model="generatorParams[3].noEdges" placeholder=""
+                    <router-link to="/help/Problems#MVCgenerator" class="form-tooltip" v-tooltip.right="'Number of edges in the generated graph. The edges are undirected so the actual number of edges is twice of this.'"><i class="fas fa-question-circle"></i></router-link>
+                    <input type="number" class="form-control" id="MingenParam2" v-model="generatorParams[3].noEdges" placeholder=""
                     name="noEdges"
                     data-vv-as="number of edges"
                     v-validate.initial="{ required: true, min_value: 0, max_value: (+generatorParams[3].size * (+generatorParams[3].size - 1)) / 2, regex: /^[0-9]+$/ }"
@@ -185,7 +185,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('cities')}">
                     <label for="tsp-cities">Number of cities</label>
-                    <span class="form-tooltip" v-tooltip.right="'Number of cities on the map.'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#ETSPgenerator" class="form-tooltip" v-tooltip.right="'Number of cities on the map.'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="tsp-cities" v-model="generatorParams[4].noCities"
                            name="cities"
                            data-vv-as="number of cities"
@@ -196,7 +196,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('x')}">
                     <label for="tsp-x">Map x range</label>
-                    <span class="form-tooltip" v-tooltip.right="'Map size from east to west.'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#ETSPgenerator" class="form-tooltip" v-tooltip.right="'Map size from east to west.'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="tsp-x" v-model="generatorParams[4].x"
                            name="x"
                            data-vv-as="x range"
@@ -207,7 +207,7 @@
 
                 <div class="form-group" v-bind:class="{'has-error': errors.has('y')}">
                     <label for="tsp-y">Map y range</label>
-                    <span class="form-tooltip" v-tooltip.right="'Map size from north to south.'"><i class="fas fa-question-circle"></i></span>
+                    <router-link to="/help/Problems#ETSPgenerator" class="form-tooltip" v-tooltip.right="'Map size from north to south.'"><i class="fas fa-question-circle"></i></router-link>
                     <input type="number" class="form-control" id="tsp-y" v-model="generatorParams[4].y"
                            name="y"
                            data-vv-as="y range"

@@ -29,6 +29,7 @@
 
         So the neighbour is knapsack with one thing removed or added.
 
+        <a href="#KNAPgenerator"></a>
         <h4>Generator</h4>
         <p>
             Most of the generator parameters should be easy to understand.

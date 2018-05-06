@@ -23,10 +23,10 @@
         <permutation></permutation>
 
         So the neighbour is permutation where the order of two cities was swapped.
-
+        <a href="#ETSPgenerator"></a>
         <h4>Generator</h4>
         <p>
-            Generator generates coordinates uniformly from 0 to given non-negative range.
+            Generator generates <b>coordinates</b> uniformly from 0 to given non-negative <b>range</b>. Number of coordinates corresponds to <b>number of cities</b>.
         </p>
 
         <h4>Instance format</h4>

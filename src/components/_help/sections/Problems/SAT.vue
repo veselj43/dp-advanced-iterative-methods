@@ -20,6 +20,7 @@
 
         So the neighbour is interpretation with one variable changed to false or true.
 
+        <a href="#SATgenerator"></a>
         <h4>Generator</h4>
         <p>
             The generator for SAT is pretty simple to use without any tricky parameters.
