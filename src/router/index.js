@@ -10,7 +10,7 @@ import Problems from '@/components/_help/sections/Problems/Default';
 
 Vue.use(Router);
 
-export default new Router({
+let router = new Router({
     routes: [
         {
             path: '/',
@@ -39,6 +39,7 @@ export default new Router({
             ]
         }
     ],
+
     scrollBehavior: (to, from, savedPosition) => {
         return (to.hash) ? {
             selector: `a[href='${to.hash}']`,
@@ -50,3 +51,13 @@ export default new Router({
     },
     linkActiveClass: 'active'
 });
+
+router.beforeEach((to, from, next) => {
+    if (from.name === 'Main') {
+        document.body.style.height = null;
+        document.body.style.overflow = null;
+    }
+    next();
+});
+
+export default router;
