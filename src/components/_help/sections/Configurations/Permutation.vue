@@ -7,7 +7,7 @@
             <ul>
                 <li>Represented as permutation of element identifiers stored in array</li>
                 <li>
-                    Implementation of <code>getNeighbor</code> method
+                    Implementation of <code>getNeighbour</code> method
                     <ol>
                         <li>Method parameter defines two array indexes so that 0 &le; <code>index1</code>, <code>index2</code> &lt; <code>array.length</code></li>
                         <li>Flip the identifiers on defined array indexes (<code>swap(array[index1], array[index2])</code>)</li>
