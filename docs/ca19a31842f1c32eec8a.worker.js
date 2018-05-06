@@ -1196,7 +1196,7 @@ var BitArray = function () {
     }, {
         key: "getNeighbour",
         value: function getNeighbour(index) {
-            if (!index) index = Math.round(Math.random() * (this._bitArray.length - 1));
+            if (!index && index !== 0) index = Math.round(Math.random() * (this._bitArray.length - 1));
 
             return this.copy().changeOn(index);
         }
@@ -3106,8 +3106,8 @@ var Permutation = function () {
     }, {
         key: "getNeighbour",
         value: function getNeighbour(indexOne, indexTwo) {
-            indexOne = indexOne || Math.round(Math.random() * (this._Array.length - 1));
-            indexTwo = indexTwo || Math.round(Math.random() * (this._Array.length - 1));
+            indexOne = indexOne || indexOne === 0 ? indexOne : Math.round(Math.random() * (this._Array.length - 1));
+            indexTwo = indexTwo || indexTwo === 0 ? indexTwo : Math.round(Math.random() * (this._Array.length - 1));
 
             while (indexOne === indexTwo) {
                 indexTwo = Math.round(Math.random() * (this._Array.length - 1));
@@ -6306,4 +6306,4 @@ exports.default = function (self, call) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=c5e2b07a9a6060bccbec.worker.js.map
+//# sourceMappingURL=ca19a31842f1c32eec8a.worker.js.map
