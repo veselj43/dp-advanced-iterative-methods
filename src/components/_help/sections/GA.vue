@@ -9,6 +9,8 @@
             Over successive generations, the population "evolves" toward an optimal solution.
             You can apply the genetic algorithm to solve a variety of optimization problems that are not well suited for standard optimization algorithms, including problems in which the objective function is discontinuous, nondifferentiable, stochastic, or highly nonlinear.
         </p>
+        <a href="#basic"></a>
+        <h3>GA cycle</h3>
         <p>
             This GA starts with <b>population</b> of given <b>size</b>.
             Then computes given <b>number of generations</b> and stops and returns best found solution.
@@ -21,20 +23,25 @@
             <li>All individuals in new generation goes into mutation where <b>mutation rate</b> defines how much are they going to be changed.</li>
             <li><b>Elite individuals</b> from old generation are added to new generation without mutation. So the new generation is of same size as the old one.</li>
         </ol>
-
+        <a href="#selection"></a>
         <h3>Selection</h3>
+        <a href="#tournament"></a>
         <h4>Tournament</h4>
         <ul>
             <li>Randomly choose several (<em>k</em>) individuals and take the best one.</li>
             <li>Repeat, until the whole new population is generated.</li>
             <li>The selection pressure can be freely adjusted by setting <em>k</em>. If <em>k</em> is high, weak individuals have a smaller chance to be selected for reproduction.</li>
         </ul>
+        <p><b>Tournament size</b> defines how many individuals compete in single tournament. If number isn't integer sizes of tournaments varies based on decimal part.
+            Example: For tournament size 2.75 there is 25 % tournaments of size 2 and 75 % tournaments of size 3.</p>
+        <a href="#roulette"></a>
         <h4>Roulette wheel</h4>
         <ul>
             <li>The better the individuals are, the higher chance to be selected they have.</li>
             <li>Roulette wheel – all individuals in the population are placed on the wheel.</li>
             <li>The size of the sections in the roulette wheel is proportional to values of the fitness function of every individual - the bigger the value is, the larger the section is.</li>
         </ul>
+        <a href="#ranking"></a>
         <h4>Ranking</h4>
         <p>
             GA uses rank instead of fitness.
@@ -43,7 +50,7 @@
             Best individual gets highest rank.
             This implementation uses ranking in combination with linear scaling.
         </p>
-
+        <a href="#scaling"></a>
         <h4>Linear scaling</h4>
         <p>
             Linear scaling fits the fitness values into a defined range using this formula: <em>f' = scale_min + (f - f_min) &times; ((scale_max - scale_min) &divide; (f_max - f_min))</em>.
@@ -52,6 +59,7 @@
         </p>
 
         <h3>Crossover</h3>
+        <a href="#bincross"></a>
         <h4>Binary crossover</h4>
         <h5>One-point</h5>
         <p>
@@ -73,6 +81,7 @@
         <img src="static/images/cross_uniform_before.png" alt="Uniform crossover before" width="40%">
         <img src="static/images/cross_uniform_after.png" alt="Uniform crossover after" width="40%">
 
+        <a href="#permcross"></a>
         <h4>Permutation crossover</h4>
         <h5>Order</h5>
         <p>
@@ -98,5 +107,12 @@
         </p>
         <img src="static/images/cross_cycle_before.png" alt="Cycle crossover before" width="40%">
         <img src="static/images/cross_cycle_after0.png" alt="Cycle crossover after" width="40%">
+        <a href="#mutation"></a>
+        <h3>Mutation</h3>
+        <b>Mutation rate</b> specifies probability that mutation is performed. Algorithm checks this probability for each position in genotype.
+        <h4>Binary mutation</h4>
+        Mutated gene is inverted.
+        <h4>Permutation mutation</h4>
+        Mutated gene is swapped with another one.
     </div>
 </template>

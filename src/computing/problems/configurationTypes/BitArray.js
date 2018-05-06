@@ -46,7 +46,7 @@ export class BitArray {
      * @return {class} return copy of the class with the value on index changed
      */
     getNeighbour(index) {
-        if (!index) index = Math.round(Math.random() * (this._bitArray.length - 1));
+        if (!index && index !== 0) index = Math.round(Math.random() * (this._bitArray.length - 1));
 
         return this.copy().changeOn(index);
     }

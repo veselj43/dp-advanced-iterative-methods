@@ -7,7 +7,9 @@ import {
     UniformCrossover
 } from './Crossover'
 
-
+/**
+ * Class for solving problems using genetic algorithm
+ */
 export class GeneticSolver {
     constructor(workerInterface) {
         this._workerInterface = workerInterface;
@@ -15,6 +17,12 @@ export class GeneticSolver {
         this._bufferedReply = new BufferedReply(this._workerInterface, 'progressBuffered', 75);
     }
 
+    /**
+     * Main function method, solves the problem using genetic algorithm
+     * @param  {Problem} problem instance of problem
+     * @param  {object} params parameters for genetic algorithm
+     * @return {Result} final configuration, its fitness and number of iterations
+     */
     solve(problem, params) {
         //set params
         this.problem = problem;
@@ -86,6 +94,12 @@ export class GeneticSolver {
         return new Result(problem.getResult(this.result), this.bestCost, this.counter);
     }
 
+    /**
+     * Creates initial population.
+     * @param populationSize size of population to create
+     * @returns {Array} population of individuals
+     * @private
+     */
     _initGeneration(populationSize) {
         var generation = [];
         for (var i = 0; i < populationSize; i++) {
@@ -95,6 +109,11 @@ export class GeneticSolver {
         return generation;
     }
 
+    /**
+     * Evaluates generation and sends information to graph.
+     * @param {Array} generation to evaluate
+     * @private
+     */
     _evaluateGeneration(generation) {
         var average = 0;
         for (var i = 0; i < generation.length; i++) {
@@ -120,6 +139,12 @@ export class GeneticSolver {
         }
     }
 
+    /**
+     * Creates new generation from potential parents.
+     * @param {Array} potentialParents
+     * @returns {Array} new generation of mutated offspring
+     * @private
+     */
     _doNewGeneration(potentialParents) {
         var newGeneration = [];
         var mate = null;

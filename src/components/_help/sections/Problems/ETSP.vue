@@ -20,30 +20,13 @@
         <h4>Configuration</h4>
         ETSP uses permutation configuration. It represents the order of visiting cities.
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <span class="panel-title">Permutation</span>
-            </div>
-            <div class="panel-body">
-                <ul>
-                    <li>Represented as permutation of element identifiers stored in array</li>
-                    <li>
-                        Implementation of <code>getNeighbor</code> method
-                        <ol>
-                            <li>Method parameter defines two array indexes so that 0 &le; <code>index1</code>, <code>index2</code> &lt; <code>array.length</code></li>
-                            <li>Flip the identifiers on defined array indexes (<code>swap(array[index1], array[index2])</code>)</li>
-                            <li>Return the new configuration</li>
-                        </ol>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <permutation></permutation>
 
         So the neighbour is permutation where the order of two cities was swapped.
-
+        <a href="#ETSPgenerator"></a>
         <h4>Generator</h4>
         <p>
-            Generator generates coordinates uniformly from 0 to given non-negative range.
+            Generator generates <b>coordinates</b> uniformly from 0 to given non-negative <b>range</b>. Number of coordinates corresponds to <b>number of cities</b>.
         </p>
 
         <h4>Instance format</h4>
@@ -51,9 +34,21 @@
 [number of cities]
 {[x coordinate] [y coordinate]}^number of cities
         </pre>
-        <div class="alert alert-info">
+        <div class="alert alert-info alert-with-icon">
             <i class="fas fa-info-circle"></i>
-            After reading expected number of arguments on each line, the rest of the line will be ignored
+            <div class="alert-content">
+                After reading expected number of arguments on each line, the rest of the line will be ignored
+            </div>
         </div>
     </div>
 </template>
+
+<script>
+import Permutation from "../Configurations/Permutation";
+
+export default {
+    components: {
+        Permutation,
+    }
+}
+</script>

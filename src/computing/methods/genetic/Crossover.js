@@ -11,15 +11,20 @@ export const CrossoverEnum = {
 }
 
 //binary crossovers
+
 export class UniformCrossover {
+    /**
+     * Performs uniform crossover.
+     * @param {BinaryIndividual} parent1 first parent
+     * @param {BinaryIndividual} parent2 second parent
+     * @returns {[BinaryIndividual, BinaryIndividual]} two offspring
+     */
     crossover(parent1, parent2) {
         var size = parent1.getSize();
         var offSeq1 = [];
         var offSeq2 = [];
         const parSeq1 = parent1.getBitArray();
         const parSeq2 = parent2.getBitArray();
-        // console.log("par", parSeq1);
-        // console.log("par", parSeq2);
         for (var i = 0; i < size; i++) {
             if (getRandomBoolean()) {
                 offSeq1.push(parSeq1[i]);
@@ -29,13 +34,17 @@ export class UniformCrossover {
                 offSeq2.push(parSeq1[i]);
             }
         }
-        // console.log("off", offSeq1);
-        // console.log("off", offSeq2);
         return [new BinaryIndividual(offSeq1), new BinaryIndividual(offSeq2)];
     }
 }
 
 export class TwoPointCrossover {
+    /**
+     * Performs two-point crossover.
+     * @param {BinaryIndividual} parent1 first parent
+     * @param {BinaryIndividual} parent2 second parent
+     * @returns {[BinaryIndividual, BinaryIndividual]} two offspring
+     */
     crossover(parent1, parent2) {
         var size = parent1.getSize();
         var first = getRandomInt(0, size+1);
@@ -49,9 +58,6 @@ export class TwoPointCrossover {
         var offSeq2 = [];
         const parSeq1 = parent1.getBitArray();
         const parSeq2 = parent2.getBitArray();
-        // console.log("par", parSeq1);
-        // console.log("par", parSeq2);
-        // console.log("point", first, second);
 
         for (var i = 0; i < size; i++) {
             if (i < first || i >= second) {
@@ -62,13 +68,17 @@ export class TwoPointCrossover {
                 offSeq2.push(parSeq1[i]);
             }
         }
-        // console.log("off", offSeq1);
-        // console.log("off", offSeq2);
         return [new BinaryIndividual(offSeq1), new BinaryIndividual(offSeq2)];
     }
 }
 
 export class OnePointCrossover {
+    /**
+     * Performs one-point crossover.
+     * @param {BinaryIndividual} parent1 first parent
+     * @param {BinaryIndividual} parent2 second parent
+     * @returns {[BinaryIndividual, BinaryIndividual]} two offspring
+     */
     crossover(parent1, parent2) {
         var size = parent1.getSize();
         var point = getRandomInt(0, size+1);
@@ -76,9 +86,6 @@ export class OnePointCrossover {
         var offSeq2 = [];
         const parSeq1 = parent1.getBitArray();
         const parSeq2 = parent2.getBitArray();
-        // console.log("par", parSeq1);
-        // console.log("par", parSeq2);
-        // console.log("point", point);
 
         for (var i = 0; i < size; i++) {
             if (i < point) {
@@ -89,14 +96,18 @@ export class OnePointCrossover {
                 offSeq2.push(parSeq1[i]);
             }
         }
-        // console.log("off", offSeq1);
-        // console.log("off", offSeq2);
         return [new BinaryIndividual(offSeq1), new BinaryIndividual(offSeq2)];
     }
 }
 
 //permutation crossovers
 export class OrderCrossover {
+    /**
+     * Performs order crossover.
+     * @param {PermutationIndividual} parent1 first parent
+     * @param {PermutationIndividual} parent2 second parent
+     * @returns {[PermutationIndividual, PermutationIndividual]} two offspring
+     */
     crossover(parent1, parent2) {
         var size = parent1.getSize();
         var point = getRandomInt(0, size+1);
@@ -143,6 +154,12 @@ export class OrderCrossover {
 
 //Partially matched crossover
 export class PartiallyMatchedCrossover {
+    /**
+     * Performs partially matched crossover.
+     * @param {PermutationIndividual} parent1 first parent
+     * @param {PermutationIndividual} parent2 second parent
+     * @returns {[PermutationIndividual, PermutationIndividual]} two offspring
+     */
     crossover(parent1, parent2) {
         var size = parent1.getSize();
         var first = getRandomInt(0, size+1);
@@ -189,6 +206,12 @@ export class PartiallyMatchedCrossover {
 }
 
 export class CycleCrossover {
+    /**
+     * Performs cycle crossover.
+     * @param {PermutationIndividual} parent1 first parent
+     * @param {PermutationIndividual} parent2 second parent
+     * @returns {[PermutationIndividual, PermutationIndividual]} two offspring
+     */
     crossover(parent1, parent2) {
         var size = parent1.getSize();
         var point = getRandomInt(0, size);

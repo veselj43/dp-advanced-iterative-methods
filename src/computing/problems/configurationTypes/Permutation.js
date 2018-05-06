@@ -69,10 +69,10 @@ export class Permutation {
      * @return {class} return copy of the class with the value on index changed
      */
     getNeighbour(indexOne, indexTwo) {
-        indexOne = indexOne || Math.round(Math.random() * (this._Array.length - 1));
-        indexTwo = indexTwo || Math.round(Math.random() * (this._Array.length - 1));
+        indexOne = (indexOne || indexOne === 0) ? indexOne : Math.round(Math.random() * (this._Array.length - 1));
+        indexTwo = (indexTwo || indexTwo === 0) ? indexTwo : Math.round(Math.random() * (this._Array.length - 1));
 
-        while(indexOne === indexTwo) {
+        while (indexOne === indexTwo) {
             indexTwo = Math.round(Math.random() * (this._Array.length - 1));
         }
         return this.copy().changeOn(indexOne, indexTwo);

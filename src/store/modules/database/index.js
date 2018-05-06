@@ -35,7 +35,10 @@ const actions = {
         let params = getters.getInputData;
         let table = getTableNameByMethod(params);
         let selectedIndexes = JSON.parse(storage.get(storageUtils.getSelectedIndexesByTypeKey())) || [0];
-        if (pushOnly) selectedIndexes = [0]; // show just computed result
+        if (pushOnly) {
+            selectedIndexes = selectedIndexes.map(i => i + 1);
+            selectedIndexes.push(0);
+        }
         return dbm.getAll(table, { problem: params.problem }).then(function(data) {
             commit('updateComputingHistory', data);
             commit('initComparingResults', selectedIndexes);
@@ -52,18 +55,14 @@ const actions = {
             data: {
                 result: result,
                 dataSet: getters.getChartValues
-            },
-            $pushComputed: true
+            }
         });
 
-        return dispatch('insertComputingHistory', dbObject);
+        return dispatch('insertComputingHistory', { dbObject, pushComputed: true });
     },
 
-    insertComputingHistory({ dispatch }, dbObject) {
+    insertComputingHistory({ dispatch }, { dbObject, pushComputed }) {
         let table = getTableNameByMethod(dbObject);
-
-        let pushComputed = dbObject.$pushComputed;
-        if (pushComputed) delete dbObject.$pushComputed;
         
         return dbm.insert(table, dbObject).then(function(data) {
             return dispatch('loadComputingHistory', pushComputed);

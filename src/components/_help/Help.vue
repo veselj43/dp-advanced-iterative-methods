@@ -28,7 +28,7 @@
                             <a>Knapsack</a>
                         </router-link>
                         <router-link tag="li" to="/help/Problems#SAT">
-                            <a>SAT</a>
+                            <a>MAX-SAT</a>
                         </router-link>
                         <router-link tag="li" to="/help/Problems#TSP">
                             <a>Travelling salesman</a>

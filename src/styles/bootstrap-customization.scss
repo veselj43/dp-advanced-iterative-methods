@@ -20,8 +20,29 @@
     }
 }
 
-.alert > .svg-inline--fa {
-    margin-right: .3em;
+.alert {
+    position: relative;
+
+    & > .svg-inline--fa {
+        margin-right: .3em;
+        font-size: 16px;
+    }
+
+    &.alert-with-icon {
+        & > .alert-content {
+            margin-left: 30px;
+
+            & > p:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        & > .svg-inline--fa {
+            position: absolute;
+            top: 50%;
+            transform: translate(0, -50%);
+        }
+    }
 }
 
 .icon-primary {

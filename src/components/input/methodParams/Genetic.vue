@@ -2,7 +2,7 @@
     <div class="params">
         <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-population-size')}">
             <label class="" for="population-size">Population size</label>
-            <span class="form-tooltip" v-tooltip.right="'Number of individuals in each generation.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+            <router-link to="/help/GA#basic" class="form-tooltip" v-tooltip.right="'Number of individuals in each generation.'"><i class="fas fa-question-circle"></i></router-link>
             <input class="form-control" type="number" min="1"
                    id="population-size" name="genetic-population-size" v-model="params.populationSize"
                    data-vv-as="population size" v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
@@ -11,7 +11,7 @@
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-generation-count')}">
             <label class="" for="generation-count">Number of generations</label>
-            <span class="form-tooltip" v-tooltip.right="'Number of generations/steps in genetic algorithm.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+            <router-link to="/help/GA#basic" class="form-tooltip" v-tooltip.right="'Number of generations/steps in genetic algorithm.'"><i class="fas fa-question-circle"></i></router-link>
             <input class="form-control" type="number" min="1"
                    id="generation-count" name="genetic-generation-count" v-model="params.noGenerations"
                    data-vv-as="number of generations" v-validate.initial="{ required: true, min_value: 1, regex: /^[0-9]+$/ }"
@@ -21,8 +21,8 @@
         <div id="selection">
             <div class="form-group">
                 <label class="" for="selection-type">Selection type</label>
-                <span class="form-tooltip" v-tooltip.right="{content: 'Defines selection mechanism:\nTournament - Selects individuals uniformly in \n     tournament the best one is selected.\n Roulette - Each individual is selected based on \n     portions in roulette.\n', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
-                <select class="form-control" id="selection-type" v-model="params.selectionType"> <!--v-on:change="selectionChange(this)"-->
+                <router-link to="/help/GA#selection" class="form-tooltip" v-tooltip.right="{content: 'Defines selection mechanism:\nTournament - Selects individuals uniformly in \n     tournament the best one is selected.\n Roulette - Each individual is selected based on \n     portions in roulette.\n', class: 'tooltip-whitespace-wrap' }"><i class="fas fa-question-circle"></i></router-link>
+                <select class="form-control" id="selection-type" v-model="params.selectionType">
                     <option :value="SelectionEnum.ROULETTE_RANK">Roulette with ranking</option>
                     <option :value="SelectionEnum.ROULETTE_LINEAR">Roulette with linear scaling</option>
                     <option :value="SelectionEnum.TOURNAMENT">Tournament</option>
@@ -32,11 +32,11 @@
             <div class="form-group" v-bind:class="{'has-error': (errors.has('genetic-scale-min') || errors.has('genetic-scale-max'))}" id="roulette" v-if="params.selectionType === SelectionEnum.ROULETTE_RANK || params.selectionType === SelectionEnum.ROULETTE_LINEAR">
                 <div v-if="params.selectionType === SelectionEnum.ROULETTE_RANK">
                 <label class="">Rank scale</label>
-                <span class="form-tooltip" v-tooltip.right="'Roulette portions are linearly scaled from min to max according to rank.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <router-link to="/help/GA#ranking" class="form-tooltip" v-tooltip.right="'Roulette portions are linearly scaled from min to max according to rank.'"><i class="fas fa-question-circle"></i></router-link>
                 </div>
                 <div v-if="params.selectionType === SelectionEnum.ROULETTE_LINEAR">
                 <label class="">Linear scaling</label>
-                <span class="form-tooltip" v-tooltip.right="'Roulette portions are linearly scaled from min to max according to fitness.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                    <router-link to="/help/GA#scaling" class="form-tooltip" v-tooltip.right="'Roulette portions are linearly scaled from min to max according to fitness.'"><i class="fas fa-question-circle"></i></router-link>
                 </div>
                 <div class="input-group">
                     <div class="input-group-addon">Min</div>
@@ -54,7 +54,7 @@
 
             <div class="form-group" id="tournament" v-if="params.selectionType === SelectionEnum.TOURNAMENT" v-bind:class="{'has-error': errors.has('genetic-tournament-size')}">
                 <label class="" for="tournament-size">Tournament size</label>
-                <span class="form-tooltip" v-tooltip.right="'Defines how many individuals compete in single tournament. If number isn\'t integer sizes of tournaments varies based on decimal part.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <router-link to="/help/GA#tournament" class="form-tooltip" v-tooltip.right="'Defines how many individuals compete in single tournament. If number isn\'t integer sizes of tournaments varies based on decimal part.'"><i class="fas fa-question-circle"></i></router-link>
                 <input class="form-control" type="number" min="1" step="0.25"
                        id="tournament-size" name="genetic-tournament-size" v-model="params.tournamentSize"
                        data-vv-as="tournament size" v-validate.initial="{ required: true, min_value: 1, max_value: params.populationSize, regex: /^([0-9]*[.])?[0-9]+$/ }"
@@ -65,7 +65,7 @@
         <div id="crossover">
             <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-cross-prob')}">
                 <label class="" for="crossover-prob">Crossover probability</label>
-                <span class="form-tooltip" v-tooltip.right="'Probability that individual goes into crossover after selection.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <router-link to="/help/GA#basic" class="form-tooltip" v-tooltip.right="'Probability that individual goes into crossover after selection.'"><i class="fas fa-question-circle"></i></router-link>
                 <input class="form-control" type="number" min="0" max="1" step="0.05"
                        id="crossover-prob" name="genetic-cross-prob" v-model="params.crossoverProb"
                        data-vv-as="crossover probability" v-validate.initial="{ required: true, min_value: 0, max_value: 1, regex: /^([0-9]*[.])?[0-9]+$/ }"
@@ -75,8 +75,8 @@
 
             <div class="form-group">
                 <label class="" for="crossover-type">Crossover type</label>
-                <span v-if="problemType === ProblemTypeEnum.BINARY" class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOne-point - Individuals are split at one point and\n     recombined.\nTwo-point - Individuals are split at two points and\n     recombined.\nUniform - Each bit of parent goes into first or\n     second offspring with equal probability.', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
-                <span v-if="problemType === ProblemTypeEnum.PERMUTATION" class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOrder - Individual is copied to random point then \n     it starts copying values from second parent if \n     possible to preserve permutation.\nPartially matched - Two random points designates\n     section where values on corresponding\n     positions are swapped.\nCycle - Cycle starts at random point in first parent.\n     Next position of cycle is where gene has same\n     value as value at corresponding position in\n     other parent. Continue until the cycle is closed.\n     Leave the cycle how it is and swap all other\n     values between 2 parents.', class: 'tooltip-whitespace-wrap' }"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <router-link to="/help/GA#bincross" v-if="problemType === ProblemTypeEnum.BINARY" class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOne-point - Individuals are split at one point and\n     recombined.\nTwo-point - Individuals are split at two points and\n     recombined.\nUniform - Each bit of parent goes into first or\n     second offspring with equal probability.', class: 'tooltip-whitespace-wrap' }"><i class="fas fa-question-circle"></i></router-link>
+                <router-link to="/help/GA#permcross" v-if="problemType === ProblemTypeEnum.PERMUTATION" class="form-tooltip" v-tooltip.right="{content: 'Defines crossover mechanism:\nOrder - Individual is copied to random point then \n     it starts copying values from second parent if \n     possible to preserve permutation.\nPartially matched - Two random points designates\n     section where values on corresponding\n     positions are swapped.\nCycle - Cycle starts at random point in first parent.\n     Next position of cycle is where gene has same\n     value as value at corresponding position in\n     other parent. Continue until the cycle is closed.\n     Leave the cycle how it is and swap all other\n     values between 2 parents.', class: 'tooltip-whitespace-wrap' }"><i class="fas fa-question-circle"></i></router-link>
                 <select class="form-control" id="crossover-type" v-model="params.crossoverType">
                     <!--binary-->
                     <template v-if="problemType === ProblemTypeEnum.BINARY">
@@ -96,8 +96,8 @@
         <div id="mutation">
             <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-mutation-rate')}">
                 <label class="" for="mutation-rate">Mutation rate</label>
-                <span v-if="problemType === ProblemTypeEnum.BINARY" class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each bit inverted.'"><span class="glyphicon glyphicon-question-sign"></span></span>
-                <span v-if="problemType === ProblemTypeEnum.PERMUTATION" class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each value swapped with another.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <router-link to="/help/GA#mutation" v-if="problemType === ProblemTypeEnum.BINARY" class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each bit inverted.'"><i class="fas fa-question-circle"></i></router-link>
+                <router-link to="/help/GA#mutation" v-if="problemType === ProblemTypeEnum.PERMUTATION" class="form-tooltip" v-tooltip.right="'Mutation rate specifies with which probability is each value swapped with another.'"><i class="fas fa-question-circle"></i></router-link>
                 <input class="form-control" type="number" min="0" max="1" step="0.001"
                        id="mutation-rate" name="genetic-mutation-rate" v-model="params.mutationRate"
                        data-vv-as="mutation rate" v-validate.initial="{ required: true, min_value: 0, max_value: 1, regex: /^([0-9]*[.])?[0-9]+$/ }"
@@ -108,7 +108,7 @@
         <div id="new-generation">
             <div class="form-group" v-bind:class="{'has-error': errors.has('genetic-elitism')}">
                 <label class="" for="elitism">Elitism</label>
-                <span class="form-tooltip" v-tooltip.right="'How many best individuals are copied from previous generation to the new one. Note that the greater elitism is the fewer new individuals are created.'"><span class="glyphicon glyphicon-question-sign"></span></span>
+                <router-link to="/help/GA#basic" class="form-tooltip" v-tooltip.right="'How many best individuals are copied from previous generation to the new one. Note that the greater elitism is the fewer new individuals are created.'"><i class="fas fa-question-circle"></i></router-link>
                 <div class="">
                     <input class="form-control" type="number" min="0"
                            id="elitism" name="genetic-elitism" v-model="params.elitism"

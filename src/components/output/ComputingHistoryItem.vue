@@ -1,6 +1,10 @@
 <template>
     <div class="history-list-item">
         <div class="history-list-item-heading">
+            <span class="history-list-item-collapse-switch" v-on:click="toggle">
+                <span v-if="isOpen" class="glyphicon glyphicon-triangle-bottom"></span>
+                <span v-else class="glyphicon glyphicon-triangle-right"></span>
+            </span>
             <label class="history-list-item-label" :title="itemTitle">
                 <input type="checkbox" v-model="checked">
                 <div class="history-list-item-collapse-header">{{itemTitle}}</div>
@@ -8,10 +12,6 @@
             <div class="history-list-item-remove" v-on:click="removeHistoryItem(item)">
                 <i class="icon-danger fas fa-trash-alt"></i>
             </div>
-            <span class="history-list-item-collapse-switch" v-on:click="toggle">
-                <span v-if="isOpen" class="glyphicon glyphicon-triangle-bottom"></span>
-                <span v-else class="glyphicon glyphicon-triangle-left"></span>
-            </span>
         </div>
         <div class="history-list-item-text collapsable" v-bind:class="{'collapsed': !isOpen}">
             <table class="table table-condensed">
@@ -32,7 +32,7 @@ import { SelectionEnum } from '@/computing/methods/genetic/Selection';
 
 let removeHistoryItemUndo = (context) => (item) => {
     context.$store.commit('adjustIndexesAfterRemoveUndo', context.index);
-    context.$store.dispatch('insertComputingHistory', item);
+    context.$store.dispatch('insertComputingHistory', { dbObject: item });
 }
 
 export default {

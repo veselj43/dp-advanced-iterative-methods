@@ -282,6 +282,7 @@ var CrossoverEnum = {
     CYCLE: "Cycle"
 
     //binary crossovers
+
 };var UniformCrossover = function () {
     function UniformCrossover() {
         __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, UniformCrossover);
@@ -289,14 +290,19 @@ var CrossoverEnum = {
 
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(UniformCrossover, [{
         key: "crossover",
+
+        /**
+         * Performs uniform crossover.
+         * @param {BinaryIndividual} parent1 first parent
+         * @param {BinaryIndividual} parent2 second parent
+         * @returns {[BinaryIndividual, BinaryIndividual]} two offspring
+         */
         value: function crossover(parent1, parent2) {
             var size = parent1.getSize();
             var offSeq1 = [];
             var offSeq2 = [];
             var parSeq1 = parent1.getBitArray();
             var parSeq2 = parent2.getBitArray();
-            // console.log("par", parSeq1);
-            // console.log("par", parSeq2);
             for (var i = 0; i < size; i++) {
                 if (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__Random__["a" /* getRandomBoolean */])()) {
                     offSeq1.push(parSeq1[i]);
@@ -306,8 +312,6 @@ var CrossoverEnum = {
                     offSeq2.push(parSeq1[i]);
                 }
             }
-            // console.log("off", offSeq1);
-            // console.log("off", offSeq2);
             return [new __WEBPACK_IMPORTED_MODULE_4__Individual__["a" /* BinaryIndividual */](offSeq1), new __WEBPACK_IMPORTED_MODULE_4__Individual__["a" /* BinaryIndividual */](offSeq2)];
         }
     }]);
@@ -322,6 +326,13 @@ var TwoPointCrossover = function () {
 
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(TwoPointCrossover, [{
         key: "crossover",
+
+        /**
+         * Performs two-point crossover.
+         * @param {BinaryIndividual} parent1 first parent
+         * @param {BinaryIndividual} parent2 second parent
+         * @returns {[BinaryIndividual, BinaryIndividual]} two offspring
+         */
         value: function crossover(parent1, parent2) {
             var size = parent1.getSize();
             var first = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__Random__["b" /* getRandomInt */])(0, size + 1);
@@ -335,9 +346,6 @@ var TwoPointCrossover = function () {
             var offSeq2 = [];
             var parSeq1 = parent1.getBitArray();
             var parSeq2 = parent2.getBitArray();
-            // console.log("par", parSeq1);
-            // console.log("par", parSeq2);
-            // console.log("point", first, second);
 
             for (var i = 0; i < size; i++) {
                 if (i < first || i >= second) {
@@ -348,8 +356,6 @@ var TwoPointCrossover = function () {
                     offSeq2.push(parSeq1[i]);
                 }
             }
-            // console.log("off", offSeq1);
-            // console.log("off", offSeq2);
             return [new __WEBPACK_IMPORTED_MODULE_4__Individual__["a" /* BinaryIndividual */](offSeq1), new __WEBPACK_IMPORTED_MODULE_4__Individual__["a" /* BinaryIndividual */](offSeq2)];
         }
     }]);
@@ -364,6 +370,13 @@ var OnePointCrossover = function () {
 
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(OnePointCrossover, [{
         key: "crossover",
+
+        /**
+         * Performs one-point crossover.
+         * @param {BinaryIndividual} parent1 first parent
+         * @param {BinaryIndividual} parent2 second parent
+         * @returns {[BinaryIndividual, BinaryIndividual]} two offspring
+         */
         value: function crossover(parent1, parent2) {
             var size = parent1.getSize();
             var point = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__Random__["b" /* getRandomInt */])(0, size + 1);
@@ -371,9 +384,6 @@ var OnePointCrossover = function () {
             var offSeq2 = [];
             var parSeq1 = parent1.getBitArray();
             var parSeq2 = parent2.getBitArray();
-            // console.log("par", parSeq1);
-            // console.log("par", parSeq2);
-            // console.log("point", point);
 
             for (var i = 0; i < size; i++) {
                 if (i < point) {
@@ -384,8 +394,6 @@ var OnePointCrossover = function () {
                     offSeq2.push(parSeq1[i]);
                 }
             }
-            // console.log("off", offSeq1);
-            // console.log("off", offSeq2);
             return [new __WEBPACK_IMPORTED_MODULE_4__Individual__["a" /* BinaryIndividual */](offSeq1), new __WEBPACK_IMPORTED_MODULE_4__Individual__["a" /* BinaryIndividual */](offSeq2)];
         }
     }]);
@@ -401,6 +409,13 @@ var OrderCrossover = function () {
 
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(OrderCrossover, [{
         key: "crossover",
+
+        /**
+         * Performs order crossover.
+         * @param {PermutationIndividual} parent1 first parent
+         * @param {PermutationIndividual} parent2 second parent
+         * @returns {[PermutationIndividual, PermutationIndividual]} two offspring
+         */
         value: function crossover(parent1, parent2) {
             var size = parent1.getSize();
             var point = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__Random__["b" /* getRandomInt */])(0, size + 1);
@@ -456,6 +471,13 @@ var PartiallyMatchedCrossover = function () {
 
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(PartiallyMatchedCrossover, [{
         key: "crossover",
+
+        /**
+         * Performs partially matched crossover.
+         * @param {PermutationIndividual} parent1 first parent
+         * @param {PermutationIndividual} parent2 second parent
+         * @returns {[PermutationIndividual, PermutationIndividual]} two offspring
+         */
         value: function crossover(parent1, parent2) {
             var size = parent1.getSize();
             var first = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__Random__["b" /* getRandomInt */])(0, size + 1);
@@ -511,6 +533,13 @@ var CycleCrossover = function () {
 
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(CycleCrossover, [{
         key: "crossover",
+
+        /**
+         * Performs cycle crossover.
+         * @param {PermutationIndividual} parent1 first parent
+         * @param {PermutationIndividual} parent2 second parent
+         * @returns {[PermutationIndividual, PermutationIndividual]} two offspring
+         */
         value: function crossover(parent1, parent2) {
             var size = parent1.getSize();
             var point = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__Random__["b" /* getRandomInt */])(0, size);
@@ -583,6 +612,9 @@ var CycleCrossover = function () {
 
 
 
+/**
+ * Class representing Euclidean TSP.
+ */
 var EuclideanTSP = function (_Problem) {
     __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(EuclideanTSP, _Problem);
 
@@ -615,7 +647,7 @@ var EuclideanTSP = function (_Problem) {
     }
 
     /**
-     * Returns fitness of selected configuration(Permutation)
+     * Returns fitness of selected configuration (Permutation)
      * @param  {class} permutationConfig Permutation of which fitness we want
      * @return {int}  calculated fitness of the configuration
      */
@@ -644,11 +676,26 @@ var EuclideanTSP = function (_Problem) {
             price -= this._distanceCache[permutation[permutation.length - 1]][permutation[0]];
             return price;
         }
+
+        /**
+         * Counts Euclidean distance between 2 points
+         * @param coord1 coordinates of first point with x and y field
+         * @param coord2 coordinates of second point with x and y field
+         * @returns {number} Euclidean distance between given points
+         */
+
     }, {
         key: 'countEuclideanDistance',
         value: function countEuclideanDistance(coord1, coord2) {
             return Math.sqrt(Math.pow(coord1.x - coord2.x, 2) + Math.pow(coord1.y - coord2.y, 2));
         }
+
+        /**
+         * Transforms maximization cost to real cost of problem.
+         * @param {number} maxCost maximization cost to transform.
+         * @returns {number} Negative value of maxCost.
+         */
+
     }, {
         key: 'transformMaximizationToRealCost',
         value: function transformMaximizationToRealCost(maxCost) {
@@ -671,9 +718,9 @@ var EuclideanTSP = function (_Problem) {
         }
 
         /**
-         *
-         * @param  {class} permutationConfig permutation of which path we want to build
-         * @return {String}
+         * Gets permutation array from configuration.
+         * @param  {class} permutationConfig permutation of which path we want to get
+         * @return {String} path
          */
 
     }, {
@@ -681,11 +728,24 @@ var EuclideanTSP = function (_Problem) {
         value: function getResult(permutationConfig) {
             return permutationConfig.getArray();
         }
+
+        /**
+         * Returns problem type.
+         * @returns {string} permutation
+         */
+
     }, {
         key: 'getType',
         value: function getType() {
             return __WEBPACK_IMPORTED_MODULE_6__Problem__["a" /* ProblemTypeEnum */].PERMUTATION;
         }
+
+        /**
+         * Resolves number od cities range of x and y coordinates.
+         * @param {string} instanceContent content of file with instance
+         * @returns {{noCities: number, x: number, y: number}} object with instance params
+         */
+
     }], [{
         key: 'resolveInstanceParams',
         value: function resolveInstanceParams(instanceContent) {
@@ -720,7 +780,7 @@ var EuclideanTSP = function (_Problem) {
 
         /**
          * Returns instance invalidity
-         * @param  {string} instanceContent content of the instance
+         * @param  {string} instanceContent content of file with instance
          * @return {boolean} is instance invalid
          */
 
@@ -929,6 +989,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+/**
+ * Definition of methods, that can be called from main thread
+ */
 var methods = {
     work: function(data, params) {
         var job = new Job(data, params);
@@ -960,6 +1023,7 @@ class Job {
         this.problem = (problemClass) ? new problemClass(inputData) : null;
         this.method = (methodClass) ? new methodClass(workerInterface) : null;
     }
+
     /**
      * Run the calculation based on selected method, problem, and method parameters
      * @param  {object} methodParams method parameters as object
@@ -989,7 +1053,7 @@ class Job {
 
 this.postMessage = self.postMessage;
 
-// msg recieved event
+// msg received event
 self.addEventListener('message', (event) => {
     workerInterface.onMessage(event)
 })
@@ -1132,7 +1196,7 @@ var BitArray = function () {
     }, {
         key: "getNeighbour",
         value: function getNeighbour(index) {
-            if (!index) index = Math.round(Math.random() * (this._bitArray.length - 1));
+            if (!index && index !== 0) index = Math.round(Math.random() * (this._bitArray.length - 1));
 
             return this.copy().changeOn(index);
         }
@@ -1933,6 +1997,9 @@ module.exports = function (COLLECTION) {
 
 
 
+/**
+ * Represents individual.
+ */
 var Individual = function () {
     function Individual() {
         __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck___default()(this, Individual);
@@ -1969,14 +2036,25 @@ var Individual = function () {
         }
     }, {
         key: 'getGenotype',
-        value: function getGenotype() {
-            //abstract
-        }
+        value: function getGenotype() {}
+        //abstract
+
+
+        /**
+         * Performs mutation with given probability.
+         * @param {number } mutationRate mutation probability
+         */
+
     }, {
         key: 'mutate',
-        value: function mutate(mutationProb) {
-            //abstract
-        }
+        value: function mutate(mutationRate) {}
+        //abstract
+
+
+        /**
+         * Deep copy of individual.
+         */
+
     }, {
         key: 'copy',
         value: function copy() {
@@ -1987,9 +2065,16 @@ var Individual = function () {
     return Individual;
 }();
 
+/**
+ * Represents binary individual.
+ */
 var BinaryIndividual = function (_Individual) {
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(BinaryIndividual, _Individual);
 
+    /**
+     * Creates individual from bit array.
+     * @param {Array} bitArray configuration
+     */
     function BinaryIndividual(bitArray) {
         __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck___default()(this, BinaryIndividual);
 
@@ -1999,6 +2084,11 @@ var BinaryIndividual = function (_Individual) {
 
         return _this;
     }
+    /**
+     * Performs inversion mutation with given probability.
+     * @param {number} mutationRate probability that each bit is inverted
+     */
+
 
     __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass___default()(BinaryIndividual, [{
         key: 'mutate',
@@ -2011,21 +2101,43 @@ var BinaryIndividual = function (_Individual) {
                 }
             }
         }
+
+        /**
+         * Gets bit array.
+         * @returns {Array} bit array
+         */
+
     }, {
         key: 'getGenotype',
         value: function getGenotype() {
             return this._bitArray;
         }
+        /**
+         * Gets bit array.
+         * @returns {Array} bit array
+         */
+
     }, {
         key: 'getBitArray',
         value: function getBitArray() {
             return this._bitArray;
         }
+        /**
+         * Gets size of bit array.
+         * @returns {number} size of bit array
+         */
+
     }, {
         key: 'getSize',
         value: function getSize() {
             return this._bitArray.length;
         }
+
+        /**
+         * Returns deep copy of individual.
+         * @returns {BinaryIndividual} deep copy
+         */
+
     }, {
         key: 'copy',
         value: function copy() {
@@ -2038,9 +2150,16 @@ var BinaryIndividual = function (_Individual) {
     return BinaryIndividual;
 }(Individual);
 
+/**
+ * Represents permutation individual.
+ */
 var PermutationIndividual = function (_Individual2) {
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(PermutationIndividual, _Individual2);
 
+    /**
+     * Creates individual from permutation.
+     * @param {Array} permutation configuration
+     */
     function PermutationIndividual(permutation) {
         __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck___default()(this, PermutationIndividual);
 
@@ -2050,6 +2169,12 @@ var PermutationIndividual = function (_Individual2) {
 
         return _this2;
     }
+
+    /**
+     * Performs swap mutation.
+     * @param mutationRate probability that each value is swapped with another one
+     */
+
 
     __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass___default()(PermutationIndividual, [{
         key: 'mutate',
@@ -2068,21 +2193,41 @@ var PermutationIndividual = function (_Individual2) {
                 }
             }
         }
+        /**
+         * Gets permutation array.
+         * @returns {Array} permutation array
+         */
+
     }, {
         key: 'getGenotype',
         value: function getGenotype() {
             return this._permutation;
         }
+        /**
+         * Gets permutation array.
+         * @returns {Array} permutation array
+         */
+
     }, {
         key: 'getArray',
         value: function getArray() {
             return this._permutation;
         }
+        /**
+         * Gets size of permutation array.
+         * @returns {number} size of permutation array
+         */
+
     }, {
         key: 'getSize',
         value: function getSize() {
             return this._permutation.length;
         }
+        /**
+         * Returns deep copy of individual.
+         * @returns {PermutationIndividual} deep copy
+         */
+
     }, {
         key: 'copy',
         value: function copy() {
@@ -2663,6 +2808,10 @@ var SelectionEnum = {
 };
 
 var TournamentSelection = function () {
+    /**
+     * Creates tournament selection of given size.
+     * @param {number} tournamentSize size of tournament
+     */
     function TournamentSelection(tournamentSize) {
         __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, TournamentSelection);
 
@@ -2671,6 +2820,14 @@ var TournamentSelection = function () {
         this._bigger = Math.ceil(this._tournamentSize);
         this._rest = this._tournamentSize - this._smaller;
     }
+
+    /**
+     * Selects individuals using tournament selection.
+     * @param {Array} generation from which to select
+     * @param {number} number of individuals to select
+     * @returns {Array} selected individuals
+     */
+
 
     __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(TournamentSelection, [{
         key: "selectIndividuals",
@@ -2687,6 +2844,15 @@ var TournamentSelection = function () {
             }
             return selected;
         }
+
+        /**
+         * Find winner of tournament of given size.
+         * @param generation from which to select competing individuals
+         * @param tournamentSize size of tournament
+         * @returns {Individual} winner of tournament
+         * @private
+         */
+
     }, {
         key: "_findWinner",
         value: function _findWinner(generation, tournamentSize) {
@@ -2699,6 +2865,14 @@ var TournamentSelection = function () {
             }
             return winner;
         }
+
+        /**
+         * Selects random individual from generation
+         * @param generation from which to select
+         * @returns {Individual} selected individual
+         * @private
+         */
+
     }, {
         key: "_selectRandomIndividual",
         value: function _selectRandomIndividual(generation) {
@@ -2710,6 +2884,12 @@ var TournamentSelection = function () {
 }();
 
 var RouletteSelection = function () {
+    /**
+     * Creates roulette selection with given parameters.
+     * @param scale type of scaling linear/ranking
+     * @param min scale
+     * @param max scale
+     */
     function RouletteSelection(scale, min, max) {
         __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, RouletteSelection);
 
@@ -2717,6 +2897,14 @@ var RouletteSelection = function () {
         this.min = min;
         this.max = max;
     }
+
+    /**
+     * Selects individuals using roulette selection.
+     * @param {Array} generation from which to select
+     * @param {number} number of individuals to select
+     * @returns {Array} selected individuals
+     */
+
 
     __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(RouletteSelection, [{
         key: "selectIndividuals",
@@ -2738,6 +2926,15 @@ var RouletteSelection = function () {
             }
             return selected;
         }
+
+        /**
+         * Select individual from generation using roulette
+         * @param {Array} generation from which to select
+         * @param {number} rankSum sum of portions on roulette
+         * @returns {Individual} selected individual
+         * @private
+         */
+
     }, {
         key: "_rouletteSelect",
         value: function _rouletteSelect(generation, rankSum) {
@@ -2751,6 +2948,14 @@ var RouletteSelection = function () {
             } while (roulette >= 0 /* && i > 0*/); //i > 0 just for precision errors
             return generation[i];
         }
+
+        /**
+         * Give individuals portions on roulette wheel based on linearly scaled rank.
+         * @param {Array} generation individuals
+         * @returns {number} sum of portions
+         * @private
+         */
+
     }, {
         key: "_rankIndividuals",
         value: function _rankIndividuals(generation) {
@@ -2762,6 +2967,14 @@ var RouletteSelection = function () {
             }
             return rankSum;
         }
+
+        /**
+         * Give individuals portions on roulette wheel based on linearly scaled fitness.
+         * @param {Array} generation individuals
+         * @returns {number} sum of portions
+         * @private
+         */
+
     }, {
         key: "_scaleIndividuals",
         value: function _scaleIndividuals(generation) {
@@ -2893,8 +3106,8 @@ var Permutation = function () {
     }, {
         key: "getNeighbour",
         value: function getNeighbour(indexOne, indexTwo) {
-            indexOne = indexOne || Math.round(Math.random() * (this._Array.length - 1));
-            indexTwo = indexTwo || Math.round(Math.random() * (this._Array.length - 1));
+            indexOne = indexOne || indexOne === 0 ? indexOne : Math.round(Math.random() * (this._Array.length - 1));
+            indexTwo = indexTwo || indexTwo === 0 ? indexTwo : Math.round(Math.random() * (this._Array.length - 1));
 
             while (indexOne === indexTwo) {
                 indexTwo = Math.round(Math.random() * (this._Array.length - 1));
@@ -3066,16 +3279,31 @@ module.exports = function (it) {
 /* harmony export (immutable) */ __webpack_exports__["c"] = getRandomFloat;
 /* harmony export (immutable) */ __webpack_exports__["b"] = getRandomInt;
 /* harmony export (immutable) */ __webpack_exports__["a"] = getRandomBoolean;
+/**
+ * Gets random float from min included and max excluded.
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
 function getRandomFloat(min, max) {
-    return Math.random() * (max - min) + min;
+  return Math.random() * (max - min) + min;
 }
-
+/**
+ * Gets random int from min included and max excluded.
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
+/**
+ * Gets random boolean.
+ * @returns {boolean}
+ */
 function getRandomBoolean() {
-    return !!Math.round(Math.random());
+  return !!Math.round(Math.random());
 }
 
 /***/ }),
@@ -3381,6 +3609,9 @@ module.exports = !__webpack_require__("+E39") && !__webpack_require__("S82l")(fu
 
 
 
+/**
+ * Class for solving problems using genetic algorithm
+ */
 var GeneticSolver = function () {
     function GeneticSolver(workerInterface) {
         __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, GeneticSolver);
@@ -3389,6 +3620,14 @@ var GeneticSolver = function () {
         // buffers messages to reduce communication overhead while sending computation progress every cycle
         this._bufferedReply = new __WEBPACK_IMPORTED_MODULE_4__common_BufferedReply__["a" /* default */](this._workerInterface, 'progressBuffered', 75);
     }
+
+    /**
+     * Main function method, solves the problem using genetic algorithm
+     * @param  {Problem} problem instance of problem
+     * @param  {object} params parameters for genetic algorithm
+     * @return {Result} final configuration, its fitness and number of iterations
+     */
+
 
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(GeneticSolver, [{
         key: 'solve',
@@ -3461,6 +3700,14 @@ var GeneticSolver = function () {
 
             return new __WEBPACK_IMPORTED_MODULE_3__common_Result__["a" /* default */](problem.getResult(this.result), this.bestCost, this.counter);
         }
+
+        /**
+         * Creates initial population.
+         * @param populationSize size of population to create
+         * @returns {Array} population of individuals
+         * @private
+         */
+
     }, {
         key: '_initGeneration',
         value: function _initGeneration(populationSize) {
@@ -3471,6 +3718,13 @@ var GeneticSolver = function () {
             this._evaluateGeneration(generation);
             return generation;
         }
+
+        /**
+         * Evaluates generation and sends information to graph.
+         * @param {Array} generation to evaluate
+         * @private
+         */
+
     }, {
         key: '_evaluateGeneration',
         value: function _evaluateGeneration(generation) {
@@ -3499,6 +3753,14 @@ var GeneticSolver = function () {
                 this.result = generation[generation.length - 1];
             }
         }
+
+        /**
+         * Creates new generation from potential parents.
+         * @param {Array} potentialParents
+         * @returns {Array} new generation of mutated offspring
+         * @private
+         */
+
     }, {
         key: '_doNewGeneration',
         value: function _doNewGeneration(potentialParents) {
@@ -4265,7 +4527,9 @@ module.exports = { "default": __webpack_require__("5zde"), __esModule: true };
 
 
 
-// Tabu method
+/**
+ * Class for solving problems using Tabu Search
+ */
 var TabuSolver = function () {
     function TabuSolver(workerInterface) {
         __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, TabuSolver);
@@ -4276,12 +4540,28 @@ var TabuSolver = function () {
         this._bufferedReply = new __WEBPACK_IMPORTED_MODULE_3__common_BufferedReply__["a" /* default */](this._workerInterface, 'progressBuffered', 75);
     }
 
+    /**
+     * Wrapper for cost function, because Tabu inner cycle starts without a selected state
+     * @param  {number} size size of the neighborhood
+     * @param  {number} neighborsToCheckRatio > 0 && <= 1 how big part of neighborhood to check
+     * @return {array} array with selected neighbors indexes to check
+     */
+
+
     __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(TabuSolver, [{
         key: '_getCost',
         value: function _getCost(state) {
             if (state === null) return -Infinity;
             return this.problem.evaluateMaximizationCost(state);
         }
+
+        /**
+         * Returns neighborhood to check
+         * @param  {number} size size of the neighborhood
+         * @param  {number} neighborsToCheckRatio > 0 && <= 1 how big part of neighborhood to check
+         * @return {array} array with selected neighbors indexes to check
+         */
+
     }, {
         key: '_generateNeighborhood',
         value: function _generateNeighborhood(size, neighborsToCheckRatio) {
@@ -4296,6 +4576,15 @@ var TabuSolver = function () {
             }
             return nbh;
         }
+
+        /**
+         * Comparison of position in queue
+         * @param  {array} queue array with configurations
+         * @param  {class} c1 configuration to compare 1
+         * @param  {class} c2 configuration to compare 2
+         * @return {number} compared indexes of configurations in queue 1: c1 < c2, 2: c2 > c1, 0: not found
+         */
+
     }, {
         key: '_compareIndexesOf',
         value: function _compareIndexesOf(queue, c1, c2) {
@@ -4305,6 +4594,14 @@ var TabuSolver = function () {
             }
             return 0;
         }
+
+        /**
+         * Tabu state check
+         * @param  {object} set indexed tabu states
+         * @param  {class} configuration instance of a problem configuration
+         * @return {boolean} contains
+         */
+
     }, {
         key: '_containsSearch',
         value: function _containsSearch(set, configuration) {
@@ -4314,6 +4611,17 @@ var TabuSolver = function () {
             }
             return set[configuration.toString()];
         }
+
+        /**
+         * Method contains Tabu Search algorithm
+         * @param  {number} iterationLimit number of iterations
+         * @param  {number} neighborsToCheckRatio how many of all neighbour states to check
+         * @param  {number} tabuSize length of tabu states queue
+         * @param  {number} tabuSizeShort length of tabu changes queue
+         * @param  {boolean} randomStart starting state is default (false) or random (true)
+         * @return {class} final configuration
+         */
+
     }, {
         key: '_process',
         value: function _process(iterationLimit, neighborsToCheckRatio, tabuSize, tabuSizeShort, randomStart) {
@@ -4406,6 +4714,14 @@ var TabuSolver = function () {
 
             return sBest;
         }
+
+        /**
+         * Main function method, solves the problem using simulated annealing
+         * @param  {Problem} problem problem instance
+         * @param  {object} params problem parameters
+         * @return {Result} Result class containing data of the run
+         */
+
     }, {
         key: 'solve',
         value: function solve(problem, _ref) {
@@ -5099,9 +5415,11 @@ module.exports = __webpack_require__("FeBl").Object.setPrototypeOf;
 var ProblemTypeEnum = {
     BINARY: "binary",
     PERMUTATION: "permutation"
-};
 
-var Problem = function () {
+    /**
+     * Abstract class for problems.
+     */
+};var Problem = function () {
     function Problem() {
         __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, Problem);
 
@@ -5110,6 +5428,12 @@ var Problem = function () {
             throw new TypeError('Abstract class "Problem" cannot be instantiated directly.');
         }
     }
+
+    /**
+     * Creates new random individual for this problem.
+     * @returns {Individual} individual representing problem configuration
+     */
+
 
     __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(Problem, [{
         key: "createNewIndividual",
@@ -5123,6 +5447,12 @@ var Problem = function () {
                     throw new TypeError('This type of problem not supported.');
             }
         }
+
+        /**
+         * Lazy fitness evaluation for individuals. It evaluates fitness only if individual don't have it yet.
+         * @param {Individual} individual which to assign fitness
+         */
+
     }, {
         key: "evaluateIndividual",
         value: function evaluateIndividual(individual) {
@@ -5130,36 +5460,80 @@ var Problem = function () {
                 individual.setFitness(this.evaluateMaximizationCost(individual));
             }
         }
+
+        /**
+         * Evaluates configuration cost for problem.
+         * @param configuration of problem
+         * @returns {number}
+         */
+
     }, {
         key: "evaluateMaximizationCost",
-        value: function evaluateMaximizationCost(configuration) {
-            // abstract
-        }
+        value: function evaluateMaximizationCost(configuration) {}
+        // abstract
+
+
+        /**
+         * Transforms maximization cost to real cost of problem.
+         * @param {number} maxCost maximization cost to transform
+         * @returns {number}
+         */
+
     }, {
         key: "transformMaximizationToRealCost",
-        value: function transformMaximizationToRealCost(maxCost) {
-            //abstract
-        }
+        value: function transformMaximizationToRealCost(maxCost) {}
+        //abstract
+
+
+        /**
+         * Returns problem type.
+         * @returns {ProblemTypeEnum}
+         */
+
     }, {
         key: "getType",
-        value: function getType() {
-            // abstract
-        }
+        value: function getType() {}
+        // abstract
+
+
+        /**
+         * Returns problem configuration.
+         * @param {bool} random configuration is random or default
+         */
+
     }, {
         key: "getConfiguration",
-        value: function getConfiguration(random) {
-            // abstract
-        }
+        value: function getConfiguration(random) {}
+        // abstract
+
+
+        /**
+         * Transforms configuration into real result.
+         * @param configuration
+         */
+
     }, {
         key: "getResult",
-        value: function getResult(configuration) {
-            // abstract
-        }
+        value: function getResult(configuration) {}
+        // abstract
+
+
+        /**
+         * Checks if instance is invalid.
+         * @param instanceContent string content of file with instance
+         */
+
     }], [{
         key: "isInvalidInstance",
-        value: function isInvalidInstance(instanceContent) {
-            // abstract static
-        }
+        value: function isInvalidInstance(instanceContent) {}
+        // abstract static
+
+
+        /**
+         * Resolves instance parameters from file.
+         * @param instanceContent string content of file with instance
+         */
+
     }, {
         key: "resolveInstanceParams",
         value: function resolveInstanceParams(instanceContent) {
@@ -5932,4 +6306,4 @@ exports.default = function (self, call) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=e576663be36a5a0e4794.worker.js.map
+//# sourceMappingURL=ca19a31842f1c32eec8a.worker.js.map

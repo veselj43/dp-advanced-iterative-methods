@@ -8,9 +8,11 @@
         <p>
             Vertex cover is a set of vertices such that each edge of the graph is incident to at least one vertex of the set.
         </p>
-        <div class="alert alert-info">
-	         <i class="fas fa-info-circle"></i>
-          Edges are undirected.
+        <div class="alert alert-info alert-with-icon">
+	        <i class="fas fa-info-circle"></i>
+            <div class="alert-content">
+                Edges are undirected.
+            </div>
         </div>
 
         <h4>Price function</h4>
@@ -28,27 +30,15 @@
         <h4>Configuration</h4>
         Minimum vertex cover uses bit array configuration. The config says which vertices are chosen.
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <span class="panel-title">Bit array</span>
-            </div>
-            <div class="panel-body">
-                <ul>
-                    <li>Represented as boolean array</li>
-                    <li>
-                        Implementation of <code>getNeighbor</code> method
-                        <ol>
-                            <li>Method parameter defines array <code>index</code> so that 0 &le; <code>index</code> &lt; <code>array.length</code></li>
-                            <li>Flip the bit on position <code>index</code> (<code>array[index] = !array[index]</code>)</li>
-                            <li>Return the new configuration</li>
-                        </ol>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <bit-array></bit-array>
 
+<<<<<<< HEAD
         So the neighbour is set of vertices with one vertex added or removed from the parent set.
 
+=======
+        So the neighbour is set of vertices with one vertice added or removed from the parent set.
+        <a href="#MVCgenerator"></a>
+>>>>>>> eb06b320b64a16f09230461697288cd68ce08df8
         <h4>Generator</h4>
         <p>
             The generator is pretty simple. Allowing to choose number of vertices and edges.
@@ -62,3 +52,13 @@
         </pre>
     </div>
 </template>
+
+<script>
+import BitArray from "../Configurations/BitArray";
+
+export default {
+    components: {
+        BitArray,
+    }
+}
+</script>
