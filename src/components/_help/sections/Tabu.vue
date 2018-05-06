@@ -72,12 +72,12 @@
 
         <h4>State tabu size</h4>
         <p>
-            How many past states are considered as tabu.
+            How many previous states are considered as tabu.
         </p>
 
         <h4>Change tabu size</h4>
         <p>
-            How many past state modifications are considered as tabu.
+            How many previous state modifications are considered as tabu.
         </p>
 
         <h4>Starting configuration</h4>

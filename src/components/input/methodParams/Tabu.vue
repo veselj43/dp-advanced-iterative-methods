@@ -3,7 +3,7 @@
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuIterationLimit')}">
             <label class="" for="iterationLimit">Iteration limit</label>
             <router-link to="/help/Tabu#input" class="form-tooltip" v-tooltip.right="'Limit of states choosed as next step'">
-                <span class="glyphicon glyphicon-question-sign"></span>
+                <i class="fas fa-question-circle"></i>
             </router-link>
             <input type="number" min="1"
                 class="form-control" id="iterationLimit" name="tabuIterationLimit"
@@ -15,7 +15,7 @@
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuNeighborsToCheck')}">
             <label class="" for="neighborsToCheck">Neighbor states to check</label>
             <router-link to="/help/Tabu#input" class="form-tooltip" v-tooltip.right="'How many neighbor configurations to check in one iteration'">
-                <span class="glyphicon glyphicon-question-sign"></span>
+                <i class="fas fa-question-circle"></i>
             </router-link>
             <div class="input-group">
                 <input type="number" min="1" max="100"
@@ -30,7 +30,7 @@
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuSize')}">
             <label class="" for="tabuSize">State tabu size</label>
             <router-link to="/help/Tabu#input" class="form-tooltip" v-tooltip.right="'Number of states in tabu queue'">
-                <span class="glyphicon glyphicon-question-sign"></span>
+                <i class="fas fa-question-circle"></i>
             </router-link>
             <input type="number" min="0" max="1000"
                 class="form-control" id="tabuSize" name="tabuSize"
@@ -42,7 +42,7 @@
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuSizeShort')}">
             <label class="" for="tabuSizeShort">Changes tabu size</label>
             <router-link to="/help/Tabu#input" class="form-tooltip" v-tooltip.right="'Number of iterations for which is configuration variable change tabu'">
-                <span class="glyphicon glyphicon-question-sign"></span>
+                <i class="fas fa-question-circle"></i>
             </router-link>
             <input type="number" min="0" max="1000"
                 class="form-control" id="tabuSizeShort" name="tabuSizeShort"
@@ -54,7 +54,7 @@
         <div class="form-group" v-bind:class="{'has-error': errors.has('tabuSizeShort')}">
             <label class="" for="tabuSizeShort">Starting configuration</label>
             <router-link to="/help/Tabu#input" class="form-tooltip" v-tooltip.right="'Random or default (ex.: all false or path by node indexes)'">
-                <span class="glyphicon glyphicon-question-sign"></span>
+                <i class="fas fa-question-circle"></i>
             </router-link>
             <select class="form-control" id="crossover-type" v-model="params.randomStart">
                 <option :value="false">Default</option>

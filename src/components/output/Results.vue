@@ -26,7 +26,7 @@
         <div v-show="!methodResultActiveSection">
             <p class="alert alert-info">
                 <i class="fas fa-info-circle"></i>
-                Start run or check past runs to compare from the right panel.
+                Start run or check previous runs to compare from the right panel.
             </p>
         </div>
 
