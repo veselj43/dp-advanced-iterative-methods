@@ -32,13 +32,8 @@
 
         <bit-array></bit-array>
 
-<<<<<<< HEAD
         So the neighbour is set of vertices with one vertex added or removed from the parent set.
-
-=======
-        So the neighbour is set of vertices with one vertice added or removed from the parent set.
         <a href="#MVCgenerator"></a>
->>>>>>> eb06b320b64a16f09230461697288cd68ce08df8
         <h4>Generator</h4>
         <p>
             The generator is pretty simple. Allowing to choose number of vertices and edges.

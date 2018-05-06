@@ -2,11 +2,7 @@
     <div class="params">
         <div class="form-group" v-bind:class="{'has-error': errors.has('startTemp')}">
             <label class="" for="param1">Starting temperature</label>
-<<<<<<< HEAD
-            <span class="form-tooltip" v-tooltip.right="'Temperature at the start of calculation. More info about calculation in help.'"><span class="glyphicon glyphicon-question-sign"></span></span>
-=======
-            <router-link to="/help/SA" class="form-tooltip" v-tooltip.right="'Temperature at the start of calculation'"><i class="fas fa-question-circle"></i></router-link>
->>>>>>> eb06b320b64a16f09230461697288cd68ce08df8
+            <router-link to="/help/SA" class="form-tooltip" v-tooltip.right="'Temperature at the start of calculation. More info about calculation in help.'"><i class="fas fa-question-circle"></i></router-link>
             <div class="input-group">
                 <input class="form-control" type="number" min="0" step="1" id="param1" v-model="params.start_temp" placeholder=""
                 name="startTemp"
