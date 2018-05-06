@@ -1,4 +1,41 @@
 /**
+ * class representing permutation position, used as iterator for getting neighbor configurations
+ * @type {class}
+ */
+export class PermutationPosition {
+    constructor(size, { indexOne, indexTwo }, key) {
+        this.size = size;
+        this.value = { indexOne, indexTwo };
+        this.key = key || 0;
+    }
+
+    next(amount) {
+        if (isNaN(amount)) amount = 1;
+
+        let { indexOne, indexTwo } = this.value;
+        let key = this.key + amount;
+
+        while (amount--) {
+            indexTwo++;
+            if (indexTwo === this.size) {
+                indexOne++;
+                indexTwo = indexOne + 1;
+            }
+        }
+
+        return new PermutationPosition(this.size, { indexOne, indexTwo }, key);
+    }
+
+    at(key) {
+        return this.next(key - this.key);
+    }
+
+    getNeighborhoodSize() {
+        return (this.size * (this.size - 1)) / 2;
+    }
+}
+
+/**
  * class representing permutation configuration, used for all problems with permutation configurations
  * @type {class}
  */
@@ -45,6 +82,7 @@ export class Permutation {
         }
         return permArray;
     }
+
     /**
      * Return copy of the class
      * @return {class} copy of the class
@@ -52,6 +90,15 @@ export class Permutation {
     copy() {
         return new Permutation({ fromArray: this._Array });
     }
+
+    /**
+     * Return position iterator
+     * @return {class} PermutationPosition
+     */
+    getDefaultPosition() {
+        return new PermutationPosition(this.getSize(), { indexOne: 0, indexTwo: 1 });
+    }
+
     /**
      * Change the value on specific index(bit flip)
      * @param  {int} index which index to change
@@ -63,14 +110,15 @@ export class Permutation {
         this._Array[indexTwo] = x;
         return this;
     }
+
     /**
      * Return neighbour, either random or selected with two indexes to swap
      * @param  {int} index which index will change to get the neighbour
      * @return {class} return copy of the class with the value on index changed
      */
-    getNeighbour(indexOne, indexTwo) {
-        indexOne = (indexOne || indexOne === 0) ? indexOne : Math.round(Math.random() * (this._Array.length - 1));
-        indexTwo = (indexTwo || indexTwo === 0) ? indexTwo : Math.round(Math.random() * (this._Array.length - 1));
+    getNeighbour({ indexOne, indexTwo } = {}) {
+        indexOne = (!isNaN(indexOne)) ? indexOne : Math.round(Math.random() * (this._Array.length - 1));
+        indexTwo = (!isNaN(indexTwo)) ? indexTwo : Math.round(Math.random() * (this._Array.length - 1));
 
         while (indexOne === indexTwo) {
             indexTwo = Math.round(Math.random() * (this._Array.length - 1));

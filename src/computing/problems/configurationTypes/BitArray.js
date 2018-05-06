@@ -1,4 +1,30 @@
 /**
+ * class representing bit array position, used as iterator for getting neighbor configurations
+ * @type {class}
+ */
+export class BitArrayPosition {
+    constructor(size, index) {
+        this.size = size;
+        this.value = index;
+        this.key = index;
+    }
+
+    next(amount) {
+        if (isNaN(amount)) amount = 1;
+
+        return new BitArrayPosition(this.size, this.key + amount);
+    }
+    
+    at(key) {
+        return this.next(key - this.key);
+    }
+
+    getNeighborhoodSize() {
+        return this.size;
+    }
+}
+
+/**
  * class representing bit array configuration, used for all problems with bit array configurations
  * @type {class}
  */
@@ -24,6 +50,7 @@ export class BitArray {
             }
         }
     }
+
     /**
      * Return copy of the class
      * @return {class} copy of the class
@@ -31,6 +58,15 @@ export class BitArray {
     copy() {
         return new BitArray({ fromBitArray: this._bitArray });
     }
+
+    /**
+     * Return position iterator
+     * @return {class} BitArrayPosition
+     */
+    getDefaultPosition() {
+        return new BitArrayPosition(this.getSize(), 0);
+    }
+
     /**
      * Change the value on specific index(bit flip)
      * @param  {int} index which index to change

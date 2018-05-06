@@ -101,13 +101,15 @@ export class TabuSolver {
             var tabuBestCandidateCost = this._getCost(tabuBestCandidate);
             var tabuBestCandidateIndex = -1;
 
-            var neighborhood = this._generateNeighborhood(state.getSize(), neighborsToCheckRatio);
+            var position = state.getDefaultPosition();
+            var neighborhood = this._generateNeighborhood(position.getNeighborhoodSize(), neighborsToCheckRatio);
 
             // checking neighbours
             for (var i = 0; i < neighborhood.length; i++) {
                 this.counter++;
 
-                var sCandidate = state.getNeighbour(neighborhood[i]);
+                position = position.at(neighborhood[i]);
+                var sCandidate = state.getNeighbour(position.value);
                 var sCandidateCost = this._getCost(sCandidate);
 
                 // check change for tabu and if it is tabu, check if we dont miss the best found state
