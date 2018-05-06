@@ -1129,12 +1129,48 @@ module.exports = function () { /* empty */ };
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export BitArrayPosition */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BitArray; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__("Zrlr");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__ = __webpack_require__("wxAW");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__);
 
+
+/**
+ * class representing bit array position, used as iterator for getting neighbor configurations
+ * @type {class}
+ */
+var BitArrayPosition = function () {
+    function BitArrayPosition(size, index) {
+        __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, BitArrayPosition);
+
+        this.size = size;
+        this.value = index;
+        this.key = index;
+    }
+
+    __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(BitArrayPosition, [{
+        key: "next",
+        value: function next(amount) {
+            if (isNaN(amount)) amount = 1;
+
+            return new BitArrayPosition(this.size, this.key + amount);
+        }
+    }, {
+        key: "at",
+        value: function at(key) {
+            return this.next(key - this.key);
+        }
+    }, {
+        key: "getNeighborhoodSize",
+        value: function getNeighborhoodSize() {
+            return this.size;
+        }
+    }]);
+
+    return BitArrayPosition;
+}();
 
 /**
  * class representing bit array configuration, used for all problems with bit array configurations
@@ -1164,6 +1200,7 @@ var BitArray = function () {
             }
         }
     }
+
     /**
      * Return copy of the class
      * @return {class} copy of the class
@@ -1175,6 +1212,18 @@ var BitArray = function () {
         value: function copy() {
             return new BitArray({ fromBitArray: this._bitArray });
         }
+
+        /**
+         * Return position iterator
+         * @return {class} BitArrayPosition
+         */
+
+    }, {
+        key: "getDefaultPosition",
+        value: function getDefaultPosition() {
+            return new BitArrayPosition(this.getSize(), 0);
+        }
+
         /**
          * Change the value on specific index(bit flip)
          * @param  {int} index which index to change
@@ -3013,12 +3062,65 @@ module.exports = { "default": __webpack_require__("oM7Q"), __esModule: true };
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export PermutationPosition */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Permutation; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__("Zrlr");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__ = __webpack_require__("wxAW");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__);
 
+
+/**
+ * class representing permutation position, used as iterator for getting neighbor configurations
+ * @type {class}
+ */
+var PermutationPosition = function () {
+    function PermutationPosition(size, _ref, key) {
+        var indexOne = _ref.indexOne,
+            indexTwo = _ref.indexTwo;
+
+        __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, PermutationPosition);
+
+        this.size = size;
+        this.value = { indexOne: indexOne, indexTwo: indexTwo };
+        this.key = key || 0;
+    }
+
+    __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(PermutationPosition, [{
+        key: "next",
+        value: function next(amount) {
+            if (isNaN(amount)) amount = 1;
+
+            var _value = this.value,
+                indexOne = _value.indexOne,
+                indexTwo = _value.indexTwo;
+
+            var key = this.key + amount;
+
+            while (amount--) {
+                indexTwo++;
+                if (indexTwo === this.size) {
+                    indexOne++;
+                    indexTwo = indexOne + 1;
+                }
+            }
+
+            return new PermutationPosition(this.size, { indexOne: indexOne, indexTwo: indexTwo }, key);
+        }
+    }, {
+        key: "at",
+        value: function at(key) {
+            return this.next(key - this.key);
+        }
+    }, {
+        key: "getNeighborhoodSize",
+        value: function getNeighborhoodSize() {
+            return this.size * (this.size - 1) / 2;
+        }
+    }]);
+
+    return PermutationPosition;
+}();
 
 /**
  * class representing permutation configuration, used for all problems with permutation configurations
@@ -3073,6 +3175,7 @@ var Permutation = function () {
             }
             return permArray;
         }
+
         /**
          * Return copy of the class
          * @return {class} copy of the class
@@ -3083,6 +3186,18 @@ var Permutation = function () {
         value: function copy() {
             return new Permutation({ fromArray: this._Array });
         }
+
+        /**
+         * Return position iterator
+         * @return {class} PermutationPosition
+         */
+
+    }, {
+        key: "getDefaultPosition",
+        value: function getDefaultPosition() {
+            return new PermutationPosition(this.getSize(), { indexOne: 0, indexTwo: 1 });
+        }
+
         /**
          * Change the value on specific index(bit flip)
          * @param  {int} index which index to change
@@ -3097,6 +3212,7 @@ var Permutation = function () {
             this._Array[indexTwo] = x;
             return this;
         }
+
         /**
          * Return neighbour, either random or selected with two indexes to swap
          * @param  {int} index which index will change to get the neighbour
@@ -3105,9 +3221,13 @@ var Permutation = function () {
 
     }, {
         key: "getNeighbour",
-        value: function getNeighbour(indexOne, indexTwo) {
-            indexOne = indexOne || indexOne === 0 ? indexOne : Math.round(Math.random() * (this._Array.length - 1));
-            indexTwo = indexTwo || indexTwo === 0 ? indexTwo : Math.round(Math.random() * (this._Array.length - 1));
+        value: function getNeighbour() {
+            var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                indexOne = _ref2.indexOne,
+                indexTwo = _ref2.indexTwo;
+
+            indexOne = !isNaN(indexOne) ? indexOne : Math.round(Math.random() * (this._Array.length - 1));
+            indexTwo = !isNaN(indexTwo) ? indexTwo : Math.round(Math.random() * (this._Array.length - 1));
 
             while (indexOne === indexTwo) {
                 indexTwo = Math.round(Math.random() * (this._Array.length - 1));
@@ -4645,13 +4765,15 @@ var TabuSolver = function () {
                 var tabuBestCandidateCost = this._getCost(tabuBestCandidate);
                 var tabuBestCandidateIndex = -1;
 
-                var neighborhood = this._generateNeighborhood(state.getSize(), neighborsToCheckRatio);
+                var position = state.getDefaultPosition();
+                var neighborhood = this._generateNeighborhood(position.getNeighborhoodSize(), neighborsToCheckRatio);
 
                 // checking neighbours
                 for (var i = 0; i < neighborhood.length; i++) {
                     this.counter++;
 
-                    var sCandidate = state.getNeighbour(neighborhood[i]);
+                    position = position.at(neighborhood[i]);
+                    var sCandidate = state.getNeighbour(position.value);
                     var sCandidateCost = this._getCost(sCandidate);
 
                     // check change for tabu and if it is tabu, check if we dont miss the best found state
@@ -6306,4 +6428,4 @@ exports.default = function (self, call) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=ca19a31842f1c32eec8a.worker.js.map
+//# sourceMappingURL=ad6c0d48ae54086003f8.worker.js.map
