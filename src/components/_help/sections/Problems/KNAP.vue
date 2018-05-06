@@ -25,24 +25,7 @@
         <h4>Configuration</h4>
         Knapsack uses bit array configuration. It says which items are in the knapsack.
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <span class="panel-title">Bit array</span>
-            </div>
-            <div class="panel-body">
-                <ul>
-                    <li>Represented as boolean array</li>
-                    <li>
-                        Implementation of <code>getNeighbor</code> method
-                        <ol>
-                            <li>Method parameter defines array <code>index</code> so that 0 &le; <code>index</code> &lt; <code>array.length</code></li>
-                            <li>Flip the bit on position <code>index</code> (<code>array[index] = !array[index]</code>)</li>
-                            <li>Return the new configuration</li>
-                        </ol>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <bit-array></bit-array>
 
         So the neighbour is knapsack with one thing removed or added.
 
@@ -67,14 +50,15 @@
             The second problem is that if the value is very high or very low, the generated weights will be basically the same, because only max weight or minimal weights have real chance to get in the knapsack.
             So what would happen is that the weights will be the same so not really more lighter or heavier things, beacuse compared to max weight or capacity they are all the same.
         </p>
-        <p>
-            <div class="alert alert-info">
-  	           <i class="fas fa-info-circle"></i>
-               So for the best results it is recommended to use numbers between -1 and 1.
+        <div class="alert alert-info alert-with-icon">
+            <i class="fas fa-info-circle"></i>
+            <div class="alert-content">
+                So for the best results it is recommended to use numbers between -1 and 1.
             </div>
+        </div>
+        <p>
             Sum of weights is also important because it is the max value for generated weight so take that in account.
             The higher the number the closer to 0 should granularity be.
-
         </p>
 
         <h4>Instance format</h4>
@@ -84,3 +68,13 @@
         </p>
     </div>
 </template>
+
+<script>
+import BitArray from "../Configurations/BitArray";
+
+export default {
+    components: {
+        BitArray,
+    }
+}
+</script>

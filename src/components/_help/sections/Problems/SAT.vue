@@ -16,24 +16,7 @@
         <h4>Configuration</h4>
         SAT uses bit array configuration. It says which variables / literals are true and which are false.
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <span class="panel-title">Bit array</span>
-            </div>
-            <div class="panel-body">
-                <ul>
-                    <li>Represented as boolean array</li>
-                    <li>
-                        Implementation of <code>getNeighbor</code> method
-                        <ol>
-                            <li>Method parameter defines array <code>index</code> so that 0 &le; <code>index</code> &lt; <code>array.length</code></li>
-                            <li>Flip the bit on position <code>index</code> (<code>array[index] = !array[index]</code>)</li>
-                            <li>Return the new configuration</li>
-                        </ol>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <bit-array></bit-array>
 
         So the neighbour is interpretation with one variable changed to false or true.
 
@@ -46,10 +29,12 @@
             But being completely random would cause the instances to be too easy, so the average number of literals should be much lower than number of variables.
         </p>
 
-        <div class="alert alert-danger">
-	         <i class="fas fa-info-circle"></i>
-            Problem is generating number of clauses which is close to maximum number of clauses that is |n^3| - 1.
-            Because the generating is random so the algorithm has to "hit" the last missing clauses.
+        <div class="alert alert-danger alert-with-icon">
+            <i class="fas fa-info-circle"></i>
+            <div class="alert-content">
+                Problem is generating number of clauses which is close to maximum number of clauses that is |n^3| - 1.
+                Because the generating is random so the algorithm has to "hit" the last missing clauses.
+            </div>
         </div>
 
         <h4>Instance format</h4>
@@ -58,3 +43,13 @@
         </p>
     </div>
 </template>
+
+<script>
+import BitArray from "../Configurations/BitArray";
+
+export default {
+    components: {
+        BitArray,
+    }
+}
+</script>

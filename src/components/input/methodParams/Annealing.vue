@@ -2,7 +2,7 @@
     <div class="params">
         <div class="form-group" v-bind:class="{'has-error': errors.has('startTemp')}">
             <label class="" for="param1">Starting temperature</label>
-            <span class="form-tooltip" v-tooltip.right="'Temperature at the start of calculation'"><i class="fas fa-question-circle"></i></span>
+            <router-link to="/help/SA" class="form-tooltip" v-tooltip.right="'Temperature at the start of calculation'"><i class="fas fa-question-circle"></i></router-link>
             <div class="input-group">
                 <input class="form-control" type="number" min="0" step="1" id="param1" v-model="params.start_temp" placeholder=""
                 name="startTemp"
@@ -18,7 +18,7 @@
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('coolingCoef')}">
             <label class="" for="param2">Cooling coefficient</label>
-            <span class="form-tooltip" v-tooltip.right="'How fast is the cooling, next temperature = current temperature * cooling coefficient'"><i class="fas fa-question-circle"></i></span>
+            <router-link to="/help/SA" class="form-tooltip" v-tooltip.right="'How fast is the cooling, next temperature = current temperature * cooling coefficient'"><i class="fas fa-question-circle"></i></router-link>
             <input class="form-control" type="number" min="0" max="1" step="0.001" id="param2" v-model="params.cool_coef" placeholder=""
             name="coolingCoef"
             data-vv-as="cooling coefficient"
@@ -28,7 +28,7 @@
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('minTemp')}">
             <label class="" for="param3">Minimal temperature</label>
-            <span class="form-tooltip" v-tooltip.right="'When the method reaches this temperatue it stops'"><i class="fas fa-question-circle"></i></span>
+            <router-link to="/help/SA" class="form-tooltip" v-tooltip.right="'When the method reaches this temperatue it stops'"><i class="fas fa-question-circle"></i></router-link>
             <div class="">
                 <input class="form-control" type="number" min="0.0001" step="0.01" id="param3" v-model="params.min_temp" placeholder=""
                 name="minTemp"
@@ -40,7 +40,7 @@
         </div>
         <div class="form-group" v-bind:class="{'has-error': errors.has('equil')}">
             <label class="" for="param4">Inner cycle</label>
-            <span class="form-tooltip" v-tooltip.right="'Size of the inner cyrcle, how many configurations the algorithm tries before changing temperature'"><i class="fas fa-question-circle"></i></span>
+            <router-link to="/help/SA" class="form-tooltip" v-tooltip.right="'Size of the inner cyrcle, how many configurations the algorithm tries before changing temperature'"><i class="fas fa-question-circle"></i></router-link>
             <div class="input-group">
                 <input class="form-control" type="number" min="1" step="1" id="param4" v-model="params.innerCycle" placeholder=""
                 name="equil"

@@ -17,12 +17,14 @@
             Otherwise, the algorithm makes the move anyway with some probability less than 1.
             The probability decreases exponentially with the “badness” of the move, which is the amount deltaE by which the solution is worsened (i.e., energy is increased.)
         </p>
-        <div class="alert alert-info">
-	         <i class="fas fa-info-circle"></i>
-            <p>Prob(accepting uphill move) ~ exp(-deltaE / T)), where T si current temperature.</p>
+        <div class="alert alert-info alert-with-icon">
+            <i class="fas fa-info-circle"></i>
+            <div class="alert-content">
+                <p>Prob(accepting uphill move) ~ exp(-deltaE / T)), where T si current temperature.</p>
 
-            <p>Used annealing schedule is geometric cooling schedule, also known as exponential multiplicative cooling. Every step the cooling does the following: <code>newTemp = currentTemp * coolingCoefficient</code>.
-            So at step k: <code>temperature = startingTemperature * coolingCoefficient ^ k</code>.</p>
+                <p>Used annealing schedule is geometric cooling schedule, also known as exponential multiplicative cooling. Every step the cooling does the following: <code>newTemp = currentTemp * coolingCoefficient</code>.
+                So at step k: <code>temperature = startingTemperature * coolingCoefficient ^ k</code>.</p>
+            </div>
         </div>
 
         <h3>Calculating starting temperature</h3>

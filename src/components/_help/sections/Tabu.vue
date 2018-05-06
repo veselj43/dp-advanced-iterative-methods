@@ -11,43 +11,9 @@
             There are two types of configurations in this application:
         </p>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <span class="panel-title">Bit array</span>
-            </div>
-            <div class="panel-body">
-                <ul>
-                    <li>Represented as boolean array</li>
-                    <li>
-                        Implementation of <code>getNeighbor</code> method
-                        <ol>
-                            <li>Method parameter defines array <code>index</code> so that 0 &le; <code>index</code> &lt; <code>array.length</code></li>
-                            <li>Flip the bit on position <code>index</code> (<code>array[index] = !array[index]</code>)</li>
-                            <li>Return the new configuration</li>
-                        </ol>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <bit-array></bit-array>
         
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <span class="panel-title">Permutation</span>
-            </div>
-            <div class="panel-body">
-                <ul>
-                    <li>Represented as permutation of element identifiers stored in array</li>
-                    <li>
-                        Implementation of <code>getNeighbor</code> method
-                        <ol>
-                            <li>Method parameter defines two array indexes so that 0 &le; <code>index1</code>, <code>index2</code> &lt; <code>array.length</code></li>
-                            <li>Flip the identifiers on defined array indexes (<code>swap(array[index1], array[index2])</code>)</li>
-                            <li>Return the new configuration</li>
-                        </ol>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <permutation></permutation>
 
         <p>
             <strong>Neighborhood</strong> is set of all neighbors from a given problem configuration.
@@ -134,3 +100,15 @@
         </div>
     </div>
 </template>
+
+<script>
+import BitArray from "./Configurations/BitArray";
+import Permutation from "./Configurations/Permutation";
+
+export default {
+    components: {
+        BitArray,
+        Permutation,
+    }
+}
+</script>
