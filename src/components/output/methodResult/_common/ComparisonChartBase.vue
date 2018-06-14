@@ -16,6 +16,11 @@ export default {
         return {
             $storeUnsubscribe: null,
             $componentHasDefinitionError: false,
+            batchedRender: {
+                valuesPerTask: 100,
+                timeoutRef: null,
+                data: [],
+            },
             lastActiveCount: 0,
             labels: {},
             dcLegend: {},
@@ -145,8 +150,8 @@ It should contain definition of following seriesChart methods:
 
             chart
                 .width(chartOptions.width).height(chartOptions.height)
-                .x(d3.scale.linear().domain([0, 10]))
-                .y(d3.scale.linear().domain([0, 10]))
+                .x(d3.scaleLinear().domain([0, 10]))
+                .y(d3.scaleLinear().domain([0, 10]))
                 .xAxisLabel(chartOptions.xAxisLabel)
                 .yAxisLabel(chartOptions.yAxisLabel)
                 .elasticX(true)
@@ -158,7 +163,7 @@ It should contain definition of following seriesChart methods:
                 .transitionDuration(0)
                 .legend(dc.legend().x(chartOptions.width - chartOptions.margin.right + 15).y(5).itemHeight(13).gap(5));
 
-            chart.yAxis().tickFormat(d3.format('s'));
+            chart.yAxis().tickFormat(d3.format('~s'));
 
             chart.margins().right = chartOptions.margin.right;
             chart.margins().bottom += 5;
@@ -171,12 +176,12 @@ It should contain definition of following seriesChart methods:
         afterMultipleLineChartInit(chart) {
             let context = this;
             let chartOptions = this.options;
-            let referencedContainer = chart.svg();
+            let referencedContainer = chart.svg()._groups[0][0];
 
-            if (referencedContainer[0][0]) {
+            if (referencedContainer) {
                 let xHoverLine =
-                    referencedContainer[0][0].getElementsByClassName(context.xHoverLineOptions.class)[0] ||
-                    referencedContainer[0][0].firstChild.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'line'));
+                    referencedContainer.getElementsByClassName(context.xHoverLineOptions.class)[0] ||
+                    referencedContainer.firstChild.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'line'));
 
                 context.xHoverLineOptions.attributes.forEach((attribute) => {
                     xHoverLine.setAttribute(attribute.name, attribute.value);
@@ -186,9 +191,8 @@ It should contain definition of following seriesChart methods:
                 xHoverLine.setAttribute('y2', chartOptions.height - context.xHoverLineOptions.bottom);
                 xHoverLine.style.display = "none";
 
-                referencedContainer.on('mousemove', function(d) {
-                    let mouseCoords = d3.mouse(this);
-                    mouseCoords.map(Math.floor);
+                referencedContainer.addEventListener('mousemove', function(e) {
+                    let mouseCoords = [e.offsetX, e.offsetY];
 
                     let chartAreaWidth = chartOptions.width - chartOptions.margin.right - chartOptions.yAxisLeftOffset;
                     let xAxisMax = context.comparingResults.info.maxDatasetLength;
@@ -216,7 +220,7 @@ It should contain definition of following seriesChart methods:
                     chart.select('.chart-hover-info').html(context.htmlCoordsBuildList.call(context, xValue, yValues));
                 });
 
-                referencedContainer.on('mouseleave', function() {
+                referencedContainer.addEventListener('mouseleave', function() {
                     xHoverLine.style.display = "none";
                     chart.select('.chart-hover-info').style('display', null);
                 });
@@ -243,7 +247,7 @@ It should contain definition of following seriesChart methods:
 
         resolveDatasetColors() {
             this.dcLegend = {};
-            Array.prototype.forEach.call(this.multipleLineChart.select('.dc-legend')[0][0].childNodes, (legendItem) => {
+            Array.prototype.forEach.call(this.multipleLineChart.select('.dc-legend')._groups[0][0].childNodes, (legendItem) => {
                 let legend = legendItem.getElementsByTagName('text')[0].textContent;
                 this.dcLegend[this.idFromSeriesLegend(legend)] = legendItem.getElementsByTagName('rect')[0].getAttribute('fill');
             });
@@ -259,7 +263,21 @@ It should contain definition of following seriesChart methods:
                 });
                 return dc.utils.subtract(min, parentChart.yAxisPadding());
             });
-        }
+        },
+
+        batchedRendering() {
+            if (this.batchedRender.data.length > 0) {
+                console.log("update", this.batchedRender.data.length);
+                this.ndx.add(this.batchedRender.data.splice(0, this.batchedRender.data.length));
+                this.multipleLineChart.redraw();
+                this.batchedRender.timeoutRef = setTimeout(this.batchedRendering, 0);
+            }
+            else {
+                console.log("done");
+                this.multipleLineChart.redraw();
+                this.resolveDatasetColors();
+            }
+        },
     },
 
     watch: {
@@ -279,9 +297,12 @@ It should contain definition of following seriesChart methods:
 
             if (remove) {
                 this.ndx.remove();
+                this.batchedRender.data = [];
             }
             for (let i = 0; i < newActiveCount; i++) {
-                this.ndx.add(this.processData(i, !remove));
+                let dataset = this.processData(i, !remove);
+                this.batchedRender.data.push(...dataset);
+                // this.ndx.add(dataset);
             }
 
             this.labels = {};
@@ -291,8 +312,11 @@ It should contain definition of following seriesChart methods:
 
             this.lastActiveCount = newActiveCount;
 
-            this.multipleLineChart.redraw();
-            this.resolveDatasetColors();
+            // this.multipleLineChart.redraw();
+            // this.resolveDatasetColors();
+
+            clearTimeout(this.batchedRender.timeoutRef);
+            this.batchedRendering();
 
             // first load of the component
             if (newActiveCount === 1) {

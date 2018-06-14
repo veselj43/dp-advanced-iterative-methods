@@ -41,7 +41,7 @@ export default {
 
         this.liveSeriesChart
             .width(options.width).height(options.height)
-            .x(d3.scale.linear().domain([0, 100]))
+            .x(d3.scaleLinear().domain([0, 100]))
             .xAxisLabel("Generation")
             .yAxisLabel("Fitness")
             .elasticY(true)
@@ -97,7 +97,7 @@ export default {
             this.indexOffset = 0;
 
             this.liveSeriesChart
-                .x(d3.scale.linear().domain([0, this.liveData.chart.noValues-1]));
+                .x(d3.scaleLinear().domain([0, this.liveData.chart.noValues-1]));
 
             this.liveSeriesChart.redraw();
         },

@@ -4,8 +4,8 @@
   "description": "A Vue.js project",
   "author": "Jaroslav Veselý <j4vesely@gmail.com>",
   "contributors": [
-      "Adam Kugler",
-      "Michal Kluzáček"
+    "Adam Kugler",
+    "Michal Kluzáček"
   ],
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "bootstrap": "3.3.7",
-    "dc": "2.1.9",
+    "dc": "3.0.2",
     "lodash": "^4.17.5",
     "sweet-modal-vue": "^2.0.0",
     "uiv": "^0.21.3",

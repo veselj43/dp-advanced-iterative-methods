@@ -41,7 +41,7 @@ export default {
 
         this.liveLineChart
             .width(options.width).height(options.height)
-            .x(d3.scale.linear().domain([0, 100]))
+            .x(d3.scaleLinear().domain([0, 100]))
             .xAxisLabel("Step")
             .yAxisLabel("Value of optimization criterion")
             .elasticY(true)
@@ -87,7 +87,7 @@ export default {
             this.ndx.remove();
 
             this.liveLineChart
-                .x(d3.scale.linear().domain([0, this.liveData.chart.noValues]));
+                .x(d3.scaleLinear().domain([0, this.liveData.chart.noValues]));
 
             this.liveLineChart.redraw();
         },
