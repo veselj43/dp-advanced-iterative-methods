@@ -51,16 +51,16 @@
             >
             <span v-show="errors.has('tabuSizeShort')" class="help-block">{{ errors.first('tabuSizeShort') }}</span>
         </div>
-        <div class="form-group" v-bind:class="{'has-error': errors.has('tabuSizeShort')}">
-            <label class="" for="tabuSizeShort">Starting configuration</label>
+        <div class="form-group" v-bind:class="{'has-error': errors.has('tabuStartingConfig')}">
+            <label class="" for="tabuStartingConfig">Starting configuration</label>
             <router-link to="/help/Tabu#input" class="form-tooltip" v-tooltip.right="'Random or default (ex.: all false or path by node indexes)'">
                 <i class="fas fa-question-circle"></i>
             </router-link>
-            <select class="form-control" id="crossover-type" v-model="params.randomStart">
+            <select class="form-control" id="tabuStartingConfig" v-model="params.randomStart">
                 <option :value="false">Default</option>
                 <option :value="true">Random</option>
             </select>
-            <span v-show="errors.has('tabuSizeShort')" class="help-block">{{ errors.first('tabuSizeShort') }}</span>
+            <span v-show="errors.has('tabuStartingConfig')" class="help-block">{{ errors.first('tabuStartingConfig') }}</span>
         </div>
     </div>
 </template>
