@@ -8,6 +8,9 @@ import GA from '@/components/_help/sections/GA';
 import Tabu from '@/components/_help/sections/Tabu';
 import Problems from '@/components/_help/sections/Problems/Default';
 
+import TestChart from '@/components/devTools/TestChart';
+import TestSeriesChart from '@/components/devTools/TestSeriesChart';
+
 Vue.use(Router);
 
 let router = new Router({
@@ -37,6 +40,12 @@ let router = new Router({
                     component: Problems
                 }
             ]
+        }, {
+            path: '/test-chart',
+            component: TestChart,
+        }, {
+            path: '/test-chart-series',
+            component: TestSeriesChart,
         }
     ],
 

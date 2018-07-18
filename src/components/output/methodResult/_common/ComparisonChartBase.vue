@@ -266,11 +266,13 @@ It should contain definition of following seriesChart methods:
         },
 
         batchedRendering() {
-            if (this.batchedRender.data.length > 0) {
-                console.log("update", this.batchedRender.data.length);
-                this.ndx.add(this.batchedRender.data.splice(0, this.batchedRender.data.length));
+            if (this.batchedRender.data.length > 4800) {
+                console.log("update", this.batchedRender.data.length, this.ndx.size());
+                let nextBatch = this.batchedRender.data.splice(0, 100);
+                console.log(nextBatch);
+                this.ndx.add(nextBatch);
                 this.multipleLineChart.redraw();
-                this.batchedRender.timeoutRef = setTimeout(this.batchedRendering, 0);
+                this.batchedRender.timeoutRef = setTimeout(this.batchedRendering, 1000);
             }
             else {
                 console.log("done");
@@ -315,8 +317,10 @@ It should contain definition of following seriesChart methods:
             // this.multipleLineChart.redraw();
             // this.resolveDatasetColors();
 
-            clearTimeout(this.batchedRender.timeoutRef);
-            this.batchedRendering();
+            // console.log("timeout cleared");
+            // clearTimeout(this.batchedRender.timeoutRef);
+            // this.batchedRendering();
+            this.batchedRender.timeoutRef = setTimeout(this.batchedRendering, 1000);
 
             // first load of the component
             if (newActiveCount === 1) {
