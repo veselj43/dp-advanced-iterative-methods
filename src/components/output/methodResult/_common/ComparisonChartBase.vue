@@ -96,6 +96,8 @@ It should contain definition of following seriesChart methods:
         this.initMultipleLineChart(this.multipleLineChart);
         this.afterMultipleLineChartInit(this.multipleLineChart);
 
+        setTimeout(this.batchedRendering, 0);
+
         this.$storeUnsubscribe = this.$store.subscribe((mutation) => {
             if (mutation.type === 'selectProblem') {
                 this.ndx.remove();
@@ -156,10 +158,12 @@ It should contain definition of following seriesChart methods:
                 .yAxisLabel(chartOptions.yAxisLabel)
                 .elasticX(true)
                 .elasticY(true)
+                .xAxisPadding(0)
                 .yAxisPadding('10%')
                 .brushOn(false)
                 // .mouseZoomable(true)
                 .renderHorizontalGridLines(true)
+                .transitionDelay(0)
                 .transitionDuration(0)
                 .legend(dc.legend().x(chartOptions.width - chartOptions.margin.right + 15).y(5).itemHeight(13).gap(5));
 
@@ -266,67 +270,78 @@ It should contain definition of following seriesChart methods:
         },
 
         batchedRendering() {
-            if (this.batchedRender.data.length > 4800) {
-                console.log("update", this.batchedRender.data.length, this.ndx.size());
-                let nextBatch = this.batchedRender.data.splice(0, 100);
-                console.log(nextBatch);
-                this.ndx.add(nextBatch);
-                this.multipleLineChart.redraw();
-                this.batchedRender.timeoutRef = setTimeout(this.batchedRendering, 1000);
+            let newData = this.generateData();
+
+            if (this.ndx.size() > 2000) {
+                return;
             }
-            else {
-                console.log("done");
-                this.multipleLineChart.redraw();
-                this.resolveDatasetColors();
-            }
+
+            this.ndx.add(newData);
+            this.multipleLineChart.redraw();
+            
+            setTimeout(this.batchedRendering, 0);
+
+            // if (this.batchedRender.data.length > 0) {
+            //     console.log("update", this.batchedRender.data.length, this.ndx.size());
+            //     let nextBatch = this.batchedRender.data.splice(0, 500);
+            //     // console.log(nextBatch);
+            //     this.ndx.add(nextBatch);
+            //     this.multipleLineChart.redraw();
+            //     this.batchedRender.timeoutRef = setTimeout(this.batchedRendering, 300);
+            // }
+            // else {
+            //     console.log("done");
+            //     // this.multipleLineChart.redraw();
+            //     this.resolveDatasetColors();
+            // }
         },
     },
 
     watch: {
-        'comparingResults.info.items'(newValue, oldValue) {
-            if (this.$componentHasDefinitionError === true) return;
+        // 'comparingResults.info.items'(newValue, oldValue) {
+        //     if (this.$componentHasDefinitionError === true) return;
 
-            let newActiveCount = this.comparingResults.info.activeCount;
+        //     let newActiveCount = this.comparingResults.info.activeCount;
 
-            // dataset(s) removed - needs to be cleared
-            let remove = (this.lastActiveCount && this.lastActiveCount > newActiveCount);
+        //     // dataset(s) removed - needs to be cleared
+        //     let remove = (this.lastActiveCount && this.lastActiveCount > newActiveCount);
 
-            // dataset replaced with just computed files and the length is the same
-            remove = remove || (
-                (this.lastActiveCount === 1 && newActiveCount === 1) &&
-                (Object.keys(newValue)[0] !== Object.keys(oldValue)[0])
-            );
+        //     // dataset replaced with just computed files and the length is the same
+        //     remove = remove || (
+        //         (this.lastActiveCount === 1 && newActiveCount === 1) &&
+        //         (Object.keys(newValue)[0] !== Object.keys(oldValue)[0])
+        //     );
 
-            if (remove) {
-                this.ndx.remove();
-                this.batchedRender.data = [];
-            }
-            for (let i = 0; i < newActiveCount; i++) {
-                let dataset = this.processData(i, !remove);
-                this.batchedRender.data.push(...dataset);
-                // this.ndx.add(dataset);
-            }
+        //     if (remove) {
+        //         this.ndx.remove();
+        //         this.batchedRender.data = [];
+        //     }
+        //     for (let i = 0; i < newActiveCount; i++) {
+        //         let dataset = this.processData(i, !remove);
+        //         this.batchedRender.data.push(...dataset);
+        //         // this.ndx.add(dataset);
+        //     }
 
-            this.labels = {};
-            for (let key in newValue) {
-                this.labels[key] = newValue[key].instance;
-            }
+        //     this.labels = {};
+        //     for (let key in newValue) {
+        //         this.labels[key] = newValue[key].instance;
+        //     }
 
-            this.lastActiveCount = newActiveCount;
+        //     this.lastActiveCount = newActiveCount;
 
-            // this.multipleLineChart.redraw();
-            // this.resolveDatasetColors();
+        //     // this.multipleLineChart.redraw();
+        //     // this.resolveDatasetColors();
 
-            // console.log("timeout cleared");
-            // clearTimeout(this.batchedRender.timeoutRef);
-            // this.batchedRendering();
-            this.batchedRender.timeoutRef = setTimeout(this.batchedRendering, 1000);
+        //     // clearTimeout(this.batchedRender.timeoutRef);
+        //     // this.batchedRendering();
+        //     // this.batchedRender.timeoutRef = 
+        //     // setTimeout(this.batchedRendering, 0);
 
-            // first load of the component
-            if (newActiveCount === 1) {
-                this.windowResize();
-            }
-        }
+        //     // first load of the component
+        //     if (newActiveCount === 1) {
+        //         this.windowResize();
+        //     }
+        // }
     },
 }
 </script>

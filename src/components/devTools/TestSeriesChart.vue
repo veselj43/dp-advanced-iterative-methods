@@ -23,9 +23,9 @@ export default {
         init() {
             this.chart = dc.seriesChart("#series-test-chart");
             
-            this.ndx = crossfilter(this.generateData());
-            let runDimension = this.ndx.dimension(function(d) {return [+d[0], d[2]];});
-            let speedSumGroup = runDimension.group().reduceSum(function(d) {return +d[1];});
+            this.ndx = crossfilter([]);
+            let runDimension = this.ndx.dimension(d => [+d[0], d[2]]);
+            let speedSumGroup = runDimension.group().reduceSum(d => +d[1]);
 
             this.chart
                 .width(600)
@@ -35,22 +35,17 @@ export default {
                 .elasticY(true)
                 .brushOn(false)
                 .yAxisLabel("This is the Y Axis!")
-                .xAxisPadding('10%')
+                .xAxisPadding(1)
                 .yAxisPadding('10%')
-                .dimension(runDimension)
+                .transitionDelay(0)
                 .transitionDuration(0)
+                .dimension(runDimension)
                 .group(speedSumGroup)
-                .on('renderlet', function(chart) {
-                    chart.selectAll('rect').on("click", function(d) {
-                        console.log("click!", d);
-                    });
-                })
                 .seriesAccessor((d) => `[${d.key[1]}]`)
                 .keyAccessor(d => +d.key[0])
                 .valueAccessor(d => +d.value)
                 .chart(function(c) {
                     let serie = dc.lineChart(c).xyTipsOn(false);
-                    // makeChartNonZero(c, serie);
                     return serie;
                 });
             this.chart.render();
@@ -70,7 +65,7 @@ export default {
         generateData() {
             let index = (this.ndx) ? this.ndx.size() : 0;
             let newData = [];
-            for (let i = index; i < index + 100; i++) {
+            for (let i = index; i < index + 500; i++) {
                 newData.push([i, Math.sin(i/100), (index < 8000)]);
             }
             return newData;
