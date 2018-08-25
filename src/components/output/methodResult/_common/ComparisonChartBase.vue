@@ -94,9 +94,12 @@ It should contain definition of following seriesChart methods:
 
         this.updateElementWidth();
         this.initMultipleLineChart(this.multipleLineChart);
-        this.afterMultipleLineChartInit(this.multipleLineChart);
+        // this.afterMultipleLineChartInit(this.multipleLineChart);
 
-        setTimeout(this.batchedRendering, 0);
+        new Promise((resolve, reject) => {
+            this.batchedRendering();
+            resolve();
+        });
 
         this.$storeUnsubscribe = this.$store.subscribe((mutation) => {
             if (mutation.type === 'selectProblem') {
@@ -167,10 +170,10 @@ It should contain definition of following seriesChart methods:
                 .transitionDuration(0)
                 .legend(dc.legend().x(chartOptions.width - chartOptions.margin.right + 15).y(5).itemHeight(13).gap(5));
 
-            chart.yAxis().tickFormat(d3.format('~s'));
+            // chart.yAxis().tickFormat(d3.format('~s'));
 
-            chart.margins().right = chartOptions.margin.right;
-            chart.margins().bottom += 5;
+            // chart.margins().right = chartOptions.margin.right;
+            // chart.margins().bottom += 5;
 
             this.beforeInitRender(chart);
 
@@ -272,14 +275,19 @@ It should contain definition of following seriesChart methods:
         batchedRendering() {
             let newData = this.generateData();
 
-            if (this.ndx.size() > 2000) {
+            if (this.ndx.size() > 200) {
                 return;
             }
 
             this.ndx.add(newData);
+            console.log("before", this.ndx.size(), newData);
             this.multipleLineChart.redraw();
+            console.log("after", this.ndx.size());
             
-            setTimeout(this.batchedRendering, 0);
+            new Promise((resolve, reject) => {
+                this.batchedRendering();
+                resolve();
+            });
 
             // if (this.batchedRender.data.length > 0) {
             //     console.log("update", this.batchedRender.data.length, this.ndx.size());

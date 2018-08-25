@@ -3,7 +3,7 @@ import dc from 'dc';
 import ComparisonChartBase from '../_common/ComparisonChartBase';
 
 export default {
-    extends: ComparisonChartBase,
+    mixins: [ComparisonChartBase],
 
     data() {
         return {
@@ -40,7 +40,7 @@ export default {
                 .valueAccessor(d => +d.value)
                 .chart(function(c) {
                     let serie = dc.lineChart(c).xyTipsOn(false);
-                    makeChartNonZero(c, serie);
+                    // makeChartNonZero(c, serie);
                     return serie;
                 })
                 .dimension(runDimension)
@@ -50,11 +50,11 @@ export default {
         generateData() {
             let index = (this.ndx) ? this.ndx.size() : 0;
             let newData = [];
-            for (let i = index; i < index + 500; i++) {
+            for (let i = index; i < index + 100; i++) {
                 newData.push({
                     dataset: 1,
                     index: i,
-                    value: Math.sin(i/100)
+                    value: Math.round(Math.sin(i/100)*10000)
                 });
             }
             return newData;
