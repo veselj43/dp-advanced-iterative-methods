@@ -16,7 +16,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "bootstrap": "3.3.7",
+    "bootstrap": "^3.4.1",
     "dc": "2.1.9",
     "lodash": "^4.17.5",
     "sweet-modal-vue": "^2.0.0",
