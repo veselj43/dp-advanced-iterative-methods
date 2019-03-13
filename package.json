@@ -4,8 +4,8 @@
   "description": "A Vue.js project",
   "author": "Jaroslav Veselý <j4vesely@gmail.com>",
   "contributors": [
-      "Adam Kugler",
-      "Michal Kluzáček"
+    "Adam Kugler",
+    "Michal Kluzáček"
   ],
   "private": true,
   "scripts": {
